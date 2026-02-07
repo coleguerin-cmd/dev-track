@@ -2,6 +2,7 @@
   "sessions": [
     {
       "date": "2026-02-07",
+      "session": 1,
       "developer": "user",
       "duration_hours": 7.5,
       "items_shipped": 15,
@@ -13,6 +14,7 @@
     },
     {
       "date": "2026-02-07",
+      "session": 2,
       "developer": "user",
       "duration_hours": 1.5,
       "items_shipped": 6,
@@ -21,16 +23,41 @@
       "points": 13,
       "issues_found": 0,
       "issues_resolved": 1
+    },
+    {
+      "date": "2026-02-07",
+      "session": 3,
+      "developer": "user",
+      "duration_hours": 4,
+      "items_shipped": 11,
+      "by_size": { "S": 2, "M": 5, "L": 4, "XL": 0 },
+      "by_category": { "bugfix": 2, "ui": 2, "core": 4, "feature": 1, "architecture": 2 },
+      "points": 32,
+      "issues_found": 3,
+      "issues_resolved": 2
+    },
+    {
+      "date": "2026-02-07",
+      "session": 4,
+      "developer": "user",
+      "duration_hours": 4,
+      "items_shipped": 10,
+      "by_size": { "S": 2, "M": 3, "L": 4, "XL": 1 },
+      "by_category": { "core": 5, "ui": 3, "feature": 1, "fix": 1 },
+      "points": 34,
+      "issues_found": 0,
+      "issues_resolved": 1,
+      "notes": "Built entire AI-in-the-loop foundation: AIService, ModelRouter (auto-discovery), 25-tool registry, ChatService, SSE streaming API, chat sidebar UI. Also: graph layman descriptions, docs wiki overhaul, model auto-discovery fix. 5 new ideas captured. Business model pivot to paid product."
     }
   ],
   "totals": {
-    "total_sessions": 2,
-    "total_items_shipped": 21,
-    "total_points": 56,
+    "total_sessions": 4,
+    "total_items_shipped": 42,
+    "total_points": 122,
     "avg_items_per_session": 10.5,
-    "avg_points_per_session": 28,
-    "total_issues_found": 4,
-    "total_issues_resolved": 1
+    "avg_points_per_session": 30.5,
+    "total_issues_found": 7,
+    "total_issues_resolved": 4
   },
   "point_values": {
     "S": 1,

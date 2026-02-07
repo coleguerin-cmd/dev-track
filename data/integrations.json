@@ -4,6 +4,13 @@
       "id": "github",
       "enabled": true,
       "credentials": {},
+      "last_tested": "2026-02-07T18:34:12.703Z",
+      "test_result": "pass"
+    },
+    {
+      "id": "helicone",
+      "enabled": false,
+      "credentials": {},
       "last_tested": null,
       "test_result": null
     }

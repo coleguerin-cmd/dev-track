@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
+import { CodebaseGraph } from './CodebaseGraph';
 
 const BASE = '/api/v1';
 async function apiFetch<T>(path: string, opts?: RequestInit): Promise<T> {
@@ -23,12 +24,12 @@ interface ModuleItem { name: string; description: string; files: string[]; expor
 interface ServiceItem { name: string; usage_count: number; files: string[]; }
 interface SearchResult { type: string; name: string; detail: string; file: string; line?: number; }
 
-type Tab = 'overview' | 'files' | 'pages' | 'api' | 'modules' | 'services';
+type Tab = 'architecture' | 'overview' | 'files' | 'pages' | 'api' | 'modules' | 'services';
 
 export function Codebase() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [scannedAt, setScannedAt] = useState<string | null>(null);
-  const [tab, setTab] = useState<Tab>('overview');
+  const [tab, setTab] = useState<Tab>('architecture');
   const [scanning, setScanning] = useState(false);
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
@@ -90,6 +91,7 @@ export function Codebase() {
   }, [search]);
 
   const TABS: { id: Tab; label: string; count?: number }[] = [
+    { id: 'architecture', label: 'Architecture' },
     { id: 'overview', label: 'Overview' },
     { id: 'files', label: 'Files', count: stats?.total_files },
     { id: 'pages', label: 'Pages', count: stats?.total_pages },
@@ -131,29 +133,32 @@ export function Codebase() {
         )}
       </div>
 
-      {!stats ? (
+      {/* Tabs — always visible */}
+      <div className="flex gap-1 mb-4 border-b border-border pb-2">
+        {TABS.map(t => (
+          <button key={t.id} onClick={() => setTab(t.id)}
+            className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
+              tab === t.id ? 'bg-surface-3 text-text-primary' : 'text-text-tertiary hover:text-text-primary'
+            }`}>
+            {t.label}{t.count !== undefined ? ` (${t.count})` : ''}
+          </button>
+        ))}
+      </div>
+
+      {/* Architecture tab works without scan data (loads from cache) */}
+      {tab === 'architecture' && <CodebaseGraph />}
+
+      {/* Other tabs need scan data */}
+      {tab !== 'architecture' && !stats ? (
         <div className="card p-16 text-center">
           <p className="text-lg text-text-secondary mb-2">No scan data</p>
           <p className="text-sm text-text-tertiary mb-4">Scan your project to explore its structure, functions, routes, and dependencies.</p>
           <button onClick={scan} disabled={scanning} className="btn-primary">
-            {scanning ? '⟳ Scanning...' : '🔍 Scan Project'}
+            {scanning ? '⟳ Scanning...' : 'Scan Project'}
           </button>
         </div>
-      ) : (
+      ) : tab !== 'architecture' && stats ? (
         <>
-          {/* Tabs */}
-          <div className="flex gap-1 mb-4 border-b border-border pb-2">
-            {TABS.map(t => (
-              <button key={t.id} onClick={() => setTab(t.id)}
-                className={`px-3 py-1.5 text-xs font-medium rounded-md transition-colors ${
-                  tab === t.id ? 'bg-surface-3 text-text-primary' : 'text-text-tertiary hover:text-text-primary'
-                }`}>
-                {t.label}{t.count !== undefined ? ` (${t.count})` : ''}
-              </button>
-            ))}
-          </div>
-
-          {/* Tab content */}
           {tab === 'overview' && <OverviewTab stats={stats} />}
           {tab === 'files' && <FilesTab files={files} filter={fileTypeFilter} onFilterChange={setFileTypeFilter} stats={stats} />}
           {tab === 'pages' && <PagesTab pages={pages} />}
@@ -161,7 +166,7 @@ export function Codebase() {
           {tab === 'modules' && <ModulesTab modules={modules} expanded={expandedModule} onExpand={setExpandedModule} />}
           {tab === 'services' && <ServicesTab services={services} />}
         </>
-      )}
+      ) : null}
     </div>
   );
 }

@@ -112,6 +112,91 @@
       "expires": null,
       "dismissed": false
     }
+    ,
+    {
+      "id": "BN-009",
+      "type": "warning",
+      "priority": "critical",
+      "title": "Passive AI instructions are unreliable — need structural enforcement",
+      "content": "Core learning from session 3: text instructions in cursor rules (even at the top, even with alwaysApply) are fundamentally unreliable for enforcing AI behavior. The coding AI's attention is consumed by the coding task. Asking it to also remember tracking duties is like asking a surgeon to also take notes during surgery. Three approaches to fix, in order of reliability: (1) Structural: tool-level validation that catches unlogged changes (dashboard widget, session-end gate, git hooks). (2) Separation: a second lightweight AI that only does tracking, triggered by file changes (IDEA-014). (3) Instructions: better-positioned text in the cursor rule (already done, weakest approach). The user's key insight: 'the minute you introduce the human into the loop, they forget too.' The same is true for AI. The system must be self-enforcing.",
+      "context": "Session 3 — meta-discussion about AI reliability, 2026-02-07",
+      "actionable": true,
+      "action_taken": false,
+      "related_items": ["ISS-006", "IDEA-014"],
+      "created": "2026-02-07T21:30:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-010",
+      "type": "observation",
+      "priority": "high",
+      "title": "The architecture graph needs to speak human, not code",
+      "content": "User looked at the Module Architecture graph and said 'I don't understand what I'm looking at.' The graph is technically accurate (correct modules, correct edges) but semantically empty. 'Server' means nothing. 'imports: getStore' means nothing. The graph needs to communicate in product terms: 'The API Server handles all requests from the dashboard. It connects to the Data Store to save your backlog items, issues, and session data.' Every node needs a layman summary. Every edge needs a relationship explanation. This is the difference between a developer tool and a product intelligence tool.",
+      "context": "Session 3 — user feedback on codebase visualizer, 2026-02-07",
+      "actionable": true,
+      "action_taken": true,
+      "related_items": ["ISS-007", "IDEA-015"],
+      "created": "2026-02-07T21:30:00Z",
+      "expires": null,
+      "dismissed": true
+    },
+    {
+      "id": "BN-011",
+      "type": "decision",
+      "priority": "critical",
+      "title": "Chat-first architecture: the chat IS the product",
+      "content": "The planning chat with tool access is not a feature — it IS the product. Everything else (monitoring, docs generation, context sync, dashboard insights) is just automation of patterns established through conversation. Build the chat first, manually trigger everything, then automate the most common workflows. This was validated: the chat agent with 25 tools can do everything the monitoring system would do, just on-demand instead of automatic.",
+      "context": "Session 4 — architecture discussion, 2026-02-07",
+      "actionable": false,
+      "action_taken": false,
+      "related_items": ["ai-chat-agent", "IDEA-014"],
+      "created": "2026-02-07T22:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-012",
+      "type": "decision",
+      "priority": "high",
+      "title": "Auto-discover models from provider APIs, never hardcode IDs",
+      "content": "Anthropic model IDs change frequently (date-suffixed versions). Hardcoding them breaks routing. Solution: on startup, query each provider's models.list() API, classify by pattern (anything matching 'sonnet' = standard tier, 'haiku' = budget, 'opus' = premium). Router picks best available model per task+tier without knowing the exact ID ahead of time. Found 58 models across 3 providers on first discovery.",
+      "context": "Session 4 — debugging model routing failure, 2026-02-07",
+      "actionable": false,
+      "action_taken": true,
+      "related_items": ["ai-chat-agent"],
+      "created": "2026-02-07T22:30:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-013",
+      "type": "decision",
+      "priority": "critical",
+      "title": "NOT open source — building a paid product",
+      "content": "User explicitly rejected open source: 'fuck open source I wanna get paid.' Distribution model: lightweight local daemon (npm installable) + web platform (paid tiers). Daemon handles local scanning/monitoring/context. Web handles AI chat, team features, billing, admin. Free tier: 1 project, basic AI. Pro: $25-40/seat/mo. Team: $60+/seat/mo. The daemon is the moat — nobody else bridges local codebase → intelligence platform → coding AI. Previous BN-003 (open source the tool) is SUPERSEDED by this decision.",
+      "context": "Session 4 — business model discussion, 2026-02-07",
+      "actionable": true,
+      "action_taken": false,
+      "related_items": ["IDEA-021", "IDEA-022", "open-source-launch"],
+      "created": "2026-02-07T23:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-014",
+      "type": "suggestion",
+      "priority": "high",
+      "title": "v0.1 = dogfoodable on Pillar and Landmark",
+      "content": "The fastest path to product validation is using dev-track daily on real projects. v0.1 needs: (1) Chat works reliably, (2) Chat is genuinely useful for planning sessions, (3) Active monitoring auto-tracks changes, (4) Context sync makes Cursor sessions smarter, (5) UI is clean enough to use daily. Everything else (users, teams, billing, Helicone deep integration, rich tray system) is post-validation.",
+      "context": "Session 4 — prioritization discussion, 2026-02-07",
+      "actionable": true,
+      "action_taken": false,
+      "related_items": ["ai-chat-agent", "ai-watcher"],
+      "created": "2026-02-07T23:00:00Z",
+      "expires": null,
+      "dismissed": false
+    }
   ],
-  "next_id": 9
+  "next_id": 15
 }

@@ -1,99 +1,107 @@
 {
   "last_updated": "2026-02-07",
-  "overall_completion": 45,
-  "summary": "UI confirmed working in browser. All 11 views render. GitHub repo live. Cold-start cursor rule added. Codebase scanner fixed. 2 sessions, 21 items shipped. Remaining: TS build, integration testing, kanban DnD, real-world dogfooding.",
+  "overall_completion": 65,
+  "summary": "4 sessions complete. AI-in-the-loop foundation shipped: chat agent with 25 tools, multi-provider model routing (58 models auto-discovered), streaming, tool call visualization. Graph descriptions fixed (ISS-007 resolved). Docs wiki overhauled. Business model clarified: paid product, not open source. v0.1 target: dogfood on Pillar and Landmark. 3 open issues, 22 ideas captured.",
   "systems": [
     {
       "id": "server",
       "name": "Server (Hono API)",
       "status": "production",
-      "rating": 8,
-      "notes": "Boots clean on port 24680. 16 route files. All endpoints return expected JSON. WebSocket working. File watcher working. Script runner untested."
+      "rating": 9,
+      "notes": "19 route files including /api/v1/ai/* (chat streaming, conversations, models, config, credentials, usage, profiles). Build passes clean. WebSocket + file watcher working."
     },
     {
       "id": "web-ui",
       "name": "Web UI (React + Tailwind)",
       "status": "v1_complete",
       "rating": 7,
-      "notes": "All 11 views render in Chrome. Tailwind/PostCSS config fixed. Dark theme working. Keyboard shortcuts working. Not tested in Cursor's built-in browser (doesn't work well with Vite/WS)."
+      "notes": "12 views render. AI chat sidebar (persistent, resizable, streaming, tool call pills). Docs wiki with markdown rendering + ToC. Backlog has completed section. Graph has layman descriptions. Needs design overhaul."
+    },
+    {
+      "id": "ai-intelligence",
+      "name": "AI Intelligence Layer",
+      "status": "v1_complete",
+      "rating": 7,
+      "notes": "AIService across OpenAI/Anthropic/Google with Helicone proxy. Auto-model-discovery (58 models). Task-aware ModelRouter with fallback chains. 25-tool registry with full dev-track access. ChatService with multi-turn agent loop (max 12 iterations). SSE streaming API. User profiles with AI instructions. Feature flags + budget controls."
     },
     {
       "id": "cli",
       "name": "CLI",
       "status": "v1_complete",
-      "rating": 7,
-      "notes": "All commands defined. Tested indirectly via API calls. Needs real usage testing."
+      "rating": 6,
+      "notes": "All commands defined but never tested against live server. Needs real usage testing."
     },
     {
       "id": "data-layer",
       "name": "Data Layer (JSON + TypeScript)",
       "status": "production",
       "rating": 9,
-      "notes": "All schemas defined in shared/types.ts. All files read/write correctly. File watcher syncs changes. Store singleton pattern working."
+      "notes": "430+ lines of shared types. All files read/write correctly. File watcher syncs changes. New: data/ai/ directory with config, profiles, usage, conversations."
     },
     {
       "id": "integrations",
       "name": "Integration Plugins",
       "status": "v1_complete",
-      "rating": 5,
-      "notes": "8 plugins: GitHub, Vercel, Supabase, Sentry, Helicone, Upstash, AWS EC2, Cloudflare. All have setup guides and credential fields. None tested with real API keys."
+      "rating": 6,
+      "notes": "8 plugins. GitHub zero-config. Other plugins still need real credentials testing. Helicone BYOK now configured for AI cost tracking."
     },
     {
-      "id": "brain",
-      "name": "AI Brain System",
+      "id": "codebase-visualizer",
+      "name": "Codebase Architecture Visualizer",
       "status": "v1_complete",
-      "rating": 7,
-      "notes": "Notes, preferences, context recovery all have API routes. Brain note creation tested and working. Context recovery populated. Cold-start cursor rule added."
+      "rating": 8,
+      "notes": "react-flow graph with 3 views. Plain-English module descriptions and relationship labels (ISS-007 resolved). Rich detail panel with description, stats, file breakdown, connections. Scanner generates descriptions from code analysis."
     },
     {
       "id": "codebase-scanner",
       "name": "Codebase Scanner",
       "status": "production",
       "rating": 8,
-      "notes": "Fixed default scan root (was scanning parent dir). Now defaults to cwd. Tested successfully on Pillar (664 files, 139K lines in 289ms)."
+      "notes": "Generic module inference. Rich description generation (generateModuleDescription). Edge relationship labels (generateEdgeLabel). 59 files detected. Auto-discovery approach validated."
     },
     {
-      "id": "ideas",
-      "name": "Ideas System",
+      "id": "brain",
+      "name": "AI Brain System",
       "status": "v1_complete",
-      "rating": 7,
-      "notes": "Full CRUD with status workflow. 8 ideas captured across 2 sessions. Promote-to-backlog flow defined."
-    },
-    {
-      "id": "context-sync",
-      "name": "Cross-Platform Context Sync",
-      "status": "planned",
-      "rating": 3,
-      "notes": "Engine written for Cursor, Claude, Copilot, Windsurf, generic. Never tested. Not wired to any CLI command or API route yet."
+      "rating": 8,
+      "notes": "10 brain notes, user profile, context recovery. Now integrated with AI chat — profile injected into every system prompt. Standing instructions in cursor rule."
     },
     {
       "id": "cursor-rule",
-      "name": "Cursor Rule Template",
+      "name": "Cursor Rule / AI Context",
       "status": "v1_complete",
-      "rating": 8,
-      "notes": "Template includes cold-start instructions, triggers, file map, AI brain instructions, autonomy permissions, self-tuning rules. Cold-start fix added this session — needs validation in fresh chat."
+      "rating": 7,
+      "notes": "alwaysApply frontmatter, mandatory checklist, inline briefing. ISS-006 (AI drift) partially addressed by AI chat agent but background monitoring still needed."
+    },
+    {
+      "id": "session-tracking",
+      "name": "Session Tracking & Velocity",
+      "status": "v1_complete",
+      "rating": 7,
+      "notes": "4 sessions logged. 18 changelog entries. Velocity tracked. Need automated tracking via AI watcher."
     }
   ],
   "remaining": {
     "must_have": [
       { "item": "UI renders in browser without errors", "done": true },
-      { "item": "Tailwind classes generating correctly", "done": true },
-      { "item": "All 11 views load and display data", "done": true },
-      { "item": "WebSocket live updates working in UI", "done": true },
-      { "item": "At least one integration tested with real credentials", "done": false }
+      { "item": "TypeScript build passes clean", "done": true },
+      { "item": "Architecture graph understandable by non-developers", "done": true },
+      { "item": "AI chat agent working with tool access", "done": true },
+      { "item": "At least one integration tested with real credentials", "done": false },
+      { "item": "Dogfood on Pillar or Landmark for a real session", "done": false }
     ],
     "important": [
-      { "item": "TypeScript build passes (npm run build)", "done": false },
-      { "item": "Kanban drag-and-drop actually works", "done": false },
-      { "item": "Context sync generates correct platform files", "done": false },
-      { "item": "Self-tracking (this project) used for a real session", "done": false },
-      { "item": "Cold-start cursor rule validated in fresh chat", "done": false }
+      { "item": "Background AI watcher for automatic change tracking", "done": false },
+      { "item": "Settings UI for AI configuration", "done": false },
+      { "item": "Context sync generates files for all AI platforms", "done": false },
+      { "item": "UI design overhaul (Cursor-inspired)", "done": false },
+      { "item": "Global command-P search across all data", "done": false }
     ],
     "nice_to_have": [
-      { "item": "Interactive dependency graph visualization", "done": false },
-      { "item": "Initialization wizard", "done": false },
-      { "item": "Structured code annotations", "done": false },
-      { "item": "Real name (not dev-track)", "done": false }
+      { "item": "Kanban drag-and-drop", "done": false },
+      { "item": "Initialization wizard for new projects", "done": false },
+      { "item": "Rich tool call tray (Pillar-style)", "done": false },
+      { "item": "Paid product distribution architecture", "done": false }
     ]
   }
 }

@@ -18,16 +18,14 @@
         "8 integration plugins: GitHub, Vercel, Supabase, Sentry, Helicone, Upstash, AWS EC2, Cloudflare",
         "Integration manager with credential storage and test connection",
         "AI Brain system: notes, preferences, context recovery",
-        "Ideas system with capture→explore→validate→promote workflow",
+        "Ideas system with capture to explore to validate to promote workflow",
         "Codebase scanner: scanned 664 files / 139K lines in 289ms",
         "Universal activity feed aggregating all systems",
         "Cross-platform context sync engine (Cursor, Claude, Copilot, Windsurf, generic)",
         "Cursor rule template with AI autonomy permissions",
         "Dark theme inspired by Linear/Cursor"
       ],
-      "files_touched": [
-        "79 files total across server/, ui/, cli/, shared/, data/, templates/"
-      ],
+      "files_touched": ["79 files total across server/, ui/, cli/, shared/, data/, templates/"],
       "backlog_item": null,
       "breaking": false
     },
@@ -42,17 +40,11 @@
         "Fixed Tailwind config: absolute content paths so Vite root resolution works",
         "Fixed PostCSS config: explicit tailwind.config.js path",
         "Fixed CSS @import ordering: Google Fonts import moved above @tailwind directives",
-        "Fixed codebase scanner: default scan root changed from parent dir to cwd (was scanning all of Projects/)",
-        "Cleared stale Pillar codebase analysis cache (52K lines of wrong data)",
+        "Fixed codebase scanner: default scan root changed from parent dir to cwd",
+        "Cleared stale Pillar codebase analysis cache",
         "Killed stale process on port 24680"
       ],
-      "files_touched": [
-        "ui/tailwind.config.js",
-        "ui/postcss.config.js",
-        "ui/src/styles/globals.css",
-        "server/routes/codebase.ts",
-        "data/codebase/analysis.json"
-      ],
+      "files_touched": ["ui/tailwind.config.js", "ui/postcss.config.js", "ui/src/styles/globals.css", "server/routes/codebase.ts"],
       "backlog_item": "boot-ui",
       "breaking": false
     },
@@ -62,13 +54,8 @@
       "session_date": "2026-02-07",
       "category": "infra",
       "title": "GitHub repo created and code pushed",
-      "description": "Created public GitHub repo and pushed all code. Installed GitHub CLI via winget.",
-      "items": [
-        "Installed GitHub CLI (gh) via winget",
-        "Authenticated with GitHub",
-        "Created public repo: coleguerin-cmd/dev-track",
-        "Pushed 3 commits to master"
-      ],
+      "description": "Created public GitHub repo and pushed all code.",
+      "items": ["Installed GitHub CLI via winget", "Created public repo: coleguerin-cmd/dev-track", "Pushed 3 commits to master"],
       "files_touched": [],
       "backlog_item": null,
       "breaking": false
@@ -79,17 +66,266 @@
       "session_date": "2026-02-07",
       "category": "core",
       "title": "Cursor rule cold-start fix — AI orients on every new conversation",
-      "description": "Added cold-start instructions to cursor rule so the AI reads context-recovery, session state, and project health on the very first message of every conversation. No more starting cold.",
+      "description": "Added cold-start instructions to cursor rule so the AI reads context-recovery, session state, and project health on the very first message.",
+      "items": ["Added Cold Start section to cursor rule interaction triggers", "Updated both .cursor/rules/dev-track.mdc and templates/dev-track.mdc"],
+      "files_touched": [".cursor/rules/dev-track.mdc", "templates/dev-track.mdc"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-session3-ts-build",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "bugfix",
+      "title": "TypeScript build passes clean",
+      "description": "Fixed TS build error: 'standard' was not a valid Verbosity type in store.ts defaults. npm run build now passes for both UI and server.",
+      "items": ["Changed 'standard' to 'detailed' in store.ts line 106", "ISS-002 resolved"],
+      "files_touched": ["server/store.ts"],
+      "backlog_item": "ts-build",
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-session3-archive-ux",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "ui",
+      "title": "Archive/completed sections with reopen for Backlog and Issues",
+      "description": "Completed items no longer vanish. Backlog has a collapsible Completed section at the bottom with reopen buttons. Issues has a reopen button for resolved items.",
       "items": [
-        "Added 'Cold Start' section to cursor rule interaction triggers",
-        "AI now reads context-recovery.json, current.json, and state.json before first response",
-        "Updated both .cursor/rules/dev-track.mdc and templates/dev-track.mdc"
+        "Added collapsible Completed section to Backlog view",
+        "Added Reopen button on completed backlog items",
+        "Added Reopen button on resolved issues in detail panel",
+        "Added POST /api/v1/backlog/:id/reopen endpoint",
+        "Added POST /api/v1/issues/:id/reopen endpoint",
+        "Added client API methods for both reopen endpoints",
+        "ISS-005 created and resolved"
+      ],
+      "files_touched": ["ui/src/views/Backlog.tsx", "ui/src/views/Issues.tsx", "server/routes/backlog.ts", "server/routes/issues.ts", "ui/src/api/client.ts"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-session3-github-rewrite",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "core",
+      "title": "GitHub integration rewritten — zero config via local git + gh CLI",
+      "description": "Replaced the PAT-only GitHub integration with a local-first approach. Layer 1: local git CLI for commit history, branches, diffs (zero config). Layer 2: gh CLI for PRs and CI (zero config if authenticated). Layer 3: PAT as optional fallback.",
+      "items": [
+        "Rewrote server/integrations/github.ts with local git + gh CLI helpers",
+        "Added getGitStatus, getGitLog, getGitBranches, getGitDiffStats functions",
+        "Added getGhPullRequests, getGhCIStatus, getGhIssues functions",
+        "Created new server/routes/git.ts with 7 endpoints",
+        "Added /api/v1/git/status, log, branches, diff, prs, ci, summary",
+        "Wired git routes into server/index.ts",
+        "Added git API client methods to ui/src/api/client.ts",
+        "PAT field changed to optional in GitHub plugin setup"
+      ],
+      "files_touched": ["server/integrations/github.ts", "server/routes/git.ts", "server/index.ts", "ui/src/api/client.ts"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-session3-inline-coldstart",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "core",
+      "title": "Cursor rule redesigned — inline briefing replaces cold-start file reads",
+      "description": "The Quick Status and Last Session Briefing are now baked directly into the cursor rule file. AI sees context immediately without reading any files. Works for any AI platform.",
+      "items": [
+        "Added Last Session Briefing section to cursor rule",
+        "Added Warnings section to cursor rule",
+        "Added 'How This File Works' section explaining cross-platform portability",
+        "Removed cold-start file read instructions (context is inline now)",
+        "Updated templates/dev-track.mdc with same pattern"
+      ],
+      "files_touched": [".cursor/rules/dev-track.mdc", "templates/dev-track.mdc"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-session3-standing-instructions",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "core",
+      "title": "Standing Instructions — persistent micro-instructions across AI platforms",
+      "description": "Added a Standing Instructions section to the cursor rule for behavioral preferences like 'restart servers for me' that persist across conversations and platforms. Instructions live in both the context file and brain/preferences.json.",
+      "items": [
+        "Added Standing Instructions section to cursor rule",
+        "Added Standing Instructions section to template",
+        "Populated brain/preferences.json with 4 learned preferences and 2 patterns",
+        "Instructions: auto-restart servers, bias toward action, aesthetic priority, cross-platform persistence"
+      ],
+      "files_touched": [".cursor/rules/dev-track.mdc", "templates/dev-track.mdc", "data/brain/preferences.json"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-session3-codebase-visualizer",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "feature",
+      "title": "Interactive codebase architecture visualizer with react-flow",
+      "description": "Built a full graph visualization for the Codebase Explorer. Three views (Module Architecture, File Dependencies, API Route Map), custom nodes, edge tooltips, click-to-highlight, detail panel with layman-friendly descriptions.",
+      "items": [
+        "Installed reactflow and dagre packages",
+        "Added GET /api/v1/codebase/graph endpoint with modules/files/routes views",
+        "Built CodebaseGraph.tsx with react-flow canvas and dagre auto-layout",
+        "Built 4 custom node types: ModuleNode, FileNode, RouteNode, ServiceNode",
+        "Built custom edge with hover tooltip showing imported symbols",
+        "Built NodeDetailPanel with auto-generated layman descriptions",
+        "Added Architecture tab as default tab in Codebase Explorer",
+        "Click-to-highlight: click a node, connections light up, rest dims",
+        "MiniMap with color-coded nodes, legend, view switcher"
       ],
       "files_touched": [
-        ".cursor/rules/dev-track.mdc",
-        "templates/dev-track.mdc"
+        "ui/src/views/CodebaseGraph.tsx",
+        "ui/src/components/graph/GraphNode.tsx",
+        "ui/src/components/graph/GraphEdge.tsx",
+        "ui/src/components/graph/NodeDetailPanel.tsx",
+        "ui/src/views/Codebase.tsx",
+        "server/routes/codebase.ts"
       ],
       "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-session3-scanner-fix",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "bugfix",
+      "title": "Codebase scanner — generic module inference replaces Next.js-specific logic",
+      "description": "The inferModules function was hardcoded for Next.js (lib/, components/, app/api/). Rewrote it to work with any project structure by grouping files by their actual directory paths. Also improved file classification to recognize Hono routes and React views.",
+      "items": [
+        "Rewrote inferModules to use generic directory-based grouping (2-3 level depth)",
+        "Added small-module merging (1-2 file groups merge into parent)",
+        "Added generateModuleName for readable names (server/routes -> Server Routes)",
+        "Fixed classifyFile to recognize Hono route files and /views/ directories",
+        "Fixed extractApiRoutes to detect Hono app.get/post patterns",
+        "dev-track now shows ~10 modules instead of one giant 'other' blob"
+      ],
+      "files_touched": ["server/analyzer/scanner.ts"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CHG-012",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "Plain-English module descriptions for architecture graph",
+      "description": "Rewrote scanner to generate rich, human-readable descriptions for every module instead of just '8 files, 3 functions'. Descriptions explain what each module does based on its file types, exports, external services, and DB operations. Added shortDescription for graph node display.",
+      "type": "enhancement",
+      "scope": "codebase",
+      "files_changed": ["server/analyzer/scanner.ts", "server/routes/codebase.ts"],
+      "backlog_item": "graph-layman-descriptions",
+      "breaking": false
+    },
+    {
+      "id": "CHG-013",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "Relationship labels on graph edges",
+      "description": "Inter-module edges now show plain-English relationship descriptions ('uses UI components from', 'reads and writes project data', 'renders pages from') instead of '3 imports'. Labels appear on hover and persist when edges are highlighted.",
+      "type": "enhancement",
+      "scope": "codebase",
+      "files_changed": ["server/analyzer/scanner.ts", "server/routes/codebase.ts", "ui/src/components/graph/GraphEdge.tsx"],
+      "backlog_item": "graph-layman-descriptions",
+      "breaking": false
+    },
+    {
+      "id": "CHG-014",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "Rich module detail panel with descriptions and connections",
+      "description": "Clicking a module node now shows a full detail panel with: plain-English description, stats, file type breakdown, key exports, connection list with relationship descriptions, and external services. Replaced the old 'click into files' placeholder.",
+      "type": "enhancement",
+      "scope": "ui",
+      "files_changed": ["ui/src/components/graph/NodeDetailPanel.tsx", "ui/src/components/graph/GraphNode.tsx", "ui/src/views/CodebaseGraph.tsx"],
+      "backlog_item": "graph-layman-descriptions",
+      "breaking": false
+    },
+    {
+      "id": "CHG-015",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "Docs view complete overhaul — proper markdown wiki",
+      "description": "Replaced raw pre-tag markdown dump with a full wiki experience: rendered markdown (react-markdown + remark-gfm), file sidebar with sorted navigation, auto-generated table of contents with click-to-scroll, proper heading styles, code blocks, tables, blockquotes, and full-width layout.",
+      "type": "enhancement",
+      "scope": "ui",
+      "files_changed": ["ui/src/views/Docs.tsx"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CHG-016",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "AI-in-the-loop foundation: multi-provider service, model router, 25-tool registry",
+      "description": "Built the complete AI backbone: AIService with unified interface across OpenAI (GPT-5.2/5.3-Codex), Anthropic (Opus 4.6/Sonnet 4.5/Haiku), and Google (Gemini 3 Pro/Flash). Task-aware ModelRouter with fallback chains. Helicone proxy for cost tracking. 25 tools giving the AI full read/write access to backlog, issues, changelog, ideas, codebase, git, docs, brain, state, metrics, and project files.",
+      "type": "feature",
+      "scope": "core",
+      "files_changed": ["server/ai/service.ts", "server/ai/router.ts", "server/ai/tools.ts", "server/ai/chat.ts", "server/routes/ai.ts", "server/index.ts"],
+      "backlog_item": "ai-chat-agent",
+      "breaking": false
+    },
+    {
+      "id": "CHG-017",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "AI chat sidebar: persistent resizable panel with streaming and tool call rendering",
+      "description": "Built the chat-first AI interface as a persistent right sidebar. Resizable (320-700px drag handle), push layout, model selector dropdown, conversation thread management, SSE streaming with real-time text + tool call events, markdown message rendering, tool call pills with expandable details, suggested prompts for new conversations.",
+      "type": "feature",
+      "scope": "ui",
+      "files_changed": ["ui/src/components/ChatSidebar.tsx", "ui/src/App.tsx"],
+      "backlog_item": "ai-chat-agent",
+      "breaking": false
+    },
+    {
+      "id": "CHG-018",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "AI configuration: data schema, user profiles, feature flags, budget controls",
+      "description": "Created data/ai/ directory with config.json (provider settings, feature flags, budget limits, model defaults), profiles.json (user profile with technical attributes, communication style, AI instructions), usage.json (cost tracking). Credentials stored in .credentials.json (gitignored).",
+      "type": "feature",
+      "scope": "core",
+      "files_changed": ["data/ai/config.json", "data/ai/profiles.json", "data/ai/usage.json", ".credentials.json"],
+      "backlog_item": "ai-chat-agent",
+      "breaking": false
+    },
+    {
+      "id": "CHG-019",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "Auto-model-discovery from provider APIs",
+      "description": "Router now queries Anthropic models.list(), OpenAI models.list(), and Google on startup to auto-discover available models. Pattern-based tier classification (opus=premium, sonnet=standard, haiku=budget) means model name changes never break routing again. Found 58 models across 3 providers.",
+      "type": "enhancement",
+      "scope": "core",
+      "files_changed": ["server/ai/router.ts", "server/ai/service.ts"],
+      "backlog_item": "ai-chat-agent",
+      "breaking": false
+    },
+    {
+      "id": "CHG-020",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "Docs ToC filtering for long documents",
+      "description": "Fixed ToC sidebar in Docs view flooding with repetitive entries from SPEC. Now filters to h1-h2 only when document has >15 headings. Also skips headings inside code blocks.",
+      "type": "fix",
+      "scope": "ui",
+      "files_changed": ["ui/src/views/Docs.tsx"],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CHG-021",
+      "date": "2026-02-07",
+      "session": 4,
+      "title": "Fix duplicate AI chat messages",
+      "description": "Fixed bug where every AI response appeared twice in chat. Both 'message_complete' and 'done' SSE events were adding the message. Now only 'message_complete' adds, and accContent is cleared to prevent double-add.",
+      "type": "fix",
+      "scope": "ui",
+      "files_changed": ["ui/src/components/ChatSidebar.tsx"],
+      "backlog_item": "ai-chat-agent",
       "breaking": false
     }
   ]

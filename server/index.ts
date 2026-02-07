@@ -24,6 +24,8 @@ import brainRoutes from './routes/brain.js';
 import ideasRoutes from './routes/ideas.js';
 import activityRoutes from './routes/activity.js';
 import codebaseRoutes from './routes/codebase.js';
+import gitRoutes from './routes/git.js';
+import aiRoutes from './routes/ai.js';
 
 const PORT = parseInt(process.env.DEV_TRACK_PORT || '24680');
 const app = new Hono();
@@ -31,7 +33,12 @@ const app = new Hono();
 // ─── Middleware ──────────────────────────────────────────────────────────────
 
 app.use('*', cors({
-  origin: ['http://localhost:24680', 'http://localhost:24681', 'http://127.0.0.1:24680', 'http://127.0.0.1:24681'],
+  origin: (origin) => {
+    // Allow any localhost port for development
+    if (!origin) return 'http://localhost:24680';
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return origin;
+    return 'http://localhost:24680';
+  },
   allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type'],
 }));
@@ -53,6 +60,8 @@ app.route('/api/v1/brain', brainRoutes);
 app.route('/api/v1/ideas', ideasRoutes);
 app.route('/api/v1/activity', activityRoutes);
 app.route('/api/v1/codebase', codebaseRoutes);
+app.route('/api/v1/git', gitRoutes);
+app.route('/api/v1/ai', aiRoutes);
 
 // Quick status shortcut
 app.get('/api/v1/quick-status', (c) => {

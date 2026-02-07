@@ -131,4 +131,34 @@ app.post('/:id/resolve', async (c) => {
   return c.json({ ok: true, data: issue });
 });
 
+// POST /api/v1/issues/:id/reopen
+app.post('/:id/reopen', async (c) => {
+  const store = getStore();
+  const issue = store.issues.issues.find(i => i.id === c.req.param('id'));
+  if (!issue) return c.json({ ok: false, error: 'Issue not found' }, 404);
+
+  if (issue.status !== 'resolved' && issue.status !== 'wont_fix') {
+    return c.json({ ok: false, error: 'Issue is not resolved' }, 400);
+  }
+
+  issue.status = 'open';
+  issue.resolution = null;
+  issue.resolved = null;
+
+  // Update action open_issues count
+  if (issue.action_id) {
+    const action = store.actions.actions.find(a => a.id === issue.action_id);
+    if (action) {
+      action.open_issues = store.issues.issues.filter(
+        i => i.action_id === issue.action_id && (i.status === 'open' || i.status === 'in_progress')
+      ).length;
+      store.saveActions();
+    }
+  }
+
+  store.saveIssues();
+  broadcast({ type: 'issue_updated', data: issue, timestamp: new Date().toISOString() });
+  return c.json({ ok: true, data: issue });
+});
+
 export default app;

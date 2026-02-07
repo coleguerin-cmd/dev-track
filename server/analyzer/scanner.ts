@@ -67,10 +67,13 @@ export interface PageRoute {
 export interface SystemModule {
   name: string;
   description: string;
+  shortDescription: string;    // One-liner for graph nodes
   files: string[];
   exports: { name: string; kind: string; file: string }[];
   dependencies: string[];  // Other modules this one depends on
   externalServices: string[];
+  fileTypeSummary: Record<string, number>;  // e.g. { component: 5, hook: 2 }
+  keyExports: string[];  // Most important export names for quick understanding
 }
 
 export interface CodebaseAnalysis {
@@ -191,15 +194,46 @@ function analyzeFile(filePath: string, projectRoot: string): FileInfo | null {
 
 function classifyFile(relativePath: string, content: string): FileInfo['type'] {
   const p = relativePath.toLowerCase();
+
+  // API routes: Next.js app router, Hono/Express route files, or files in routes/ dirs
   if (p.includes('/api/') && (p.endsWith('route.ts') || p.endsWith('route.js'))) return 'api_route';
+  if (p.includes('/routes/') && !p.includes('node_modules')) return 'api_route';
+  if (content.match(/new\s+Hono\s*\(/) || content.match(/app\.(get|post|patch|put|delete)\s*\(/)) {
+    if (p.includes('/routes/') || p.includes('/api/')) return 'api_route';
+  }
+
+  // Pages / Views
   if (p.endsWith('page.tsx') || p.endsWith('page.ts') || p.endsWith('page.jsx')) return 'page';
+  if (p.includes('/views/') || p.includes('/pages/')) return 'page';
+
+  // Tests
   if (p.includes('.test.') || p.includes('.spec.') || p.includes('__test__')) return 'test';
-  if (p.includes('schema') || p.endsWith('.schema.ts')) return 'schema';
+
+  // Schemas
+  if (p.includes('schema') || p.endsWith('.schema.ts') || p.includes('/types')) return 'schema';
+
+  // Styles
   if (p.endsWith('.css') || p.endsWith('.scss')) return 'style';
+
+  // Config
   if (p.endsWith('.config.ts') || p.endsWith('.config.js') || p.endsWith('.config.mjs')) return 'config';
+  if (p.includes('tsconfig') || p.includes('tailwind') || p.includes('postcss') || p.includes('vite.config')) return 'config';
+
+  // Hooks
   if (p.includes('/hooks/') || content.match(/^export\s+(default\s+)?function\s+use[A-Z]/m)) return 'hook';
-  if (p.includes('/components/') || content.match(/export\s+(default\s+)?function\s+[A-Z]/)) return 'component';
+
+  // Components (React components that export PascalCase functions)
+  if (p.includes('/components/') || (
+    content.match(/export\s+(default\s+)?function\s+[A-Z]/) &&
+    (p.endsWith('.tsx') || p.endsWith('.jsx'))
+  )) return 'component';
+
+  // Utilities
   if (p.includes('/lib/') || p.includes('/utils/') || p.includes('/helpers/')) return 'utility';
+
+  // Integrations
+  if (p.includes('/integrations/') || p.includes('/plugins/')) return 'utility';
+
   return 'other';
 }
 
@@ -377,13 +411,37 @@ function extractApiRoutes(files: FileInfo[]): ApiRoute[] {
   return files
     .filter(f => f.type === 'api_route')
     .map(f => {
-      const methods = f.exports
+      // Try Next.js pattern first: exported GET, POST, etc.
+      let methods = f.exports
         .filter(e => ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD', 'OPTIONS'].includes(e.name))
         .map(e => e.name);
-      const urlPath = f.path
+
+      // If no explicit method exports, scan file content for Hono/Express patterns
+      if (methods.length === 0) {
+        const content = (() => {
+          try { return require('fs').readFileSync(require('path').resolve(f.path), 'utf-8'); } catch { return ''; }
+        })();
+        const methodPatterns = ['get', 'post', 'put', 'patch', 'delete'];
+        methods = methodPatterns
+          .filter(m => new RegExp(`app\\.${m}\\s*\\(`).test(content))
+          .map(m => m.toUpperCase());
+      }
+
+      // Generate route path from file path
+      let urlPath = f.path;
+      // Next.js app router pattern
+      urlPath = urlPath
         .replace(/^apps\/web\/src\/app/, '')
         .replace(/\/route\.(ts|js)$/, '')
         .replace(/\[([^\]]+)\]/g, ':$1');
+      // Generic routes/ directory pattern (e.g., server/routes/backlog.ts → /api/v1/backlog)
+      if (f.path.includes('/routes/')) {
+        const routeName = f.path.split('/routes/').pop()?.replace(/\.(ts|js)$/, '') || '';
+        urlPath = `/api/v1/${routeName}`;
+      }
+
+      if (methods.length === 0) methods = ['GET']; // Default fallback
+
       return { path: urlPath, methods, file: f.path, handlers: methods };
     });
 }
@@ -447,32 +505,54 @@ function aggregateExternalServices(files: FileInfo[]): { name: string; usage_cou
 }
 
 function inferModules(files: FileInfo[], projectRoot: string): SystemModule[] {
-  // Group files by top-level directory structure
+  // Generic directory-based grouping that works with any project structure.
+  // Strategy: group by the deepest meaningful directory (2-3 levels deep).
+  // If a directory has 1-2 files, merge up to parent. If it has many, it's its own module.
   const groups: Record<string, FileInfo[]> = {};
 
   for (const file of files) {
     const parts = file.path.split('/');
-    // Find a meaningful grouping key
-    let key = 'other';
-    if (parts.includes('lib')) {
-      const libIdx = parts.indexOf('lib');
-      key = parts.slice(0, libIdx + 2).join('/');
-    } else if (parts.includes('components')) {
-      const compIdx = parts.indexOf('components');
-      key = parts.slice(0, compIdx + 2).join('/');
-    } else if (parts.includes('app') && parts.includes('api')) {
-      key = 'api';
-    } else if (parts.includes('app')) {
-      key = 'pages';
+    let key: string;
+
+    if (parts.length === 1) {
+      key = 'root';
+    } else if (parts.length === 2) {
+      key = parts[0];
+    } else {
+      const genericDirs = new Set(['src', 'lib', 'app', 'source', 'pkg']);
+      if (genericDirs.has(parts[1]) && parts.length > 3) {
+        key = parts.slice(0, 3).join('/');
+      } else {
+        key = parts.slice(0, 2).join('/');
+      }
     }
 
     if (!groups[key]) groups[key] = [];
     groups[key].push(file);
   }
 
-  return Object.entries(groups)
-    .filter(([_, files]) => files.length > 0)
-    .map(([name, moduleFiles]) => {
+  // Merge tiny groups (1-2 files) into their parent if a parent group exists
+  const mergedGroups: Record<string, FileInfo[]> = {};
+  const sortedKeys = Object.keys(groups).sort();
+
+  for (const key of sortedKeys) {
+    const groupFiles = groups[key];
+    if (groupFiles.length <= 2 && key.includes('/')) {
+      const parentKey = key.split('/').slice(0, -1).join('/');
+      if (groups[parentKey] && groups[parentKey].length > 0) {
+        if (!mergedGroups[parentKey]) mergedGroups[parentKey] = [...(groups[parentKey] || [])];
+        mergedGroups[parentKey].push(...groupFiles);
+        continue;
+      }
+    }
+    if (!mergedGroups[key]) mergedGroups[key] = [];
+    mergedGroups[key].push(...groupFiles);
+  }
+
+  // Remove empty groups and build modules
+  return Object.entries(mergedGroups)
+    .filter(([_, moduleFiles]) => moduleFiles.length > 0)
+    .map(([dirPath, moduleFiles]) => {
       const allExports = moduleFiles.flatMap(f =>
         f.exports.map(e => ({ name: e.name, kind: e.kind, file: f.path }))
       );
@@ -485,14 +565,313 @@ function inferModules(files: FileInfo[], projectRoot: string): SystemModule[] {
         )
       )];
 
+      // File type breakdown for description generation
+      const fileTypeSummary: Record<string, number> = {};
+      for (const f of moduleFiles) {
+        fileTypeSummary[f.type] = (fileTypeSummary[f.type] || 0) + 1;
+      }
+
+      // Key exports — the most "important" ones (components, main functions, not types/constants)
+      const keyExports = allExports
+        .filter(e => e.kind === 'function' || e.kind === 'component' || e.kind === 'hook' || e.kind === 'class')
+        .map(e => e.name)
+        .slice(0, 8);
+
+      const name = generateModuleName(dirPath);
+
+      // Generate rich descriptions
+      const { description, shortDescription } = generateModuleDescription(
+        name, dirPath, moduleFiles, allExports, allExternalServices, fileTypeSummary, keyExports
+      );
+
       return {
-        name: name.split('/').pop() || name,
-        description: `${moduleFiles.length} files, ${allExports.filter(e => e.kind === 'function' || e.kind === 'hook').length} functions`,
+        name,
+        description,
+        shortDescription,
         files: moduleFiles.map(f => f.path),
         exports: allExports.filter(e => e.kind !== 'type').slice(0, 50),
         dependencies: deps,
         externalServices: allExternalServices,
+        fileTypeSummary,
+        keyExports,
       };
     })
     .sort((a, b) => b.files.length - a.files.length);
+}
+
+// ─── Module Description Generation ──────────────────────────────────────────
+// Creates plain-English descriptions from code analysis — no special comments needed.
+
+function generateModuleDescription(
+  name: string,
+  dirPath: string,
+  moduleFiles: FileInfo[],
+  allExports: { name: string; kind: string; file: string }[],
+  externalServices: string[],
+  fileTypeSummary: Record<string, number>,
+  keyExports: string[],
+): { description: string; shortDescription: string } {
+  const parts: string[] = [];
+  const totalFiles = moduleFiles.length;
+  const totalLines = moduleFiles.reduce((s, f) => s + f.lines, 0);
+  const componentCount = fileTypeSummary['component'] || 0;
+  const hookCount = fileTypeSummary['hook'] || 0;
+  const routeCount = fileTypeSummary['api_route'] || 0;
+  const pageCount = fileTypeSummary['page'] || 0;
+  const utilCount = fileTypeSummary['utility'] || 0;
+  const configCount = fileTypeSummary['config'] || 0;
+  const schemaCount = fileTypeSummary['schema'] || 0;
+
+  const dbOps = [...new Set(moduleFiles.flatMap(f => f.dbOperations))];
+  const hasDb = dbOps.length > 0;
+
+  const lowerName = name.toLowerCase();
+  const lowerDir = dirPath.toLowerCase();
+
+  // ── Build the opening sentence based on what this module IS ──
+
+  if (routeCount > 0 && lowerName.includes('route')) {
+    // API route module
+    const routeNames = moduleFiles
+      .filter(f => f.type === 'api_route')
+      .map(f => f.name.replace(/\.(ts|js)$/, ''))
+      .filter(n => n !== 'index');
+    const short = `Handles API requests for ${routeNames.length} endpoints`;
+    parts.push(`This module handles all the HTTP API endpoints for the application.`);
+    if (routeNames.length > 0) {
+      parts.push(`It contains ${routeCount} route file${routeCount > 1 ? 's' : ''} covering: ${routeNames.slice(0, 6).join(', ')}${routeNames.length > 6 ? `, and ${routeNames.length - 6} more` : ''}.`);
+    }
+    parts.push(`Routes receive HTTP requests, process them, and return JSON responses.`);
+    if (hasDb) parts.push(`It reads and writes data to the persistence layer.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (pageCount > 0 || (lowerName.includes('view') && componentCount === 0)) {
+    // Views / pages module
+    const viewNames = moduleFiles
+      .filter(f => f.type === 'page')
+      .map(f => f.name.replace(/\.(tsx?|jsx?)$/, ''));
+    const short = `${viewNames.length} main screens of the web app`;
+    parts.push(`These are the main pages of the web application - what users see and interact with.`);
+    if (viewNames.length > 0) {
+      parts.push(`Includes ${viewNames.length} screens: ${viewNames.slice(0, 6).join(', ')}${viewNames.length > 6 ? `, and ${viewNames.length - 6} more` : ''}.`);
+    }
+    parts.push(`Each page fetches data from the API and renders interactive UI.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (componentCount > 0 && (lowerName.includes('component') || lowerDir.includes('component'))) {
+    // UI components module
+    const compNames = allExports.filter(e => e.kind === 'component').map(e => e.name);
+    const short = `Reusable UI building blocks (${compNames.length} components)`;
+    parts.push(`A library of reusable UI components that the pages are built from.`);
+    if (compNames.length > 0) {
+      parts.push(`Contains ${compNames.length} component${compNames.length > 1 ? 's' : ''}: ${compNames.slice(0, 5).join(', ')}${compNames.length > 5 ? '...' : ''}.`);
+    }
+    parts.push(`These handle individual pieces of the interface like buttons, panels, cards, and visualizations.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (hookCount > 0 && (lowerName.includes('hook') || lowerDir.includes('hook'))) {
+    // Hooks module
+    const hookNames = allExports.filter(e => e.kind === 'hook').map(e => e.name);
+    const short = `Shared logic hooks (${hookNames.length} hooks)`;
+    parts.push(`Custom React hooks that provide shared logic and state management across the UI.`);
+    if (hookNames.length > 0) {
+      parts.push(`Includes: ${hookNames.slice(0, 5).join(', ')}.`);
+    }
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (lowerDir.includes('integration') || lowerDir.includes('plugin')) {
+    // Integrations module
+    const short = `Connects to external services (${externalServices.length > 0 ? externalServices.join(', ') : 'plugins'})`;
+    parts.push(`Handles connections to external tools and services.`);
+    if (externalServices.length > 0) {
+      parts.push(`Integrates with: ${externalServices.join(', ')}.`);
+    }
+    parts.push(`Each integration can be configured with API credentials and provides data to the rest of the application.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (lowerDir.includes('analyzer') || lowerDir.includes('scanner')) {
+    const short = `Scans and analyzes project source code`;
+    parts.push(`Scans the project's source code to extract structure and metadata.`);
+    parts.push(`Identifies files, functions, imports, API routes, database operations, and external service usage.`);
+    parts.push(`This powers the codebase visualization and architecture graphs.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (schemaCount > 0 || lowerDir.includes('schema') || lowerDir.includes('types') || lowerDir.includes('shared')) {
+    const typeCount = allExports.filter(e => e.kind === 'type').length;
+    const short = `Shared type definitions and data structures`;
+    parts.push(`Contains shared type definitions and data structures used across the project.`);
+    if (typeCount > 0) parts.push(`Defines ${typeCount} types and interfaces.`);
+    parts.push(`This ensures the server, UI, and other modules all agree on the shape of data.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (lowerName.includes('server') && !lowerName.includes('route')) {
+    const short = `Core HTTP server and application entry point`;
+    parts.push(`The core server that runs the application.`);
+    parts.push(`It starts the HTTP server, mounts API routes, and manages the application lifecycle.`);
+    if (externalServices.length > 0) {
+      parts.push(`Connects to: ${externalServices.join(', ')}.`);
+    }
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (lowerDir.includes('store') || lowerDir.includes('data')) {
+    const short = `Data persistence and storage layer`;
+    parts.push(`The data persistence layer that stores and retrieves all project information.`);
+    if (hasDb) {
+      parts.push(`Performs database operations: ${dbOps.join(', ')}.`);
+    } else {
+      parts.push(`Manages reading and writing JSON data files.`);
+    }
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (utilCount > 0 || lowerDir.includes('util') || lowerDir.includes('lib') || lowerDir.includes('helper')) {
+    const funcNames = allExports.filter(e => e.kind === 'function').map(e => e.name);
+    const short = `Helper functions and utilities`;
+    parts.push(`Utility functions and helpers used by other parts of the application.`);
+    if (funcNames.length > 0) {
+      parts.push(`Key functions: ${funcNames.slice(0, 5).join(', ')}.`);
+    }
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (lowerDir.includes('cli') || lowerDir.includes('command')) {
+    const short = `Command-line interface`;
+    parts.push(`Provides a command-line interface for interacting with the application from the terminal.`);
+    if (keyExports.length > 0) {
+      parts.push(`Commands include: ${keyExports.slice(0, 5).join(', ')}.`);
+    }
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (configCount > 0) {
+    const short = `Project configuration files`;
+    parts.push(`Configuration files that control how the project is built, tested, and deployed.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  if (lowerDir === 'root') {
+    const short = `Root-level project files`;
+    parts.push(`Top-level project files: configuration, entry points, and setup.`);
+
+    return { description: parts.join(' '), shortDescription: short };
+  }
+
+  // Fallback — generate from what we know
+  const funcCount = allExports.filter(e => e.kind === 'function' || e.kind === 'hook').length;
+  const short = `${totalFiles} files, ${funcCount > 0 ? `${funcCount} functions` : `${totalLines.toLocaleString()} lines`}`;
+  parts.push(`This module contains ${totalFiles} files with ${totalLines.toLocaleString()} lines of code.`);
+  if (keyExports.length > 0) {
+    parts.push(`Key exports: ${keyExports.slice(0, 5).join(', ')}.`);
+  }
+  if (externalServices.length > 0) {
+    parts.push(`Uses external services: ${externalServices.join(', ')}.`);
+  }
+
+  return { description: parts.join(' '), shortDescription: short };
+}
+
+// ─── Edge Relationship Labels ───────────────────────────────────────────────
+// Generates plain-English relationship descriptions between modules.
+
+export function generateEdgeLabel(
+  sourceModule: SystemModule,
+  targetModule: SystemModule,
+  importNames: string[],
+): string {
+  const targetLower = targetModule.name.toLowerCase();
+  const sourceLower = sourceModule.name.toLowerCase();
+
+  // What kind of things are being imported?
+  const targetExportKinds = new Map<string, string>();
+  for (const exp of targetModule.exports) {
+    targetExportKinds.set(exp.name, exp.kind);
+  }
+
+  const importedKinds: Record<string, number> = {};
+  for (const imp of importNames) {
+    const kind = targetExportKinds.get(imp) || 'unknown';
+    importedKinds[kind] = (importedKinds[kind] || 0) + 1;
+  }
+
+  // Describe the relationship based on what's being used
+  if (targetLower.includes('store') || targetLower.includes('data')) {
+    return 'reads and writes project data';
+  }
+  if (targetLower.includes('route') && targetLower.includes('api')) {
+    return 'handles API requests through';
+  }
+  if (targetLower.includes('component')) {
+    return 'uses UI components from';
+  }
+  if (targetLower.includes('hook')) {
+    return 'uses shared logic from';
+  }
+  if (targetLower.includes('integration') || targetLower.includes('plugin')) {
+    return 'connects to external services via';
+  }
+  if (targetLower.includes('schema') || targetLower.includes('type') || targetLower.includes('shared')) {
+    return 'uses type definitions from';
+  }
+  if (targetLower.includes('util') || targetLower.includes('lib') || targetLower.includes('helper')) {
+    return 'uses helper functions from';
+  }
+  if (targetLower.includes('analyzer') || targetLower.includes('scanner')) {
+    return 'triggers code analysis via';
+  }
+  if (targetLower.includes('server') && !targetLower.includes('route')) {
+    if (sourceLower.includes('route')) return 'routes are registered on';
+    return 'depends on server infrastructure from';
+  }
+  if (targetLower.includes('view') || targetLower.includes('page')) {
+    return 'renders pages from';
+  }
+
+  // Fallback based on imported kinds
+  if (importedKinds['component'] > 0) return 'renders components from';
+  if (importedKinds['hook'] > 0) return 'uses hooks from';
+  if (importedKinds['function'] > 0) return `uses ${importNames.length} function${importNames.length > 1 ? 's' : ''} from`;
+  if (importedKinds['class'] > 0) return 'extends classes from';
+  if (importedKinds['constant'] > 0) return 'reads configuration from';
+
+  return `depends on (${importNames.length} import${importNames.length > 1 ? 's' : ''})`;
+}
+
+function generateModuleName(dirPath: string): string {
+  // Turn directory paths into readable names:
+  // "server/routes" → "Server Routes"
+  // "ui/src/views" → "UI Views"
+  // "ui/src/components" → "UI Components"
+  // "server/integrations" → "Server Integrations"
+  // "shared" → "Shared"
+  // "cli" → "CLI"
+  const parts = dirPath.split('/').filter(p => p !== 'src');
+  return parts
+    .map(p => {
+      if (p === 'ui') return 'UI';
+      if (p === 'cli') return 'CLI';
+      if (p === 'api') return 'API';
+      if (p === 'ws') return 'WebSocket';
+      return p.charAt(0).toUpperCase() + p.slice(1);
+    })
+    .join(' ');
 }

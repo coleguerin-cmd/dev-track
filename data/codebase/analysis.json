@@ -1,19 +1,23 @@
 {
-  "scanned_at": "2026-02-07T17:54:42.187Z",
+  "scanned_at": "2026-02-07T20:21:53.495Z",
   "project_root": "C:\\Users\\realk\\Projects\\dev-track",
   "stats": {
-    "total_files": 54,
-    "total_lines": 7763,
-    "total_functions": 11,
-    "total_components": 20,
-    "total_api_routes": 0,
-    "total_pages": 0,
+    "total_files": 59,
+    "total_lines": 10003,
+    "total_functions": 19,
+    "total_components": 22,
+    "total_api_routes": 16,
+    "total_pages": 12,
     "total_external_services": 6,
     "file_types": {
-      "other": 36,
+      "other": 10,
+      "utility": 9,
+      "schema": 2,
+      "api_route": 16,
       "config": 3,
       "hook": 1,
-      "component": 14
+      "component": 6,
+      "page": 12
     }
   },
   "files": [
@@ -33,16 +37,23 @@
       "path": "server/analyzer/scanner.ts",
       "name": "scanner.ts",
       "extension": ".ts",
-      "lines": 499,
-      "size": 17707,
+      "lines": 878,
+      "size": 34080,
       "type": "other",
       "exports": [
         {
           "name": "scanCodebase",
           "kind": "function",
-          "line": 106,
+          "line": 109,
           "isDefault": false,
           "params": "(projectRoot: string, srcDir?: string)"
+        },
+        {
+          "name": "generateEdgeLabel",
+          "kind": "function",
+          "line": 796,
+          "isDefault": false,
+          "params": "(\r\n  sourceModule: SystemModule,\r\n  targetModule: SystemModule,\r\n  importNames: string[],\r\n)"
         },
         {
           "name": "FileInfo",
@@ -89,7 +100,7 @@
         {
           "name": "CodebaseAnalysis",
           "kind": "type",
-          "line": 76,
+          "line": 79,
           "isDefault": false
         }
       ],
@@ -115,47 +126,47 @@
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 324
+          "line": 358
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 324
+          "line": 358
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 345
+          "line": 379
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 345
+          "line": 379
         },
         {
           "service": "deepgram",
           "detail": "deepgram",
-          "line": 325
+          "line": 359
         },
         {
           "service": "deepgram",
           "detail": "deepgram",
-          "line": 325
+          "line": 359
         },
         {
           "service": "deepgram",
           "detail": "deepgram",
-          "line": 346
+          "line": 380
         },
         {
           "service": "deepgram",
           "detail": "deepgram",
-          "line": 346
+          "line": 380
         },
         {
           "service": "sentry",
           "detail": "sentry.",
-          "line": 347
+          "line": 381
         }
       ],
       "dbOperations": [
@@ -218,8 +229,8 @@
       "path": "server/index.ts",
       "name": "index.ts",
       "extension": ".ts",
-      "lines": 158,
-      "size": 5899,
+      "lines": 160,
+      "size": 5979,
       "type": "other",
       "exports": [],
       "imports": [
@@ -414,6 +425,14 @@
           ],
           "isDefault": true,
           "isExternal": false
+        },
+        {
+          "source": "./routes/git.js",
+          "names": [
+            "gitRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
         }
       ],
       "externalCalls": [],
@@ -425,7 +444,7 @@
       "extension": ".ts",
       "lines": 123,
       "size": 4616,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "ec2Plugin",
@@ -444,7 +463,7 @@
       "extension": ".ts",
       "lines": 167,
       "size": 6192,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "cloudflarePlugin",
@@ -487,38 +506,81 @@
       "path": "server/integrations/github.ts",
       "name": "github.ts",
       "extension": ".ts",
-      "lines": 130,
-      "size": 4772,
-      "type": "other",
+      "lines": 308,
+      "size": 10195,
+      "type": "utility",
       "exports": [
+        {
+          "name": "getGitStatus",
+          "kind": "function",
+          "line": 51,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGitLog",
+          "kind": "function",
+          "line": 93,
+          "isDefault": false,
+          "params": "(limit = 20)"
+        },
+        {
+          "name": "getGitBranches",
+          "kind": "function",
+          "line": 107,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGitDiffStats",
+          "kind": "function",
+          "line": 118,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGhPullRequests",
+          "kind": "function",
+          "line": 140,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGhCIStatus",
+          "kind": "function",
+          "line": 147,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGhIssues",
+          "kind": "function",
+          "line": 154,
+          "isDefault": false,
+          "params": "()"
+        },
         {
           "name": "githubPlugin",
           "kind": "constant",
-          "line": 3,
+          "line": 163,
           "isDefault": false
         }
       ],
-      "imports": [],
+      "imports": [
+        {
+          "source": "child_process",
+          "names": [
+            "execSync"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
       "externalCalls": [
         {
           "service": "github",
-          "detail": "https://api.github.com/repos/${creds.owner}/${creds.repo}",
-          "line": 54
-        },
-        {
-          "service": "github",
-          "detail": "https://api.github.com/repos/${creds.owner}/${creds.repo}",
-          "line": 72
-        },
-        {
-          "service": "github",
-          "detail": "https://api.github.com/repos/${creds.owner}/${creds.repo}/pulls?state=open&per_p",
-          "line": 75
-        },
-        {
-          "service": "github",
-          "detail": "https://api.github.com/repos/${creds.owner}/${creds.repo}/commits?per_page=5",
-          "line": 101
+          "detail": "https://api.github.com/repos/${status?.owner}/${status?.repo}",
+          "line": 235
         }
       ],
       "dbOperations": []
@@ -529,7 +591,7 @@
       "extension": ".ts",
       "lines": 133,
       "size": 4404,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "heliconePlugin",
@@ -654,7 +716,7 @@
       "extension": ".ts",
       "lines": 220,
       "size": 7048,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "getIntegrationManager",
@@ -787,7 +849,7 @@
       "extension": ".ts",
       "lines": 124,
       "size": 4668,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "sentryPlugin",
@@ -867,7 +929,7 @@
       "extension": ".ts",
       "lines": 124,
       "size": 4351,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "supabasePlugin",
@@ -886,7 +948,7 @@
       "extension": ".ts",
       "lines": 66,
       "size": 1735,
-      "type": "other",
+      "type": "schema",
       "exports": [
         {
           "name": "IntegrationHealth",
@@ -941,7 +1003,7 @@
       "extension": ".ts",
       "lines": 85,
       "size": 2877,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "upstashPlugin",
@@ -960,7 +1022,7 @@
       "extension": ".ts",
       "lines": 150,
       "size": 6249,
-      "type": "other",
+      "type": "utility",
       "exports": [
         {
           "name": "vercelPlugin",
@@ -995,7 +1057,7 @@
       "extension": ".ts",
       "lines": 163,
       "size": 5930,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1040,7 +1102,7 @@
       "extension": ".ts",
       "lines": 96,
       "size": 3220,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1067,9 +1129,9 @@
       "path": "server/routes/backlog.ts",
       "name": "backlog.ts",
       "extension": ".ts",
-      "lines": 177,
-      "size": 6601,
-      "type": "other",
+      "lines": 196,
+      "size": 7299,
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1108,7 +1170,7 @@
       "extension": ".ts",
       "lines": 167,
       "size": 6233,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1153,7 +1215,7 @@
       "extension": ".ts",
       "lines": 56,
       "size": 1831,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1188,9 +1250,9 @@
       "path": "server/routes/codebase.ts",
       "name": "codebase.ts",
       "extension": ".ts",
-      "lines": 207,
-      "size": 7140,
-      "type": "other",
+      "lines": 417,
+      "size": 14333,
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1221,6 +1283,7 @@
           "source": "../analyzer/scanner.js",
           "names": [
             "scanCodebase",
+            "generateEdgeLabel",
             "type CodebaseAnalysis"
           ],
           "isDefault": false,
@@ -1236,7 +1299,7 @@
       "extension": ".ts",
       "lines": 54,
       "size": 1557,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1273,7 +1336,7 @@
       "extension": ".ts",
       "lines": 37,
       "size": 1195,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1297,12 +1360,47 @@
       "dbOperations": []
     },
     {
+      "path": "server/routes/git.ts",
+      "name": "git.ts",
+      "extension": ".ts",
+      "lines": 96,
+      "size": 2860,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../integrations/github.js",
+          "names": [
+            "getGitStatus",
+            "getGitLog",
+            "getGitBranches",
+            "getGitDiffStats",
+            "getGhPullRequests",
+            "getGhCIStatus",
+            "getGhIssues"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
       "path": "server/routes/ideas.ts",
       "name": "ideas.ts",
       "extension": ".ts",
       "lines": 113,
       "size": 4426,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1347,7 +1445,7 @@
       "extension": ".ts",
       "lines": 92,
       "size": 3327,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1374,9 +1472,9 @@
       "path": "server/routes/issues.ts",
       "name": "issues.ts",
       "extension": ".ts",
-      "lines": 135,
-      "size": 4905,
-      "type": "other",
+      "lines": 165,
+      "size": 5937,
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1413,7 +1511,7 @@
       "extension": ".ts",
       "lines": 35,
       "size": 1188,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1442,7 +1540,7 @@
       "extension": ".ts",
       "lines": 28,
       "size": 783,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1471,7 +1569,7 @@
       "extension": ".ts",
       "lines": 120,
       "size": 4013,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1508,7 +1606,7 @@
       "extension": ".ts",
       "lines": 55,
       "size": 1836,
-      "type": "other",
+      "type": "api_route",
       "exports": [],
       "imports": [
         {
@@ -1738,7 +1836,7 @@
       "extension": ".ts",
       "lines": 430,
       "size": 11453,
-      "type": "other",
+      "type": "schema",
       "exports": [
         {
           "name": "Horizon",
@@ -2121,8 +2219,8 @@
       "path": "ui/src/api/client.ts",
       "name": "client.ts",
       "extension": ".ts",
-      "lines": 134,
-      "size": 6060,
+      "lines": 148,
+      "size": 6671,
       "type": "other",
       "exports": [
         {
@@ -2146,43 +2244,49 @@
         {
           "name": "issues",
           "kind": "constant",
-          "line": 56,
+          "line": 57,
           "isDefault": false
         },
         {
           "name": "actions",
           "kind": "constant",
-          "line": 74,
+          "line": 76,
           "isDefault": false
         },
         {
           "name": "changelog",
           "kind": "constant",
-          "line": 87,
+          "line": 89,
           "isDefault": false
         },
         {
           "name": "runs",
           "kind": "constant",
-          "line": 101,
+          "line": 103,
           "isDefault": false
         },
         {
           "name": "metrics",
           "kind": "constant",
-          "line": 113,
+          "line": 115,
           "isDefault": false
         },
         {
           "name": "docs",
           "kind": "constant",
-          "line": 120,
+          "line": 122,
+          "isDefault": false
+        },
+        {
+          "name": "git",
+          "kind": "constant",
+          "line": 131,
           "isDefault": false
         },
         {
           "name": "config",
           "kind": "constant",
-          "line": 129,
+          "line": 143,
           "isDefault": false
         }
       ],
@@ -2358,6 +2462,136 @@
       "dbOperations": []
     },
     {
+      "path": "ui/src/components/graph/GraphEdge.tsx",
+      "name": "GraphEdge.tsx",
+      "extension": ".tsx",
+      "lines": 125,
+      "size": 3987,
+      "type": "component",
+      "exports": [
+        {
+          "name": "edgeTypes",
+          "kind": "constant",
+          "line": 122,
+          "isDefault": false
+        },
+        {
+          "name": "GraphEdgeData",
+          "kind": "type",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useState",
+            "memo"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow",
+          "names": [
+            "getBezierPath",
+            "EdgeLabelRenderer",
+            "type EdgeProps"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/graph/GraphNode.tsx",
+      "name": "GraphNode.tsx",
+      "extension": ".tsx",
+      "lines": 164,
+      "size": 8028,
+      "type": "component",
+      "exports": [
+        {
+          "name": "nodeTypes",
+          "kind": "constant",
+          "line": 158,
+          "isDefault": false
+        },
+        {
+          "name": "GraphNodeData",
+          "kind": "type",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "memo"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow",
+          "names": [
+            "Handle",
+            "Position",
+            "type NodeProps"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/graph/NodeDetailPanel.tsx",
+      "name": "NodeDetailPanel.tsx",
+      "extension": ".tsx",
+      "lines": 486,
+      "size": 21202,
+      "type": "component",
+      "exports": [
+        {
+          "name": "NodeDetailPanel",
+          "kind": "component",
+          "line": 33,
+          "isDefault": false,
+          "params": "({ nodeId, nodeType, nodeData, connectedEdges, connectedNodes, onClose }: NodeDetailProps)"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 478
+        },
+        {
+          "service": "deepgram",
+          "detail": "deepgram",
+          "line": 479
+        }
+      ],
+      "dbOperations": []
+    },
+    {
       "path": "ui/src/components/Sidebar.tsx",
       "name": "Sidebar.tsx",
       "extension": ".tsx",
@@ -2498,7 +2732,7 @@
       "extension": ".tsx",
       "lines": 176,
       "size": 7515,
-      "type": "component",
+      "type": "page",
       "exports": [
         {
           "name": "Actions",
@@ -2535,9 +2769,9 @@
       "path": "ui/src/views/Backlog.tsx",
       "name": "Backlog.tsx",
       "extension": ".tsx",
-      "lines": 278,
-      "size": 9790,
-      "type": "component",
+      "lines": 327,
+      "size": 12050,
+      "type": "page",
       "exports": [
         {
           "name": "Backlog",
@@ -2580,7 +2814,7 @@
       "extension": ".tsx",
       "lines": 90,
       "size": 3587,
-      "type": "component",
+      "type": "page",
       "exports": [
         {
           "name": "Changelog",
@@ -2616,14 +2850,14 @@
       "path": "ui/src/views/Codebase.tsx",
       "name": "Codebase.tsx",
       "extension": ".tsx",
-      "lines": 406,
-      "size": 18209,
-      "type": "component",
+      "lines": 411,
+      "size": 18509,
+      "type": "page",
       "exports": [
         {
           "name": "Codebase",
           "kind": "component",
-          "line": 28,
+          "line": 29,
           "isDefault": false,
           "params": "()"
         }
@@ -2638,6 +2872,101 @@
           ],
           "isDefault": false,
           "isExternal": true
+        },
+        {
+          "source": "./CodebaseGraph",
+          "names": [
+            "CodebaseGraph"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/CodebaseGraph.tsx",
+      "name": "CodebaseGraph.tsx",
+      "extension": ".tsx",
+      "lines": 307,
+      "size": 11524,
+      "type": "page",
+      "exports": [
+        {
+          "name": "CodebaseGraph",
+          "kind": "component",
+          "line": 67,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow",
+          "names": [
+            "ReactFlow",
+            "Background",
+            "Controls",
+            "MiniMap",
+            "useNodesState",
+            "useEdgesState",
+            "type Node",
+            "type Edge",
+            "BackgroundVariant",
+            "Panel"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "dagre",
+          "names": [
+            "dagre"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow/dist/style.css",
+          "names": [],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/graph/GraphNode",
+          "names": [
+            "nodeTypes"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../components/graph/GraphEdge",
+          "names": [
+            "edgeTypes"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../components/graph/NodeDetailPanel",
+          "names": [
+            "NodeDetailPanel"
+          ],
+          "isDefault": false,
+          "isExternal": false
         }
       ],
       "externalCalls": [],
@@ -2649,7 +2978,7 @@
       "extension": ".tsx",
       "lines": 287,
       "size": 13647,
-      "type": "component",
+      "type": "page",
       "exports": [
         {
           "name": "Dashboard",
@@ -2689,14 +3018,14 @@
       "path": "ui/src/views/Docs.tsx",
       "name": "Docs.tsx",
       "extension": ".tsx",
-      "lines": 96,
-      "size": 3768,
-      "type": "component",
+      "lines": 262,
+      "size": 12312,
+      "type": "page",
       "exports": [
         {
           "name": "Docs",
           "kind": "component",
-          "line": 4,
+          "line": 27,
           "isDefault": false,
           "params": "()"
         }
@@ -2706,9 +3035,27 @@
           "source": "react",
           "names": [
             "useEffect",
-            "useState"
+            "useState",
+            "useMemo",
+            "useCallback"
           ],
           "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "react-markdown",
+          "names": [
+            "ReactMarkdown"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "remark-gfm",
+          "names": [
+            "remarkGfm"
+          ],
+          "isDefault": true,
           "isExternal": true
         }
       ],
@@ -2721,7 +3068,7 @@
       "extension": ".tsx",
       "lines": 215,
       "size": 10275,
-      "type": "component",
+      "type": "page",
       "exports": [
         {
           "name": "Ideas",
@@ -2750,9 +3097,9 @@
       "path": "ui/src/views/Issues.tsx",
       "name": "Issues.tsx",
       "extension": ".tsx",
-      "lines": 192,
-      "size": 8079,
-      "type": "component",
+      "lines": 202,
+      "size": 8541,
+      "type": "page",
       "exports": [
         {
           "name": "Issues",
@@ -2792,7 +3139,7 @@
       "extension": ".tsx",
       "lines": 154,
       "size": 6928,
-      "type": "component",
+      "type": "page",
       "exports": [
         {
           "name": "Metrics",
@@ -2822,7 +3169,7 @@
       "extension": ".tsx",
       "lines": 130,
       "size": 5959,
-      "type": "component",
+      "type": "page",
       "exports": [
         {
           "name": "Sessions",
@@ -2860,7 +3207,7 @@
       "extension": ".tsx",
       "lines": 278,
       "size": 11741,
-      "type": "component",
+      "type": "page",
       "exports": [
         {
           "name": "Settings",
@@ -2951,17 +3298,386 @@
       "dbOperations": []
     }
   ],
-  "api_routes": [],
-  "pages": [],
+  "api_routes": [
+    {
+      "path": "/api/v1/actions",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/actions.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/activity",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/activity.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/backlog",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/backlog.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/brain",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/brain.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/changelog",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/changelog.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/codebase",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/codebase.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/config",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/config.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/docs",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/docs.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/git",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/git.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/ideas",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/ideas.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/integrations",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/integrations.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/issues",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/issues.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/metrics",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/metrics.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/runs",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/runs.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/session",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/session.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/state",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/state.ts",
+      "handlers": [
+        "GET"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "path": "ui/src/views/Actions.tsx",
+      "file": "ui/src/views/Actions.tsx",
+      "components": [
+        "HealthDot",
+        "PassRate"
+      ]
+    },
+    {
+      "path": "ui/src/views/Backlog.tsx",
+      "file": "ui/src/views/Backlog.tsx",
+      "components": [
+        "SizeBadge",
+        "StatusBadge",
+        "CategoryTag"
+      ]
+    },
+    {
+      "path": "ui/src/views/Changelog.tsx",
+      "file": "ui/src/views/Changelog.tsx",
+      "components": [
+        "CategoryTag"
+      ]
+    },
+    {
+      "path": "ui/src/views/Codebase.tsx",
+      "file": "ui/src/views/Codebase.tsx",
+      "components": [
+        "CodebaseGraph"
+      ]
+    },
+    {
+      "path": "ui/src/views/CodebaseGraph.tsx",
+      "file": "ui/src/views/CodebaseGraph.tsx",
+      "components": [
+        "NodeDetailPanel"
+      ]
+    },
+    {
+      "path": "ui/src/views/Dashboard.tsx",
+      "file": "ui/src/views/Dashboard.tsx",
+      "components": [
+        "HealthDot",
+        "SizeBadge",
+        "StatusBadge",
+        "PassRate",
+        "SeverityBadge"
+      ]
+    },
+    {
+      "path": "ui/src/views/Docs.tsx",
+      "file": "ui/src/views/Docs.tsx",
+      "components": []
+    },
+    {
+      "path": "ui/src/views/Ideas.tsx",
+      "file": "ui/src/views/Ideas.tsx",
+      "components": []
+    },
+    {
+      "path": "ui/src/views/Issues.tsx",
+      "file": "ui/src/views/Issues.tsx",
+      "components": [
+        "SeverityBadge",
+        "StatusBadge"
+      ]
+    },
+    {
+      "path": "ui/src/views/Metrics.tsx",
+      "file": "ui/src/views/Metrics.tsx",
+      "components": []
+    },
+    {
+      "path": "ui/src/views/Sessions.tsx",
+      "file": "ui/src/views/Sessions.tsx",
+      "components": [
+        "SizeBadge"
+      ]
+    },
+    {
+      "path": "ui/src/views/Settings.tsx",
+      "file": "ui/src/views/Settings.tsx",
+      "components": []
+    }
+  ],
   "modules": [
     {
-      "name": "other",
-      "description": "52 files, 11 functions",
+      "name": "Server Routes",
+      "description": "This module handles all the HTTP API endpoints for the application. It contains 16 route files covering: actions, activity, backlog, brain, changelog, codebase, and 10 more. Routes receive HTTP requests, process them, and return JSON responses. It reads and writes data to the persistence layer.",
+      "shortDescription": "Handles API requests for 16 endpoints",
       "files": [
-        "cli/index.ts",
-        "server/analyzer/scanner.ts",
-        "server/context-sync.ts",
-        "server/index.ts",
+        "server/routes/actions.ts",
+        "server/routes/activity.ts",
+        "server/routes/backlog.ts",
+        "server/routes/brain.ts",
+        "server/routes/changelog.ts",
+        "server/routes/codebase.ts",
+        "server/routes/config.ts",
+        "server/routes/docs.ts",
+        "server/routes/git.ts",
+        "server/routes/ideas.ts",
+        "server/routes/integrations.ts",
+        "server/routes/issues.ts",
+        "server/routes/metrics.ts",
+        "server/routes/runs.ts",
+        "server/routes/session.ts",
+        "server/routes/state.ts"
+      ],
+      "exports": [],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "api_route": 16
+      },
+      "keyExports": []
+    },
+    {
+      "name": "UI Views",
+      "description": "These are the main pages of the web application - what users see and interact with. Includes 12 screens: Actions, Backlog, Changelog, Codebase, CodebaseGraph, Dashboard, and 6 more. Each page fetches data from the API and renders interactive UI.",
+      "shortDescription": "12 main screens of the web app",
+      "files": [
+        "ui/src/views/Actions.tsx",
+        "ui/src/views/Backlog.tsx",
+        "ui/src/views/Changelog.tsx",
+        "ui/src/views/Codebase.tsx",
+        "ui/src/views/CodebaseGraph.tsx",
+        "ui/src/views/Dashboard.tsx",
+        "ui/src/views/Docs.tsx",
+        "ui/src/views/Ideas.tsx",
+        "ui/src/views/Issues.tsx",
+        "ui/src/views/Metrics.tsx",
+        "ui/src/views/Sessions.tsx",
+        "ui/src/views/Settings.tsx"
+      ],
+      "exports": [
+        {
+          "name": "Actions",
+          "kind": "component",
+          "file": "ui/src/views/Actions.tsx"
+        },
+        {
+          "name": "Backlog",
+          "kind": "component",
+          "file": "ui/src/views/Backlog.tsx"
+        },
+        {
+          "name": "Changelog",
+          "kind": "component",
+          "file": "ui/src/views/Changelog.tsx"
+        },
+        {
+          "name": "Codebase",
+          "kind": "component",
+          "file": "ui/src/views/Codebase.tsx"
+        },
+        {
+          "name": "CodebaseGraph",
+          "kind": "component",
+          "file": "ui/src/views/CodebaseGraph.tsx"
+        },
+        {
+          "name": "Dashboard",
+          "kind": "component",
+          "file": "ui/src/views/Dashboard.tsx"
+        },
+        {
+          "name": "Docs",
+          "kind": "component",
+          "file": "ui/src/views/Docs.tsx"
+        },
+        {
+          "name": "Ideas",
+          "kind": "component",
+          "file": "ui/src/views/Ideas.tsx"
+        },
+        {
+          "name": "Issues",
+          "kind": "component",
+          "file": "ui/src/views/Issues.tsx"
+        },
+        {
+          "name": "Metrics",
+          "kind": "component",
+          "file": "ui/src/views/Metrics.tsx"
+        },
+        {
+          "name": "Sessions",
+          "kind": "component",
+          "file": "ui/src/views/Sessions.tsx"
+        },
+        {
+          "name": "Settings",
+          "kind": "component",
+          "file": "ui/src/views/Settings.tsx"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "page": 12
+      },
+      "keyExports": [
+        "Actions",
+        "Backlog",
+        "Changelog",
+        "Codebase",
+        "CodebaseGraph",
+        "Dashboard",
+        "Docs",
+        "Ideas"
+      ]
+    },
+    {
+      "name": "Server Integrations",
+      "description": "Handles connections to external tools and services. Integrates with: cloudflare, github, helicone, sentry, vercel. Each integration can be configured with API credentials and provides data to the rest of the application.",
+      "shortDescription": "Connects to external services (cloudflare, github, helicone, sentry, vercel)",
+      "files": [
         "server/integrations/aws-ec2.ts",
         "server/integrations/cloudflare.ts",
         "server/integrations/github.ts",
@@ -2971,62 +3687,9 @@
         "server/integrations/supabase.ts",
         "server/integrations/types.ts",
         "server/integrations/upstash.ts",
-        "server/integrations/vercel.ts",
-        "server/routes/actions.ts",
-        "server/routes/activity.ts",
-        "server/routes/backlog.ts",
-        "server/routes/brain.ts",
-        "server/routes/changelog.ts",
-        "server/routes/codebase.ts",
-        "server/routes/config.ts",
-        "server/routes/docs.ts",
-        "server/routes/ideas.ts",
-        "server/routes/integrations.ts",
-        "server/routes/issues.ts",
-        "server/routes/metrics.ts",
-        "server/routes/runs.ts",
-        "server/routes/session.ts",
-        "server/routes/state.ts",
-        "server/script-runner.ts",
-        "server/store.ts",
-        "server/watcher.ts",
-        "server/ws.ts",
-        "shared/types.ts",
-        "ui/postcss.config.js",
-        "ui/src/api/client.ts",
-        "ui/src/api/useWebSocket.ts",
-        "ui/src/App.tsx",
-        "ui/src/main.tsx",
-        "ui/src/views/Actions.tsx",
-        "ui/src/views/Backlog.tsx",
-        "ui/src/views/Changelog.tsx",
-        "ui/src/views/Codebase.tsx",
-        "ui/src/views/Dashboard.tsx",
-        "ui/src/views/Docs.tsx",
-        "ui/src/views/Ideas.tsx",
-        "ui/src/views/Issues.tsx",
-        "ui/src/views/Metrics.tsx",
-        "ui/src/views/Sessions.tsx",
-        "ui/src/views/Settings.tsx",
-        "ui/tailwind.config.js",
-        "ui/vite.config.ts"
+        "server/integrations/vercel.ts"
       ],
       "exports": [
-        {
-          "name": "scanCodebase",
-          "kind": "function",
-          "file": "server/analyzer/scanner.ts"
-        },
-        {
-          "name": "generateContextFile",
-          "kind": "function",
-          "file": "server/context-sync.ts"
-        },
-        {
-          "name": "syncAllPlatforms",
-          "kind": "function",
-          "file": "server/context-sync.ts"
-        },
         {
           "name": "ec2Plugin",
           "kind": "constant",
@@ -3036,6 +3699,41 @@
           "name": "cloudflarePlugin",
           "kind": "constant",
           "file": "server/integrations/cloudflare.ts"
+        },
+        {
+          "name": "getGitStatus",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGitLog",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGitBranches",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGitDiffStats",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGhPullRequests",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGhCIStatus",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGhIssues",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
         },
         {
           "name": "githubPlugin",
@@ -3076,6 +3774,54 @@
           "name": "vercelPlugin",
           "kind": "constant",
           "file": "server/integrations/vercel.ts"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "cloudflare",
+        "github",
+        "helicone",
+        "sentry",
+        "vercel"
+      ],
+      "fileTypeSummary": {
+        "utility": 9,
+        "schema": 1
+      },
+      "keyExports": [
+        "getGitStatus",
+        "getGitLog",
+        "getGitBranches",
+        "getGitDiffStats",
+        "getGhPullRequests",
+        "getGhCIStatus",
+        "getGhIssues",
+        "getIntegrationManager"
+      ]
+    },
+    {
+      "name": "Server",
+      "description": "The core server that runs the application. It starts the HTTP server, mounts API routes, and manages the application lifecycle. Connects to: helicone, deepgram, sentry.",
+      "shortDescription": "Core HTTP server and application entry point",
+      "files": [
+        "server/context-sync.ts",
+        "server/index.ts",
+        "server/script-runner.ts",
+        "server/store.ts",
+        "server/watcher.ts",
+        "server/ws.ts",
+        "server/analyzer/scanner.ts"
+      ],
+      "exports": [
+        {
+          "name": "generateContextFile",
+          "kind": "function",
+          "file": "server/context-sync.ts"
+        },
+        {
+          "name": "syncAllPlatforms",
+          "kind": "function",
+          "file": "server/context-sync.ts"
         },
         {
           "name": "runScript",
@@ -3111,6 +3857,169 @@
           "name": "broadcast",
           "kind": "function",
           "file": "server/ws.ts"
+        },
+        {
+          "name": "scanCodebase",
+          "kind": "function",
+          "file": "server/analyzer/scanner.ts"
+        },
+        {
+          "name": "generateEdgeLabel",
+          "kind": "function",
+          "file": "server/analyzer/scanner.ts"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "helicone",
+        "deepgram",
+        "sentry"
+      ],
+      "fileTypeSummary": {
+        "other": 7
+      },
+      "keyExports": [
+        "generateContextFile",
+        "syncAllPlatforms",
+        "runScript",
+        "getStore",
+        "reloadStore",
+        "Store",
+        "startWatcher",
+        "setupWebSocket"
+      ]
+    },
+    {
+      "name": "UI",
+      "description": "Configuration files that control how the project is built, tested, and deployed.",
+      "shortDescription": "Project configuration files",
+      "files": [
+        "ui/postcss.config.js",
+        "ui/tailwind.config.js",
+        "ui/vite.config.ts",
+        "ui/src/App.tsx",
+        "ui/src/main.tsx"
+      ],
+      "exports": [
+        {
+          "name": "App",
+          "kind": "component",
+          "file": "ui/src/App.tsx"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "config": 3,
+        "component": 1,
+        "other": 1
+      },
+      "keyExports": [
+        "App"
+      ]
+    },
+    {
+      "name": "UI Components",
+      "description": "A library of reusable UI components that the pages are built from. Contains 9 components: NodeDetailPanel, Sidebar, HealthDot, SizeBadge, StatusBadge.... These handle individual pieces of the interface like buttons, panels, cards, and visualizations.",
+      "shortDescription": "Reusable UI building blocks (9 components)",
+      "files": [
+        "ui/src/components/graph/GraphEdge.tsx",
+        "ui/src/components/graph/GraphNode.tsx",
+        "ui/src/components/graph/NodeDetailPanel.tsx",
+        "ui/src/components/Sidebar.tsx",
+        "ui/src/components/StatusBadge.tsx"
+      ],
+      "exports": [
+        {
+          "name": "edgeTypes",
+          "kind": "constant",
+          "file": "ui/src/components/graph/GraphEdge.tsx"
+        },
+        {
+          "name": "nodeTypes",
+          "kind": "constant",
+          "file": "ui/src/components/graph/GraphNode.tsx"
+        },
+        {
+          "name": "NodeDetailPanel",
+          "kind": "component",
+          "file": "ui/src/components/graph/NodeDetailPanel.tsx"
+        },
+        {
+          "name": "Sidebar",
+          "kind": "component",
+          "file": "ui/src/components/Sidebar.tsx"
+        },
+        {
+          "name": "HealthDot",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "SizeBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "StatusBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "SeverityBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "HorizonBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "CategoryTag",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "PassRate",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "helicone",
+        "deepgram"
+      ],
+      "fileTypeSummary": {
+        "component": 5
+      },
+      "keyExports": [
+        "NodeDetailPanel",
+        "Sidebar",
+        "HealthDot",
+        "SizeBadge",
+        "StatusBadge",
+        "SeverityBadge",
+        "HorizonBadge",
+        "CategoryTag"
+      ]
+    },
+    {
+      "name": "UI",
+      "description": "This module contains 4 files with 277 lines of code. Key exports: App, useWebSocket.",
+      "shortDescription": "4 files, 1 functions",
+      "files": [
+        "ui/src/App.tsx",
+        "ui/src/main.tsx",
+        "ui/src/api/client.ts",
+        "ui/src/api/useWebSocket.ts"
+      ],
+      "exports": [
+        {
+          "name": "App",
+          "kind": "component",
+          "file": "ui/src/App.tsx"
         },
         {
           "name": "state",
@@ -3158,6 +4067,11 @@
           "file": "ui/src/api/client.ts"
         },
         {
+          "name": "git",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
           "name": "config",
           "kind": "constant",
           "file": "ui/src/api/client.ts"
@@ -3166,149 +4080,60 @@
           "name": "useWebSocket",
           "kind": "hook",
           "file": "ui/src/api/useWebSocket.ts"
-        },
-        {
-          "name": "App",
-          "kind": "component",
-          "file": "ui/src/App.tsx"
-        },
-        {
-          "name": "Actions",
-          "kind": "component",
-          "file": "ui/src/views/Actions.tsx"
-        },
-        {
-          "name": "Backlog",
-          "kind": "component",
-          "file": "ui/src/views/Backlog.tsx"
-        },
-        {
-          "name": "Changelog",
-          "kind": "component",
-          "file": "ui/src/views/Changelog.tsx"
-        },
-        {
-          "name": "Codebase",
-          "kind": "component",
-          "file": "ui/src/views/Codebase.tsx"
-        },
-        {
-          "name": "Dashboard",
-          "kind": "component",
-          "file": "ui/src/views/Dashboard.tsx"
-        },
-        {
-          "name": "Docs",
-          "kind": "component",
-          "file": "ui/src/views/Docs.tsx"
-        },
-        {
-          "name": "Ideas",
-          "kind": "component",
-          "file": "ui/src/views/Ideas.tsx"
-        },
-        {
-          "name": "Issues",
-          "kind": "component",
-          "file": "ui/src/views/Issues.tsx"
-        },
-        {
-          "name": "Metrics",
-          "kind": "component",
-          "file": "ui/src/views/Metrics.tsx"
-        },
-        {
-          "name": "Sessions",
-          "kind": "component",
-          "file": "ui/src/views/Sessions.tsx"
-        },
-        {
-          "name": "Settings",
-          "kind": "component",
-          "file": "ui/src/views/Settings.tsx"
         }
       ],
       "dependencies": [],
-      "externalServices": [
-        "helicone",
-        "deepgram",
-        "sentry",
-        "cloudflare",
-        "github",
-        "vercel"
+      "externalServices": [],
+      "fileTypeSummary": {
+        "component": 1,
+        "other": 2,
+        "hook": 1
+      },
+      "keyExports": [
+        "App",
+        "useWebSocket"
       ]
     },
     {
-      "name": "Sidebar.tsx",
-      "description": "1 files, 0 functions",
+      "name": "CLI",
+      "description": "Provides a command-line interface for interacting with the application from the terminal.",
+      "shortDescription": "Command-line interface",
       "files": [
-        "ui/src/components/Sidebar.tsx"
+        "cli/index.ts"
       ],
-      "exports": [
-        {
-          "name": "Sidebar",
-          "kind": "component",
-          "file": "ui/src/components/Sidebar.tsx"
-        }
-      ],
+      "exports": [],
       "dependencies": [],
-      "externalServices": []
+      "externalServices": [],
+      "fileTypeSummary": {
+        "other": 1
+      },
+      "keyExports": []
     },
     {
-      "name": "StatusBadge.tsx",
-      "description": "1 files, 0 functions",
+      "name": "Shared",
+      "description": "Contains shared type definitions and data structures used across the project. Defines 57 types and interfaces. This ensures the server, UI, and other modules all agree on the shape of data.",
+      "shortDescription": "Shared type definitions and data structures",
       "files": [
-        "ui/src/components/StatusBadge.tsx"
+        "shared/types.ts"
       ],
-      "exports": [
-        {
-          "name": "HealthDot",
-          "kind": "component",
-          "file": "ui/src/components/StatusBadge.tsx"
-        },
-        {
-          "name": "SizeBadge",
-          "kind": "component",
-          "file": "ui/src/components/StatusBadge.tsx"
-        },
-        {
-          "name": "StatusBadge",
-          "kind": "component",
-          "file": "ui/src/components/StatusBadge.tsx"
-        },
-        {
-          "name": "SeverityBadge",
-          "kind": "component",
-          "file": "ui/src/components/StatusBadge.tsx"
-        },
-        {
-          "name": "HorizonBadge",
-          "kind": "component",
-          "file": "ui/src/components/StatusBadge.tsx"
-        },
-        {
-          "name": "CategoryTag",
-          "kind": "component",
-          "file": "ui/src/components/StatusBadge.tsx"
-        },
-        {
-          "name": "PassRate",
-          "kind": "component",
-          "file": "ui/src/components/StatusBadge.tsx"
-        }
-      ],
+      "exports": [],
       "dependencies": [],
-      "externalServices": []
+      "externalServices": [],
+      "fileTypeSummary": {
+        "schema": 1
+      },
+      "keyExports": []
     }
   ],
   "external_services": [
     {
       "name": "helicone",
-      "usage_count": 3,
+      "usage_count": 4,
       "files": [
         "server/analyzer/scanner.ts",
         "server/integrations/helicone.ts",
-        "server/integrations/manager.ts"
+        "server/integrations/manager.ts",
+        "ui/src/components/graph/NodeDetailPanel.tsx"
       ]
     },
     {
@@ -3322,9 +4147,10 @@
     },
     {
       "name": "deepgram",
-      "usage_count": 1,
+      "usage_count": 2,
       "files": [
-        "server/analyzer/scanner.ts"
+        "server/analyzer/scanner.ts",
+        "ui/src/components/graph/NodeDetailPanel.tsx"
       ]
     },
     {
@@ -3470,6 +4296,34 @@
       "to": "ui/src/components/StatusBadge.tsx",
       "imports": [
         "CategoryTag"
+      ]
+    },
+    {
+      "from": "ui/src/views/Codebase.tsx",
+      "to": "ui/src/views/CodebaseGraph.tsx",
+      "imports": [
+        "CodebaseGraph"
+      ]
+    },
+    {
+      "from": "ui/src/views/CodebaseGraph.tsx",
+      "to": "ui/src/components/graph/GraphNode.tsx",
+      "imports": [
+        "nodeTypes"
+      ]
+    },
+    {
+      "from": "ui/src/views/CodebaseGraph.tsx",
+      "to": "ui/src/components/graph/GraphEdge.tsx",
+      "imports": [
+        "edgeTypes"
+      ]
+    },
+    {
+      "from": "ui/src/views/CodebaseGraph.tsx",
+      "to": "ui/src/components/graph/NodeDetailPanel.tsx",
+      "imports": [
+        "NodeDetailPanel"
       ]
     },
     {

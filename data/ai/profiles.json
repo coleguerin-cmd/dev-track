@@ -1,0 +1,33 @@
+{
+  "profiles": [
+    {
+      "id": "user-001",
+      "name": "Cole",
+      "role": "founder",
+      "technical_level": 3,
+      "attributes": {
+        "coding": 4,
+        "architecture": 6,
+        "design": 8,
+        "product": 9,
+        "devops": 2
+      },
+      "communication_style": {
+        "prefers_visual": true,
+        "prefers_concise": false,
+        "thinks_out_loud": true,
+        "moves_fast": true
+      },
+      "context_notes": [
+        "Thinks in systems, not implementation details",
+        "Wants beautiful UI - aesthetics matter as much as function",
+        "Prefers action over asking permission",
+        "Non-technical enough that graphs need plain English, technical enough to discuss architecture",
+        "Will challenge ideas - that's how he thinks through problems"
+      ],
+      "ai_instructions": "This user thinks big and fast. Present options with clear tradeoffs, not just recommendations. They'll challenge ideas - that's how they think. Keep explanations visual and systemic, skip low-level implementation details unless asked. They care deeply about UX and will notice ugly things.",
+      "created": "2026-02-07",
+      "updated": "2026-02-07"
+    }
+  ]
+}

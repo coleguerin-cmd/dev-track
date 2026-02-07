@@ -46,6 +46,7 @@ export const backlog = {
   update: (id: string, data: any) =>
     request<any>(`/backlog/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   complete: (id: string) => request<any>(`/backlog/${id}/complete`, { method: 'POST' }),
+  reopen: (id: string) => request<any>(`/backlog/${id}/reopen`, { method: 'POST' }),
   move: (id: string, horizon: string) =>
     request<any>(`/backlog/${id}/move`, { method: 'POST', body: JSON.stringify({ horizon }) }),
   remove: (id: string) => request<any>(`/backlog/${id}`, { method: 'DELETE' }),
@@ -67,6 +68,7 @@ export const issues = {
     request<any>(`/issues/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   resolve: (id: string, resolution: string) =>
     request<any>(`/issues/${id}/resolve`, { method: 'POST', body: JSON.stringify({ resolution }) }),
+  reopen: (id: string) => request<any>(`/issues/${id}/reopen`, { method: 'POST' }),
 };
 
 // ─── Actions ────────────────────────────────────────────────────────────────
@@ -122,6 +124,18 @@ export const docs = {
   getDesign: (filename: string) => request<any>(`/docs/designs/${filename}`),
   listDecisions: () => request<any>('/docs/decisions'),
   getDecision: (filename: string) => request<any>(`/docs/decisions/${filename}`),
+};
+
+// ─── Git ────────────────────────────────────────────────────────────────────
+
+export const git = {
+  status: () => request<any>('/git/status'),
+  log: (limit = 20) => request<any>(`/git/log?limit=${limit}`),
+  branches: () => request<any>('/git/branches'),
+  diff: () => request<any>('/git/diff'),
+  prs: () => request<any>('/git/prs'),
+  ci: () => request<any>('/git/ci'),
+  summary: () => request<any>('/git/summary'),
 };
 
 // ─── Config ─────────────────────────────────────────────────────────────────

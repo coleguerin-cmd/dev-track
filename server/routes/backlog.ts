@@ -161,6 +161,25 @@ app.post('/:id/move', async (c) => {
   return c.json({ ok: true, data: item });
 });
 
+// POST /api/v1/backlog/:id/reopen
+app.post('/:id/reopen', async (c) => {
+  const store = getStore();
+  const item = store.backlog.items.find(i => i.id === c.req.param('id'));
+  if (!item) return c.json({ ok: false, error: 'Item not found' }, 404);
+
+  if (item.status !== 'completed' && item.status !== 'cancelled') {
+    return c.json({ ok: false, error: 'Item is not completed or cancelled' }, 400);
+  }
+
+  item.status = 'pending';
+  item.completed = null;
+  item.updated = new Date().toISOString().split('T')[0];
+
+  store.saveBacklog();
+  broadcast({ type: 'backlog_updated', data: item, timestamp: new Date().toISOString() });
+  return c.json({ ok: true, data: item });
+});
+
 // DELETE /api/v1/backlog/:id
 app.delete('/:id', (c) => {
   const store = getStore();

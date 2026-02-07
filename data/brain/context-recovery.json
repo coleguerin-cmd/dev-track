@@ -1,22 +1,31 @@
 {
-  "last_generated": "2026-02-07T19:00:00Z",
-  "briefing": "Session 2 complete. dev-track is running — all 11 UI views render in Chrome, server boots clean, GitHub repo live at coleguerin-cmd/dev-track. Fixed Tailwind/PostCSS config, codebase scanner root, and CSS import ordering. Added cold-start instructions to cursor rule so every new AI conversation auto-orients before responding. ISS-001 (critical: UI untested) is resolved. Remaining: TypeScript build (ISS-002), integration testing (ISS-003), kanban DnD (ISS-004). IDEA-008 captured for web-based multi-user future.",
+  "last_generated": "2026-02-08T00:00:00Z",
+  "briefing": "Session 4 complete (Feb 7, evening). MASSIVE session: built the entire AI-in-the-loop foundation. Chat-first architecture validated — persistent sidebar agent with 25 tools, multi-provider model routing (OpenAI GPT-5.2, Anthropic Sonnet 4.5, Google Gemini 3), SSE streaming, tool call visualization. Auto-model-discovery from provider APIs (58 models found) so we never hardcode model IDs again. Also shipped: graph layman descriptions (ISS-007 resolved), docs wiki overhaul with markdown rendering + ToC. Architecture plan created for full AI system. User profile built for Cole. 22 ideas captured total (5 new this session). Key business decision: NOT open source — building a paid product (lightweight local daemon + web platform model). v0.1 goal is dogfooding on Pillar and Landmark immediately.",
   "hot_context": [
-    "UI works in Chrome (not Cursor's built-in browser)",
-    "GitHub repo: coleguerin-cmd/dev-track (public, 3 commits on master)",
-    "Cold-start cursor rule added — THIS conversation was the first to test it. Validate in next fresh chat.",
-    "ISS-001 resolved (UI renders). ISS-002 (TS build) is the next critical issue.",
-    "8 ideas captured, 1 new this session (IDEA-008: web-based multi-user)"
+    "Dev servers: API on port 24680, UI on port 24681 (may shift to 24682-24684 if Vite grabs others)",
+    "AI chat is LIVE: click blue circle bottom-right in UI. Routes to Claude Sonnet 4.5 by default. All 3 providers configured with API keys in .credentials.json",
+    "Helicone BYOK configured. Proxy enabled in config. Sessions/Properties/Users/Cache features planned (IDEA-018) but not integrated yet",
+    "Now backlog: ai-chat-agent (L, in_progress), test-integrations (M, pending — deprioritize to next). 1 slot free.",
+    "22 ideas captured (IDEA-001 through IDEA-022). IDEA-021 (paid product distribution) and IDEA-019 (Pillar tray system) are highest priority for next iteration",
+    "3 open issues: ISS-003 (integrations untested, medium), ISS-004 (kanban DnD, low), ISS-006 (AI drift, high — partially addressed by chat agent)",
+    "Model auto-discovery: router queries provider APIs on startup, classifies by pattern. 58 models found. No hardcoded IDs.",
+    "User profile for Cole in data/ai/profiles.json — injected into every AI chat system prompt",
+    "Business model: NOT open source. Paid product: local daemon + web platform. Free tier (1 project, limited AI), Pro ($25-40/seat/mo), Team ($60+/seat/mo)",
+    "Changelog has 18 entries across 4 sessions. 7 new entries this session."
   ],
   "warnings": [
-    "TypeScript build (npm run build) has NEVER been run — could have type errors",
-    "Integration plugins still untested with real API keys",
-    "Cold-start cursor rule is untested in a fresh conversation — validate next session"
+    "AI chat works but needs real-world testing. First user message succeeded with Claude Sonnet 4.5. Tool calling untested in browser yet.",
+    "Server crashes on tsx watch reload when port is held (EADDRINUSE). Need graceful shutdown or port-in-use handling.",
+    "Settings UI for AI keys not built yet — keys only configurable via .credentials.json file directly.",
+    "Helicone proxy enabled but Sessions/Properties/Users features not integrated — just basic cost logging for now.",
+    "ISS-006 (AI context drift) partially addressed by chat agent but background auto-monitoring (IDEA-014) still needed for full solution.",
+    "The open-source-launch backlog item needs updating — user explicitly said 'fuck open source I wanna get paid'. Business model shifted to paid product."
   ],
   "suggestions": [
-    "NEXT SESSION: Open a fresh chat to validate cold-start rule works",
-    "Then run npm run build and fix any TypeScript errors (ISS-002)",
-    "Then try using dev-track to manage a real Pillar development session",
-    "Consider testing one integration (GitHub is simplest) with real credentials"
+    "FIRST: Test the AI chat in the browser. Send messages, verify tool calls work, check streaming renders properly.",
+    "THEN: Build Settings UI for AI config (API keys, model preferences, feature flags) so it's not manual JSON editing.",
+    "CONSIDER: Start dogfooding on Pillar — run dev-track init on the Pillar project, use the chat for planning.",
+    "PRIORITY: The ai-watcher (background monitoring) is the next big feature after chat is polished. It solves ISS-006.",
+    "BUSINESS: Start a design doc for the paid product architecture (local daemon + web platform). IDEA-021 has the framework."
   ]
 }

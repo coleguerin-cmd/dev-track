@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useWebSocket } from './api/useWebSocket';
 import { Sidebar } from './components/Sidebar';
+import { ChatSidebar } from './components/ChatSidebar';
 import { Dashboard } from './views/Dashboard';
 import { Backlog } from './views/Backlog';
 import { Actions } from './views/Actions';
@@ -19,6 +20,8 @@ type View = 'dashboard' | 'backlog' | 'actions' | 'issues' | 'ideas' | 'codebase
 export default function App() {
   const [view, setView] = useState<View>('dashboard');
   const [refreshKey, setRefreshKey] = useState(0);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [chatWidth, setChatWidth] = useState(450);
 
   const handleWSMessage = useCallback((event: WSEvent) => {
     // Trigger re-render of active view on relevant updates
@@ -49,6 +52,12 @@ export default function App() {
       <main className="flex-1 overflow-y-auto p-6">
         {renderView()}
       </main>
+      <ChatSidebar
+        isOpen={chatOpen}
+        onToggle={() => setChatOpen(!chatOpen)}
+        width={chatWidth}
+        onWidthChange={setChatWidth}
+      />
     </div>
   );
 }

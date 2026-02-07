@@ -27,15 +27,14 @@
         { "title": "PHASES.md build plan", "size": "M", "category": "docs" }
       ],
       "discovered": [
-        "UI has never been rendered in browser — critical unknown",
+        "UI has never been rendered in browser",
         "TypeScript build not attempted",
         "Integration plugins untested with real API keys",
-        "watcher.ts had variable-before-declaration bug (fixed)",
         "Kanban dnd-kit imported but not wired up",
         "Need a real name"
       ],
-      "next_session_suggestion": "Boot the UI (npm run dev), fix everything broken, then use the tool to manage its own next iteration.",
-      "handoff_message": "Built 79 files from scratch in one session. Server boots clean. Codebase scanner works (tested on Pillar). Everything else needs browser testing. The tool is now set up to track its own development — all ideas, backlog, issues, and brain notes populated from the design conversation."
+      "next_session_suggestion": "Boot the UI, fix everything broken, then use the tool to manage its own next iteration.",
+      "handoff_message": "Built 79 files from scratch. Server boots clean. Everything needs browser testing."
     },
     {
       "date": "2026-02-07",
@@ -47,21 +46,88 @@
       "items_planned": 3,
       "items_shipped": 6,
       "shipped": [
-        { "title": "Fixed Tailwind/PostCSS config for Vite root resolution", "size": "M", "category": "bugfix" },
-        { "title": "Fixed codebase scanner default root (was scanning all Projects/)", "size": "S", "category": "bugfix" },
+        { "title": "Fixed Tailwind/PostCSS config", "size": "M", "category": "bugfix" },
+        { "title": "Fixed codebase scanner default root", "size": "S", "category": "bugfix" },
         { "title": "All 11 UI views confirmed rendering in Chrome", "size": "L", "category": "validation" },
-        { "title": "GitHub repo created and all code pushed", "size": "S", "category": "infra" },
-        { "title": "Cursor rule cold-start fix for AI auto-orientation", "size": "M", "category": "core" },
-        { "title": "Full project state update: session log, changelog, issues, brain notes, ideas", "size": "M", "category": "core" }
+        { "title": "GitHub repo created and code pushed", "size": "S", "category": "infra" },
+        { "title": "Cursor rule cold-start fix", "size": "M", "category": "core" },
+        { "title": "Full project state update", "size": "M", "category": "core" }
       ],
       "discovered": [
-        "Cursor built-in browser doesn't work well with Vite/WebSocket — Chrome required",
-        "AI did not follow dev-track cursor rule proactively — cold-start instructions were missing",
-        "Codebase scanner was scanning parent directory (all of Projects/) instead of dev-track",
-        "Multi-user/concurrent session support needed for web-based future"
+        "Cursor built-in browser doesn't work well with Vite/WebSocket",
+        "AI did not follow dev-track cursor rule proactively",
+        "Codebase scanner was scanning parent directory"
       ],
-      "next_session_suggestion": "Test the cold-start cursor rule in a fresh chat window. Then tackle ISS-002 (TypeScript build). Start using dev-track to manage a real Pillar development session.",
-      "handoff_message": "UI works. GitHub repo live at coleguerin-cmd/dev-track. Critical ISS-001 resolved. Cursor rule now has cold-start instructions so next chat window will auto-orient. The AI should now be managing the project proactively from the first message. Remaining: TS build (ISS-002), integration testing (ISS-003), kanban DnD (ISS-004)."
+      "next_session_suggestion": "Test cold-start rule in fresh chat. Fix TypeScript build. Start dogfooding on Pillar.",
+      "handoff_message": "UI works. GitHub repo live. ISS-001 resolved. Cold-start added to cursor rule."
+    },
+    {
+      "date": "2026-02-07",
+      "developer": "user",
+      "started_at": "2026-02-07T19:00:00Z",
+      "ended_at": "2026-02-07T23:00:00Z",
+      "duration_hours": 4,
+      "objective": "Full audit, fix core issues, build codebase visualizer, establish AI discipline",
+      "items_planned": 3,
+      "items_shipped": 11,
+      "shipped": [
+        { "title": "TypeScript build fixed (one-line: 'standard' to 'detailed')", "size": "S", "category": "bugfix" },
+        { "title": "Archive/completed sections with reopen for Backlog + Issues", "size": "M", "category": "ui" },
+        { "title": "GitHub integration rewritten — zero config via local git + gh CLI", "size": "L", "category": "core" },
+        { "title": "Dedicated /api/v1/git/* routes (7 endpoints)", "size": "M", "category": "core" },
+        { "title": "Cursor rule redesigned with inline briefing (no cold-start reads)", "size": "M", "category": "core" },
+        { "title": "Standing Instructions section for cross-platform preferences", "size": "S", "category": "core" },
+        { "title": "Interactive codebase visualizer with react-flow + dagre", "size": "L", "category": "feature" },
+        { "title": "Custom graph nodes, edges, detail panel with layman descriptions", "size": "L", "category": "feature" },
+        { "title": "Scanner rewritten for generic project structures (not Next.js-specific)", "size": "L", "category": "bugfix" },
+        { "title": "Mandatory post-change checklist added to cursor rule with alwaysApply frontmatter", "size": "M", "category": "architecture" },
+        { "title": "Comprehensive session wrap-up — first proper dogfooding of session-end flow", "size": "M", "category": "core" }
+      ],
+      "discovered": [
+        "AI context drift is a fundamental problem — passive instructions in cursor rules are unreliable for enforcing behavior (ISS-006)",
+        "Cursor rule had no frontmatter — may not have been loading at all",
+        "Scanner inferModules was hardcoded for Next.js — lumped everything into 'other' for non-Next projects",
+        "Architecture graph is technically accurate but semantically empty for non-developers (ISS-007)",
+        "The real fix for AI discipline is separation of concerns: background AI watcher for tracking, coding AI for coding (IDEA-014)",
+        "User preference: they want the tool to be AI-driven and self-managing, not human-prompted",
+        "The session-end flow had never been properly executed until now"
+      ],
+      "next_session_suggestion": "Make the architecture graph actually useful for laymen (ISS-007). Then test one real integration (GitHub is already zero-config — try Vercel or Supabase). Then seriously consider building the background AI watcher (IDEA-014) as it solves the core reliability problem.",
+      "handoff_message": "Session 3 was the biggest yet — 11 items, 32 points. Major features: codebase visualizer (react-flow), zero-config GitHub integration, cursor rule overhaul. But the most important discovery was architectural: the AI doesn't reliably follow tracking rules, and adding more rules doesn't fix it. The solution is structural enforcement — either tool-level validation or a second AI dedicated to tracking. This is documented as ISS-006 (high severity), IDEA-014 (background AI watcher), and BN-009 (brain note). The cursor rule now has proper alwaysApply frontmatter and a mandatory checklist at the very top. Now items: test-integrations (pending), graph-layman-descriptions (new, pending). 4 open issues, 15 ideas captured. Dev servers running on ports 24680 (API) and 24682 (UI)."
+    },
+    {
+      "date": "2026-02-07",
+      "developer": "user",
+      "started_at": "2026-02-07T23:00:00Z",
+      "ended_at": "2026-02-08T03:00:00Z",
+      "duration_hours": 4,
+      "objective": "Build AI-in-the-loop foundation — chat-first architecture with multi-provider routing",
+      "items_planned": 2,
+      "items_shipped": 10,
+      "shipped": [
+        { "title": "Plain-English module descriptions for graph (ISS-007 resolved)", "size": "M", "category": "enhancement" },
+        { "title": "Relationship labels on graph edges", "size": "M", "category": "enhancement" },
+        { "title": "Rich module detail panel with descriptions and connections", "size": "M", "category": "ui" },
+        { "title": "Docs view overhaul — markdown rendering, ToC, wiki layout", "size": "L", "category": "ui" },
+        { "title": "AI foundation: AIService across OpenAI/Anthropic/Google + Helicone", "size": "XL", "category": "core" },
+        { "title": "Task-aware ModelRouter with auto-discovery (58 models)", "size": "L", "category": "core" },
+        { "title": "25-tool registry with full dev-track access", "size": "L", "category": "core" },
+        { "title": "ChatService with multi-turn agent loop + SSE streaming", "size": "L", "category": "core" },
+        { "title": "Persistent resizable chat sidebar UI", "size": "L", "category": "ui" },
+        { "title": "User profile + AI config + feature flags + budget controls", "size": "M", "category": "core" }
+      ],
+      "discovered": [
+        "Anthropic model IDs change frequently — hardcoding breaks routing. Solution: auto-discover from APIs, classify by pattern",
+        "Helicone BYOK requires provider keys configured in Helicone dashboard, not just in our code",
+        "Hono SSE streaming works but both message_complete and done events fire — causes duplicate messages (ISS-008, fixed)",
+        "Dashboard brain note cards show stale/superseded notes (ISS-009, open)",
+        "The dev-track chat agent gave itself a remarkably accurate self-assessment — but 20% stale due to context loading only last 5 brain notes",
+        "Business model crystallized: NOT open source. Paid product: local daemon + web platform. Previous open-source decision superseded.",
+        "Chat-first is the right architecture — the chat IS the product, everything else is tools the chat calls",
+        "User captures ideas faster than any tracking system can keep up — needs automated capture or will always do manual audits"
+      ],
+      "next_session_suggestion": "1. Test the chat agent in real conversations — verify tool calls work, fix any issues. 2. Build Settings UI for AI config (keys, models, flags). 3. Start dogfooding on Pillar — run dev-track init on Pillar, use chat for planning. 4. Begin background monitoring (ai-watcher) — the key missing piece for self-tracking.",
+      "handoff_message": "Session 4 was the AI session. Built the entire intelligence layer: 3-provider AIService, auto-discovering ModelRouter (58 models from OpenAI/Anthropic/Google), 25-tool registry, ChatService with multi-turn agent loop, SSE streaming API, and persistent resizable chat sidebar. Also shipped graph layman descriptions (ISS-007 resolved) and docs wiki overhaul. Fixed model routing (auto-discovery vs hardcoded IDs) and duplicate message bug (ISS-008). Business model decided: paid product, not open source (BN-013). 23 ideas captured (IDEA-001 through IDEA-023). 3 open issues (ISS-003 integrations, ISS-004 DnD, ISS-006 AI drift — ISS-009 dashboard cards also open). Key insight: the chat giving its own self-assessment that was 80% right but 20% stale IS the problem dev-track exists to solve. v0.1 goal: dogfood on Pillar. Next: polish chat, Settings UI, start background monitoring."
     }
   ]
 }

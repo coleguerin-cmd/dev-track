@@ -1,4 +1,62 @@
 {
-  "preferences": [],
-  "learned_patterns": []
+  "preferences": [
+    {
+      "key": "auto_restart_servers",
+      "value": "When code changes require a dev server restart, just do it. Don't ask or tell the user to restart.",
+      "learned_from": "user said explicitly: 'I want you to restart dev servers whenever it's time to restart dev servers instead of telling me to do it'",
+      "confidence": 1.0,
+      "updated": "2026-02-07"
+    },
+    {
+      "key": "bias_toward_action",
+      "value": "Do things proactively rather than asking for permission. Act first, report what you did.",
+      "learned_from": "observed pattern: user prefers results over confirmation dialogs",
+      "confidence": 0.9,
+      "updated": "2026-02-07"
+    },
+    {
+      "key": "aesthetic_priority",
+      "value": "User cares deeply about clean, beautiful UI. Cursor-inspired minimalism. No emoji icons in production UI — use clean SVG/Lucide icons. Tight spacing, professional typography.",
+      "learned_from": "user said: 'really tuning up the design... much more beautiful cleaner form factor, tighter, better icons' and referenced Cursor's dashboard as inspiration",
+      "confidence": 1.0,
+      "updated": "2026-02-07"
+    },
+    {
+      "key": "cross_platform_instructions",
+      "value": "Behavioral instructions must persist across AI platforms. Write them to the Standing Instructions section of the context file AND to brain/preferences.json so they survive platform switches.",
+      "learned_from": "user said: 'how do we pass them into DevTrack accurately so that if I'm working in Cursor or Claude Code or Gemini CLI, it gets all the same instructions'",
+      "confidence": 1.0,
+      "updated": "2026-02-07"
+    }
+  ],
+  "learned_patterns": [
+    {
+      "pattern": "User thinks in voice-note style — long stream-of-consciousness with multiple ideas. Capture each distinct idea separately.",
+      "frequency": 3,
+      "first_seen": "2026-02-07",
+      "last_seen": "2026-02-07",
+      "notes": "Always parse multi-idea messages and log each one individually to ideas/items.json"
+    },
+    {
+      "pattern": "User wants to understand the tool's own workflow — how to use Now/Next/Later, when to move ideas to backlog, etc.",
+      "frequency": 2,
+      "first_seen": "2026-02-07",
+      "last_seen": "2026-02-07",
+      "notes": "Should document the intended workflow clearly — probably in a dedicated view or onboarding flow"
+    },
+    {
+      "pattern": "User rapidly ideates during conversation — will share 5-10 ideas in one message, mixing business strategy, technical architecture, UX vision, and product direction. Each needs separate capture.",
+      "frequency": 4,
+      "first_seen": "2026-02-07",
+      "last_seen": "2026-02-07",
+      "notes": "Session 4 had multiple messages with 3-6 distinct ideas each. All captured to IDEA-018 through IDEA-022. The user explicitly asked for audit because they know ideas get lost."
+    },
+    {
+      "pattern": "User wants honest pushback, not agreement. Will directly ask 'do you actually agree with me or are you just saying that?'",
+      "frequency": 2,
+      "first_seen": "2026-02-07",
+      "last_seen": "2026-02-07",
+      "notes": "Give genuine opinions with specific reasoning. Say where you agree AND where you'd push back. The user respects directness."
+    }
+  ]
 }

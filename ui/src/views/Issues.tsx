@@ -23,6 +23,11 @@ export function Issues() {
     load();
   };
 
+  const reopenIssue = async (id: string) => {
+    await api.issues.reopen(id);
+    load();
+  };
+
   const selected = issues.find(i => i.id === selectedIssue);
 
   return (
@@ -120,9 +125,14 @@ export function Issues() {
                   <p className="text-sm text-status-pass">{selected.resolution}</p>
                 </div>
               )}
-              {selected.status !== 'resolved' && (
+              {selected.status !== 'resolved' && selected.status !== 'wont_fix' && (
                 <button onClick={() => resolveIssue(selected.id)} className="btn-primary text-sm w-full mt-2">
                   Resolve Issue
+                </button>
+              )}
+              {(selected.status === 'resolved' || selected.status === 'wont_fix') && (
+                <button onClick={() => reopenIssue(selected.id)} className="btn-ghost text-sm w-full mt-2 text-accent-yellow border border-accent-yellow/20">
+                  ↩ Reopen Issue
                 </button>
               )}
             </div>

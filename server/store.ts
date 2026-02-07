@@ -103,7 +103,7 @@ export class Store {
           issue_commentary: 'detailed',
           design_docs: 'detailed',
           diagnostic_output: 'summary',
-          backlog_descriptions: 'standard',
+          backlog_descriptions: 'detailed',
           ai_context_loading: 'efficient',
         },
         developers: [],

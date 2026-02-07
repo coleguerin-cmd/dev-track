@@ -1,0 +1,21 @@
+{
+  "id": "chat-1770501796117-4ugz0z",
+  "title": "hello! what can you do?",
+  "messages": [
+    {
+      "id": "msg-1770501796119",
+      "role": "user",
+      "content": "hello! what can you do?",
+      "timestamp": "2026-02-07T22:03:16.119Z"
+    },
+    {
+      "id": "msg-1770501805792",
+      "role": "assistant",
+      "content": "# Hey Cole! 👋\n\nI'm your dev-track AI copilot — I have **full access** to your project management system and codebase. Here's what I can do for you:\n\n## 🎯 Project Management\n- **Backlog**: Create, update, and organize work items across now/next/later horizons\n- **Issues**: Track bugs, create issue reports, resolve problems\n- **Changelog**: Record what you've shipped\n- **Ideas**: Capture and explore new concepts with pros/cons/questions\n- **Brain Notes**: Persistent memory for observations, decisions, warnings, suggestions\n\n## 🔍 Codebase Intelligence\n- **Search**: Find files, functions, routes, components across your codebase\n- **Read Code**: Examine any file in detail\n- **Architecture**: View system modules, dependencies, and structure\n- **Stats**: Get metrics on files, lines, components, functions\n\n## 📊 Project Insights\n- **Git**: Check status, view diffs, read commit history\n- **Docs**: Read design specs and decision documents\n- **Sessions**: View work history and session plans\n- **Velocity**: Track shipping metrics and trends\n- **Health**: Monitor system health ratings\n\n## 💡 What I'm Good At\n- **Planning & prioritization** — helping you decide what to build next\n- **Architecture discussions** — thinking in systems, not just features\n- **Context awareness** — I read your code and understand the project\n- **Proactive tracking** — if you mention something worth capturing, I'll track it\n- **Action-oriented** — I don't just suggest, I create backlog items, issues, and notes\n\n---\n\n**Current project status**: 55% health, 2 items in \"now\" horizon, 3 open issues, AI chat agent work in progress.\n\nWhat would you like to explore or work on?",
+      "timestamp": "2026-02-07T22:03:25.792Z"
+    }
+  ],
+  "model": null,
+  "created": "2026-02-07T22:03:16.117Z",
+  "updated": "2026-02-07T22:03:25.792Z"
+}

@@ -1,0 +1,27 @@
+{
+  "providers": {
+    "openai": { "enabled": true },
+    "anthropic": { "enabled": true },
+    "google": { "enabled": true },
+    "helicone": { "enabled": true }
+  },
+  "features": {
+    "planning_chat": { "enabled": true, "model_override": null },
+    "scan_enrichment": { "enabled": true, "model_override": null },
+    "change_monitoring": { "enabled": false, "trigger": "git_commit" },
+    "docs_generation": { "enabled": false, "model_override": null },
+    "dashboard_insights": { "enabled": true, "model_override": null },
+    "context_generation": { "enabled": true, "model_override": null },
+    "codebase_qa": { "enabled": true, "model_override": null }
+  },
+  "budget": {
+    "daily_limit_usd": 5.00,
+    "warn_at_usd": 3.00,
+    "pause_on_limit": true
+  },
+  "defaults": {
+    "chat_model": "claude-sonnet-4-5-20250929",
+    "fast_model": "claude-haiku-4-5-20251001",
+    "reasoning_model": "gpt-5.2"
+  }
+}

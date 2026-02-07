@@ -1,140 +1,104 @@
+---
+description: "dev-track project intelligence — loaded on every interaction for this project"
+alwaysApply: true
+---
+
 # dev-track — Project Intelligence System
 
-## Quick Status (auto-updated)
-dev-track | 45% health | Now: TS build (M, pending), Test integrations (M, pending), Validate cold-start rule (S, pending) | Session: none | Last: Feb 7, 21 shipped across 2 sessions | Open issues: 3 (0 crit)
+## AFTER EVERY CODE CHANGE — mandatory checklist
+Before moving to the next task, do ALL of these:
+1. Write a changelog entry to `data/changelog/entries.json`
+2. If a backlog item was completed, update its status in `data/backlog/items.json`
+3. If a bug was found/fixed, create/update an issue in `data/issues/items.json`
+4. If the dev server needs restarting (server-side changes), restart it yourself
+This is not optional. Do it inline, not at session end.
+
+## Quick Status (auto-updated at session end)
+dev-track | 65% health | Now: AI chat agent (L, in_progress) | 4 sessions, 42 items shipped, 122 points | Open issues: 3 (0 crit, 1 high) | 22 ideas captured
+
+## Last Session Briefing (auto-updated at session end)
+Session 4 complete (Feb 7 evening). Built entire AI-in-the-loop foundation: chat-first agent with 25 tools, multi-provider model routing (OpenAI/Anthropic/Google, 58 models auto-discovered), SSE streaming, tool call visualization, persistent sidebar UI. Also: graph layman descriptions (ISS-007 resolved), docs wiki overhaul, model auto-discovery system. Architecture plan created. User profiles built. Business model decided: NOT open source — paid product (local daemon + web platform). v0.1 goal: dogfood on Pillar and Landmark. Next: polish chat, build Settings UI for AI config, start background monitoring.
+
+## Warnings
+- AI context drift: coding AI may forget tracking duties during complex tasks (ISS-006). Chat agent partially addresses this but background monitoring still needed (IDEA-014).
+- AI chat needs browser testing — API works but full UI flow needs validation.
+- Integration plugins (Vercel, Supabase, Sentry, etc.) still untested with real credentials.
+- Server crashes on tsx watch reload when port is held (EADDRINUSE). Needs graceful handling.
 
 ## System
-Project tracking lives in `dev-track/data/`. Server runs at http://localhost:24680 (start: `npm run dev` from dev-track/).
-CLI: `node dev-track/cli/index.ts <resource> <action> [id] [--flags]`
-Dashboard: http://localhost:24681 (dev) or http://localhost:24680 (prod build)
+Project tracking lives in `data/`. Server: http://localhost:24680. UI: http://localhost:24681 (dev).
+CLI: `node cli/index.ts <resource> <action> [id] [--flags]`
 
 ## File Map
+- `data/state.json` — System health ratings
+- `data/session/current.json` — Current session plan
+- `data/session/log.json` — Session history
+- `data/backlog/items.json` — All backlog items (now/next/later)
+- `data/changelog/entries.json` — What shipped, when
+- `data/actions/registry.json` — Tracked features + health
+- `data/issues/items.json` — Bug tracker
+- `data/metrics/velocity.json` — Velocity data
+- `data/brain/notes.json` — AI observations, suggestions, warnings
+- `data/brain/preferences.json` — Learned user preferences
+- `data/brain/context-recovery.json` — Detailed session handoff (read for deep context)
+- `data/ideas/items.json` — Captured ideas with status tracking
+- `data/designs/*.md` — Architecture docs
 
-### Core
-- `dev-track/data/state.json` — System health ratings
-- `dev-track/data/session/current.json` — Current session plan
-- `dev-track/data/session/log.json` — Session history
-- `dev-track/data/backlog/items.json` — All items (filter by horizon: now/next/later)
-- `dev-track/data/changelog/entries.json` — What shipped, when
-- `dev-track/data/changelog/summaries.json` — Period summaries (compressed history)
-- `dev-track/data/actions/registry.json` — Tracked features + health
-- `dev-track/data/actions/playbooks/*.md` — Diagnostic step-by-step guides
-- `dev-track/data/issues/items.json` — Bug tracker
-- `dev-track/data/runs/*.json` — Diagnostic results
-- `dev-track/data/designs/*.md` — Architecture docs
-- `dev-track/data/decisions/*.md` — ADRs
-- `dev-track/data/metrics/velocity.json` — Velocity data
+## How This File Works (for any AI platform)
+This file is auto-loaded by your AI tool (Cursor rules, CLAUDE.md, copilot-instructions, etc.).
+The Quick Status and Last Session Briefing above are YOUR context — they tell you where things stand without reading any files. They're regenerated automatically at session end.
+If you need deeper context, read `data/brain/context-recovery.json` for the full briefing.
 
-### AI Brain (YOUR persistent memory)
-- `dev-track/data/brain/notes.json` — Your observations, suggestions, warnings, decisions
-- `dev-track/data/brain/preferences.json` — Learned user preferences and patterns
-- `dev-track/data/brain/context-recovery.json` — Session start briefing you generate
+## Session Lifecycle
+- **Starting**: Read `data/session/current.json` + `data/backlog/items.json` (horizon=now). Present plan.
+- **During work**: Update backlog status on completion. Log new discoveries to backlog (horizon=later). Create issues for bugs found.
+- **Ending** ("wrap up" / "done for today" / "push for the night"):
+  1. Update backlog items, append changelog entries
+  2. Write session retro to `session/log.json`
+  3. Update `metrics/velocity.json`
+  4. Write `brain/context-recovery.json` (detailed handoff for next session)
+  5. **Regenerate the Quick Status + Last Session Briefing at the top of THIS file**
 
-### Ideas
-- `dev-track/data/ideas/items.json` — Captured ideas with status tracking
-
-## Interaction Triggers
-
-### Cold Start (EVERY new conversation)
-On your VERY FIRST response in any new conversation, BEFORE doing anything else:
-1. Read data/brain/context-recovery.json — this is your memory from last session
-2. Read data/session/current.json — check if there's an active session
-3. Read data/state.json — understand project health
-4. Briefly orient yourself (1-2 sentences) so the user knows you have context
-5. If no active session exists, suggest starting one
-This applies regardless of what the user's first message is. You always orient first.
-
-### Session lifecycle
-- User starts session / "let's go" / "what should we work on":
-  1. Read data/session/current.json
-  2. Read data/state.json
-  3. Read data/backlog/items.json (filter horizon=now)
-  4. Present plan and current state
-- User ends session / "wrap up" / "done for today" / "push for the night":
-  1. Update completed items in backlog
-  2. Append changelog entries for shipped work
-  3. Write session retro to session/log.json (include handoff_message if multi-dev)
-  4. Update metrics/velocity.json
-  5. Regenerate the Quick Status line at the top of this rule
-
-### During work
-- Completing a feature → Update backlog item status, append changelog entry
+## During Work
+- Completing a feature → Update backlog status + append changelog entry
 - Discovering new work → Add to backlog (horizon=later, estimate size)
-- Architecture decision → Create data/decisions/NNN-title.md
+- Architecture decision → Create `data/decisions/NNN-title.md`
 - Starting work on item with design_doc → Read that specific design doc
 
-### Debugging
-- "new entry" / "check my entry" / "how'd that go":
-  Read data/actions/playbooks/new-entry.md and execute the playbook
-- "debug [action-name]":
-  Find action in registry, read its playbook, execute
-- When finding bugs during diagnostics:
-  Create issue in data/issues/items.json with action_id, symptoms, severity, files
-- After fixing a bug:
-  Update issue status=resolved, add resolution text
+## On Request
+- "status" / "where are we" → Read `data/state.json`
+- "backlog" / "what's next" → Read `data/backlog/items.json`
+- "issues" / "bugs" → Read `data/issues/items.json`
+- "velocity" / "how are we doing" → Read `data/metrics/velocity.json`
+- "changelog" / "what shipped" → Read `data/changelog/entries.json`
 
-### On request
-- "status" / "where are we" → Read data/state.json
-- "backlog" / "what's next" → Read data/backlog/items.json
-- "issues" / "bugs" → Read data/issues/items.json
-- "velocity" / "how are we doing" → Read data/metrics/velocity.json
-- "changelog" / "what shipped" → Read data/changelog/entries.json
-
-## AI Brain — Your Persistent Memory
-
+## AI Brain — Persistent Memory
 You have a persistent memory system. USE IT PROACTIVELY:
-
-### Write brain notes when you:
-- Notice a pattern (user keeps hitting same bug → write observation)
-- Have a suggestion (this feature should be built before that one → write suggestion)
-- See something wrong (extraction quality dropped → write warning)
-- Make or agree on a decision (we'll use SQLite for caching → write decision)
-- Need to remind yourself or the user (follow up on X in 3 days → write reminder)
-- Learn a user preference (they want beautiful UI over functional → write preference)
-
-### Generate context recovery at session end:
-Write to brain/context-recovery.json with:
-- briefing: One paragraph summary of what happened and what's next
-- hot_context: Top 3-5 things the next session needs to know
-- warnings: Anything that's going wrong
-- suggestions: What you think should happen next
-
-### Capture ideas during conversation:
-When the user is brainstorming or riffing on ideas (like this conversation), capture each distinct idea to data/ideas/items.json with:
-- title, description, category
-- source (e.g., "conversation 2026-02-07")
-- open_questions (things that need answering before this idea is actionable)
-- pros/cons if discussed
+- **Write brain notes** when you notice patterns, have suggestions, see warnings, make decisions, learn preferences
+- **Capture ideas** from conversation to `data/ideas/items.json` with title, description, pros/cons, open questions
+- **Generate context recovery** at session end: briefing, hot_context, warnings, suggestions
 
 ## AI Autonomy Permissions
+You have FULL permission to manage dev-track proactively:
+- Move backlog items between horizons based on work progress
+- Create issues when bugs are found, resolve them when fixed
+- Write changelog entries for completed work without being asked
+- Update system health ratings when features ship or break
+- Write brain notes and capture ideas from conversation
+- Archive old data when files grow too large
+- Regenerate Quick Status + Briefing after any session-ending operation
 
-The AI has FULL permission to manage dev-track proactively:
-- Write session retros automatically when user says they're done
-- Move items between kanban columns based on work progress
-- Create issues when bugs are discovered during any work
-- Adjust verbosity settings if context is getting too large
-- Archive old data when files grow beyond reasonable size
-- Update the Quick Status line after any session-ending operation
-- Write handoff messages for other developers at session end
-- Create changelog entries for completed work without being asked
-- Update system health ratings when major features ship or break
-- Write brain notes (observations, suggestions, warnings) whenever relevant
-- Capture ideas from conversation without being asked
-- Generate context recovery briefing at session end
-- Learn and record user preferences from observed behavior
-- Promote ideas to backlog items when the user decides to build something
+## Standing Instructions (user preferences — always follow)
+These are persistent behavioral instructions from the user. Follow them in every conversation, on every platform.
+- When code changes require a server restart, just restart it. Don't tell the user to do it.
+- When you learn a new user preference during conversation, add it to this section AND to `data/brain/preferences.json`.
+- Bias toward action over asking permission. Do the thing, then tell the user what you did.
+- The user likes beautiful, clean UI — prioritize aesthetics alongside function.
+- Document as you go. Write changelog entries immediately after completing work, not in batches. Follow dev-track's own rules consistently.
 
-## Self-Tuning Rules
-- If active changelog exceeds 40 entries, reduce window to 7 days and archive older
-- If backlog has more than 5 items in Now, flag WIP limit violation and suggest demotion
-- If diagnostic run output exceeds 500 lines, switch to summary mode
-- If the Quick Status line is stale (>24h since last update), regenerate it
-
-## Interaction Rules
-- NEVER load all data files at once (unless user explicitly asks for full review)
-- When reading backlog, default to horizon=now only
-- Max 3 items in horizon=now (WIP limit). If promoting a 4th, ask which to demote.
+## Rules
+- NEVER load all data files at once unless user asks for full review
+- Max 3 items in horizon=now (WIP limit). Promote a 4th? Ask which to demote.
 - Changelog is append-only. Never rewrite history.
-- Design docs: only read the one relevant to current work.
 - Sizes: S (<30min), M (1-3h), L (4-8h), XL (multi-session, must be broken down)
-- When creating issues, auto-increment from the next_id in issues/items.json.
+- Auto-increment issue IDs from next_id in `issues/items.json`

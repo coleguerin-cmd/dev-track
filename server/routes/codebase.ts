@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import fs from 'fs';
 import path from 'path';
-import { scanCodebase, type CodebaseAnalysis } from '../analyzer/scanner.js';
+import { scanCodebase, generateEdgeLabel, type CodebaseAnalysis } from '../analyzer/scanner.js';
 
 const DATA_DIR = path.resolve(process.cwd(), 'data');
 const CACHE_FILE = path.join(DATA_DIR, 'codebase', 'analysis.json');
@@ -162,6 +162,216 @@ app.get('/dependencies', (c) => {
 
   return c.json({ ok: true, data: { edges, total: edges.length } });
 });
+
+// GET /api/v1/codebase/graph — Pre-computed graph data for react-flow
+app.get('/graph', (c) => {
+  const analysis = cachedAnalysis || loadCache();
+  if (!analysis) return c.json({ ok: true, data: { nodes: [], edges: [] } });
+
+  const view = c.req.query('view') || 'modules'; // modules | files | routes
+  const filterModule = c.req.query('module');
+
+  interface GraphNode {
+    id: string;
+    type: string;
+    data: {
+      label: string;
+      kind: string;
+      lines: number;
+      exports: number;
+      files?: number;
+      services: string[];
+      methods?: string[];
+      fileType?: string;
+      description?: string;
+      shortDescription?: string;
+      keyExports?: string[];
+      fileTypeSummary?: Record<string, number>;
+    };
+  }
+
+  interface GraphEdge {
+    id: string;
+    source: string;
+    target: string;
+    data: { imports: string[]; label: string; relationship?: string };
+  }
+
+  let nodes: GraphNode[] = [];
+  let edges: GraphEdge[] = [];
+
+  if (view === 'modules') {
+    // Module-level architecture graph
+    const moduleMap = new Map<string, typeof analysis.modules[0]>();
+    for (const mod of analysis.modules) {
+      moduleMap.set(mod.name, mod);
+    }
+
+    // Build module nodes
+    for (const mod of analysis.modules) {
+      const totalLines = analysis.files
+        .filter(f => mod.files.includes(f.path))
+        .reduce((sum, f) => sum + f.lines, 0);
+
+      nodes.push({
+        id: mod.name,
+        type: 'moduleNode',
+        data: {
+          label: mod.name,
+          kind: inferModuleKind(mod),
+          lines: totalLines,
+          exports: mod.exports.length,
+          files: mod.files.length,
+          services: mod.externalServices,
+          description: mod.description,
+          shortDescription: mod.shortDescription,
+          keyExports: mod.keyExports,
+          fileTypeSummary: mod.fileTypeSummary,
+        },
+      });
+    }
+
+    // Build inter-module edges from file-level dependency edges
+    const moduleEdgeMap = new Map<string, Set<string>>();
+    for (const edge of analysis.dependency_edges) {
+      const fromModule = analysis.modules.find(m => m.files.includes(edge.from));
+      const toModule = analysis.modules.find(m => m.files.includes(edge.to));
+      if (fromModule && toModule && fromModule.name !== toModule.name) {
+        const key = `${fromModule.name}→${toModule.name}`;
+        if (!moduleEdgeMap.has(key)) moduleEdgeMap.set(key, new Set());
+        for (const imp of edge.imports) moduleEdgeMap.get(key)!.add(imp);
+      }
+    }
+
+    for (const [key, imports] of moduleEdgeMap) {
+      const [source, target] = key.split('→');
+      const sourceMod = moduleMap.get(source);
+      const targetMod = moduleMap.get(target);
+      const relationship = (sourceMod && targetMod)
+        ? generateEdgeLabel(sourceMod, targetMod, [...imports])
+        : `${imports.size} imports`;
+      edges.push({
+        id: `e-${source}-${target}`,
+        source,
+        target,
+        data: { imports: [...imports], label: relationship, relationship },
+      });
+    }
+  } else if (view === 'files') {
+    // File-level dependency graph
+    let files = analysis.files;
+    if (filterModule) {
+      const mod = analysis.modules.find(m => m.name === filterModule);
+      if (mod) files = files.filter(f => mod.files.includes(f.path));
+    }
+
+    for (const file of files) {
+      nodes.push({
+        id: file.path,
+        type: 'fileNode',
+        data: {
+          label: file.name,
+          kind: file.type,
+          lines: file.lines,
+          exports: file.exports.length,
+          services: file.externalCalls.map(c => c.service),
+          fileType: file.type,
+        },
+      });
+    }
+
+    let depEdges = analysis.dependency_edges;
+    if (filterModule) {
+      const filePaths = new Set(files.map(f => f.path));
+      depEdges = depEdges.filter(e => filePaths.has(e.from) && filePaths.has(e.to));
+    }
+
+    for (const edge of depEdges) {
+      edges.push({
+        id: `e-${edge.from}-${edge.to}`,
+        source: edge.from,
+        target: edge.to,
+        data: { imports: edge.imports, label: edge.imports.join(', ') },
+      });
+    }
+  } else if (view === 'routes') {
+    // API route map
+    for (const route of analysis.api_routes) {
+      nodes.push({
+        id: `route:${route.path}`,
+        type: 'routeNode',
+        data: {
+          label: route.path,
+          kind: 'api_route',
+          lines: 0,
+          exports: route.handlers.length,
+          methods: route.methods,
+          services: [],
+        },
+      });
+
+      // Find the handler file and its external services
+      const handlerFile = analysis.files.find(f => f.path === route.file);
+      if (handlerFile) {
+        const fileNodeId = route.file;
+        // Add file node if not already added
+        if (!nodes.find(n => n.id === fileNodeId)) {
+          nodes.push({
+            id: fileNodeId,
+            type: 'fileNode',
+            data: {
+              label: handlerFile.name,
+              kind: handlerFile.type,
+              lines: handlerFile.lines,
+              exports: handlerFile.exports.length,
+              services: handlerFile.externalCalls.map(c => c.service),
+              fileType: handlerFile.type,
+            },
+          });
+        }
+
+        edges.push({
+          id: `e-route-${route.path}-${fileNodeId}`,
+          source: `route:${route.path}`,
+          target: fileNodeId,
+          data: { imports: route.handlers, label: route.handlers.join(', ') },
+        });
+
+        // Add external service nodes
+        const services = [...new Set(handlerFile.externalCalls.map(c => c.service))];
+        for (const svc of services) {
+          const svcId = `svc:${svc}`;
+          if (!nodes.find(n => n.id === svcId)) {
+            nodes.push({
+              id: svcId,
+              type: 'serviceNode',
+              data: { label: svc, kind: 'external_service', lines: 0, exports: 0, services: [svc] },
+            });
+          }
+          edges.push({
+            id: `e-${fileNodeId}-${svcId}`,
+            source: fileNodeId,
+            target: svcId,
+            data: { imports: [], label: svc },
+          });
+        }
+      }
+    }
+  }
+
+  return c.json({ ok: true, data: { nodes, edges, view } });
+});
+
+function inferModuleKind(mod: { name: string; files: string[]; externalServices: string[] }): string {
+  const name = mod.name.toLowerCase();
+  if (name.includes('route') || name.includes('api') || name.includes('server')) return 'backend';
+  if (name.includes('view') || name.includes('component') || name.includes('page') || name.includes('ui')) return 'frontend';
+  if (name.includes('integration') || name.includes('plugin')) return 'integration';
+  if (name.includes('data') || name.includes('store') || name.includes('schema')) return 'data';
+  if (name.includes('util') || name.includes('lib') || name.includes('shared')) return 'shared';
+  if (mod.externalServices.length > 0) return 'integration';
+  return 'other';
+}
 
 // GET /api/v1/codebase/search — Search across files, functions, routes
 app.get('/search', (c) => {

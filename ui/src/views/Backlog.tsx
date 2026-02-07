@@ -14,9 +14,10 @@ export function Backlog() {
 
   useEffect(() => { load(); }, [load]);
 
-  const nowItems = items.filter(i => i.horizon === 'now' && i.status !== 'completed');
-  const nextItems = items.filter(i => i.horizon === 'next' && i.status !== 'completed');
-  const laterItems = items.filter(i => i.horizon === 'later' && i.status !== 'completed');
+  const nowItems = items.filter(i => i.horizon === 'now' && i.status !== 'completed' && i.status !== 'cancelled');
+  const nextItems = items.filter(i => i.horizon === 'next' && i.status !== 'completed' && i.status !== 'cancelled');
+  const laterItems = items.filter(i => i.horizon === 'later' && i.status !== 'completed' && i.status !== 'cancelled');
+  const completedItems = items.filter(i => i.status === 'completed' || i.status === 'cancelled');
 
   const moveItem = async (id: string, horizon: Horizon) => {
     try {
@@ -32,10 +33,17 @@ export function Backlog() {
     load();
   };
 
+  const reopenItem = async (id: string) => {
+    await api.backlog.reopen(id);
+    load();
+  };
+
   const updateStatus = async (id: string, status: string) => {
     await api.backlog.update(id, { status });
     load();
   };
+
+  const [showCompleted, setShowCompleted] = useState(false);
 
   return (
     <div className="max-w-7xl mx-auto">
@@ -77,6 +85,47 @@ export function Backlog() {
           onToggleExpand={setExpandedId}
         />
       </div>
+
+      {/* Completed / Archived items */}
+      {completedItems.length > 0 && (
+        <div className="mt-8">
+          <button
+            onClick={() => setShowCompleted(!showCompleted)}
+            className="flex items-center gap-2 text-sm text-text-tertiary hover:text-text-secondary transition-colors"
+          >
+            <span className={`transition-transform ${showCompleted ? 'rotate-90' : ''}`}>▸</span>
+            Completed ({completedItems.length})
+          </button>
+
+          {showCompleted && (
+            <div className="mt-3 space-y-2 animate-fade-in">
+              {completedItems.map(item => (
+                <div key={item.id} className="card p-3 opacity-60 hover:opacity-100 transition-opacity">
+                  <div className="flex items-center justify-between gap-3">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <span className="text-status-pass text-sm">✓</span>
+                      <span className="text-sm line-through text-text-tertiary truncate">{item.title}</span>
+                      <SizeBadge size={item.size} />
+                      {item.category && <CategoryTag category={item.category} />}
+                    </div>
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      {item.completed && (
+                        <span className="text-2xs text-text-tertiary">{item.completed}</span>
+                      )}
+                      <button
+                        onClick={() => reopenItem(item.id)}
+                        className="btn-ghost text-xs py-1 text-accent-yellow"
+                      >
+                        ↩ Reopen
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Quick add form */}
       {showForm && <AddItemModal onClose={() => setShowForm(false)} onAdded={load} />}
