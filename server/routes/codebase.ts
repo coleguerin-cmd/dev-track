@@ -28,8 +28,9 @@ const app = new Hono();
 // POST /api/v1/codebase/scan — Trigger a fresh scan
 app.post('/scan', async (c) => {
   const body = await c.req.json().catch(() => ({}));
-  // Default: scan parent directory (the project root above dev-track)
-  const projectRoot = body.project_root || path.resolve(process.cwd(), '..');
+  // Default: scan the current project (cwd). When dev-track lives inside another
+  // project as .dev-track/, pass project_root explicitly to scan the host project.
+  const projectRoot = body.project_root || process.cwd();
   const srcDir = body.src_dir; // Optional: scan only a subdirectory
 
   console.log(`[codebase] Scanning ${projectRoot}${srcDir ? `/${srcDir}` : ''}...`);
