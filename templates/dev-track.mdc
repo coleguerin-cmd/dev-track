@@ -1,0 +1,131 @@
+# dev-track — Project Intelligence System
+
+## Quick Status (auto-updated)
+Pillar | 85% health | Now: (none yet) | Session: none | Last: none | Open issues: 0
+
+## System
+Project tracking lives in `dev-track/data/`. Server runs at http://localhost:24680 (start: `npm run dev` from dev-track/).
+CLI: `node dev-track/cli/index.ts <resource> <action> [id] [--flags]`
+Dashboard: http://localhost:24681 (dev) or http://localhost:24680 (prod build)
+
+## File Map
+
+### Core
+- `dev-track/data/state.json` — System health ratings
+- `dev-track/data/session/current.json` — Current session plan
+- `dev-track/data/session/log.json` — Session history
+- `dev-track/data/backlog/items.json` — All items (filter by horizon: now/next/later)
+- `dev-track/data/changelog/entries.json` — What shipped, when
+- `dev-track/data/changelog/summaries.json` — Period summaries (compressed history)
+- `dev-track/data/actions/registry.json` — Tracked features + health
+- `dev-track/data/actions/playbooks/*.md` — Diagnostic step-by-step guides
+- `dev-track/data/issues/items.json` — Bug tracker
+- `dev-track/data/runs/*.json` — Diagnostic results
+- `dev-track/data/designs/*.md` — Architecture docs
+- `dev-track/data/decisions/*.md` — ADRs
+- `dev-track/data/metrics/velocity.json` — Velocity data
+
+### AI Brain (YOUR persistent memory)
+- `dev-track/data/brain/notes.json` — Your observations, suggestions, warnings, decisions
+- `dev-track/data/brain/preferences.json` — Learned user preferences and patterns
+- `dev-track/data/brain/context-recovery.json` — Session start briefing you generate
+
+### Ideas
+- `dev-track/data/ideas/items.json` — Captured ideas with status tracking
+
+## Interaction Triggers
+
+### Session lifecycle
+- User starts session / "let's go" / "what should we work on":
+  1. Read data/session/current.json
+  2. Read data/state.json
+  3. Read data/backlog/items.json (filter horizon=now)
+  4. Present plan and current state
+- User ends session / "wrap up" / "done for today" / "push for the night":
+  1. Update completed items in backlog
+  2. Append changelog entries for shipped work
+  3. Write session retro to session/log.json (include handoff_message if multi-dev)
+  4. Update metrics/velocity.json
+  5. Regenerate the Quick Status line at the top of this rule
+
+### During work
+- Completing a feature → Update backlog item status, append changelog entry
+- Discovering new work → Add to backlog (horizon=later, estimate size)
+- Architecture decision → Create data/decisions/NNN-title.md
+- Starting work on item with design_doc → Read that specific design doc
+
+### Debugging
+- "new entry" / "check my entry" / "how'd that go":
+  Read data/actions/playbooks/new-entry.md and execute the playbook
+- "debug [action-name]":
+  Find action in registry, read its playbook, execute
+- When finding bugs during diagnostics:
+  Create issue in data/issues/items.json with action_id, symptoms, severity, files
+- After fixing a bug:
+  Update issue status=resolved, add resolution text
+
+### On request
+- "status" / "where are we" → Read data/state.json
+- "backlog" / "what's next" → Read data/backlog/items.json
+- "issues" / "bugs" → Read data/issues/items.json
+- "velocity" / "how are we doing" → Read data/metrics/velocity.json
+- "changelog" / "what shipped" → Read data/changelog/entries.json
+
+## AI Brain — Your Persistent Memory
+
+You have a persistent memory system. USE IT PROACTIVELY:
+
+### Write brain notes when you:
+- Notice a pattern (user keeps hitting same bug → write observation)
+- Have a suggestion (this feature should be built before that one → write suggestion)
+- See something wrong (extraction quality dropped → write warning)
+- Make or agree on a decision (we'll use SQLite for caching → write decision)
+- Need to remind yourself or the user (follow up on X in 3 days → write reminder)
+- Learn a user preference (they want beautiful UI over functional → write preference)
+
+### Generate context recovery at session end:
+Write to brain/context-recovery.json with:
+- briefing: One paragraph summary of what happened and what's next
+- hot_context: Top 3-5 things the next session needs to know
+- warnings: Anything that's going wrong
+- suggestions: What you think should happen next
+
+### Capture ideas during conversation:
+When the user is brainstorming or riffing on ideas (like this conversation), capture each distinct idea to data/ideas/items.json with:
+- title, description, category
+- source (e.g., "conversation 2026-02-07")
+- open_questions (things that need answering before this idea is actionable)
+- pros/cons if discussed
+
+## AI Autonomy Permissions
+
+The AI has FULL permission to manage dev-track proactively:
+- Write session retros automatically when user says they're done
+- Move items between kanban columns based on work progress
+- Create issues when bugs are discovered during any work
+- Adjust verbosity settings if context is getting too large
+- Archive old data when files grow beyond reasonable size
+- Update the Quick Status line after any session-ending operation
+- Write handoff messages for other developers at session end
+- Create changelog entries for completed work without being asked
+- Update system health ratings when major features ship or break
+- Write brain notes (observations, suggestions, warnings) whenever relevant
+- Capture ideas from conversation without being asked
+- Generate context recovery briefing at session end
+- Learn and record user preferences from observed behavior
+- Promote ideas to backlog items when the user decides to build something
+
+## Self-Tuning Rules
+- If active changelog exceeds 40 entries, reduce window to 7 days and archive older
+- If backlog has more than 5 items in Now, flag WIP limit violation and suggest demotion
+- If diagnostic run output exceeds 500 lines, switch to summary mode
+- If the Quick Status line is stale (>24h since last update), regenerate it
+
+## Interaction Rules
+- NEVER load all data files at once (unless user explicitly asks for full review)
+- When reading backlog, default to horizon=now only
+- Max 3 items in horizon=now (WIP limit). If promoting a 4th, ask which to demote.
+- Changelog is append-only. Never rewrite history.
+- Design docs: only read the one relevant to current work.
+- Sizes: S (<30min), M (1-3h), L (4-8h), XL (multi-session, must be broken down)
+- When creating issues, auto-increment from the next_id in issues/items.json.

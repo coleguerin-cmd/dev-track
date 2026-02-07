@@ -1,0 +1,61 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply bg-surface-1 text-text-primary font-sans antialiased;
+    margin: 0;
+    overflow: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply bg-border rounded-full;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-border-strong;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-surface-2 border border-border rounded-lg;
+  }
+  .card-hover {
+    @apply card hover:border-border-strong hover:bg-surface-3 transition-colors cursor-pointer;
+  }
+  .badge {
+    @apply inline-flex items-center px-1.5 py-0.5 rounded text-2xs font-medium;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-colors;
+  }
+  .btn-primary {
+    @apply btn bg-accent-blue text-white hover:bg-accent-blue/90;
+  }
+  .btn-ghost {
+    @apply btn text-text-secondary hover:text-text-primary hover:bg-surface-3;
+  }
+  .btn-danger {
+    @apply btn bg-accent-red/10 text-accent-red hover:bg-accent-red/20;
+  }
+  .input {
+    @apply w-full bg-surface-0 border border-border rounded-md px-3 py-1.5 text-sm text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/30;
+  }
+  .label {
+    @apply text-xs font-medium text-text-tertiary uppercase tracking-wider;
+  }
+}

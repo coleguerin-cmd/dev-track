@@ -1,0 +1,35 @@
+{
+  "entries": [
+    {
+      "id": "chg-20260207-initial-build",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "core",
+      "title": "Initial build — complete architecture from scratch",
+      "description": "Built the entire dev-track system in one session: server, UI, CLI, data layer, integrations, AI brain, codebase scanner.",
+      "items": [
+        "Hono server on port 24680 with 16 API route files",
+        "React + Vite + Tailwind UI with 11 views",
+        "CLI with full command set for AI and human use",
+        "Shared TypeScript types across server/UI/CLI",
+        "File watcher (chokidar) for live sync",
+        "WebSocket server for real-time dashboard updates",
+        "Script runner for diagnostic execution",
+        "8 integration plugins: GitHub, Vercel, Supabase, Sentry, Helicone, Upstash, AWS EC2, Cloudflare",
+        "Integration manager with credential storage and test connection",
+        "AI Brain system: notes, preferences, context recovery",
+        "Ideas system with capture→explore→validate→promote workflow",
+        "Codebase scanner: scanned 664 files / 139K lines in 289ms",
+        "Universal activity feed aggregating all systems",
+        "Cross-platform context sync engine (Cursor, Claude, Copilot, Windsurf, generic)",
+        "Cursor rule template with AI autonomy permissions",
+        "Dark theme inspired by Linear/Cursor"
+      ],
+      "files_touched": [
+        "79 files total across server/, ui/, cli/, shared/, data/, templates/"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    }
+  ]
+}

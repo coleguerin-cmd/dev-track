@@ -1,0 +1,45 @@
+{
+  "name": "dev-track",
+  "version": "0.1.0",
+  "description": "AI-native project intelligence system for rapid development",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:ui\"",
+    "dev:server": "tsx watch server/index.ts",
+    "dev:ui": "vite ui --port 24681",
+    "build": "npm run build:ui && npm run build:server",
+    "build:ui": "vite build ui --outDir ../dist/ui",
+    "build:server": "tsc -p tsconfig.server.json",
+    "serve": "tsx server/index.ts",
+    "start": "node dist/server/index.js"
+  },
+  "dependencies": {
+    "hono": "^4.0.0",
+    "@hono/node-server": "^1.8.0",
+    "chokidar": "^3.6.0",
+    "ws": "^8.16.0",
+    "glob": "^10.3.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/ws": "^8.5.0",
+    "concurrently": "^8.2.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.0",
+    "vite": "^5.1.0",
+    "@vitejs/plugin-react": "^4.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "tailwindcss": "^3.4.0",
+    "autoprefixer": "^10.4.0",
+    "postcss": "^8.4.0",
+    "recharts": "^2.12.0",
+    "react-markdown": "^9.0.0",
+    "lucide-react": "^0.344.0",
+    "@dnd-kit/core": "^6.1.0",
+    "@dnd-kit/sortable": "^8.0.0",
+    "@dnd-kit/utilities": "^3.2.0"
+  }
+}

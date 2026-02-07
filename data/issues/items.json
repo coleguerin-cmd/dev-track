@@ -1,0 +1,73 @@
+{
+  "issues": [
+    {
+      "id": "ISS-001",
+      "title": "UI never tested in browser — rendering state unknown",
+      "action_id": null,
+      "status": "open",
+      "severity": "critical",
+      "assignee": null,
+      "discovered": "2026-02-07",
+      "discovered_in_run": null,
+      "symptoms": "All 11 React views were written without being rendered. Vite, Tailwind, and component imports may have errors.",
+      "root_cause": "Built in one session without stopping to test",
+      "files": ["ui/src/views/*.tsx", "ui/tailwind.config.js", "ui/vite.config.ts"],
+      "backlog_item": "boot-ui",
+      "resolution": null,
+      "resolved": null,
+      "notes": "This is the single biggest risk. Fix by running npm run dev:ui and opening localhost:24681."
+    },
+    {
+      "id": "ISS-002",
+      "title": "TypeScript build not attempted",
+      "action_id": null,
+      "status": "open",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-07",
+      "discovered_in_run": null,
+      "symptoms": "npm run build has never been run. Type errors may exist across server, UI, and shared code.",
+      "root_cause": "Prioritized feature breadth over build verification",
+      "files": ["tsconfig.json", "tsconfig.server.json", "ui/tsconfig.json"],
+      "backlog_item": "ts-build",
+      "resolution": null,
+      "resolved": null,
+      "notes": ""
+    },
+    {
+      "id": "ISS-003",
+      "title": "Integration plugins untested with real API keys",
+      "action_id": null,
+      "status": "open",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-07",
+      "discovered_in_run": null,
+      "symptoms": "All 8 plugins have testConnection() methods but none have been called with real credentials.",
+      "root_cause": "No credentials configured during initial build",
+      "files": ["server/integrations/*.ts"],
+      "backlog_item": "test-integrations",
+      "resolution": null,
+      "resolved": null,
+      "notes": "Settings UI has credential forms. Test by configuring GitHub first (simplest API)."
+    },
+    {
+      "id": "ISS-004",
+      "title": "Kanban drag-and-drop not actually implemented",
+      "action_id": null,
+      "status": "open",
+      "severity": "low",
+      "assignee": null,
+      "discovered": "2026-02-07",
+      "discovered_in_run": null,
+      "symptoms": "@dnd-kit is in package.json but not imported or used in Backlog.tsx. Cards have move buttons instead.",
+      "root_cause": "Deprioritized in favor of core features",
+      "files": ["ui/src/views/Backlog.tsx"],
+      "backlog_item": "kanban-dnd",
+      "resolution": null,
+      "resolved": null,
+      "notes": "Button-based moving works as a fallback. DnD is polish."
+    }
+  ],
+  "next_id": 5
+}

@@ -1,0 +1,89 @@
+{
+  "notes": [
+    {
+      "id": "BN-001",
+      "type": "observation",
+      "priority": "high",
+      "title": "79 files built without browser testing is a risk",
+      "content": "The entire UI was written in one pass without seeing a single pixel. This could mean everything works fine, or it could mean 30 minutes of fixing import paths and Tailwind config. The first action in the next session MUST be booting the UI.",
+      "context": "Initial build session 2026-02-07",
+      "actionable": true,
+      "action_taken": false,
+      "related_items": ["boot-ui", "ISS-001"],
+      "created": "2026-02-07T17:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-002",
+      "type": "decision",
+      "priority": "medium",
+      "title": "Data files are the source of truth, not the database",
+      "content": "We chose JSON + Markdown files over SQLite or any database. Reason: git-friendly, AI can read/write directly, human-readable. Optional SQLite cache for complex queries later. This is a core architectural decision — don't revisit unless file I/O becomes a bottleneck.",
+      "context": "Architecture discussion 2026-02-07",
+      "actionable": false,
+      "action_taken": false,
+      "related_items": [],
+      "created": "2026-02-07T12:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-003",
+      "type": "decision",
+      "priority": "medium",
+      "title": "Open source the tool, sell the intelligence layer",
+      "content": "File format + cursor rule + basic UI should be free/open-source. Chargeable value is in: automated diagnostics, AI agents, cross-project dashboards, cloud hosting. But validate with real usage first before any product decisions.",
+      "context": "Business model discussion 2026-02-07",
+      "actionable": false,
+      "action_taken": false,
+      "related_items": ["open-source-launch"],
+      "created": "2026-02-07T14:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-004",
+      "type": "preference",
+      "priority": "medium",
+      "title": "User prefers 'go big or fuck off' over MVP",
+      "content": "The user consistently pushes for ambitious scope and beautiful UI. They prefer building something impressive over something minimal. When suggesting approaches, lean toward the ambitious option. BUT — also be the voice of 'let's test what we have' when we're building in the dark.",
+      "context": "Observed across entire conversation 2026-02-07",
+      "actionable": false,
+      "action_taken": false,
+      "related_items": [],
+      "created": "2026-02-07T15:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-005",
+      "type": "preference",
+      "priority": "medium",
+      "title": "User is non-technical but highly capable",
+      "content": "The user describes themselves as 'not a developer' but has built a 139K-line production app with AI assistance. They think in product terms, not engineering terms. Explain things in outcomes and user experience, not in technical implementation details. They also ship insanely fast — 17 features in one session on Pillar.",
+      "context": "Observed across entire conversation 2026-02-07",
+      "actionable": false,
+      "action_taken": false,
+      "related_items": [],
+      "created": "2026-02-07T15:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-006",
+      "type": "suggestion",
+      "priority": "high",
+      "title": "Tool needs a real name before open-source launch",
+      "content": "Current name 'dev-track' is a placeholder. Discussed options: Forge (crowded), Keystone, Pylon, Tack, Axis. User didn't pick one. Revisit when ready to ship publicly. Not blocking for development.",
+      "context": "Naming discussion 2026-02-07",
+      "actionable": true,
+      "action_taken": false,
+      "related_items": ["open-source-launch"],
+      "created": "2026-02-07T16:30:00Z",
+      "expires": null,
+      "dismissed": false
+    }
+  ],
+  "next_id": 7
+}

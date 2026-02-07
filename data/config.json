@@ -1,0 +1,29 @@
+{
+  "project": "dev-track",
+  "description": "AI-native project intelligence system for rapid development. Built for the human + AI pair.",
+  "created": "2026-02-07",
+  "version": "0.1.0",
+  "settings": {
+    "max_now_items": 3,
+    "max_session_history": 10,
+    "max_run_history_per_action": 20,
+    "auto_archive_resolved_issues_after_days": 7,
+    "changelog_window_days": 14,
+    "completed_backlog_window_days": 14,
+    "summary_period": "monthly",
+    "verbosity": {
+      "changelog_entries": "detailed",
+      "session_retros": "detailed",
+      "issue_commentary": "detailed",
+      "design_docs": "detailed",
+      "diagnostic_output": "summary",
+      "backlog_descriptions": "standard",
+      "ai_context_loading": "efficient"
+    },
+    "developers": [
+      { "id": "user", "name": "Lead", "role": "lead" }
+    ],
+    "ai_platform": "cursor",
+    "integrations": []
+  }
+}
