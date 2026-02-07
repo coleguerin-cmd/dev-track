@@ -1,6 +1,11 @@
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url)).replace(/\\/g, '/');
+
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ['./index.html', './src/**/*.{ts,tsx}'],
+  content: [`${__dirname}/index.html`, `${__dirname}/src/**/*.{ts,tsx}`],
   darkMode: 'class',
   theme: {
     extend: {

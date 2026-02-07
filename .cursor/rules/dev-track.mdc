@@ -1,7 +1,7 @@
 # dev-track — Project Intelligence System
 
 ## Quick Status (auto-updated)
-Pillar | 85% health | Now: (none yet) | Session: none | Last: none | Open issues: 0
+dev-track | 35% health | Now: Boot UI (L, pending), TS build (M, pending), Test integrations (M, pending) | Session: none | Last: Feb 7, 15 shipped | Open issues: 4 (1 crit)
 
 ## System
 Project tracking lives in `dev-track/data/`. Server runs at http://localhost:24680 (start: `npm run dev` from dev-track/).

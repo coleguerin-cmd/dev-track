@@ -1,3 +1,11 @@
 {
-  "integrations": []
+  "integrations": [
+    {
+      "id": "github",
+      "enabled": true,
+      "credentials": {},
+      "last_tested": null,
+      "test_result": null
+    }
+  ]
 }
