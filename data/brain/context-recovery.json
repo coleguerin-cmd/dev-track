@@ -1,22 +1,22 @@
 {
-  "last_generated": "2026-02-07T17:30:00Z",
-  "briefing": "Built dev-track from scratch in one session: 79 files, full server + UI + CLI + 8 integration plugins + AI brain + codebase scanner. Server boots clean, API tested, codebase scanner found 664 files / 139K lines in Pillar in 289ms. UI has NOT been tested in browser yet — that's the critical next step. Need to boot Vite, see what renders, fix what's broken, then populate with Pillar data.",
+  "last_generated": "2026-02-07T19:00:00Z",
+  "briefing": "Session 2 complete. dev-track is running — all 11 UI views render in Chrome, server boots clean, GitHub repo live at coleguerin-cmd/dev-track. Fixed Tailwind/PostCSS config, codebase scanner root, and CSS import ordering. Added cold-start instructions to cursor rule so every new AI conversation auto-orients before responding. ISS-001 (critical: UI untested) is resolved. Remaining: TypeScript build (ISS-002), integration testing (ISS-003), kanban DnD (ISS-004). IDEA-008 captured for web-based multi-user future.",
   "hot_context": [
-    "Server works: port 24680, all API endpoints tested",
-    "UI is untested in browser — Vite + Tailwind + React may have issues",
-    "Codebase scanner works and scanned Pillar successfully",
-    "7 ideas captured in ideas/items.json from this conversation",
-    "Tool needs a real name (currently 'dev-track')"
+    "UI works in Chrome (not Cursor's built-in browser)",
+    "GitHub repo: coleguerin-cmd/dev-track (public, 3 commits on master)",
+    "Cold-start cursor rule added — THIS conversation was the first to test it. Validate in next fresh chat.",
+    "ISS-001 resolved (UI renders). ISS-002 (TS build) is the next critical issue.",
+    "8 ideas captured, 1 new this session (IDEA-008: web-based multi-user)"
   ],
   "warnings": [
-    "UI has never been rendered — could have import issues, Tailwind config problems, or component bugs",
-    "No TypeScript build has been attempted yet",
-    "Integration plugins use real external APIs but haven't been tested with actual credentials"
+    "TypeScript build (npm run build) has NEVER been run — could have type errors",
+    "Integration plugins still untested with real API keys",
+    "Cold-start cursor rule is untested in a fresh conversation — validate next session"
   ],
   "suggestions": [
-    "NEXT SESSION: Boot the UI (npm run dev), see what renders, fix everything broken",
-    "Then populate with Pillar data to start using it for real",
-    "Then use it for one real development session on Pillar to validate the workflow",
-    "Then decide on extraction to own repo and naming"
+    "NEXT SESSION: Open a fresh chat to validate cold-start rule works",
+    "Then run npm run build and fix any TypeScript errors (ISS-002)",
+    "Then try using dev-track to manage a real Pillar development session",
+    "Consider testing one integration (GitHub is simplest) with real credentials"
   ]
 }

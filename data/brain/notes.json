@@ -8,11 +8,11 @@
       "content": "The entire UI was written in one pass without seeing a single pixel. This could mean everything works fine, or it could mean 30 minutes of fixing import paths and Tailwind config. The first action in the next session MUST be booting the UI.",
       "context": "Initial build session 2026-02-07",
       "actionable": true,
-      "action_taken": false,
+      "action_taken": true,
       "related_items": ["boot-ui", "ISS-001"],
       "created": "2026-02-07T17:00:00Z",
       "expires": null,
-      "dismissed": false
+      "dismissed": true
     },
     {
       "id": "BN-002",
@@ -83,7 +83,35 @@
       "created": "2026-02-07T16:30:00Z",
       "expires": null,
       "dismissed": false
+    },
+    {
+      "id": "BN-007",
+      "type": "warning",
+      "priority": "high",
+      "title": "AI didn't follow dev-track rules until explicitly asked",
+      "content": "In the first boot session, the AI (me) did not proactively manage issues, changelog, or brain notes despite having full autonomy permissions in the cursor rule. Root cause: the rule had trigger-based activation ('let's go') but no cold-start instruction. Fixed by adding a mandatory cold-start section that runs on every first message. VALIDATE: open a new chat window and confirm the AI orients itself automatically.",
+      "context": "Session 2 — first boot, 2026-02-07",
+      "actionable": true,
+      "action_taken": true,
+      "related_items": [],
+      "created": "2026-02-07T18:30:00Z",
+      "expires": "2026-02-10",
+      "dismissed": false
+    },
+    {
+      "id": "BN-008",
+      "type": "observation",
+      "priority": "medium",
+      "title": "All 11 views rendered on first browser test — architecture is solid",
+      "content": "79 files written blind and they all work. The Hono + React + Tailwind + TypeScript stack is clean. Only 3 config issues (Tailwind paths, PostCSS config, CSS import order) — all environmental, not logic bugs. This validates the approach of building breadth-first and testing later for this type of structured/generated code.",
+      "context": "Session 2 — first boot validation, 2026-02-07",
+      "actionable": false,
+      "action_taken": false,
+      "related_items": ["ISS-001"],
+      "created": "2026-02-07T18:30:00Z",
+      "expires": null,
+      "dismissed": false
     }
   ],
-  "next_id": 7
+  "next_id": 9
 }

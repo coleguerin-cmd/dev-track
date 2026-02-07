@@ -1,7 +1,7 @@
 # dev-track — Project Intelligence System
 
 ## Quick Status (auto-updated)
-dev-track | 35% health | Now: Boot UI (L, pending), TS build (M, pending), Test integrations (M, pending) | Session: none | Last: Feb 7, 15 shipped | Open issues: 4 (1 crit)
+dev-track | 45% health | Now: TS build (M, pending), Test integrations (M, pending), Validate cold-start rule (S, pending) | Session: none | Last: Feb 7, 21 shipped across 2 sessions | Open issues: 3 (0 crit)
 
 ## System
 Project tracking lives in `dev-track/data/`. Server runs at http://localhost:24680 (start: `npm run dev` from dev-track/).
@@ -34,6 +34,15 @@ Dashboard: http://localhost:24681 (dev) or http://localhost:24680 (prod build)
 - `dev-track/data/ideas/items.json` — Captured ideas with status tracking
 
 ## Interaction Triggers
+
+### Cold Start (EVERY new conversation)
+On your VERY FIRST response in any new conversation, BEFORE doing anything else:
+1. Read data/brain/context-recovery.json — this is your memory from last session
+2. Read data/session/current.json — check if there's an active session
+3. Read data/state.json — understand project health
+4. Briefly orient yourself (1-2 sentences) so the user knows you have context
+5. If no active session exists, suggest starting one
+This applies regardless of what the user's first message is. You always orient first.
 
 ### Session lifecycle
 - User starts session / "let's go" / "what should we work on":

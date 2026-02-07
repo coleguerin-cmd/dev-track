@@ -1,13 +1,36 @@
 {
-  "sessions": [],
+  "sessions": [
+    {
+      "date": "2026-02-07",
+      "developer": "user",
+      "duration_hours": 7.5,
+      "items_shipped": 15,
+      "by_size": { "S": 1, "M": 8, "L": 6, "XL": 0 },
+      "by_category": { "core": 8, "design": 1, "ui": 1, "integrations": 1, "docs": 2 },
+      "points": 43,
+      "issues_found": 4,
+      "issues_resolved": 0
+    },
+    {
+      "date": "2026-02-07",
+      "developer": "user",
+      "duration_hours": 1.5,
+      "items_shipped": 6,
+      "by_size": { "S": 2, "M": 3, "L": 1, "XL": 0 },
+      "by_category": { "bugfix": 2, "validation": 1, "infra": 1, "core": 2 },
+      "points": 13,
+      "issues_found": 0,
+      "issues_resolved": 1
+    }
+  ],
   "totals": {
-    "total_sessions": 0,
-    "total_items_shipped": 0,
-    "total_points": 0,
-    "avg_items_per_session": 0,
-    "avg_points_per_session": 0,
-    "total_issues_found": 0,
-    "total_issues_resolved": 0
+    "total_sessions": 2,
+    "total_items_shipped": 21,
+    "total_points": 56,
+    "avg_items_per_session": 10.5,
+    "avg_points_per_session": 28,
+    "total_issues_found": 4,
+    "total_issues_resolved": 1
   },
   "point_values": {
     "S": 1,

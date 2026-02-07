@@ -35,6 +35,15 @@ Dashboard: http://localhost:24681 (dev) or http://localhost:24680 (prod build)
 
 ## Interaction Triggers
 
+### Cold Start (EVERY new conversation)
+On your VERY FIRST response in any new conversation, BEFORE doing anything else:
+1. Read data/brain/context-recovery.json — this is your memory from last session
+2. Read data/session/current.json — check if there's an active session
+3. Read data/state.json — understand project health
+4. Briefly orient yourself (1-2 sentences) so the user knows you have context
+5. If no active session exists, suggest starting one
+This applies regardless of what the user's first message is. You always orient first.
+
 ### Session lifecycle
 - User starts session / "let's go" / "what should we work on":
   1. Read data/session/current.json

@@ -30,6 +30,67 @@
       ],
       "backlog_item": null,
       "breaking": false
+    },
+    {
+      "id": "chg-20260207-first-boot",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "bugfix",
+      "title": "First boot — UI renders successfully in browser",
+      "description": "Fixed all configuration issues preventing the UI from rendering. All 11 views confirmed working in Chrome.",
+      "items": [
+        "Fixed Tailwind config: absolute content paths so Vite root resolution works",
+        "Fixed PostCSS config: explicit tailwind.config.js path",
+        "Fixed CSS @import ordering: Google Fonts import moved above @tailwind directives",
+        "Fixed codebase scanner: default scan root changed from parent dir to cwd (was scanning all of Projects/)",
+        "Cleared stale Pillar codebase analysis cache (52K lines of wrong data)",
+        "Killed stale process on port 24680"
+      ],
+      "files_touched": [
+        "ui/tailwind.config.js",
+        "ui/postcss.config.js",
+        "ui/src/styles/globals.css",
+        "server/routes/codebase.ts",
+        "data/codebase/analysis.json"
+      ],
+      "backlog_item": "boot-ui",
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-github-repo",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "infra",
+      "title": "GitHub repo created and code pushed",
+      "description": "Created public GitHub repo and pushed all code. Installed GitHub CLI via winget.",
+      "items": [
+        "Installed GitHub CLI (gh) via winget",
+        "Authenticated with GitHub",
+        "Created public repo: coleguerin-cmd/dev-track",
+        "Pushed 3 commits to master"
+      ],
+      "files_touched": [],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "chg-20260207-cold-start-fix",
+      "date": "2026-02-07",
+      "session_date": "2026-02-07",
+      "category": "core",
+      "title": "Cursor rule cold-start fix — AI orients on every new conversation",
+      "description": "Added cold-start instructions to cursor rule so the AI reads context-recovery, session state, and project health on the very first message of every conversation. No more starting cold.",
+      "items": [
+        "Added 'Cold Start' section to cursor rule interaction triggers",
+        "AI now reads context-recovery.json, current.json, and state.json before first response",
+        "Updated both .cursor/rules/dev-track.mdc and templates/dev-track.mdc"
+      ],
+      "files_touched": [
+        ".cursor/rules/dev-track.mdc",
+        "templates/dev-track.mdc"
+      ],
+      "backlog_item": null,
+      "breaking": false
     }
   ]
 }

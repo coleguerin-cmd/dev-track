@@ -111,7 +111,23 @@
       "notes": "Far future. Requires everything else working first. But the data layer supports it — agents just read/write dev-track/data/ files.",
       "created": "2026-02-07",
       "updated": "2026-02-07"
+    },
+    {
+      "id": "IDEA-008",
+      "title": "Web-based multi-user version with concurrent sessions and threads",
+      "description": "When dev-track becomes a web-based tool, it needs to support multiple users working concurrently, each with their own conversation threads within a shared project. Sessions become first-class entities with IDs. Each AI conversation registers as a thread within a session. The API server handles serialization so concurrent writes don't conflict. Multi-user means auth, permissions, and activity attribution. Data model seeds: add conversation_id to activities and changelog entries now (ignored in single-user mode, ready for multi-user later).",
+      "category": "architecture",
+      "status": "captured",
+      "source": "conversation 2026-02-07 (session 2 — first boot)",
+      "related_ideas": ["IDEA-004", "IDEA-007"],
+      "promoted_to": null,
+      "pros": ["Future-proofs for team usage", "Web-based tool is the natural evolution", "API server already exists as coordination layer", "Can seed data model now without changing current behavior"],
+      "cons": ["Significant architectural lift when built", "Auth/permissions is a whole thing", "File-based data store may not scale to multi-user — may need a real DB"],
+      "open_questions": ["When does file-based storage hit its limit?", "How to handle auth — GitHub OAuth? Magic links?", "Do conversations need their own data partition or share the project data?", "How to handle offline/reconnect for remote users?"],
+      "notes": "For now: single-user, single-chat, file-based is fine. Plant seeds in data model (conversation_id field). Build the web version when the local tool is fully validated. The server + API + WebSocket architecture already supports this — it's mostly a data model and auth problem.",
+      "created": "2026-02-07",
+      "updated": "2026-02-07"
     }
   ],
-  "next_id": 8
+  "next_id": 9
 }

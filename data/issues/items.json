@@ -4,7 +4,7 @@
       "id": "ISS-001",
       "title": "UI never tested in browser — rendering state unknown",
       "action_id": null,
-      "status": "open",
+      "status": "resolved",
       "severity": "critical",
       "assignee": null,
       "discovered": "2026-02-07",
@@ -13,9 +13,9 @@
       "root_cause": "Built in one session without stopping to test",
       "files": ["ui/src/views/*.tsx", "ui/tailwind.config.js", "ui/vite.config.ts"],
       "backlog_item": "boot-ui",
-      "resolution": null,
-      "resolved": null,
-      "notes": "This is the single biggest risk. Fix by running npm run dev:ui and opening localhost:24681."
+      "resolution": "Fixed Tailwind/PostCSS config, CSS import ordering. All 11 views render correctly in Chrome. User confirmed.",
+      "resolved": "2026-02-07",
+      "notes": "Required 3 fixes: absolute content paths in tailwind.config.js, explicit config path in postcss.config.js, @import order in globals.css."
     },
     {
       "id": "ISS-002",

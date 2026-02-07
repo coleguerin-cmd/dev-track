@@ -1,7 +1,7 @@
 {
   "last_updated": "2026-02-07",
-  "overall_completion": 35,
-  "summary": "Core architecture built in one session. Server boots clean, API tested, codebase scanner works. UI built but never rendered in browser. 79 source files. Needs browser testing, then real-world usage.",
+  "overall_completion": 45,
+  "summary": "UI confirmed working in browser. All 11 views render. GitHub repo live. Cold-start cursor rule added. Codebase scanner fixed. 2 sessions, 21 items shipped. Remaining: TS build, integration testing, kanban DnD, real-world dogfooding.",
   "systems": [
     {
       "id": "server",
@@ -13,9 +13,9 @@
     {
       "id": "web-ui",
       "name": "Web UI (React + Tailwind)",
-      "status": "partial",
-      "rating": 3,
-      "notes": "11 views built (Dashboard, Backlog, Actions, Issues, Ideas, Codebase, Sessions, Changelog, Docs, Metrics, Settings). Dark theme configured. NEVER TESTED IN BROWSER. This is the critical gap."
+      "status": "v1_complete",
+      "rating": 7,
+      "notes": "All 11 views render in Chrome. Tailwind/PostCSS config fixed. Dark theme working. Keyboard shortcuts working. Not tested in Cursor's built-in browser (doesn't work well with Vite/WS)."
     },
     {
       "id": "cli",
@@ -43,21 +43,21 @@
       "name": "AI Brain System",
       "status": "v1_complete",
       "rating": 7,
-      "notes": "Notes, preferences, context recovery all have API routes. Brain note creation tested and working. Context recovery populated from this session."
+      "notes": "Notes, preferences, context recovery all have API routes. Brain note creation tested and working. Context recovery populated. Cold-start cursor rule added."
     },
     {
       "id": "codebase-scanner",
       "name": "Codebase Scanner",
       "status": "production",
       "rating": 8,
-      "notes": "Scanned Pillar (664 files, 139K lines) in 289ms. Extracts functions, components, API routes, pages, imports, external calls, DB operations. Search working."
+      "notes": "Fixed default scan root (was scanning parent dir). Now defaults to cwd. Tested successfully on Pillar (664 files, 139K lines in 289ms)."
     },
     {
       "id": "ideas",
       "name": "Ideas System",
       "status": "v1_complete",
       "rating": 7,
-      "notes": "Full CRUD with status workflow. 7 ideas captured from initial conversation. Promote-to-backlog flow defined."
+      "notes": "Full CRUD with status workflow. 8 ideas captured across 2 sessions. Promote-to-backlog flow defined."
     },
     {
       "id": "context-sync",
@@ -70,23 +70,24 @@
       "id": "cursor-rule",
       "name": "Cursor Rule Template",
       "status": "v1_complete",
-      "rating": 7,
-      "notes": "Template written with triggers, file map, AI brain instructions, autonomy permissions, self-tuning rules. Not yet validated in a real session."
+      "rating": 8,
+      "notes": "Template includes cold-start instructions, triggers, file map, AI brain instructions, autonomy permissions, self-tuning rules. Cold-start fix added this session — needs validation in fresh chat."
     }
   ],
   "remaining": {
     "must_have": [
-      { "item": "UI renders in browser without errors", "done": false },
-      { "item": "Tailwind classes generating correctly", "done": false },
-      { "item": "All 11 views load and display data", "done": false },
-      { "item": "WebSocket live updates working in UI", "done": false },
+      { "item": "UI renders in browser without errors", "done": true },
+      { "item": "Tailwind classes generating correctly", "done": true },
+      { "item": "All 11 views load and display data", "done": true },
+      { "item": "WebSocket live updates working in UI", "done": true },
       { "item": "At least one integration tested with real credentials", "done": false }
     ],
     "important": [
       { "item": "TypeScript build passes (npm run build)", "done": false },
       { "item": "Kanban drag-and-drop actually works", "done": false },
       { "item": "Context sync generates correct platform files", "done": false },
-      { "item": "Self-tracking (this project) used for a real session", "done": false }
+      { "item": "Self-tracking (this project) used for a real session", "done": false },
+      { "item": "Cold-start cursor rule validated in fresh chat", "done": false }
     ],
     "nice_to_have": [
       { "item": "Interactive dependency graph visualization", "done": false },
