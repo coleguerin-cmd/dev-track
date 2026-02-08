@@ -33,14 +33,15 @@
       "type": "decision",
       "priority": "medium",
       "title": "Open source the tool, sell the intelligence layer",
-      "content": "File format + cursor rule + basic UI should be free/open-source. Chargeable value is in: automated diagnostics, AI agents, cross-project dashboards, cloud hosting. But validate with real usage first before any product decisions.",
+      "content": "SUPERSEDED by BN-013. User explicitly rejected open source in session 4. Building a paid product instead.",
       "context": "Business model discussion 2026-02-07",
       "actionable": false,
       "action_taken": false,
       "related_items": ["open-source-launch"],
       "created": "2026-02-07T14:00:00Z",
       "expires": null,
-      "dismissed": false
+      "dismissed": true,
+      "superseded_by": "BN-013"
     },
     {
       "id": "BN-004",
@@ -73,13 +74,13 @@
     {
       "id": "BN-006",
       "type": "suggestion",
-      "priority": "high",
-      "title": "Tool needs a real name before open-source launch",
+      "priority": "medium",
+      "title": "Tool needs a real name before paid launch",
       "content": "Current name 'dev-track' is a placeholder. Discussed options: Forge (crowded), Keystone, Pylon, Tack, Axis. User didn't pick one. Revisit when ready to ship publicly. Not blocking for development.",
       "context": "Naming discussion 2026-02-07",
       "actionable": true,
       "action_taken": false,
-      "related_items": ["open-source-launch"],
+      "related_items": ["paid-product-launch"],
       "created": "2026-02-07T16:30:00Z",
       "expires": null,
       "dismissed": false
@@ -96,7 +97,7 @@
       "related_items": [],
       "created": "2026-02-07T18:30:00Z",
       "expires": "2026-02-10",
-      "dismissed": false
+      "dismissed": true
     },
     {
       "id": "BN-008",
@@ -110,7 +111,7 @@
       "related_items": ["ISS-001"],
       "created": "2026-02-07T18:30:00Z",
       "expires": null,
-      "dismissed": false
+      "dismissed": true
     }
     ,
     {

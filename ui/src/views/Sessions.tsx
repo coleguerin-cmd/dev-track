@@ -95,7 +95,7 @@ export function Sessions() {
                       <p className="label mb-1.5">Discovered</p>
                       <ul className="space-y-0.5">
                         {session.discovered.map((d, i) => (
-                          <li key={i} className="text-xs text-accent-yellow">⚠ {d}</li>
+                          <li key={i} className="text-xs text-accent-yellow">{d}</li>
                         ))}
                       </ul>
                     </div>

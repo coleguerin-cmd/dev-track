@@ -1,8 +1,10 @@
-import { useState, useRef, useEffect, useCallback } from 'react';
+import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 const BASE = '/api/v1';
+const STORAGE_KEY = 'dt-chat-conversation';
+const STORAGE_MODEL_KEY = 'dt-chat-model';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -41,6 +43,29 @@ interface AvailableModel {
   id: string;
   provider: string;
   name: string;
+  tier: string;
+}
+
+// Deduplicate models — only keep one per unique name, preferring the shortest ID (base model)
+function deduplicateModels(models: AvailableModel[]): AvailableModel[] {
+  const byName = new Map<string, AvailableModel>();
+  for (const m of models) {
+    // Skip audio/tts/transcribe/search/diarize variants — not useful for chat
+    if (/tts|transcribe|audio|diarize|search|codex/.test(m.id)) continue;
+    const key = `${m.provider}:${m.name}`;
+    const existing = byName.get(key);
+    if (!existing || m.id.length < existing.id.length) {
+      byName.set(key, m);
+    }
+  }
+  // Sort: Anthropic first, then OpenAI, then Google. Within each, premium > standard > budget
+  const tierOrder: Record<string, number> = { premium: 0, standard: 1, budget: 2 };
+  const providerOrder: Record<string, number> = { anthropic: 0, openai: 1, google: 2 };
+  return Array.from(byName.values()).sort((a, b) => {
+    const pDiff = (providerOrder[a.provider] ?? 9) - (providerOrder[b.provider] ?? 9);
+    if (pDiff !== 0) return pDiff;
+    return (tierOrder[a.tier] ?? 9) - (tierOrder[b.tier] ?? 9);
+  });
 }
 
 // ─── Chat Sidebar ───────────────────────────────────────────────────────────
@@ -58,12 +83,18 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [activeToolCalls, setActiveToolCalls] = useState<ToolCallEvent[]>([]);
-  const [conversationId, setConversationId] = useState<string | null>(null);
+  const [conversationId, setConversationId] = useState<string | null>(() => {
+    try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
+  });
   const [conversations, setConversations] = useState<ConversationSummary[]>([]);
-  const [models, setModels] = useState<AvailableModel[]>([]);
-  const [selectedModel, setSelectedModel] = useState<string>('');
+  const [allModels, setAllModels] = useState<AvailableModel[]>([]);
+  const [selectedModel, setSelectedModel] = useState<string>(() => {
+    try { return localStorage.getItem(STORAGE_MODEL_KEY) || ''; } catch { return ''; }
+  });
   const [showConvoList, setShowConvoList] = useState(false);
   const [configured, setConfigured] = useState(false);
+
+  const models = useMemo(() => deduplicateModels(allModels), [allModels]);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
@@ -74,19 +105,62 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, streamingContent, activeToolCalls]);
 
-  // Load models and conversations on mount
+  // Persist conversationId to localStorage
   useEffect(() => {
-    fetch(`${BASE}/ai/models`).then(r => r.json()).then(d => {
-      if (d.ok) {
-        setModels(d.data.models || []);
-        setConfigured(d.data.configured);
-      }
-    }).catch(() => {});
+    try {
+      if (conversationId) localStorage.setItem(STORAGE_KEY, conversationId);
+      else localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+  }, [conversationId]);
+
+  // Persist selected model
+  useEffect(() => {
+    try {
+      if (selectedModel) localStorage.setItem(STORAGE_MODEL_KEY, selectedModel);
+      else localStorage.removeItem(STORAGE_MODEL_KEY);
+    } catch {}
+  }, [selectedModel]);
+
+  // Load models (with retry for discovery race) and conversations on mount
+  useEffect(() => {
+    let retryTimer: ReturnType<typeof setTimeout>;
+
+    const fetchModels = (attempt = 0) => {
+      fetch(`${BASE}/ai/models`).then(r => r.json()).then(d => {
+        if (d.ok) {
+          setConfigured(d.data.configured);
+          const modelList = d.data.models || [];
+          setAllModels(modelList);
+          // If configured but no models yet, discovery might still be running — retry
+          if (d.data.configured && modelList.length === 0 && attempt < 5) {
+            retryTimer = setTimeout(() => fetchModels(attempt + 1), 1500);
+          }
+        }
+      }).catch(() => {});
+    };
+
+    fetchModels();
 
     fetch(`${BASE}/ai/conversations`).then(r => r.json()).then(d => {
       if (d.ok) setConversations(d.data.conversations || []);
     }).catch(() => {});
+
+    return () => clearTimeout(retryTimer);
   }, []);
+
+  // Auto-load persisted conversation on mount
+  useEffect(() => {
+    if (conversationId && messages.length === 0) {
+      fetch(`${BASE}/ai/conversations/${conversationId}`).then(r => r.json()).then(data => {
+        if (data.ok) {
+          setMessages((data.data.messages || []).filter((m: ChatMessage) => m.role !== 'system' && m.role !== 'tool'));
+        } else {
+          // Conversation gone — clear
+          setConversationId(null);
+        }
+      }).catch(() => setConversationId(null));
+    }
+  }, []); // Only on mount
 
   // Resize handler
   useEffect(() => {
@@ -96,24 +170,32 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
     let isDragging = false;
 
     const onMouseDown = (e: MouseEvent) => {
+      e.preventDefault(); // Prevent text selection
+      e.stopPropagation();
       isDragging = true;
       startX = e.clientX;
       startWidth = width;
       document.body.style.cursor = 'col-resize';
       document.body.style.userSelect = 'none';
+      document.body.style.pointerEvents = 'none';
+      // Keep resize handle interactive
+      if (resizeRef.current) resizeRef.current.style.pointerEvents = 'auto';
     };
 
     const onMouseMove = (e: MouseEvent) => {
       if (!isDragging) return;
+      e.preventDefault();
       const diff = startX - e.clientX; // Dragging left increases width
       const newWidth = Math.min(700, Math.max(320, startWidth + diff));
       onWidthChange(newWidth);
     };
 
     const onMouseUp = () => {
+      if (!isDragging) return;
       isDragging = false;
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
+      document.body.style.pointerEvents = '';
     };
 
     const el = resizeRef.current;
@@ -252,6 +334,18 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
     } catch {}
   };
 
+  // ── Delete conversation ────────────────────────────────────────────────
+
+  const deleteConversation = async (id: string) => {
+    try {
+      await fetch(`${BASE}/ai/conversations/${id}`, { method: 'DELETE' });
+      setConversations(prev => prev.filter(c => c.id !== id));
+      if (conversationId === id) {
+        startNewConversation();
+      }
+    } catch {}
+  };
+
   if (!isOpen) {
     return (
       <button
@@ -271,7 +365,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
       {/* Resize handle */}
       <div
         ref={resizeRef}
-        className="absolute left-0 top-0 bottom-0 w-1 cursor-col-resize hover:bg-accent-blue/30 transition-colors z-10"
+        className="absolute left-[-2px] top-0 bottom-0 w-[5px] cursor-col-resize hover:bg-accent-blue/40 active:bg-accent-blue/60 transition-colors z-20"
       />
 
       {/* Header */}
@@ -288,12 +382,20 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
             <select
               value={selectedModel}
               onChange={(e) => setSelectedModel(e.target.value)}
-              className="text-[10px] bg-surface-2 border border-border rounded px-1.5 py-0.5 text-text-secondary"
+              className="text-[10px] bg-surface-2 border border-border rounded px-1.5 py-0.5 text-text-secondary max-w-[140px]"
             >
               <option value="">Auto</option>
-              {models.map(m => (
-                <option key={m.id} value={m.id}>{m.name}</option>
-              ))}
+              {['anthropic', 'openai', 'google'].map(provider => {
+                const providerModels = models.filter(m => m.provider === provider);
+                if (providerModels.length === 0) return null;
+                return (
+                  <optgroup key={provider} label={provider.charAt(0).toUpperCase() + provider.slice(1)}>
+                    {providerModels.map(m => (
+                      <option key={m.id} value={m.id}>{m.name}</option>
+                    ))}
+                  </optgroup>
+                );
+              })}
             </select>
           )}
           {/* Conversations */}
@@ -336,18 +438,31 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
             <p className="text-xs text-text-tertiary p-3">No conversations yet</p>
           ) : (
             conversations.map(c => (
-              <button
+              <div
                 key={c.id}
-                onClick={() => loadConversation(c.id)}
-                className={`w-full text-left px-3 py-2 text-xs hover:bg-surface-3 transition-colors ${
+                className={`flex items-center gap-1 px-3 py-2 text-xs hover:bg-surface-3 transition-colors group ${
                   conversationId === c.id ? 'bg-surface-3 text-text-primary' : 'text-text-secondary'
                 }`}
               >
-                <p className="truncate font-medium">{c.title}</p>
-                <p className="text-[9px] text-text-tertiary mt-0.5">
-                  {new Date(c.updated).toLocaleDateString()}
-                </p>
-              </button>
+                <button
+                  onClick={() => loadConversation(c.id)}
+                  className="flex-1 text-left min-w-0"
+                >
+                  <p className="truncate font-medium">{c.title}</p>
+                  <p className="text-[9px] text-text-tertiary mt-0.5">
+                    {new Date(c.updated).toLocaleDateString()}
+                  </p>
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); deleteConversation(c.id); }}
+                  className="opacity-0 group-hover:opacity-100 text-text-tertiary hover:text-accent-red p-0.5 transition-opacity"
+                  title="Delete conversation"
+                >
+                  <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                </button>
+              </div>
             ))
           )}
         </div>

@@ -372,6 +372,108 @@
       "created": "2026-02-07",
       "updated": "2026-02-07"
     }
+    ,
+    {
+      "id": "IDEA-024",
+      "title": "Session lifecycle system — clear start/end with AI-driven closure",
+      "status": "captured",
+      "category": "core",
+      "priority": "high",
+      "description": "Every coding session needs a clear start and end. When a user starts a new chat window, the AI recognizes it's a new session and logs it in DevTrack. The AI is trained to push users toward session closure at the right time — especially users who overload context windows. Based on user profile (behavior patterns, context window habits), the AI prompts: 'Good stopping point. Let's push, update dev-track, and pick up in a fresh session.' Loads user profile at session start so any AI picking up knows how to handle this specific user.",
+      "pros": ["Prevents context window overload", "Creates clean session boundaries for tracking", "Trains users on good habits", "User profile makes every AI session-aware"],
+      "cons": ["Users might find it annoying if pushed too aggressively", "Hard to detect 'right time' to prompt closure"],
+      "open_questions": ["What triggers session start detection?", "How aggressive should closure prompting be?", "Should there be a hard context limit that forces a new session?", "How does this work across different AI platforms (Cursor, Claude, etc)?"],
+      "notes": "User self-describes as someone who throws too much too fast. This is a training mechanism — like training a user like a dog (their words). The AI needs to be the guardrail.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-025",
+      "title": "Session-end self-audit — DevTrack audits its own data freshness",
+      "status": "captured",
+      "category": "core",
+      "priority": "high",
+      "description": "At the end of every session, DevTrack should audit itself: go through backlog, actions, issues, ideas, codebase, session notes, changelog, docs. Flag anything stale, contradicting, or out of date. Automatically clean up superseded brain notes, update statuses, archive old data. The system should be self-healing — if the AI missed a changelog entry or left an issue open that was fixed, the audit catches it.",
+      "pros": ["Self-healing data", "Catches AI drift automatically", "Reduces manual maintenance", "Ensures dashboard always reflects reality"],
+      "cons": ["Could be expensive if using premium AI models", "Might make incorrect changes if context is incomplete"],
+      "open_questions": ["Which model tier for audit (budget should be fine)?", "How deep should the audit go?", "Should it make changes automatically or just flag them?", "Run at session end only, or periodically?"],
+      "notes": "User explicitly frustrated by stale brain notes contradicting current decisions. This is the structural fix for ISS-006 (AI context drift) — don't rely on the coding AI to maintain tracking, have a separate audit process.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-026",
+      "title": "User behavior profiles — experience levels, habits, interaction patterns",
+      "status": "captured",
+      "category": "core",
+      "priority": "high",
+      "description": "Build rich user profiles that go beyond basic info. Include: experience levels as a web diagram (frontend, backend, devops, AI, etc.), intelligence/capability ratings, behavioral patterns (context window habits, session length preferences, communication style), and how the AI should handle this user (push to closure? let them run? explain more? explain less?). Profile is loaded at every session start and injected into AI system prompts.",
+      "pros": ["Every AI knows how to work with this user", "Personalized experience", "Better session management", "Could power team features later"],
+      "cons": ["Privacy concerns for team features", "Profiles might become stale", "Hard to auto-detect behavior patterns initially"],
+      "open_questions": ["Self-reported vs AI-observed profile data?", "How to visualize the web diagram in UI?", "Should profiles be editable by the user?", "How granular should behavior tracking be?"],
+      "notes": "User already has a basic profile in data/ai/profiles.json. This would expand it significantly with behavior modeling and make it central to the AI experience.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
+    ,
+    {
+      "id": "IDEA-027",
+      "title": "AI conversation bridge — extension/CLI that passes logs from any AI tool to DevTrack",
+      "status": "captured",
+      "category": "core",
+      "priority": "critical",
+      "description": "A lightweight extension/CLI daemon that watches AI conversations in Cursor, Claude, Gemini, etc. Captures user messages + AI final response messages (not intermediate file changes). Passes logs to DevTrack's backend AI for lightweight parsing. Extracts: issues reported, decisions made, ideas captured, action items. Also detects session start (new chat window) and session end (wrap-up language or inactivity). The backend AI can then create issues, update backlog, write brain notes — filling in what the coding AI missed. This is the bridge that makes DevTrack truly intelligent across all AI platforms.",
+      "pros": ["Solves ISS-006 structurally — no more relying on coding AI to self-track", "Works across any AI platform", "Lightweight — only captures messages, not file diffs", "Backend AI does the heavy lifting with cheap models", "Enables automatic session lifecycle detection"],
+      "cons": ["Extension development per platform (Cursor, VS Code, web)", "Privacy considerations — user conversations contain sensitive code", "AI cost for parsing every conversation", "Needs to handle different conversation formats per platform"],
+      "open_questions": ["Cursor extension vs CLI file watcher vs both?", "How to detect conversation boundaries in different tools?", "Should it capture in real-time or batch at intervals?", "How much context does the parsing AI need — just messages or also file change summaries?"],
+      "notes": "User's key insight: 'Don't pass all the changes while it's making them. Pass the user message and the AI's wrap-up response.' This keeps cost low and context manageable. The backend AI can then correlate with git diffs to understand what actually changed.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-028",
+      "title": "Deepgram voice integration — talk to DevTrack instead of typing",
+      "status": "captured",
+      "category": "feature",
+      "priority": "medium",
+      "description": "Integrate Deepgram (or similar) for voice-to-text in the DevTrack AI chat. User can talk to DevTrack instead of typing. Useful for brain dumps, session planning, quick updates. The DevTrack chat sidebar would have a mic button. Voice transcription feeds into the same chat pipeline.",
+      "pros": ["Faster for brain dumps and planning", "User explicitly wants this — 'sometimes I type, sometimes I talk'", "Deepgram has good real-time transcription APIs", "Natural for non-technical users"],
+      "cons": ["Transcription quality varies (user noted 'self-rate' → 'self-rape')", "Additional API cost", "Needs good error handling for misheard words", "Audio privacy considerations"],
+      "open_questions": ["Deepgram vs Whisper vs browser native?", "Real-time streaming or record-then-transcribe?", "How to handle transcription errors gracefully?", "Should we use AI to clean up transcription before feeding to chat?"],
+      "notes": "User is already using voice (Deepgram) in Cursor and loves it. Bringing that to DevTrack's own chat is natural.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
+    ,
+    {
+      "id": "IDEA-029",
+      "title": "Session-end user observation pipeline — AI-to-AI profile crowdsourcing",
+      "status": "captured",
+      "category": "core",
+      "priority": "high",
+      "description": "At the end of every coding session, the AI writes a brief observation about the user back to the DevTrack profile (session_observations array). Includes: attribute signals observed during the session, behavioral patterns, emotional tone, specific examples. DevTrack's backend AI periodically consolidates these observations into weighted scores — attributes that get reinforced across many sessions carry more weight than one-off signals. Essentially crowdsourced AI observations about the user, aggregated into a living profile.",
+      "pros": ["Profile improves automatically over time", "Multiple AI perspectives (Cursor, Claude, Gemini) contribute", "Weighted scoring smooths out noise from single sessions", "Creates longitudinal data about user growth"],
+      "cons": ["Adds overhead to session wrap", "Different AIs may assess differently", "Need to handle conflicting observations"],
+      "open_questions": ["How often does DevTrack AI consolidate?", "How to weight observations from different platforms/models?", "Should the user be able to see raw observations?", "Minimum observations before a score adjustment?"],
+      "notes": "User explicitly asked for this. The session_observations structure is already in the profile. Now needs: (1) cursor rule instruction to write observation at session end, (2) DevTrack AI consolidation job, (3) weighted score recalculation logic.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
+    ,
+    {
+      "id": "IDEA-030",
+      "title": "Portable user intelligence profile — travels with the user across projects and tools",
+      "status": "captured",
+      "category": "business",
+      "priority": "high",
+      "description": "The user profile becomes a portable document that follows the user across projects, AI tools, and potentially employers/teams. Contains: AI-observed intelligence scores, cognitive strengths/weaknesses, work style, behavioral patterns, communication calibration. Could be: (1) exported as a JSON/PDF for sharing, (2) hosted on a user's dev-track web profile, (3) injected into any AI tool's system prompt. Use cases beyond dev-track: team composition (pair a high-vision/low-implementation person with a high-implementation partner), hiring (honest AI assessment vs self-reported resume), work product direction (assign architecture work to systems thinkers, testing work to detail-oriented people).",
+      "pros": ["Makes every AI interaction smarter from message one", "Valuable for teams and hiring", "Differentiated product feature no one else has", "Natural extension of what we've already built"],
+      "cons": ["Privacy concerns are massive — honest AI assessments of intelligence/weaknesses", "Users might game the system if they know how scoring works", "Employers using this could be discriminatory", "Needs robust consent/sharing model"],
+      "open_questions": ["Who controls sharing? User opt-in only?", "How to prevent gaming?", "Is this ethical for hiring?", "Should there be a 'public' vs 'private' profile?"],
+      "notes": "User's insight: 'how interesting would this data be to employers if you were ACTUALLY honest.' The answer is: extremely. But also extremely sensitive. The product opportunity is there but the ethics need to be right. Start with: portable across the user's own projects and AI tools. Later: opt-in sharing for teams.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
   ],
-  "next_id": 24
+  "next_id": 31
 }

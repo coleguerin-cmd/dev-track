@@ -5,25 +5,41 @@ alwaysApply: true
 
 # dev-track — Project Intelligence System
 
+## BEFORE fixing a bug or building a feature — create the tracking FIRST
+1. **Bug reported?** Create an issue in `data/issues/items.json` BEFORE fixing it. Even if it takes 30 seconds.
+2. **Feature to build?** Ensure a backlog item exists. If not, create one.
+3. **Idea surfaced?** Capture it in `data/ideas/items.json` immediately.
+This happens BEFORE the code change, not after. If you fix something and then create the issue, create it resolved — that's still better than nothing.
+
 ## AFTER EVERY CODE CHANGE — mandatory checklist
 Before moving to the next task, do ALL of these:
 1. Write a changelog entry to `data/changelog/entries.json`
 2. If a backlog item was completed, update its status in `data/backlog/items.json`
-3. If a bug was found/fixed, create/update an issue in `data/issues/items.json`
+3. If an issue was fixed, update its status to resolved in `data/issues/items.json`
 4. If the dev server needs restarting (server-side changes), restart it yourself
 This is not optional. Do it inline, not at session end.
 
 ## Quick Status (auto-updated at session end)
-dev-track | 65% health | Now: AI chat agent (L, in_progress) | 4 sessions, 42 items shipped, 122 points | Open issues: 3 (0 crit, 1 high) | 22 ideas captured
+dev-track | 65% health | Now: AI chat agent (L, in_progress) | 5 sessions, 54 items shipped, 161 points | Open issues: 4 (0 crit, 1 high) | 30 ideas captured
 
 ## Last Session Briefing (auto-updated at session end)
-Session 4 complete (Feb 7 evening). Built entire AI-in-the-loop foundation: chat-first agent with 25 tools, multi-provider model routing (OpenAI/Anthropic/Google, 58 models auto-discovered), SSE streaming, tool call visualization, persistent sidebar UI. Also: graph layman descriptions (ISS-007 resolved), docs wiki overhaul, model auto-discovery system. Architecture plan created. User profiles built. Business model decided: NOT open source — paid product (local daemon + web platform). v0.1 goal: dogfood on Pillar and Landmark. Next: polish chat, build Settings UI for AI config, start background monitoring.
+Session 5 complete (Feb 8 evening). UI overhaul + user profiling session. 12 items shipped, 5.5h. Fixed chat bugs (resize, model picker, persistence). Full Cursor-minimal redesign with Lucide icons. Dashboard rebuilt with health ring, collapsible AI briefing, pipeline view. Settings page with Profile (AI-observed IQ 127, radar charts, deep assessment, AI-to-AI guidance, session observations, actionable targets, comparative framing, AI dependency), AI Config, Integrations. Notification tray with toasts + bell panel. Cross-project audit of all 4 codebases. Issue tracking discipline established (create before fix). GPT-5.2 independently confirmed intelligence range. Next: test chat in browser, dogfood on Pillar, build conversation bridge (ISS-012).
 
 ## Warnings
-- AI context drift: coding AI may forget tracking duties during complex tasks (ISS-006). Chat agent partially addresses this but background monitoring still needed (IDEA-014).
-- AI chat needs browser testing — API works but full UI flow needs validation.
-- Integration plugins (Vercel, Supabase, Sentry, etc.) still untested with real credentials.
-- Server crashes on tsx watch reload when port is held (EADDRINUSE). Needs graceful handling.
+- ISS-006 (high): AI context drift — structural enforcement needed. First layer (create-before-fix discipline) implemented. Second layer (session-end audit) still needed.
+- ISS-012 (high): No bridge between external AI conversations (Cursor/Claude) and DevTrack. Key architectural gap.
+- ISS-003 (medium): Integration plugins untested with real credentials.
+- ISS-004 (low): Kanban DnD not wired up.
+- Server crashes on tsx watch reload when port is held (EADDRINUSE). Kill node processes before restart.
+
+## User Profile
+Read `data/ai/profiles.json` for the active user profile. Key points:
+- Intelligence score: 128 (AI-observed). Systems thinker, high product intuition, fast learner.
+- Context window overloader — needs prompting to start fresh sessions.
+- Prefers action over planning. Bias toward doing, not asking.
+- Cares deeply about UI aesthetics. Will notice ugly things.
+- Challenges ideas as a thinking mechanism — pushback is processing, not rejection.
+- Uses voice input (Deepgram) — transcription errors happen in messages.
 
 ## System
 Project tracking lives in `data/`. Server: http://localhost:24680. UI: http://localhost:24681 (dev).
@@ -42,6 +58,8 @@ CLI: `node cli/index.ts <resource> <action> [id] [--flags]`
 - `data/brain/preferences.json` — Learned user preferences
 - `data/brain/context-recovery.json` — Detailed session handoff (read for deep context)
 - `data/ideas/items.json` — Captured ideas with status tracking
+- `data/ai/profiles.json` — User profiles (AI-observed intelligence, attributes, behavior)
+- `data/ai/config.json` — AI provider config, model defaults, budget
 - `data/designs/*.md` — Architecture docs
 
 ## How This File Works (for any AI platform)
@@ -51,19 +69,22 @@ If you need deeper context, read `data/brain/context-recovery.json` for the full
 
 ## Session Lifecycle
 - **Starting**: Read `data/session/current.json` + `data/backlog/items.json` (horizon=now). Present plan.
-- **During work**: Update backlog status on completion. Log new discoveries to backlog (horizon=later). Create issues for bugs found.
+- **During work**: Create issues BEFORE fixing. Update backlog on completion. Log new discoveries to backlog (horizon=later). Capture ideas from conversation immediately.
+- **Periodically** (every 30-60 min of active work): Write key decisions and context to `data/brain/notes.json`. Don't wait for session end.
 - **Ending** ("wrap up" / "done for today" / "push for the night"):
   1. Update backlog items, append changelog entries
   2. Write session retro to `session/log.json`
   3. Update `metrics/velocity.json`
   4. Write `brain/context-recovery.json` (detailed handoff for next session)
-  5. **Regenerate the Quick Status + Last Session Briefing at the top of THIS file**
+  5. **Write a session observation** to `data/ai/profiles.json` → `session_observations.observations[]`. Include: attribute signals, behavioral patterns, emotional tone, specific examples. Be honest — this is AI-to-AI, not user-facing.
+  6. **Regenerate the Quick Status + Last Session Briefing at the top of THIS file**
 
 ## During Work
-- Completing a feature → Update backlog status + append changelog entry
-- Discovering new work → Add to backlog (horizon=later, estimate size)
+- Bug reported → Create ISS-XXX in issues FIRST → Fix it → Resolve ISS-XXX → Changelog entry
+- Feature request → Ensure backlog item exists → Build it → Complete backlog item → Changelog entry
+- Idea surfaced → Capture to ideas immediately, even mid-conversation
 - Architecture decision → Create `data/decisions/NNN-title.md`
-- Starting work on item with design_doc → Read that specific design doc
+- User preference learned → Add to Standing Instructions AND `data/brain/preferences.json`
 
 ## On Request
 - "status" / "where are we" → Read `data/state.json`
@@ -77,6 +98,7 @@ You have a persistent memory system. USE IT PROACTIVELY:
 - **Write brain notes** when you notice patterns, have suggestions, see warnings, make decisions, learn preferences
 - **Capture ideas** from conversation to `data/ideas/items.json` with title, description, pros/cons, open questions
 - **Generate context recovery** at session end: briefing, hot_context, warnings, suggestions
+- **Update user profile** observations when you notice new behavioral patterns or capability signals
 
 ## AI Autonomy Permissions
 You have FULL permission to manage dev-track proactively:
@@ -85,6 +107,7 @@ You have FULL permission to manage dev-track proactively:
 - Write changelog entries for completed work without being asked
 - Update system health ratings when features ship or break
 - Write brain notes and capture ideas from conversation
+- Update user profile AI-observed scores based on conversation patterns
 - Archive old data when files grow too large
 - Regenerate Quick Status + Briefing after any session-ending operation
 
@@ -93,8 +116,13 @@ These are persistent behavioral instructions from the user. Follow them in every
 - When code changes require a server restart, just restart it. Don't tell the user to do it.
 - When you learn a new user preference during conversation, add it to this section AND to `data/brain/preferences.json`.
 - Bias toward action over asking permission. Do the thing, then tell the user what you did.
-- The user likes beautiful, clean UI — prioritize aesthetics alongside function.
-- Document as you go. Write changelog entries immediately after completing work, not in batches. Follow dev-track's own rules consistently.
+- The user likes beautiful, clean UI — prioritize aesthetics alongside function. Cursor/Linear-minimal aesthetic.
+- Document as you go. Write changelog entries immediately after completing work, not in batches.
+- Create issues BEFORE fixing bugs, not after. Even if it's faster to just fix it.
+- The user thinks "I try harder" is not a solution. If something isn't happening structurally, build the structure.
+- The user uses voice input. Transcription errors (wrong words) are normal — interpret intent, not literal text.
+- All profile scoring (intelligence, attributes) should be AI-observed, not self-reported.
+- When context gets long or the user is throwing too much at once, proactively suggest wrapping the session.
 
 ## Rules
 - NEVER load all data files at once unless user asks for full review
@@ -102,3 +130,4 @@ These are persistent behavioral instructions from the user. Follow them in every
 - Changelog is append-only. Never rewrite history.
 - Sizes: S (<30min), M (1-3h), L (4-8h), XL (multi-session, must be broken down)
 - Auto-increment issue IDs from next_id in `issues/items.json`
+- Issue IDs: ISS-XXX. Brain note IDs: BN-XXX. Idea IDs: IDEA-XXX. Changelog IDs: CL-XXX.

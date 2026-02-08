@@ -197,7 +197,7 @@ app.get('/usage', (c) => {
 
 // ─── Profiles ────────────────────────────────────────────────────────────────
 
-// GET /api/v1/ai/profiles — Get user profiles
+// GET /api/v1/ai/profiles — Get all user profiles
 app.get('/profiles', (c) => {
   const profilesPath = path.resolve(process.cwd(), 'data/ai/profiles.json');
   try {
@@ -206,6 +206,52 @@ app.get('/profiles', (c) => {
     return c.json({ ok: true, data: profiles });
   } catch {
     return c.json({ ok: true, data: { profiles: [] } });
+  }
+});
+
+// GET /api/v1/ai/profile — Get the active user profile (first one)
+app.get('/profile', (c) => {
+  const profilesPath = path.resolve(process.cwd(), 'data/ai/profiles.json');
+  try {
+    if (!fs.existsSync(profilesPath)) return c.json({ ok: true, data: null });
+    const data = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
+    const profile = data.profiles?.[0] || null;
+    return c.json({ ok: true, data: profile });
+  } catch {
+    return c.json({ ok: true, data: null });
+  }
+});
+
+// PUT /api/v1/ai/profile — Update the active user profile
+app.put('/profile', async (c) => {
+  const profilesPath = path.resolve(process.cwd(), 'data/ai/profiles.json');
+  const body = await c.req.json().catch(() => ({}));
+
+  try {
+    let data: any = { profiles: [] };
+    if (fs.existsSync(profilesPath)) {
+      data = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
+    }
+
+    const updated = {
+      ...body,
+      updated: new Date().toISOString().split('T')[0],
+    };
+
+    if (data.profiles.length > 0) {
+      data.profiles[0] = { ...data.profiles[0], ...updated };
+    } else {
+      data.profiles.push({
+        id: 'user-001',
+        ...updated,
+        created: new Date().toISOString().split('T')[0],
+      });
+    }
+
+    fs.writeFileSync(profilesPath, JSON.stringify(data, null, 2));
+    return c.json({ ok: true, data: data.profiles[0] });
+  } catch (err: any) {
+    return c.json({ ok: false, error: err.message }, 500);
   }
 });
 

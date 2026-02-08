@@ -142,7 +142,7 @@
       "id": "ISS-009",
       "title": "Dashboard brain note cards are stale and contradict header text",
       "action_id": null,
-      "status": "open",
+      "status": "resolved",
       "severity": "medium",
       "assignee": null,
       "discovered": "2026-02-07",
@@ -151,10 +151,61 @@
       "root_cause": "Dashboard renders all brain notes regardless of dismissed status or staleness. BN-003 (open source decision) was superseded by BN-013 (paid product) but both still show. No mechanism to hide dismissed/superseded notes from dashboard.",
       "files": ["ui/src/views/Dashboard.tsx", "data/brain/notes.json"],
       "backlog_item": null,
+      "resolution": "Dismissed BN-003 (superseded by BN-013), BN-007, BN-008 (both already actioned). Added superseded_by field to BN-003. API already filters dismissed notes. Dashboard now shows only current, relevant notes.",
+      "resolved": "2026-02-08",
+      "notes": "The API was already doing the right thing (filtering dismissed notes). The fix was just data cleanup — marking stale notes as dismissed."
+    },
+    {
+      "id": "ISS-010",
+      "title": "User profile attributes are self-reported — should be AI-observed",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": "session-5",
+      "symptoms": "Profile Settings page has sliders where the user rates themselves on coding, architecture, design, etc. User explicitly said 'fuck what the user thinks — make it all AI-set.' Self-reported scores are unreliable and the AI should be assessing these dynamically from conversation patterns.",
+      "root_cause": "Profile was built as a self-reported form. No AI observation/assessment pipeline exists yet.",
+      "files": ["ui/src/views/Settings.tsx", "data/ai/profiles.json", "server/routes/ai.ts"],
+      "backlog_item": "user-profiles",
+      "resolution": "Rebuilt profile with AI-observed scoring. Intelligence score (128, IQ-scale), cognitive profile radar chart (8 dimensions), technical skills radar chart (8 dimensions). All AI-set, read-only. Assessment notes from AI observation. Behavior patterns remain user-adjustable. SVG radar charts built from scratch, no deps.",
+      "resolved": "2026-02-08",
+      "notes": "User wants: AI-determined intelligence score, AI-observed attribute web, dynamic updates from conversations. Make sliders read-only (AI-set), add intelligence composite score, add radar/spider chart visualization."
+    },
+    {
+      "id": "ISS-011",
+      "title": "No notification system — DevTrack changes are invisible to the user",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": "session-5",
+      "symptoms": "When changes happen in DevTrack (new issues, changelog entries, brain notes), the user sees nothing unless they navigate to that view. No toast/tray notifications. DevTrack feels passive, not alive.",
+      "root_cause": "No notification/toast UI component. WebSocket events are received but only trigger a full view re-render, not targeted notifications.",
+      "files": ["ui/src/App.tsx", "ui/src/api/useWebSocket.ts"],
+      "backlog_item": null,
+      "resolution": "Built NotificationTray component: toast notifications (auto-dismiss 5s, max 3 visible), notification bell in header with unread count, dropdown panel with full history. WebSocket events converted to notifications via wsEventToNotification(). Top bar added to App layout. Dedupe logic prevents rapid-fire toasts from file watcher.",
+      "resolved": "2026-02-08",
+      "notes": "User referenced their Pillar tray system. Build a notification tray: toasts for real-time events, persistent notification panel accessible from header. WebSocket already broadcasts file_changed events — just need the UI layer."
+    },
+    {
+      "id": "ISS-012",
+      "title": "No way to pass Cursor/Claude conversation context back to DevTrack",
+      "action_id": null,
+      "status": "open",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": "session-5",
+      "symptoms": "Conversations in external AI tools (Cursor, Claude, Gemini) are invisible to DevTrack. Issues, decisions, and ideas discussed in those conversations are lost unless the AI manually writes them to DevTrack data files. This is the root cause of ISS-006 (AI context drift) — the tracking AI and the coding AI are separate systems with no bridge.",
+      "root_cause": "No integration between external AI tools and DevTrack. Each platform is a silo. DevTrack only knows what gets explicitly written to its data files.",
+      "files": [],
+      "backlog_item": null,
       "resolution": null,
       "resolved": null,
-      "notes": "Fix: Dashboard should filter out dismissed notes and notes that have been superseded. Or: add a 'superseded_by' field to brain notes and hide superseded ones."
+      "notes": "User proposed: extension/CLI that watches AI conversation logs, captures user messages + AI final responses (not intermediate changes), passes to DevTrack AI for lightweight parse. Extracts issues, decisions, ideas. Also detects session start/end. Needs to work across platforms (Cursor, Claude, Gemini, etc). This is the 'bridge' that makes DevTrack truly intelligent. See IDEA-024 for session lifecycle aspect."
     }
   ],
-  "next_id": 10
+  "next_id": 13
 }

@@ -110,7 +110,7 @@ export function Codebase() {
           )}
         </div>
         <button onClick={scan} disabled={scanning} className="btn-primary">
-          {scanning ? '⟳ Scanning...' : '🔍 Scan Project'}
+          {scanning ? 'Scanning...' : 'Scan Project'}
         </button>
       </div>
 

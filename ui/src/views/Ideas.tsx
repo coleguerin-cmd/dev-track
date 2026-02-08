@@ -8,8 +8,8 @@ async function apiFetch<T>(path: string, opts?: RequestInit): Promise<T> {
 }
 
 const STATUS_CONFIG: Record<IdeaStatus, { label: string; color: string; icon: string }> = {
-  captured: { label: 'Captured', color: 'bg-accent-blue/15 text-accent-blue', icon: '💡' },
-  exploring: { label: 'Exploring', color: 'bg-accent-purple/15 text-accent-purple', icon: '🔍' },
+  captured: { label: 'Captured', color: 'bg-accent-blue/15 text-accent-blue', icon: '◆' },
+  exploring: { label: 'Exploring', color: 'bg-accent-purple/15 text-accent-purple', icon: '○' },
   validated: { label: 'Validated', color: 'bg-status-pass/15 text-status-pass', icon: '✓' },
   promoted: { label: 'Promoted', color: 'bg-accent-green/15 text-accent-green', icon: '↗' },
   parked: { label: 'Parked', color: 'bg-surface-4 text-text-tertiary', icon: '⏸' },
@@ -49,7 +49,7 @@ export function Ideas() {
           <h1 className="text-2xl font-bold tracking-tight">Ideas</h1>
           <p className="text-sm text-text-tertiary mt-1">Capture, explore, and promote ideas to your backlog</p>
         </div>
-        <button onClick={() => setShowForm(true)} className="btn-primary">💡 New Idea</button>
+        <button onClick={() => setShowForm(true)} className="btn-primary">New Idea</button>
       </div>
 
       {/* Filters */}
@@ -69,7 +69,7 @@ export function Ideas() {
             <div key={idea.id} onClick={() => setSelectedId(idea.id)}
               className={`card-hover p-4 ${selectedId === idea.id ? 'ring-1 ring-accent-blue/40' : ''}`}>
               <div className="flex items-start gap-3">
-                <span className="text-lg mt-0.5">{STATUS_CONFIG[idea.status]?.icon || '💡'}</span>
+                <span className="text-sm mt-0.5 text-text-tertiary">{STATUS_CONFIG[idea.status]?.icon || '◆'}</span>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-1">
                     <span className="text-sm font-semibold">{idea.title}</span>
@@ -189,7 +189,7 @@ function NewIdeaModal({ onClose, onCreated }: { onClose: () => void; onCreated: 
   return (
     <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 animate-fade-in" onClick={onClose}>
       <div className="card p-6 w-full max-w-lg space-y-4 animate-slide-in" onClick={e => e.stopPropagation()}>
-        <h2 className="text-lg font-semibold">💡 New Idea</h2>
+        <h2 className="text-lg font-semibold">New Idea</h2>
         <input className="input" placeholder="What's the idea?" value={title} onChange={e => setTitle(e.target.value)} autoFocus />
         <textarea className="input h-24 resize-none" placeholder="Describe it..." value={description} onChange={e => setDescription(e.target.value)} />
         <div className="grid grid-cols-2 gap-3">

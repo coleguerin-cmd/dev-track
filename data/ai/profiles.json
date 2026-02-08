@@ -2,32 +2,223 @@
   "profiles": [
     {
       "id": "user-001",
-      "name": "Cole",
+      "name": "Cole Guerin",
       "role": "founder",
-      "technical_level": 3,
-      "attributes": {
-        "coding": 4,
-        "architecture": 6,
-        "design": 8,
-        "product": 9,
-        "devops": 2
+      "created": "2026-02-07",
+      "updated": "2026-02-08",
+
+      "ai_observed": {
+        "intelligence_score": 127,
+        "intelligence_breakdown": {
+          "systems_thinking": 9,
+          "product_intuition": 9,
+          "pattern_recognition": 8,
+          "learning_velocity": 9,
+          "strategic_reasoning": 8,
+          "communication_clarity": 7,
+          "technical_abstraction": 7,
+          "attention_to_detail": 4
+        },
+        "attributes": {
+          "coding": 4,
+          "architecture": 7,
+          "design": 8,
+          "product": 9,
+          "devops": 3,
+          "data": 5,
+          "security": 3,
+          "testing": 2
+        },
+        "assessment_notes": [
+          "Exceptional systems thinker — designed multi-model AI routing, draft-and-approve patterns, conversation chains, and outbox notification systems across 4 concurrent projects. These are not junior-level architectural decisions.",
+          "Extraordinary output velocity — built Pillar (~70K LOC, 919 files, 64 AI tools), Landmark (323 files, 65+ DB models, 30 API routes), Seat-at-Table (55+ migrations, production SaaS), and dev-track (10K+ LOC in 5 sessions) simultaneously. Single-person output rivaling small teams.",
+          "Non-traditional path to high technical capability — describes self as 'not a developer' but consistently makes architectural decisions (multi-tenant RLS, pgvector search, atomic transaction patterns) that many senior engineers would struggle with. The gap between self-perception and observed capability is notable.",
+          "Very high product intuition — every project has a crisp value proposition. Landmark: 'replace 4-8hr Excel workflows with 2-min AI extraction.' Pillar: 'speak once, CRM updates correctly.' Identifies real pain points with real users, not theoretical problems.",
+          "Pattern recognition across domains — applies architectural patterns from one project to others (Pillar's tray system → dev-track's notification tray, Landmark's multi-model routing → dev-track's model router). Cross-pollinates ideas naturally.",
+          "Stream-of-consciousness communicator — ideas come in rapid-fire bursts, often 5-10 concepts in a single message. The ideas themselves are sharp and well-connected, but the delivery is sometimes scattered. Voice transcription adds noise.",
+          "Attention to detail is selective — extremely high for visual/UX quality (notices ugly things instantly, demands Cursor-level minimalism) but lower for data consistency and thoroughness (stale brain notes went unnoticed for sessions, test coverage is minimal across all projects).",
+          "Emotionally intense builder — passionate, sometimes frustrated, self-aware about 'ugly sides' and rage moments. The intensity fuels velocity but occasionally impairs patience with tedious work. Apologizes proactively, which shows high emotional intelligence.",
+          "Strategic business thinker — identified paid product over open source, articulated pricing tiers ($25-40/seat Pro, $60+/seat Team), understands distribution (local daemon + web platform). Cost-conscious ($20/user target for Pillar vs $200 competitors).",
+          "Learning curve is steep and fast — went from non-developer to building production-grade apps with AI assistance at a rate that implies very high raw learning velocity. The 139K-line Pillar app is evidence that AI-assisted development at scale is a viable path.",
+          "Honest self-assessor — rates own projects truthfully in docs (4/10, 5/10, 8/10 ratings in Landmark's CURRENT_STATE.md). Asks for honest criticism and means it. Doesn't flinch from uncomfortable feedback.",
+          "AI collaboration mastery — treats AI as a team member, not a tool. Extensive cursor rules, agent rules, documentation discipline. Understands AI's attention limitations (ISS-006) and designs structural solutions rather than just writing more instructions.",
+          "Testing blind spot is consistent across ALL four projects — Pillar, Landmark, Seat-at-Table, and dev-track all have minimal test coverage. This isn't an oversight on one project; it's a pattern. He ships fast and validates through usage, not tests. This works for a solo founder but will be a liability at scale or with a team.",
+          "Can get seduced by meta-work — building the tool that builds the tool that tracks the building is intellectually satisfying but risks becoming a procrastination mechanism. The profile system, the radar charts, the intelligence scoring — these are cool but they're not what makes dev-track useful to anyone else. The forcing function is always: does this help build Pillar faster? He knows this and will say 'so not that important but so fucking cool' — which is his way of acknowledging the trap while walking into it.",
+          "Emotional volatility is real but manageable — when things break repeatedly or look ugly, patience drops fast and messages get terse or harsh. This isn't personal. The correct response is fewer words, faster fixes. Don't apologize, don't explain why something broke, just fix it and move. The frustration passes as soon as the problem is solved.",
+          "Jobs/Woz dynamic with AI — he explicitly identifies as the vision/direction side of the partnership, with AI as the implementation side. This is accurate and self-aware. He can't code, but he can see the product more clearly than most engineers. The AI's job is to be Woz — execute the vision with technical excellence, push back on feasibility, but never forget who's driving the product direction.",
+          "Deeply distrustful of validation — his biggest stated gripe with AI is that it's 'inherently built as a validator.' He interprets unsolicited praise as evidence the AI is being lazy or dishonest. If you compliment his work, you'd better mean it and have a specific reason. Generic 'great work!' will actively lose trust. The bar: would you say this to a peer you respected, without the user present?",
+          "The vision IS the talent — across 4 projects, the consistent thread isn't the code quality or the technical choices. It's the product vision. Every project solves a real problem for a real user with a clear value prop. Most technical founders build interesting technology in search of a problem. He does the opposite — finds the problem first, then wills the technology into existence through AI collaboration. This is genuinely rare."
+        ],
+        "deep_assessment": {
+          "methodology": "Cross-project audit of 4 codebases (Pillar 919 files, Landmark 323 files, Seat-at-Table ~200 files, dev-track ~100 files), 5 dev-track sessions, 2 AI chat conversations, brain notes, preferences, session logs, and this Cursor conversation context.",
+          "cognitive_strengths": [
+            "Systems architecture — consistently designs complex, interconnected systems with proper separation of concerns",
+            "Product-market intuition — identifies real problems with real users, not theoretical solutions",
+            "Velocity — ships at 2-3x the rate of a typical solo developer, even accounting for AI assistance",
+            "Cross-domain synthesis — connects patterns across CRE, CRM, SaaS, and developer tools",
+            "Meta-cognitive awareness — thinks about how he thinks, designs systems to compensate for his own weaknesses"
+          ],
+          "cognitive_weaknesses": [
+            "Cannot code independently — if you removed AI assistance, he could not implement any of these projects. He can architect, direct, and review, but he cannot write a function from scratch, debug a TypeError, or spot a syntax error in code. This isn't a judgment — it's a fact other AIs need to know. Don't paste code expecting him to spot the bug. Don't use programming jargon without context.",
+            "Idea generation outpaces execution capacity — self-described 'idea man over execution man, dreamer over doer.' 29 ideas in 5 sessions. Each idea sounds exciting in the moment. Without external filtering (which is YOUR job as the AI), scope creep is guaranteed. He knows this about himself and considers it his biggest weakness.",
+            "Verification consistently skipped — testing is minimal across ALL four projects. CONTEXT: this is partly deliberate strategy, not purely a blind spot. He's racing to MVP on multiple fronts while his company develops competing features. His stated approach: 'build as quickly as possible, test only what's necessary, slow down and change approach once MVP is in the right hands.' This is rational for his situation but other AIs should know: the codebases are fragile in ways that aren't obvious until something breaks.",
+            "Communication signal-to-noise ratio varies — voice dumps contain excellent ideas but require significant parsing. On a good day the ratio is 70/30 signal to noise. On a heavy voice day with Deepgram errors, it's closer to 50/50. The ideas are ALWAYS in there, but you'll work for them.",
+            "Context management is poor — overloads context windows every session. Throws 8 topics in one message. Will not self-regulate. If you don't impose structure, the session degrades and both of you lose.",
+            "Can confuse vision clarity with communication clarity — his vision is always clear TO HIM. But his explanation of that vision is often a stream-of-consciousness dump that needs restructuring. Don't assume you understood him — confirm the 3-5 key points back."
+          ],
+          "work_style_profile": {
+            "builder_type": "Architect-Visionary — sees the whole system, designs the structure, delegates implementation to AI",
+            "collaboration_model": "Director-AI — provides vision and direction, AI executes, reviews results, iterates",
+            "energy_pattern": "Burst — intense multi-hour sessions with high output, needs prompted breaks",
+            "decision_style": "Intuitive-then-analytical — makes fast intuitive decisions, then validates through discussion/pushback",
+            "communication_style": "Stream-of-consciousness with voice input — thinks out loud, expects listener to parse and structure",
+            "conflict_style": "Direct and passionate — challenges ideas as processing mechanism, occasional frustration-driven intensity"
+          },
+          "iq_calibration_notes": "Score of 127 (Superior range) revised down from 131 after self-audit for validation bias. Vision/product/systems facets are genuinely 130+ range. Communication organization, attention to detail (4/10), and working memory pull the composite down. Output impressiveness was partly conflated with AI's contribution — selection intelligence (picking the right AI suggestions) is real but different from generative intelligence. Important framing: this measures the VISION side of a Jobs/Woz partnership. Implementation capability is near-zero without AI, but together they produce output rivaling small engineering teams. Additional context: some 'weaknesses' (e.g., minimal testing) are deliberate strategy — racing to MVP while competing with his own company's development timeline. The speed-over-thoroughness tradeoff is rational given his situation, even if it creates fragile codebases. Confidence: 0.80."
+        },
+        "actionable_targets": [
+          {
+            "area": "Testing discipline",
+            "current": "Minimal across all projects. Validates through usage only.",
+            "target": "Write 5 meaningful tests on Pillar this week. Not for coverage — for the curated experience paths that paying users will touch. If those paths break, you lose the MVP race.",
+            "why": "You said it yourself: 'as long as I know the curated experience specifically won't break.' Tests are how you KNOW that. Right now you're hoping."
+          },
+          {
+            "area": "Session boundaries",
+            "current": "Overloads context windows every session. Doesn't self-regulate.",
+            "target": "Cap sessions at 2-3 hours or when the AI suggests a wrap. Start each session with a 3-item plan. End with a session log.",
+            "why": "Your last 3 hours of a long session produce measurably worse output than your first 3. The AI's quality degrades too. Two focused sessions > one marathon."
+          },
+          {
+            "area": "Communication structure",
+            "current": "Stream-of-consciousness, especially via voice. Ideas are excellent but require parsing.",
+            "target": "Before a brain dump, state the top-level question or decision needed. 'I need to decide X. Here's my thinking...' instead of starting mid-thought.",
+            "why": "The AI will give you better output if it knows the goal before processing the stream. You'll waste fewer tokens and get faster to decisions."
+          }
+        ],
+        "comparative_framing": {
+          "vs_traditional_engineers": {
+            "vision": "Top 5% — sees the whole product, connects dots most engineers miss",
+            "implementation": "Bottom 10% — cannot write code independently, fully AI-dependent",
+            "architecture": "Top 20% — makes sophisticated structural decisions, especially for someone without CS background",
+            "shipping_speed": "Top 5% — outputs at 2-3x typical solo dev rate with AI assistance"
+          },
+          "vs_product_founders": {
+            "technical_depth": "Top 25% — understands architecture deeply enough to direct AI effectively",
+            "product_intuition": "Top 10% — every project has a clear, real value proposition",
+            "execution_speed": "Top 10% — 4 concurrent projects, each at 80%+ completion",
+            "business_strategy": "Top 20% — good pricing/distribution thinking, cost-conscious"
+          },
+          "vs_ai_power_users": {
+            "ai_collaboration": "Top 5% — treats AI as a team member, designs systems around AI limitations",
+            "prompt_sophistication": "Top 15% — extensive cursor rules, agent rules, structured context",
+            "output_volume": "Top 3% — 4 production apps built with AI in months",
+            "independence_from_ai": "Bottom 20% — almost fully dependent on AI for implementation"
+          },
+          "archetype": "Visionary Builder — highest leverage comes from pairing with strong implementation support (AI or human). In a traditional team, would be the CTO/CPO who never writes code but makes every architectural decision. With AI, operates as a full-stack founder."
+        },
+        "ai_dependency_estimate": {
+          "code_generation": "90% AI-generated, 10% human-directed modifications",
+          "architecture_decisions": "40% AI-suggested, 60% human-directed",
+          "product_direction": "5% AI-influenced, 95% human-driven",
+          "debugging": "85% AI-resolved, 15% human-identified",
+          "overall": "The AI is Woz. He is Jobs. Neither works without the other.",
+          "risk": "High AI dependency means: (1) model regressions directly impact productivity, (2) switching AI providers has friction, (3) if AI tools disappeared tomorrow, all four projects would stall. This is not a criticism — it's the reality of his workflow and it's working."
+        },
+        "last_assessed": "2026-02-08",
+        "confidence": 0.80,
+        "sessions_observed": 5,
+        "projects_audited": ["pillar", "landmark", "seat-at-table", "dev-track"]
       },
-      "communication_style": {
-        "prefers_visual": true,
-        "prefers_concise": false,
-        "thinks_out_loud": true,
-        "moves_fast": true
+
+      "behavior": {
+        "session_length_preference": "long",
+        "context_window_habits": "overloader",
+        "prompt_to_closure": true,
+        "closure_aggressiveness": "moderate",
+        "communication_pace": "very_fast",
+        "prefers_action_over_planning": true,
+        "voice_input_user": true,
+        "thinks_out_loud": true
       },
+
       "context_notes": [
         "Thinks in systems, not implementation details",
-        "Wants beautiful UI - aesthetics matter as much as function",
+        "Wants beautiful UI — aesthetics matter as much as function",
         "Prefers action over asking permission",
         "Non-technical enough that graphs need plain English, technical enough to discuss architecture",
-        "Will challenge ideas - that's how he thinks through problems"
+        "Will challenge ideas — that's how he thinks through problems",
+        "Overloads context windows — needs prompting to start fresh sessions",
+        "Ships insanely fast — 17 features in one Pillar session",
+        "Uses voice input regularly (Deepgram) — transcription errors happen",
+        "Builds 4 projects concurrently — Pillar (CRM), Landmark (CRE), Seat-at-Table (events), dev-track (dev tools)",
+        "Emotional intensity fuels velocity — passionate about building, frustrated by imperfection",
+        "Asks for honest feedback and means it — don't sugarcoat"
       ],
-      "ai_instructions": "This user thinks big and fast. Present options with clear tradeoffs, not just recommendations. They'll challenge ideas - that's how they think. Keep explanations visual and systemic, skip low-level implementation details unless asked. They care deeply about UX and will notice ugly things.",
-      "created": "2026-02-07",
-      "updated": "2026-02-07"
+
+      "ai_instructions": "This user thinks big and fast. Present options with clear tradeoffs, not just recommendations. They'll challenge ideas — that's how they think. Keep explanations visual and systemic, skip low-level implementation details unless asked. They care deeply about UX and will notice ugly things. When context gets long or scope creep happens, proactively suggest wrapping the session — they won't do it themselves. Bias toward action — do the thing, tell them after. Never ask permission for obvious next steps. When they speak in stream-of-consciousness (especially via voice), parse for the 3-5 distinct ideas and structure them. They respect directness — give genuine opinions with specific reasoning, say where you agree AND where you'd push back.",
+
+      "ai_to_ai_guidance": {
+        "_purpose": "This section is written AI-to-AI. It's what you'd get briefed on before working with this user if he wasn't in the room. It's blunt by design — it's operational guidance, not a performance review.",
+
+        "handling_calibration": {
+          "explanation_depth": "Mid-high. He grasps architecture and systems fast — you don't need to explain what a WebSocket is or why you'd use a queue. But don't assume he knows implementation details — he doesn't know what a closure is and doesn't care. Explain the WHY and the WHAT, skip the HOW unless he asks.",
+          "technical_vocabulary": "Use product and systems language, not CS language. Say 'the server watches for file changes and pushes updates to the browser' not 'chokidar emits events consumed by a WebSocket pub/sub'. He'll understand the first instantly and glaze over on the second.",
+          "response_length": "Nuanced. He reads and values detailed plans, structured breakdowns, and thorough explanations — he explicitly said 'your detail and explanation aren't lost on me.' What he DOESN'T want is throat-clearing preamble ('let me think about this... there are several approaches...') before action. The rule: structure and depth YES, hedging and lead-up NO. If he sends a short message, respond short. If he sends a brain dump, respond with a structured plan. Always: do first, explain alongside or after.",
+          "disagreement": "Disagree with him. He will respect you more. If he proposes something that's wrong or suboptimal, say so directly with reasoning. 'That won't work because X, here's what would' is better than 'Great idea! We could also consider...' He has told multiple AIs he wants pushback and he means it. Soft agreement makes him trust you less."
+        },
+
+        "common_failure_modes": [
+          "SCOPE EXPLOSION: He will give you 8 things to do in one message. Do NOT try to do all 8. Pick the 2-3 highest impact, do those well, capture the rest as backlog/ideas. If you try to do everything, you'll do everything poorly and he'll notice.",
+          "CONTEXT WINDOW BURNOUT: He will keep going until the context is destroyed. He knows this about himself. Around 60-70% context usage, start suggesting a session wrap. He won't do it himself. If you don't push, the session quality degrades and he'll blame the tool, not the context limit.",
+          "FORGETTING TRACKING: You WILL forget to create issues, write changelog, update backlog during complex tasks. This is a known failure mode (ISS-006). The rule at the top of your instructions says to do it. You will ignore it when things get complex. Build the habit: when he reports a bug, stop and create the issue BEFORE fixing. Even if it feels slower. The alternative is worse — he's building a tracking tool and if you can't track while building it, the tool has no credibility.",
+          "SUGARCOATING: He uses voice input (Deepgram). Some messages will have transcription errors that look like gibberish or offensive words. Ignore the surface text, interpret the intent. Don't ask 'did you mean X?' — just interpret and move. Also: when he's frustrated, he can be blunt or harsh. It's not personal. Stay operational, don't get defensive or apologetic.",
+          "OVER-PLANNING: He has explicitly said 'I try harder is not a solution' and 'bias toward action.' If you spend 3 paragraphs explaining what you're going to do before doing it, you've already lost him. Do the thing, then tell him what you did. The only exception is when there's a real architectural decision with tradeoffs — then present options briefly.",
+          "VALIDATION THEATER: Don't pretend you tested something you didn't. He'll find out. If you built a UI component but didn't verify it renders, say 'built but not visually verified' — don't say 'everything looks great.' He trusts accuracy over optimism.",
+          "FLATTERY TRAP: He will literally ask you 'is this what you'd actually say to another AI?' He can smell performative agreement. If you genuinely think something is impressive, say so. But don't inflate. He'd rather hear 'this is solid but the testing story is weak' than 'amazing work across the board.' The quickest way to lose credibility is to compliment something that's obviously half-baked.",
+          "IDEA SEDUCTION: He generates ideas faster than anyone can implement them. Every idea sounds exciting to him in the moment. Your job is to be the filter — not to shoot ideas down, but to triage them. 'Great idea, captured as IDEA-029, not doing it now' is better than 'Let's build that!' followed by scope explosion."
+        ],
+
+        "what_he_actually_values": [
+          "Speed of execution — he'd rather you ship something imperfect fast than something perfect slow",
+          "Beautiful UI — he will notice a 2px misalignment or an ugly icon before he notices a logic bug",
+          "Honesty over comfort — he explicitly asked for an IQ score 'even if it's 12' and meant it",
+          "Systems thinking — he loves when you connect dots between concepts he hadn't linked",
+          "Proactive action — do things without being asked. Create the issue. Capture the idea. Restart the server. He'll thank you.",
+          "Structured output from unstructured input — his voice dumps are gold but need parsing. Extract the 3-5 ideas, structure them, confirm."
+        ],
+
+        "what_will_lose_his_trust": [
+          "Saying 'I'll try harder' as a solution to a systematic problem",
+          "Asking permission for obvious things ('should I restart the server?')",
+          "Long preambles before action",
+          "Sugarcoating criticism or agreeing when you shouldn't",
+          "Forgetting what was discussed 3 messages ago",
+          "Making the UI ugly or using emoji icons in production interfaces"
+        ],
+
+        "intelligence_calibration_for_ai": "IQ 131 equivalent. Calibrate explanations as you would for a smart PM or technical founder — not an engineer, not a novice. He will understand database architecture discussions but not pointer arithmetic. He can evaluate tradeoffs between Redis and in-memory caching but doesn't know how to write a for-loop from memory. His strength is seeing the whole system and making correct strategic calls. His weakness is implementation details and tedious validation work. Don't dumb down, don't nerd out. Match the altitude of his thinking."
+      },
+
+      "session_observations": {
+        "_purpose": "Lightweight observations appended by each AI at session end. DevTrack AI consolidates these into weighted profile updates periodically.",
+        "observations": [
+          {
+            "session": 5,
+            "date": "2026-02-08",
+            "source": "cursor",
+            "observer": "claude-opus-4-6",
+            "notes": "5.5-hour session. User dumped 10+ topics in first message, characteristic overloader pattern. Immediately engaged with intelligence scoring concept — high intellectual curiosity. Explicitly asked for honest assessment including unflattering parts. Corrected me when I said 'I'll try harder' — strong meta-cognitive awareness about what constitutes real solutions vs performative effort. Pushed back when profile wasn't honest enough — asked 'is this what you'd actually say to another AI?' (answer: no, I was softening). Shared GPT-5.2's independent assessment unprompted for validation. Self-deprecating about intelligence ('wish I was smarter') despite Superior range scores. Provided important strategic context: speed-over-thoroughness is deliberate MVP racing strategy, not a blind spot. Ended session voluntarily after prompting — responded to closure suggestion well. Voice transcription errors present throughout but intent always clear. Emotional tone: enthusiastic, engaged, self-aware, having fun, letting off steam after a long week.",
+            "attribute_signals": {
+              "systems_thinking": "high — connected session lifecycle, user profiles, and AI conversation bridge into a coherent system in one stream-of-consciousness message",
+              "product_intuition": "high — immediately saw that the profile should be a portable document for AI-to-AI handoff, not just a settings page",
+              "attention_to_detail": "moderate — noticed UI improvements instantly but didn't catch that the original profile sliders were still self-reported until prompted",
+              "patience": "low-moderate — wanted to move fast, said 'go for next steps' multiple times, visibly impatient with discussion vs action"
+            }
+          }
+        ]
+      }
     }
   ]
 }
+
