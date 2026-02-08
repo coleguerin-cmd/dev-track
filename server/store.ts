@@ -4,21 +4,27 @@ import { getDataDir } from './project-config.js';
 import type {
   DevTrackConfig,
   ProjectState,
-  SessionPlan,
-  SessionLog,
-  BacklogData,
-  ChangelogData,
-  ChangelogSummaries,
-  ActionsRegistry,
+  RoadmapData,
+  RoadmapItem,
+  EpicsData,
+  MilestonesData,
+  ReleasesData,
+  SystemsData,
   IssuesData,
-  DiagnosticRun,
+  ChangelogData,
+  SessionsData,
+  Session,
+  IdeasData,
+  ActivityFeedData,
+  ActivityEvent,
+  LabelsData,
+  AutomationsData,
+  DocsRegistryData,
   VelocityData,
   QuickStatus,
-  BacklogItem,
-  Issue,
-  ChangelogEntry,
-  SessionEntry,
-  Action,
+  BrainNotesData,
+  BrainPreferences,
+  ContextRecovery,
 } from '../shared/types.js';
 
 // ─── File Helpers ───────────────────────────────────────────────────────────
@@ -67,17 +73,29 @@ function listFiles(dirPath: string, ext: string): string[] {
 // ─── Store Class ────────────────────────────────────────────────────────────
 
 export class Store {
+  // Core config
   config: DevTrackConfig;
   state: ProjectState;
-  sessionCurrent: SessionPlan | null;
-  sessionLog: SessionLog;
-  backlog: BacklogData;
-  changelog: ChangelogData;
-  changelogSummaries: ChangelogSummaries;
-  actions: ActionsRegistry;
+
+  // v2 Entities
+  roadmap: RoadmapData;
+  epics: EpicsData;
+  milestones: MilestonesData;
+  releases: ReleasesData;
+  systems: SystemsData;
   issues: IssuesData;
-  runs: DiagnosticRun[];
+  changelog: ChangelogData;
+  sessions: SessionsData;
+  sessionCurrent: Session | null;
+  ideas: IdeasData;
+  activity: ActivityFeedData;
+  labels: LabelsData;
+  automations: AutomationsData;
+  docsRegistry: DocsRegistryData;
   velocity: VelocityData;
+
+  // Backward compat aliases
+  get backlog(): RoadmapData { return this.roadmap; }
 
   // Track write timestamps for debouncing watcher
   private _lastWriteTime: Record<string, number> = {};
@@ -87,14 +105,13 @@ export class Store {
       project: 'unknown',
       description: '',
       created: new Date().toISOString().split('T')[0],
-      version: '0.1',
+      version: '0.2',
       settings: {
         max_now_items: 3,
-        max_session_history: 10,
-        max_run_history_per_action: 20,
+        max_session_history: 20,
         auto_archive_resolved_issues_after_days: 7,
         changelog_window_days: 14,
-        completed_backlog_window_days: 14,
+        completed_items_window_days: 14,
         summary_period: 'monthly',
         verbosity: {
           changelog_entries: 'detailed',
@@ -102,7 +119,7 @@ export class Store {
           issue_commentary: 'detailed',
           design_docs: 'detailed',
           diagnostic_output: 'summary',
-          backlog_descriptions: 'detailed',
+          roadmap_descriptions: 'detailed',
           ai_context_loading: 'efficient',
         },
         developers: [],
@@ -111,19 +128,32 @@ export class Store {
 
     this.state = readJSON<ProjectState>('state.json', {
       last_updated: new Date().toISOString().split('T')[0],
-      overall_completion: 0,
+      overall_health: 0,
       summary: '',
-      systems: [],
-      remaining: { must_have: [], important: [], nice_to_have: [] },
     });
 
-    this.sessionCurrent = readJSON<SessionPlan | null>('session/current.json', null);
-    this.sessionLog = readJSON<SessionLog>('session/log.json', { sessions: [] });
-    this.backlog = readJSON<BacklogData>('backlog/items.json', { items: [] });
-    this.changelog = readJSON<ChangelogData>('changelog/entries.json', { entries: [] });
-    this.changelogSummaries = readJSON<ChangelogSummaries>('changelog/summaries.json', { summaries: [] });
-    this.actions = readJSON<ActionsRegistry>('actions/registry.json', { actions: [] });
+    // v2 entities — read from new paths, fallback to old paths for backward compat
+    this.roadmap = readJSON<RoadmapData>('roadmap/items.json', null as any)
+      || readJSON<RoadmapData>('backlog/items.json', { items: [] });
+
+    this.epics = readJSON<EpicsData>('roadmap/epics.json', { epics: [] });
+    this.milestones = readJSON<MilestonesData>('roadmap/milestones.json', { milestones: [] });
+    this.releases = readJSON<ReleasesData>('releases/releases.json', { releases: [] });
+    this.systems = readJSON<SystemsData>('systems/systems.json', { systems: [] });
     this.issues = readJSON<IssuesData>('issues/items.json', { issues: [], next_id: 1 });
+    this.changelog = readJSON<ChangelogData>('changelog/entries.json', { entries: [] });
+
+    // Sessions — v2 format
+    const sessionsData = readJSON<SessionsData>('session/log.json', { sessions: [], next_id: 1 });
+    this.sessions = sessionsData;
+    this.sessionCurrent = readJSON<Session | null>('session/current.json', null);
+
+    this.ideas = readJSON<IdeasData>('ideas/items.json', { ideas: [], next_id: 1 });
+    this.activity = readJSON<ActivityFeedData>('activity/feed.json', { events: [], next_id: 1 });
+    this.labels = readJSON<LabelsData>('labels/labels.json', { labels: [] });
+    this.automations = readJSON<AutomationsData>('automations/automations.json', { automations: [] });
+    this.docsRegistry = readJSON<DocsRegistryData>('docs/registry.json', { docs: [] });
+
     this.velocity = readJSON<VelocityData>('metrics/velocity.json', {
       sessions: [],
       totals: {
@@ -138,21 +168,10 @@ export class Store {
       point_values: { S: 1, M: 2, L: 5, XL: 8 },
     });
 
-    // Load recent runs
-    this.runs = this.loadRecentRuns();
-
-    console.log(`[store] Loaded: ${this.backlog.items.length} backlog items, ${this.issues.issues.length} issues, ${this.actions.actions.length} actions`);
+    console.log(`[store] Loaded: ${this.roadmap.items.length} roadmap items, ${this.issues.issues.length} issues, ${this.systems.systems.length} systems, ${this.epics.epics.length} epics`);
   }
 
-  private loadRecentRuns(): DiagnosticRun[] {
-    const files = listFiles('runs', '.json');
-    return files
-      .slice(-50) // Last 50 runs
-      .map(f => readJSON<DiagnosticRun>(`runs/${f}`, null as unknown as DiagnosticRun))
-      .filter(Boolean);
-  }
-
-  // ─── Write Methods (update in-memory + persist to disk) ─────────────────
+  // ─── Write Methods ──────────────────────────────────────────────────────
 
   markWrite(filePath: string): void {
     this._lastWriteTime[filePath] = Date.now();
@@ -173,31 +192,34 @@ export class Store {
     writeJSON('state.json', this.state);
   }
 
-  saveSessionCurrent(): void {
-    this.markWrite('session/current.json');
-    if (this.sessionCurrent) {
-      writeJSON('session/current.json', this.sessionCurrent);
-    }
+  saveRoadmap(): void {
+    this.markWrite('roadmap/items.json');
+    writeJSON('roadmap/items.json', this.roadmap);
   }
 
-  saveSessionLog(): void {
-    this.markWrite('session/log.json');
-    writeJSON('session/log.json', this.sessionLog);
-  }
-
+  /** @deprecated Use saveRoadmap() */
   saveBacklog(): void {
-    this.markWrite('backlog/items.json');
-    writeJSON('backlog/items.json', this.backlog);
+    this.saveRoadmap();
   }
 
-  saveChangelog(): void {
-    this.markWrite('changelog/entries.json');
-    writeJSON('changelog/entries.json', this.changelog);
+  saveEpics(): void {
+    this.markWrite('roadmap/epics.json');
+    writeJSON('roadmap/epics.json', this.epics);
   }
 
-  saveActions(): void {
-    this.markWrite('actions/registry.json');
-    writeJSON('actions/registry.json', this.actions);
+  saveMilestones(): void {
+    this.markWrite('roadmap/milestones.json');
+    writeJSON('roadmap/milestones.json', this.milestones);
+  }
+
+  saveReleases(): void {
+    this.markWrite('releases/releases.json');
+    writeJSON('releases/releases.json', this.releases);
+  }
+
+  saveSystems(): void {
+    this.markWrite('systems/systems.json');
+    writeJSON('systems/systems.json', this.systems);
   }
 
   saveIssues(): void {
@@ -205,64 +227,130 @@ export class Store {
     writeJSON('issues/items.json', this.issues);
   }
 
+  saveChangelog(): void {
+    this.markWrite('changelog/entries.json');
+    writeJSON('changelog/entries.json', this.changelog);
+  }
+
+  saveSessionCurrent(): void {
+    this.markWrite('session/current.json');
+    writeJSON('session/current.json', this.sessionCurrent);
+  }
+
+  saveSessionLog(): void {
+    this.markWrite('session/log.json');
+    writeJSON('session/log.json', this.sessions);
+  }
+
+  saveIdeas(): void {
+    this.markWrite('ideas/items.json');
+    writeJSON('ideas/items.json', this.ideas);
+  }
+
+  saveActivity(): void {
+    this.markWrite('activity/feed.json');
+    writeJSON('activity/feed.json', this.activity);
+  }
+
+  saveLabels(): void {
+    this.markWrite('labels/labels.json');
+    writeJSON('labels/labels.json', this.labels);
+  }
+
+  saveAutomations(): void {
+    this.markWrite('automations/automations.json');
+    writeJSON('automations/automations.json', this.automations);
+  }
+
+  saveDocsRegistry(): void {
+    this.markWrite('docs/registry.json');
+    writeJSON('docs/registry.json', this.docsRegistry);
+  }
+
   saveVelocity(): void {
     this.markWrite('metrics/velocity.json');
     writeJSON('metrics/velocity.json', this.velocity);
   }
 
-  saveRun(run: DiagnosticRun): void {
-    const filename = `${run.id}.json`;
-    this.markWrite(`runs/${filename}`);
-    writeJSON(`runs/${filename}`, run);
-    this.runs.push(run);
-    // Keep in-memory list trimmed
-    if (this.runs.length > 50) this.runs = this.runs.slice(-50);
+  // ─── Activity Feed Helper ─────────────────────────────────────────────
+
+  addActivity(event: Omit<ActivityEvent, 'id' | 'timestamp'>): ActivityEvent {
+    const full: ActivityEvent = {
+      ...event,
+      id: `ACT-${String(this.activity.next_id).padStart(4, '0')}`,
+      timestamp: new Date().toISOString(),
+    };
+    this.activity.events.push(full);
+    this.activity.next_id++;
+
+    // Rolling window — keep last 500
+    if (this.activity.events.length > 500) {
+      this.activity.events = this.activity.events.slice(-500);
+    }
+
+    this.saveActivity();
+    return full;
   }
 
-  // ─── Reload from disk (for file watcher) ────────────────────────────────
+  // ─── Reload from disk (for file watcher) ──────────────────────────────
 
   reloadFile(relativePath: string): void {
-    const normalized = relativePath.replace(/\\/g, '/');
-    if (normalized === 'config.json') {
+    const n = relativePath.replace(/\\/g, '/');
+
+    if (n === 'config.json') {
       this.config = readJSON('config.json', this.config);
-    } else if (normalized === 'state.json') {
+    } else if (n === 'state.json') {
       this.state = readJSON('state.json', this.state);
-    } else if (normalized === 'session/current.json') {
-      this.sessionCurrent = readJSON('session/current.json', this.sessionCurrent);
-    } else if (normalized === 'session/log.json') {
-      this.sessionLog = readJSON('session/log.json', this.sessionLog);
-    } else if (normalized === 'backlog/items.json') {
-      this.backlog = readJSON('backlog/items.json', this.backlog);
-    } else if (normalized === 'changelog/entries.json') {
-      this.changelog = readJSON('changelog/entries.json', this.changelog);
-    } else if (normalized === 'actions/registry.json') {
-      this.actions = readJSON('actions/registry.json', this.actions);
-    } else if (normalized === 'issues/items.json') {
+    } else if (n === 'roadmap/items.json' || n === 'backlog/items.json') {
+      this.roadmap = readJSON('roadmap/items.json', this.roadmap);
+    } else if (n === 'roadmap/epics.json') {
+      this.epics = readJSON('roadmap/epics.json', this.epics);
+    } else if (n === 'roadmap/milestones.json') {
+      this.milestones = readJSON('roadmap/milestones.json', this.milestones);
+    } else if (n === 'releases/releases.json') {
+      this.releases = readJSON('releases/releases.json', this.releases);
+    } else if (n === 'systems/systems.json') {
+      this.systems = readJSON('systems/systems.json', this.systems);
+    } else if (n === 'issues/items.json') {
       this.issues = readJSON('issues/items.json', this.issues);
-    } else if (normalized === 'metrics/velocity.json') {
+    } else if (n === 'changelog/entries.json') {
+      this.changelog = readJSON('changelog/entries.json', this.changelog);
+    } else if (n === 'session/current.json') {
+      this.sessionCurrent = readJSON('session/current.json', this.sessionCurrent);
+    } else if (n === 'session/log.json') {
+      this.sessions = readJSON('session/log.json', this.sessions);
+    } else if (n === 'ideas/items.json') {
+      this.ideas = readJSON('ideas/items.json', this.ideas);
+    } else if (n === 'activity/feed.json') {
+      this.activity = readJSON('activity/feed.json', this.activity);
+    } else if (n === 'labels/labels.json') {
+      this.labels = readJSON('labels/labels.json', this.labels);
+    } else if (n === 'automations/automations.json') {
+      this.automations = readJSON('automations/automations.json', this.automations);
+    } else if (n === 'docs/registry.json') {
+      this.docsRegistry = readJSON('docs/registry.json', this.docsRegistry);
+    } else if (n === 'metrics/velocity.json') {
       this.velocity = readJSON('metrics/velocity.json', this.velocity);
-    } else if (normalized.startsWith('runs/')) {
-      this.runs = this.loadRecentRuns();
     }
   }
 
-  // ─── Computed Helpers ───────────────────────────────────────────────────
+  // ─── Computed Helpers ─────────────────────────────────────────────────
 
   getQuickStatus(): QuickStatus {
-    const nowItems = this.backlog.items
+    const nowItems = this.roadmap.items
       .filter(i => i.horizon === 'now' && i.status !== 'completed' && i.status !== 'cancelled')
       .map(i => ({ title: i.title, size: i.size, status: i.status }));
 
     const openIssues = this.issues.issues.filter(i => i.status === 'open' || i.status === 'in_progress');
     const criticalIssues = openIssues.filter(i => i.severity === 'critical');
 
-    const lastSession = this.sessionLog.sessions.length > 0
-      ? this.sessionLog.sessions[this.sessionLog.sessions.length - 1]
+    const lastSession = this.sessions.sessions.length > 0
+      ? this.sessions.sessions[this.sessions.sessions.length - 1]
       : null;
 
     return {
       project: this.config.project,
-      health: this.state.overall_completion,
+      health: this.state.overall_health,
       now_items: nowItems,
       session: this.sessionCurrent
         ? {
@@ -276,6 +364,8 @@ export class Store {
         ? { date: lastSession.date, items_shipped: lastSession.items_shipped }
         : null,
       open_issues: { total: openIssues.length, critical: criticalIssues.length },
+      active_epics: this.epics.epics.filter(e => e.status === 'active').length,
+      active_milestones: this.milestones.milestones.filter(m => m.status === 'active').length,
     };
   }
 
@@ -288,12 +378,56 @@ export class Store {
     const lastStr = qs.last_session
       ? `Last: ${qs.last_session.date}, ${qs.last_session.items_shipped} shipped`
       : 'Last: none';
-    const issueStr = `Open issues: ${qs.open_issues.total}${qs.open_issues.critical > 0 ? ` (${qs.open_issues.critical} crit)` : ''}`;
+    const issueStr = `Issues: ${qs.open_issues.total}${qs.open_issues.critical > 0 ? ` (${qs.open_issues.critical} crit)` : ''}`;
+    const epicStr = qs.active_epics > 0 ? ` | Epics: ${qs.active_epics}` : '';
+    const msStr = qs.active_milestones > 0 ? ` | Milestones: ${qs.active_milestones}` : '';
 
-    return `${qs.project} | ${qs.health}% health | Now: ${nowStr || 'none'} | ${sessionStr} | ${lastStr} | ${issueStr}`;
+    return `${qs.project} | ${qs.health}% health | Now: ${nowStr || 'none'} | ${sessionStr} | ${lastStr} | ${issueStr}${epicStr}${msStr}`;
   }
 
-  // ─── Design Docs ────────────────────────────────────────────────────────
+  // ─── Epic progress computation ────────────────────────────────────────
+
+  recomputeEpicProgress(epicId: string): void {
+    const epic = this.epics.epics.find(e => e.id === epicId);
+    if (!epic) return;
+
+    const items = this.roadmap.items.filter(i => i.epic_id === epicId);
+    epic.item_count = items.length;
+    epic.completed_count = items.filter(i => i.status === 'completed').length;
+    epic.progress_pct = items.length > 0
+      ? Math.round((epic.completed_count / epic.item_count) * 100)
+      : 0;
+
+    if (epic.completed_count === epic.item_count && epic.item_count > 0 && epic.status === 'active') {
+      epic.status = 'completed';
+      epic.completed = new Date().toISOString().split('T')[0];
+    }
+
+    epic.updated = new Date().toISOString().split('T')[0];
+  }
+
+  // ─── Milestone progress computation ───────────────────────────────────
+
+  recomputeMilestoneProgress(milestoneId: string): void {
+    const ms = this.milestones.milestones.find(m => m.id === milestoneId);
+    if (!ms) return;
+
+    const items = this.roadmap.items.filter(i => i.milestone_id === milestoneId);
+    ms.total_items = items.length;
+    ms.completed_items = items.filter(i => i.status === 'completed').length;
+    ms.progress_pct = items.length > 0
+      ? Math.round((ms.completed_items / ms.total_items) * 100)
+      : 0;
+
+    const blockingIssues = this.issues.issues.filter(
+      i => i.milestone_id === milestoneId && (i.status === 'open' || i.status === 'in_progress')
+    );
+    ms.blocking_issues = blockingIssues.length;
+
+    ms.updated = new Date().toISOString().split('T')[0];
+  }
+
+  // ─── Design Docs ──────────────────────────────────────────────────────
 
   listDesignDocs(): string[] {
     return listFiles('designs', '.md');
@@ -309,10 +443,6 @@ export class Store {
 
   getDecision(filename: string): string {
     return readMarkdown(`decisions/${filename}`);
-  }
-
-  getPlaybook(filename: string): string {
-    return readMarkdown(`actions/playbooks/${filename}`);
   }
 }
 

@@ -20,7 +20,7 @@ import {
 } from 'lucide-react';
 import * as api from '../api/client';
 import { SizeBadge, StatusBadge, SeverityBadge } from '../components/StatusBadge';
-import type { QuickStatus, BacklogItem, Action, Issue, SessionEntry, BrainNote, ActivityItem, Idea } from '@shared/types';
+import type { QuickStatus, RoadmapItem, Issue, Session, BrainNote, ActivityEvent, Idea } from '@shared/types';
 
 const BASE = '/api/v1';
 async function apiFetch<T>(path: string): Promise<T> {
@@ -30,12 +30,12 @@ async function apiFetch<T>(path: string): Promise<T> {
 
 export function Dashboard() {
   const [status, setStatus] = useState<QuickStatus | null>(null);
-  const [nowItems, setNowItems] = useState<BacklogItem[]>([]);
-  const [nextItems, setNextItems] = useState<BacklogItem[]>([]);
+  const [nowItems, setNowItems] = useState<RoadmapItem[]>([]);
+  const [nextItems, setNextItems] = useState<RoadmapItem[]>([]);
   const [recentIssues, setRecentIssues] = useState<Issue[]>([]);
-  const [lastSession, setLastSession] = useState<SessionEntry | null>(null);
+  const [lastSession, setLastSession] = useState<Session | null>(null);
   const [brainNotes, setBrainNotes] = useState<BrainNote[]>([]);
-  const [activity, setActivity] = useState<ActivityItem[]>([]);
+  const [activity, setActivity] = useState<ActivityEvent[]>([]);
   const [recentIdeas, setRecentIdeas] = useState<Idea[]>([]);
   const [contextRecovery, setContextRecovery] = useState<any>(null);
   const [changelog, setChangelog] = useState<any[]>([]);
@@ -47,7 +47,7 @@ export function Dashboard() {
     api.issues.list({ status: 'open' }).then((d: any) => setRecentIssues((d?.issues || []).slice(0, 5))).catch(() => {});
     api.session.getLatest().then((d: any) => setLastSession(d)).catch(() => {});
     apiFetch<{ notes: BrainNote[] }>('/brain/notes').then(d => setBrainNotes(d?.notes || [])).catch(() => {});
-    apiFetch<{ activities: ActivityItem[] }>('/activity?limit=12').then(d => setActivity(d?.activities || [])).catch(() => {});
+    apiFetch<{ events: ActivityEvent[] }>('/activity?limit=12').then(d => setActivity(d?.events || [])).catch(() => {});
     apiFetch<{ ideas: Idea[] }>('/ideas?status=captured').then(d => setRecentIdeas((d?.ideas || []).slice(0, 4))).catch(() => {});
     apiFetch<any>('/brain/context').then(d => setContextRecovery(d)).catch(() => {});
     apiFetch<{ entries: any[] }>('/changelog').then(d => setChangelog((d?.entries || []).slice(0, 5))).catch(() => {});
@@ -231,7 +231,7 @@ export function Dashboard() {
                   <ActivityIcon type={item.type} />
                   <div className="flex-1 min-w-0">
                     <p className="text-[11px] text-text-primary leading-tight">{item.title}</p>
-                    {item.detail && <p className="text-[10px] text-text-tertiary truncate mt-0.5">{item.detail}</p>}
+                    {item.entity_type && <p className="text-[10px] text-text-tertiary truncate mt-0.5">{item.entity_type} · {item.actor}</p>}
                   </div>
                   <span className="text-[9px] text-text-tertiary flex-shrink-0 mt-0.5">{formatTime(item.timestamp)}</span>
                 </div>

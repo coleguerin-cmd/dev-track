@@ -5,7 +5,7 @@ import { ChatSidebar } from './components/ChatSidebar';
 import { ToastContainer, NotificationBell, wsEventToNotification, type Notification } from './components/NotificationTray';
 import { Dashboard } from './views/Dashboard';
 import { Backlog } from './views/Backlog';
-import { Actions } from './views/Actions';
+import { Systems } from './views/Systems';
 import { Issues } from './views/Issues';
 import { Sessions } from './views/Sessions';
 import { Changelog } from './views/Changelog';
@@ -16,7 +16,7 @@ import { Ideas } from './views/Ideas';
 import { Codebase } from './views/Codebase';
 import type { WSEvent } from '@shared/types';
 
-type View = 'dashboard' | 'backlog' | 'actions' | 'issues' | 'ideas' | 'codebase' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
+type View = 'dashboard' | 'backlog' | 'systems' | 'issues' | 'ideas' | 'codebase' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
 
 export default function App() {
   const [view, setView] = useState<View>('dashboard');
@@ -63,7 +63,7 @@ export default function App() {
     switch (view) {
       case 'dashboard': return <Dashboard key={refreshKey} />;
       case 'backlog': return <Backlog key={refreshKey} />;
-      case 'actions': return <Actions key={refreshKey} />;
+      case 'systems': return <Systems key={refreshKey} />;
       case 'issues': return <Issues key={refreshKey} />;
       case 'ideas': return <Ideas key={refreshKey} />;
       case 'codebase': return <Codebase key={refreshKey} />;

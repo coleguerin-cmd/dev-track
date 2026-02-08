@@ -16,7 +16,7 @@ import {
   FolderOpen,
 } from 'lucide-react';
 
-type View = 'dashboard' | 'backlog' | 'actions' | 'issues' | 'ideas' | 'codebase' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
+type View = 'dashboard' | 'backlog' | 'systems' | 'issues' | 'ideas' | 'codebase' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
 
 interface SidebarProps {
   activeView: View;
@@ -34,8 +34,8 @@ interface ProjectInfo {
 
 const NAV_ITEMS: { id: View; label: string; icon: typeof LayoutDashboard; shortcut: string; group: 'main' | 'data' | 'config' }[] = [
   { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard, shortcut: 'D', group: 'main' },
-  { id: 'backlog', label: 'Backlog', icon: ListTodo, shortcut: 'B', group: 'main' },
-  { id: 'actions', label: 'Actions', icon: Zap, shortcut: 'A', group: 'main' },
+  { id: 'backlog', label: 'Roadmap', icon: ListTodo, shortcut: 'B', group: 'main' },
+  { id: 'systems', label: 'Systems', icon: Zap, shortcut: 'Y', group: 'main' },
   { id: 'issues', label: 'Issues', icon: CircleDot, shortcut: 'I', group: 'main' },
   { id: 'ideas', label: 'Ideas', icon: Lightbulb, shortcut: 'E', group: 'main' },
   { id: 'codebase', label: 'Codebase', icon: Code2, shortcut: 'X', group: 'main' },

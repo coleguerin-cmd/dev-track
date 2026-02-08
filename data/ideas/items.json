@@ -7,14 +7,31 @@
       "category": "feature",
       "status": "captured",
       "source": "conversation 2026-02-07 (ideas thread)",
-      "related_ideas": ["IDEA-002", "IDEA-003"],
+      "related_ideas": [
+        "IDEA-002",
+        "IDEA-003"
+      ],
       "promoted_to": null,
-      "pros": ["Non-engineers can understand codebase via tooltips", "AI maintains them as it writes code", "Parseable structured data, not freeform comments"],
-      "cons": ["Adds noise to source files", "AI has to be disciplined about maintaining them", "Need to define a spec for the annotation format"],
-      "open_questions": ["What annotation format? JSDoc-like? Magic comments?", "How do we handle annotation drift when code changes?", "Do we parse on scan or in real-time?"],
+      "pros": [
+        "Non-engineers can understand codebase via tooltips",
+        "AI maintains them as it writes code",
+        "Parseable structured data, not freeform comments"
+      ],
+      "cons": [
+        "Adds noise to source files",
+        "AI has to be disciplined about maintaining them",
+        "Need to define a spec for the annotation format"
+      ],
+      "open_questions": [
+        "What annotation format? JSDoc-like? Magic comments?",
+        "How do we handle annotation drift when code changes?",
+        "Do we parse on scan or in real-time?"
+      ],
       "notes": "Requires the Codebase Explorer to be working and useful first so we know what annotations actually matter. Phase 3+.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-002",
@@ -23,14 +40,30 @@
       "category": "feature",
       "status": "captured",
       "source": "conversation 2026-02-07 (ideas thread)",
-      "related_ideas": ["IDEA-003"],
+      "related_ideas": [
+        "IDEA-003"
+      ],
       "promoted_to": null,
-      "pros": ["Zero-to-productive in one command", "AI does the heavy lifting of understanding the project", "Verifiable win condition"],
-      "cons": ["Quality depends on model capability", "Large codebases may need chunked analysis", "Without good existing docs, AI analysis is limited"],
-      "open_questions": ["How to handle projects with zero documentation?", "Multi-pass for smaller models — how to chunk?", "What's the minimum viable initialization?"],
+      "pros": [
+        "Zero-to-productive in one command",
+        "AI does the heavy lifting of understanding the project",
+        "Verifiable win condition"
+      ],
+      "cons": [
+        "Quality depends on model capability",
+        "Large codebases may need chunked analysis",
+        "Without good existing docs, AI analysis is limited"
+      ],
+      "open_questions": [
+        "How to handle projects with zero documentation?",
+        "Multi-pass for smaller models — how to chunk?",
+        "What's the minimum viable initialization?"
+      ],
       "notes": "The codebase scanner already does 80% of this.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-003",
@@ -39,14 +72,28 @@
       "category": "architecture",
       "status": "captured",
       "source": "conversation 2026-02-07 (ideas thread)",
-      "related_ideas": ["IDEA-002"],
+      "related_ideas": [
+        "IDEA-002"
+      ],
       "promoted_to": null,
-      "pros": ["Works for everyone regardless of model/budget", "Prevents context overflow on smaller models", "Cost-conscious by default"],
-      "cons": ["Harder to test across all model sizes", "Compression may lose important nuance"],
-      "open_questions": ["Auto-detect model or manual config?", "Should we have preset profiles (heavy/medium/light)?"],
+      "pros": [
+        "Works for everyone regardless of model/budget",
+        "Prevents context overflow on smaller models",
+        "Cost-conscious by default"
+      ],
+      "cons": [
+        "Harder to test across all model sizes",
+        "Compression may lose important nuance"
+      ],
+      "open_questions": [
+        "Auto-detect model or manual config?",
+        "Should we have preset profiles (heavy/medium/light)?"
+      ],
       "notes": "The verbosity settings already exist in config. This extends them with model-aware profiles.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-004",
@@ -57,12 +104,25 @@
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [],
       "promoted_to": null,
-      "pros": ["Growing market of AI-assisted developers", "No existing tool solves this exact problem", "Open-source builds community and adoption"],
-      "cons": ["Small TAM right now", "Core file format is easily replicated", "Needs real usage validation first"],
-      "open_questions": ["When to extract? After how much dogfooding?", "License: MIT? Apache? AGPL?"],
+      "pros": [
+        "Growing market of AI-assisted developers",
+        "No existing tool solves this exact problem",
+        "Open-source builds community and adoption"
+      ],
+      "cons": [
+        "Small TAM right now",
+        "Core file format is easily replicated",
+        "Needs real usage validation first"
+      ],
+      "open_questions": [
+        "When to extract? After how much dogfooding?",
+        "License: MIT? Apache? AGPL?"
+      ],
       "notes": "Dogfood for 2-3 weeks. Extract when the data model is stable and the UI is polished.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-005",
@@ -71,14 +131,25 @@
       "category": "feature",
       "status": "promoted",
       "source": "conversation 2026-02-07 (ideas thread)",
-      "related_ideas": ["IDEA-001"],
+      "related_ideas": [
+        "IDEA-001"
+      ],
       "promoted_to": "codebase-visualizer",
-      "pros": ["Visual understanding of complex codebases", "Non-engineers can navigate architecture", "Impressive demo for open-source launch"],
-      "cons": ["react-flow adds complexity", "Layout algorithms for large graphs are hard"],
+      "pros": [
+        "Visual understanding of complex codebases",
+        "Non-engineers can navigate architecture",
+        "Impressive demo for open-source launch"
+      ],
+      "cons": [
+        "react-flow adds complexity",
+        "Layout algorithms for large graphs are hard"
+      ],
       "open_questions": [],
       "notes": "BUILDING NOW. Using react-flow + dagre. Three views: module architecture, file dependencies, API route map.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-006",
@@ -89,12 +160,23 @@
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [],
       "promoted_to": null,
-      "pros": ["Catches problems automatically", "AI starts sessions with real-time awareness"],
-      "cons": ["Requires dev-track server running", "Webhook setup is project-specific"],
-      "open_questions": ["Local-only or need a cloud relay?", "Queue system needed?"],
+      "pros": [
+        "Catches problems automatically",
+        "AI starts sessions with real-time awareness"
+      ],
+      "cons": [
+        "Requires dev-track server running",
+        "Webhook setup is project-specific"
+      ],
+      "open_questions": [
+        "Local-only or need a cloud relay?",
+        "Queue system needed?"
+      ],
       "notes": "Phase 4+. Requires working integrations first.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-007",
@@ -103,14 +185,27 @@
       "category": "architecture",
       "status": "captured",
       "source": "conversation 2026-02-07 (ideas thread)",
-      "related_ideas": ["IDEA-006"],
+      "related_ideas": [
+        "IDEA-006"
+      ],
       "promoted_to": null,
-      "pros": ["Work happens even when user isn't coding", "Separates concerns"],
-      "cons": ["Complex orchestration", "Cost if running frequently"],
-      "open_questions": ["Claude Code CLI as the agent runtime?", "How to trigger — schedule vs event?"],
+      "pros": [
+        "Work happens even when user isn't coding",
+        "Separates concerns"
+      ],
+      "cons": [
+        "Complex orchestration",
+        "Cost if running frequently"
+      ],
+      "open_questions": [
+        "Claude Code CLI as the agent runtime?",
+        "How to trigger — schedule vs event?"
+      ],
       "notes": "Far future. The data layer supports it — agents just read/write data/ files.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-008",
@@ -119,14 +214,28 @@
       "category": "architecture",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 2)",
-      "related_ideas": ["IDEA-004", "IDEA-007"],
+      "related_ideas": [
+        "IDEA-004",
+        "IDEA-007"
+      ],
       "promoted_to": null,
-      "pros": ["Future-proofs for team usage", "API server already exists as coordination layer"],
-      "cons": ["Significant architectural lift", "File-based store may not scale"],
-      "open_questions": ["When does file-based storage hit its limit?", "How to handle auth?"],
+      "pros": [
+        "Future-proofs for team usage",
+        "API server already exists as coordination layer"
+      ],
+      "cons": [
+        "Significant architectural lift",
+        "File-based store may not scale"
+      ],
+      "open_questions": [
+        "When does file-based storage hit its limit?",
+        "How to handle auth?"
+      ],
       "notes": "Plant seeds in data model now. Build when local tool is fully validated.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-009",
@@ -135,14 +244,29 @@
       "category": "feature",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
-      "related_ideas": ["IDEA-006"],
+      "related_ideas": [
+        "IDEA-006"
+      ],
       "promoted_to": null,
-      "pros": ["Data appears where it's contextually relevant", "Reduces tab switching", "Makes integrations feel native not bolted-on"],
-      "cons": ["Complex routing logic per integration", "Need to handle missing integrations gracefully", "Each view needs integration-aware sections"],
-      "open_questions": ["How to handle when integration is down vs not configured?", "Do we need a separate Costs tab or just sections?"],
+      "pros": [
+        "Data appears where it's contextually relevant",
+        "Reduces tab switching",
+        "Makes integrations feel native not bolted-on"
+      ],
+      "cons": [
+        "Complex routing logic per integration",
+        "Need to handle missing integrations gracefully",
+        "Each view needs integration-aware sections"
+      ],
+      "open_questions": [
+        "How to handle when integration is down vs not configured?",
+        "Do we need a separate Costs tab or just sections?"
+      ],
       "notes": "Start with Sentry -> Issues and Helicone -> Metrics. Build the pattern, then extend.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-010",
@@ -153,12 +277,24 @@
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [],
       "promoted_to": null,
-      "pros": ["Fast navigation", "Discoverability of old items", "Feels professional and powerful"],
-      "cons": ["Need a unified search index or multi-source search", "Performance if data grows large"],
-      "open_questions": ["Server-side search or client-side?", "Hotkey activation or always-visible?"],
+      "pros": [
+        "Fast navigation",
+        "Discoverability of old items",
+        "Feels professional and powerful"
+      ],
+      "cons": [
+        "Need a unified search index or multi-source search",
+        "Performance if data grows large"
+      ],
+      "open_questions": [
+        "Server-side search or client-side?",
+        "Hotkey activation or always-visible?"
+      ],
       "notes": "Codebase Explorer already has search within its view. This extends it globally.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-011",
@@ -169,12 +305,24 @@
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [],
       "promoted_to": null,
-      "pros": ["More professional appearance", "Better information density", "Consistent with tools developers already use"],
-      "cons": ["Significant effort across all 11 views", "Subjective — need to nail the aesthetic"],
-      "open_questions": ["Which icon set? Lucide is already installed.", "How far to deviate from current dark theme?"],
+      "pros": [
+        "More professional appearance",
+        "Better information density",
+        "Consistent with tools developers already use"
+      ],
+      "cons": [
+        "Significant effort across all 11 views",
+        "Subjective — need to nail the aesthetic"
+      ],
+      "open_questions": [
+        "Which icon set? Lucide is already installed.",
+        "How far to deviate from current dark theme?"
+      ],
       "notes": "User specifically mentioned liking Cursor's navigation style. Lucide-react is already in package.json.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-012",
@@ -183,14 +331,28 @@
       "category": "ux",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
-      "related_ideas": ["IDEA-011"],
+      "related_ideas": [
+        "IDEA-011"
+      ],
       "promoted_to": null,
-      "pros": ["More context per item", "Reduces need to read raw JSON", "Better for handoffs"],
-      "cons": ["More data to manage", "UI gets busier if not done well"],
-      "open_questions": ["Markdown rendering or plain text?", "Inline expansion or slide-out panel?"],
+      "pros": [
+        "More context per item",
+        "Reduces need to read raw JSON",
+        "Better for handoffs"
+      ],
+      "cons": [
+        "More data to manage",
+        "UI gets busier if not done well"
+      ],
+      "open_questions": [
+        "Markdown rendering or plain text?",
+        "Inline expansion or slide-out panel?"
+      ],
       "notes": "react-markdown is already in package.json. Could render descriptions as markdown in detail panels.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-013",
@@ -199,16 +361,29 @@
       "category": "feature",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
-      "related_ideas": ["IDEA-009"],
+      "related_ideas": [
+        "IDEA-009"
+      ],
       "promoted_to": null,
-      "pros": ["Single pane of glass for all costs", "Could alert on spending spikes", "Useful for budget-conscious developers"],
-      "cons": ["Every provider has different billing APIs", "Some don't expose cost data via API"],
-      "open_questions": ["Which providers expose cost APIs?", "Manual entry fallback for those that don't?"],
+      "pros": [
+        "Single pane of glass for all costs",
+        "Could alert on spending spikes",
+        "Useful for budget-conscious developers"
+      ],
+      "cons": [
+        "Every provider has different billing APIs",
+        "Some don't expose cost data via API"
+      ],
+      "open_questions": [
+        "Which providers expose cost APIs?",
+        "Manual entry fallback for those that don't?"
+      ],
       "notes": "User showed $733 Cursor spend in screenshot. Cost awareness is clearly important to them.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
-    }
-    ,
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
+    },
     {
       "id": "IDEA-014",
       "title": "Background AI watcher — file-change-driven intelligence loop",
@@ -216,14 +391,36 @@
       "category": "architecture",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3 — meta discussion)",
-      "related_ideas": ["IDEA-007", "IDEA-006"],
+      "related_ideas": [
+        "IDEA-007",
+        "IDEA-006"
+      ],
       "promoted_to": null,
-      "pros": ["Removes human-in-the-loop for tracking", "Removes coding-AI attention burden for tracking", "Cheap models sufficient for analysis-only work", "File watcher already exists (chokidar)", "Data layer is the communication protocol between AIs", "Could stream-analyze changes as they come in"],
-      "cons": ["Cost adds up if triggered on every save", "Needs debouncing — 20 file changes in one prompt shouldn't trigger 20 analyses", "Needs to understand 'when the AI is done' vs mid-edit", "Context window still needed to understand changes meaningfully"],
-      "open_questions": ["What model? GPT-4o-mini? Haiku? Local model?", "Trigger on git commit? On file save with debounce? On session end?", "How does the coding AI signal 'I just finished a task' to the watcher?", "Can we use git diff as the input rather than raw file watching?"],
+      "pros": [
+        "Removes human-in-the-loop for tracking",
+        "Removes coding-AI attention burden for tracking",
+        "Cheap models sufficient for analysis-only work",
+        "File watcher already exists (chokidar)",
+        "Data layer is the communication protocol between AIs",
+        "Could stream-analyze changes as they come in"
+      ],
+      "cons": [
+        "Cost adds up if triggered on every save",
+        "Needs debouncing — 20 file changes in one prompt shouldn't trigger 20 analyses",
+        "Needs to understand 'when the AI is done' vs mid-edit",
+        "Context window still needed to understand changes meaningfully"
+      ],
+      "open_questions": [
+        "What model? GPT-4o-mini? Haiku? Local model?",
+        "Trigger on git commit? On file save with debounce? On session end?",
+        "How does the coding AI signal 'I just finished a task' to the watcher?",
+        "Can we use git diff as the input rather than raw file watching?"
+      ],
       "notes": "This is the real solution to the 'AI forgot to update changelog' problem. Instead of asking the coding AI to both write code AND track changes (competing attention), separate the concerns: coding AI writes code, watcher AI tracks changes. They communicate through dev-track data files — that's the protocol. Start simple: on git commit, run a cheap model against the diff and auto-update changelog + state.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-015",
@@ -232,16 +429,32 @@
       "category": "ux",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3 — graph feedback)",
-      "related_ideas": ["IDEA-005", "IDEA-001"],
+      "related_ideas": [
+        "IDEA-005",
+        "IDEA-001"
+      ],
       "promoted_to": null,
-      "pros": ["Makes the graph actually useful for non-developers", "Differentiates dev-track from every other code visualization tool", "AI-generated descriptions can be very good"],
-      "cons": ["Auto-generation quality varies", "Needs to stay in sync as code changes", "Long descriptions clutter the graph"],
-      "open_questions": ["Generate at scan time or on-demand?", "Where to show: on the node, in the panel, or both?", "How to handle modules where auto-description would be vague?"],
+      "pros": [
+        "Makes the graph actually useful for non-developers",
+        "Differentiates dev-track from every other code visualization tool",
+        "AI-generated descriptions can be very good"
+      ],
+      "cons": [
+        "Auto-generation quality varies",
+        "Needs to stay in sync as code changes",
+        "Long descriptions clutter the graph"
+      ],
+      "open_questions": [
+        "Generate at scan time or on-demand?",
+        "Where to show: on the node, in the panel, or both?",
+        "How to handle modules where auto-description would be vague?"
+      ],
       "notes": "The scanner has all the data — file types, exports, external services, DB ops. We can generate descriptions like: 'This module handles all HTTP API requests. It has 16 route files covering backlog, issues, sessions, metrics, and more. It depends on the Data Store for persistence and broadcasts changes via WebSocket.' The detail panel should show this prominently.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
-    }
-    ,
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
+    },
     {
       "id": "IDEA-016",
       "title": "Living project wiki with auto-generated documentation",
@@ -249,14 +462,32 @@
       "category": "feature",
       "status": "exploring",
       "source": "conversation 2026-02-07 (session 4)",
-      "related_ideas": ["IDEA-001", "IDEA-015"],
+      "related_ideas": [
+        "IDEA-001",
+        "IDEA-015"
+      ],
       "promoted_to": "docs-wiki-overhaul",
-      "pros": ["Single source of truth for the project", "Auto-updates reduce manual maintenance", "Onboarding tool for new AIs and developers", "Beautiful rendered markdown instead of raw files"],
-      "cons": ["Auto-generation quality may vary", "Need to handle multiple doc formats", "Could get stale if auto-update breaks"],
-      "open_questions": ["Should docs be markdown or HTML?", "How to auto-detect when architecture changed enough to trigger doc update?", "How to handle docs for external project (not dev-track itself)?"],
+      "pros": [
+        "Single source of truth for the project",
+        "Auto-updates reduce manual maintenance",
+        "Onboarding tool for new AIs and developers",
+        "Beautiful rendered markdown instead of raw files"
+      ],
+      "cons": [
+        "Auto-generation quality may vary",
+        "Need to handle multiple doc formats",
+        "Could get stale if auto-update breaks"
+      ],
+      "open_questions": [
+        "Should docs be markdown or HTML?",
+        "How to auto-detect when architecture changed enough to trigger doc update?",
+        "How to handle docs for external project (not dev-track itself)?"
+      ],
       "notes": "User specifically wants: nested tabs/nav, table of contents with sections within sections, beautiful rendering, real-time updates on architecture changes. Look at Pillar project docs for reference on structure. Phase 1 shipped: react-markdown + remark-gfm rendering, file sidebar, auto-generated ToC, styled components for all markdown elements.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-017",
@@ -265,16 +496,33 @@
       "category": "architecture",
       "status": "validated",
       "source": "conversation 2026-02-07 (session 4 — architecture discussion)",
-      "related_ideas": ["IDEA-001", "IDEA-014", "IDEA-015"],
+      "related_ideas": [
+        "IDEA-001",
+        "IDEA-014",
+        "IDEA-015"
+      ],
       "promoted_to": null,
-      "pros": ["No code pollution with special comments", "Works across all languages", "Code IS the source of truth", "Already proven — module descriptions work well", "Background watcher gets context from git diffs not file saves"],
-      "cons": ["Auto-generated descriptions can be generic for unusual modules", "Requires good heuristics per module type"],
-      "open_questions": ["Should we add optional manual override for auto-descriptions?", "How to handle projects with unusual structures?"],
+      "pros": [
+        "No code pollution with special comments",
+        "Works across all languages",
+        "Code IS the source of truth",
+        "Already proven — module descriptions work well",
+        "Background watcher gets context from git diffs not file saves"
+      ],
+      "cons": [
+        "Auto-generated descriptions can be generic for unusual modules",
+        "Requires good heuristics per module type"
+      ],
+      "open_questions": [
+        "Should we add optional manual override for auto-descriptions?",
+        "How to handle projects with unusual structures?"
+      ],
       "notes": "This was validated in session 4. The generateModuleDescription() function produces descriptions like 'This module handles all the HTTP API endpoints for the application. It contains 16 route files covering...' — far better than any annotation system could produce because it has the full module context. IDEA-001 (structured annotations) is now deprioritized in favor of this approach.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
-    }
-    ,
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
+    },
     {
       "id": "IDEA-018",
       "title": "Helicone deep integration — sessions, properties, users, cache",
@@ -282,14 +530,29 @@
       "category": "integration",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 4)",
-      "related_ideas": ["IDEA-013"],
+      "related_ideas": [
+        "IDEA-013"
+      ],
       "promoted_to": null,
-      "pros": ["Granular cost visibility", "Caching saves money on repeated prompts", "Per-user tracking essential for teams", "Audit trail for AI decisions"],
-      "cons": ["Adds Helicone as a hard dependency for analytics", "Configuration complexity"],
-      "open_questions": ["Should we build our own analytics or rely on Helicone?", "How to handle when Helicone is down?"],
+      "pros": [
+        "Granular cost visibility",
+        "Caching saves money on repeated prompts",
+        "Per-user tracking essential for teams",
+        "Audit trail for AI decisions"
+      ],
+      "cons": [
+        "Adds Helicone as a hard dependency for analytics",
+        "Configuration complexity"
+      ],
+      "open_questions": [
+        "Should we build our own analytics or rely on Helicone?",
+        "How to handle when Helicone is down?"
+      ],
       "notes": "User set up BYOK in Helicone. Ready to integrate deeply.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-019",
@@ -298,14 +561,28 @@
       "category": "ux",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 4)",
-      "related_ideas": ["IDEA-005"],
+      "related_ideas": [
+        "IDEA-005"
+      ],
       "promoted_to": null,
-      "pros": ["Makes tool calls actionable not just informational", "Chat becomes a navigation hub", "Feels like a real agent not just a chatbot"],
-      "cons": ["Significant UI complexity", "Need to coordinate chat state with view navigation"],
-      "open_questions": ["How to handle navigation while chat is mid-stream?", "Which tools get rich rendering vs plain text?"],
+      "pros": [
+        "Makes tool calls actionable not just informational",
+        "Chat becomes a navigation hub",
+        "Feels like a real agent not just a chatbot"
+      ],
+      "cons": [
+        "Significant UI complexity",
+        "Need to coordinate chat state with view navigation"
+      ],
+      "open_questions": [
+        "How to handle navigation while chat is mid-stream?",
+        "Which tools get rich rendering vs plain text?"
+      ],
       "notes": "Reference: Pillar's SidebarChat tray system and Landmark's ToolCallDisplay component.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-020",
@@ -314,14 +591,29 @@
       "category": "architecture",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 4)",
-      "related_ideas": ["IDEA-014", "IDEA-018"],
+      "related_ideas": [
+        "IDEA-014",
+        "IDEA-018"
+      ],
       "promoted_to": null,
-      "pros": ["Eat your own dogfood at every level", "AI can help debug AI issues", "Proves the tool works on complex real projects"],
-      "cons": ["Recursive complexity", "Log volume could get large"],
-      "open_questions": ["Store logs in data/ai/logs/ or a separate system?", "How much context does the AI need about its own logs?"],
+      "pros": [
+        "Eat your own dogfood at every level",
+        "AI can help debug AI issues",
+        "Proves the tool works on complex real projects"
+      ],
+      "cons": [
+        "Recursive complexity",
+        "Log volume could get large"
+      ],
+      "open_questions": [
+        "Store logs in data/ai/logs/ or a separate system?",
+        "How much context does the AI need about its own logs?"
+      ],
       "notes": "The vindaloop. dev-track monitors itself building itself. This is actually a killer demo for the product.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-021",
@@ -330,14 +622,33 @@
       "category": "business",
       "status": "exploring",
       "source": "conversation 2026-02-07 (session 4)",
-      "related_ideas": ["IDEA-004", "IDEA-008"],
+      "related_ideas": [
+        "IDEA-004",
+        "IDEA-008"
+      ],
       "promoted_to": null,
-      "pros": ["Preserves local-first real-time advantage", "Web handles auth/billing/teams", "npm distribution for easy trial", "Proven model (Cursor, Copilot, Linear)"],
-      "cons": ["Building both a daemon AND a web platform", "Sync reliability between local and cloud", "Offline mode complexity"],
-      "open_questions": ["Electron/Tauri desktop app vs pure daemon?", "Free tier scope?", "How to handle multi-project views?", "GitHub App integration as alternative entry point?"],
+      "pros": [
+        "Preserves local-first real-time advantage",
+        "Web handles auth/billing/teams",
+        "npm distribution for easy trial",
+        "Proven model (Cursor, Copilot, Linear)"
+      ],
+      "cons": [
+        "Building both a daemon AND a web platform",
+        "Sync reliability between local and cloud",
+        "Offline mode complexity"
+      ],
+      "open_questions": [
+        "Electron/Tauri desktop app vs pure daemon?",
+        "Free tier scope?",
+        "How to handle multi-project views?",
+        "GitHub App integration as alternative entry point?"
+      ],
       "notes": "See detailed analysis in session 4 conversation. Multiple distribution options explored: desktop app, CLI, IDE extension, GitHub App, hybrid daemon+web. Hybrid wins because it preserves what makes dev-track unique (local real-time context) while enabling what requires cloud (teams, billing, AI budget).",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
     },
     {
       "id": "IDEA-022",
@@ -346,16 +657,30 @@
       "category": "architecture",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 4)",
-      "related_ideas": ["IDEA-008", "IDEA-021"],
+      "related_ideas": [
+        "IDEA-008",
+        "IDEA-021"
+      ],
       "promoted_to": null,
-      "pros": ["Required for revenue", "Teams is a force multiplier for the product"],
-      "cons": ["Massive engineering scope", "Premature if core product isn't validated"],
-      "open_questions": ["Supabase Auth or custom?", "Stripe or Lemon Squeezy?", "When to start — after how much dogfooding?"],
+      "pros": [
+        "Required for revenue",
+        "Teams is a force multiplier for the product"
+      ],
+      "cons": [
+        "Massive engineering scope",
+        "Premature if core product isn't validated"
+      ],
+      "open_questions": [
+        "Supabase Auth or custom?",
+        "Stripe or Lemon Squeezy?",
+        "When to start — after how much dogfooding?"
+      ],
       "notes": "User correctly identified this as a can of worms. Park until v0.2+.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
-    }
-    ,
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
+    },
     {
       "id": "IDEA-023",
       "title": "Visual state capture — automated screenshots of every view for AI context",
@@ -363,16 +688,33 @@
       "category": "feature",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 4)",
-      "related_ideas": ["IDEA-020"],
+      "related_ideas": [
+        "IDEA-020"
+      ],
       "promoted_to": null,
-      "pros": ["AI gets visual context without user effort", "Visual diff detection between versions", "Great for AI-assisted UI iteration", "Kills the constant screenshot-and-paste workflow"],
-      "cons": ["Puppeteer/Playwright adds a heavy dependency", "Screenshots need to be taken at the right time", "Storage grows with every capture"],
-      "open_questions": ["Headless browser or actual browser automation?", "Trigger: on scan, on demand, on page change?", "How to efficiently diff screenshots?", "Should the chat be able to request a fresh screenshot?"],
+      "pros": [
+        "AI gets visual context without user effort",
+        "Visual diff detection between versions",
+        "Great for AI-assisted UI iteration",
+        "Kills the constant screenshot-and-paste workflow"
+      ],
+      "cons": [
+        "Puppeteer/Playwright adds a heavy dependency",
+        "Screenshots need to be taken at the right time",
+        "Storage grows with every capture"
+      ],
+      "open_questions": [
+        "Headless browser or actual browser automation?",
+        "Trigger: on scan, on demand, on page change?",
+        "How to efficiently diff screenshots?",
+        "Should the chat be able to request a fresh screenshot?"
+      ],
       "notes": "User currently does this manually constantly — screenshots to send to AI. Automating it is obvious. Could start simple: just capture on codebase scan and store the images.",
       "created": "2026-02-07",
-      "updated": "2026-02-07"
-    }
-    ,
+      "updated": "2026-02-07",
+      "priority": "P2",
+      "tags": []
+    },
     {
       "id": "IDEA-024",
       "title": "Session lifecycle system — clear start/end with AI-driven closure",
@@ -380,12 +722,26 @@
       "category": "core",
       "priority": "high",
       "description": "Every coding session needs a clear start and end. When a user starts a new chat window, the AI recognizes it's a new session and logs it in DevTrack. The AI is trained to push users toward session closure at the right time — especially users who overload context windows. Based on user profile (behavior patterns, context window habits), the AI prompts: 'Good stopping point. Let's push, update dev-track, and pick up in a fresh session.' Loads user profile at session start so any AI picking up knows how to handle this specific user.",
-      "pros": ["Prevents context window overload", "Creates clean session boundaries for tracking", "Trains users on good habits", "User profile makes every AI session-aware"],
-      "cons": ["Users might find it annoying if pushed too aggressively", "Hard to detect 'right time' to prompt closure"],
-      "open_questions": ["What triggers session start detection?", "How aggressive should closure prompting be?", "Should there be a hard context limit that forces a new session?", "How does this work across different AI platforms (Cursor, Claude, etc)?"],
+      "pros": [
+        "Prevents context window overload",
+        "Creates clean session boundaries for tracking",
+        "Trains users on good habits",
+        "User profile makes every AI session-aware"
+      ],
+      "cons": [
+        "Users might find it annoying if pushed too aggressively",
+        "Hard to detect 'right time' to prompt closure"
+      ],
+      "open_questions": [
+        "What triggers session start detection?",
+        "How aggressive should closure prompting be?",
+        "Should there be a hard context limit that forces a new session?",
+        "How does this work across different AI platforms (Cursor, Claude, etc)?"
+      ],
       "notes": "User self-describes as someone who throws too much too fast. This is a training mechanism — like training a user like a dog (their words). The AI needs to be the guardrail.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-025",
@@ -394,12 +750,26 @@
       "category": "core",
       "priority": "high",
       "description": "At the end of every session, DevTrack should audit itself: go through backlog, actions, issues, ideas, codebase, session notes, changelog, docs. Flag anything stale, contradicting, or out of date. Automatically clean up superseded brain notes, update statuses, archive old data. The system should be self-healing — if the AI missed a changelog entry or left an issue open that was fixed, the audit catches it.",
-      "pros": ["Self-healing data", "Catches AI drift automatically", "Reduces manual maintenance", "Ensures dashboard always reflects reality"],
-      "cons": ["Could be expensive if using premium AI models", "Might make incorrect changes if context is incomplete"],
-      "open_questions": ["Which model tier for audit (budget should be fine)?", "How deep should the audit go?", "Should it make changes automatically or just flag them?", "Run at session end only, or periodically?"],
+      "pros": [
+        "Self-healing data",
+        "Catches AI drift automatically",
+        "Reduces manual maintenance",
+        "Ensures dashboard always reflects reality"
+      ],
+      "cons": [
+        "Could be expensive if using premium AI models",
+        "Might make incorrect changes if context is incomplete"
+      ],
+      "open_questions": [
+        "Which model tier for audit (budget should be fine)?",
+        "How deep should the audit go?",
+        "Should it make changes automatically or just flag them?",
+        "Run at session end only, or periodically?"
+      ],
       "notes": "User explicitly frustrated by stale brain notes contradicting current decisions. This is the structural fix for ISS-006 (AI context drift) — don't rely on the coding AI to maintain tracking, have a separate audit process.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-026",
@@ -408,14 +778,28 @@
       "category": "core",
       "priority": "high",
       "description": "Build rich user profiles that go beyond basic info. Include: experience levels as a web diagram (frontend, backend, devops, AI, etc.), intelligence/capability ratings, behavioral patterns (context window habits, session length preferences, communication style), and how the AI should handle this user (push to closure? let them run? explain more? explain less?). Profile is loaded at every session start and injected into AI system prompts.",
-      "pros": ["Every AI knows how to work with this user", "Personalized experience", "Better session management", "Could power team features later"],
-      "cons": ["Privacy concerns for team features", "Profiles might become stale", "Hard to auto-detect behavior patterns initially"],
-      "open_questions": ["Self-reported vs AI-observed profile data?", "How to visualize the web diagram in UI?", "Should profiles be editable by the user?", "How granular should behavior tracking be?"],
+      "pros": [
+        "Every AI knows how to work with this user",
+        "Personalized experience",
+        "Better session management",
+        "Could power team features later"
+      ],
+      "cons": [
+        "Privacy concerns for team features",
+        "Profiles might become stale",
+        "Hard to auto-detect behavior patterns initially"
+      ],
+      "open_questions": [
+        "Self-reported vs AI-observed profile data?",
+        "How to visualize the web diagram in UI?",
+        "Should profiles be editable by the user?",
+        "How granular should behavior tracking be?"
+      ],
       "notes": "User already has a basic profile in data/ai/profiles.json. This would expand it significantly with behavior modeling and make it central to the AI experience.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
-    }
-    ,
+      "updated": "2026-02-08",
+      "tags": []
+    },
     {
       "id": "IDEA-027",
       "title": "AI conversation bridge — extension/CLI that passes logs from any AI tool to DevTrack",
@@ -423,12 +807,29 @@
       "category": "core",
       "priority": "critical",
       "description": "A lightweight extension/CLI daemon that watches AI conversations in Cursor, Claude, Gemini, etc. Captures user messages + AI final response messages (not intermediate file changes). Passes logs to DevTrack's backend AI for lightweight parsing. Extracts: issues reported, decisions made, ideas captured, action items. Also detects session start (new chat window) and session end (wrap-up language or inactivity). The backend AI can then create issues, update backlog, write brain notes — filling in what the coding AI missed. This is the bridge that makes DevTrack truly intelligent across all AI platforms.",
-      "pros": ["Solves ISS-006 structurally — no more relying on coding AI to self-track", "Works across any AI platform", "Lightweight — only captures messages, not file diffs", "Backend AI does the heavy lifting with cheap models", "Enables automatic session lifecycle detection"],
-      "cons": ["Extension development per platform (Cursor, VS Code, web)", "Privacy considerations — user conversations contain sensitive code", "AI cost for parsing every conversation", "Needs to handle different conversation formats per platform"],
-      "open_questions": ["Cursor extension vs CLI file watcher vs both?", "How to detect conversation boundaries in different tools?", "Should it capture in real-time or batch at intervals?", "How much context does the parsing AI need — just messages or also file change summaries?"],
+      "pros": [
+        "Solves ISS-006 structurally — no more relying on coding AI to self-track",
+        "Works across any AI platform",
+        "Lightweight — only captures messages, not file diffs",
+        "Backend AI does the heavy lifting with cheap models",
+        "Enables automatic session lifecycle detection"
+      ],
+      "cons": [
+        "Extension development per platform (Cursor, VS Code, web)",
+        "Privacy considerations — user conversations contain sensitive code",
+        "AI cost for parsing every conversation",
+        "Needs to handle different conversation formats per platform"
+      ],
+      "open_questions": [
+        "Cursor extension vs CLI file watcher vs both?",
+        "How to detect conversation boundaries in different tools?",
+        "Should it capture in real-time or batch at intervals?",
+        "How much context does the parsing AI need — just messages or also file change summaries?"
+      ],
       "notes": "User's key insight: 'Don't pass all the changes while it's making them. Pass the user message and the AI's wrap-up response.' This keeps cost low and context manageable. The backend AI can then correlate with git diffs to understand what actually changed.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-028",
@@ -437,14 +838,29 @@
       "category": "feature",
       "priority": "medium",
       "description": "Integrate Deepgram (or similar) for voice-to-text in the DevTrack AI chat. User can talk to DevTrack instead of typing. Useful for brain dumps, session planning, quick updates. The DevTrack chat sidebar would have a mic button. Voice transcription feeds into the same chat pipeline.",
-      "pros": ["Faster for brain dumps and planning", "User explicitly wants this — 'sometimes I type, sometimes I talk'", "Deepgram has good real-time transcription APIs", "Natural for non-technical users"],
-      "cons": ["Transcription quality varies (user noted 'self-rate' → 'self-rape')", "Additional API cost", "Needs good error handling for misheard words", "Audio privacy considerations"],
-      "open_questions": ["Deepgram vs Whisper vs browser native?", "Real-time streaming or record-then-transcribe?", "How to handle transcription errors gracefully?", "Should we use AI to clean up transcription before feeding to chat?"],
+      "pros": [
+        "Faster for brain dumps and planning",
+        "User explicitly wants this — 'sometimes I type, sometimes I talk'",
+        "Deepgram has good real-time transcription APIs",
+        "Natural for non-technical users"
+      ],
+      "cons": [
+        "Transcription quality varies (user noted 'self-rate' → 'self-rape')",
+        "Additional API cost",
+        "Needs good error handling for misheard words",
+        "Audio privacy considerations"
+      ],
+      "open_questions": [
+        "Deepgram vs Whisper vs browser native?",
+        "Real-time streaming or record-then-transcribe?",
+        "How to handle transcription errors gracefully?",
+        "Should we use AI to clean up transcription before feeding to chat?"
+      ],
       "notes": "User is already using voice (Deepgram) in Cursor and loves it. Bringing that to DevTrack's own chat is natural.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
-    }
-    ,
+      "updated": "2026-02-08",
+      "tags": []
+    },
     {
       "id": "IDEA-029",
       "title": "Session-end user observation pipeline — AI-to-AI profile crowdsourcing",
@@ -452,14 +868,28 @@
       "category": "core",
       "priority": "high",
       "description": "At the end of every coding session, the AI writes a brief observation about the user back to the DevTrack profile (session_observations array). Includes: attribute signals observed during the session, behavioral patterns, emotional tone, specific examples. DevTrack's backend AI periodically consolidates these observations into weighted scores — attributes that get reinforced across many sessions carry more weight than one-off signals. Essentially crowdsourced AI observations about the user, aggregated into a living profile.",
-      "pros": ["Profile improves automatically over time", "Multiple AI perspectives (Cursor, Claude, Gemini) contribute", "Weighted scoring smooths out noise from single sessions", "Creates longitudinal data about user growth"],
-      "cons": ["Adds overhead to session wrap", "Different AIs may assess differently", "Need to handle conflicting observations"],
-      "open_questions": ["How often does DevTrack AI consolidate?", "How to weight observations from different platforms/models?", "Should the user be able to see raw observations?", "Minimum observations before a score adjustment?"],
+      "pros": [
+        "Profile improves automatically over time",
+        "Multiple AI perspectives (Cursor, Claude, Gemini) contribute",
+        "Weighted scoring smooths out noise from single sessions",
+        "Creates longitudinal data about user growth"
+      ],
+      "cons": [
+        "Adds overhead to session wrap",
+        "Different AIs may assess differently",
+        "Need to handle conflicting observations"
+      ],
+      "open_questions": [
+        "How often does DevTrack AI consolidate?",
+        "How to weight observations from different platforms/models?",
+        "Should the user be able to see raw observations?",
+        "Minimum observations before a score adjustment?"
+      ],
       "notes": "User explicitly asked for this. The session_observations structure is already in the profile. Now needs: (1) cursor rule instruction to write observation at session end, (2) DevTrack AI consolidation job, (3) weighted score recalculation logic.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
-    }
-    ,
+      "updated": "2026-02-08",
+      "tags": []
+    },
     {
       "id": "IDEA-030",
       "title": "Portable user intelligence profile — travels with the user across projects and tools",
@@ -467,12 +897,28 @@
       "category": "business",
       "priority": "high",
       "description": "The user profile becomes a portable document that follows the user across projects, AI tools, and potentially employers/teams. Contains: AI-observed intelligence scores, cognitive strengths/weaknesses, work style, behavioral patterns, communication calibration. Could be: (1) exported as a JSON/PDF for sharing, (2) hosted on a user's dev-track web profile, (3) injected into any AI tool's system prompt. Use cases beyond dev-track: team composition (pair a high-vision/low-implementation person with a high-implementation partner), hiring (honest AI assessment vs self-reported resume), work product direction (assign architecture work to systems thinkers, testing work to detail-oriented people).",
-      "pros": ["Makes every AI interaction smarter from message one", "Valuable for teams and hiring", "Differentiated product feature no one else has", "Natural extension of what we've already built"],
-      "cons": ["Privacy concerns are massive — honest AI assessments of intelligence/weaknesses", "Users might game the system if they know how scoring works", "Employers using this could be discriminatory", "Needs robust consent/sharing model"],
-      "open_questions": ["Who controls sharing? User opt-in only?", "How to prevent gaming?", "Is this ethical for hiring?", "Should there be a 'public' vs 'private' profile?"],
+      "pros": [
+        "Makes every AI interaction smarter from message one",
+        "Valuable for teams and hiring",
+        "Differentiated product feature no one else has",
+        "Natural extension of what we've already built"
+      ],
+      "cons": [
+        "Privacy concerns are massive — honest AI assessments of intelligence/weaknesses",
+        "Users might game the system if they know how scoring works",
+        "Employers using this could be discriminatory",
+        "Needs robust consent/sharing model"
+      ],
+      "open_questions": [
+        "Who controls sharing? User opt-in only?",
+        "How to prevent gaming?",
+        "Is this ethical for hiring?",
+        "Should there be a 'public' vs 'private' profile?"
+      ],
       "notes": "User's insight: 'how interesting would this data be to employers if you were ACTUALLY honest.' The answer is: extremely. But also extremely sensitive. The product opportunity is there but the ethics need to be right. Start with: portable across the user's own projects and AI tools. Later: opt-in sharing for teams.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-031",
@@ -481,14 +927,26 @@
       "category": "security",
       "priority": "high",
       "description": "When initializing dev-track in a new project, credentials from .credentials.json auto-populate in the UI (already works locally). For the paid product, if we ever sync credentials between projects or from a central store, the transfer must be encrypted. HTTPS + encrypted storage at rest minimum. Consider: (1) per-project encryption key derived from a master password, (2) OS keychain integration (macOS Keychain, Windows Credential Manager), (3) zero-knowledge architecture where the server never sees plaintext keys. For local-only use this is fine — keys never leave the machine. Becomes critical when cloud sync or team features are added.",
-      "pros": ["Enables secure cross-project credential sharing", "Users don't need to re-enter keys per project", "OS keychain integration is the gold standard for local credential storage"],
-      "cons": ["Adds complexity to a local-first tool", "OS keychain APIs differ per platform", "Master password UX is annoying"],
-      "open_questions": ["When does this become critical — only when cloud sync ships?", "OS keychain vs encrypted file vs master password?", "Should credentials ever sync to the web platform or stay local-only?"],
+      "pros": [
+        "Enables secure cross-project credential sharing",
+        "Users don't need to re-enter keys per project",
+        "OS keychain integration is the gold standard for local credential storage"
+      ],
+      "cons": [
+        "Adds complexity to a local-first tool",
+        "OS keychain APIs differ per platform",
+        "Master password UX is annoying"
+      ],
+      "open_questions": [
+        "When does this become critical — only when cloud sync ships?",
+        "OS keychain vs encrypted file vs master password?",
+        "Should credentials ever sync to the web platform or stay local-only?"
+      ],
       "notes": "User noticed credentials auto-populating from .credentials.json and flagged security concern proactively. Good instinct. Park until cloud sync is on the roadmap, but document the requirement now.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
-    }
-    ,
+      "updated": "2026-02-08",
+      "tags": []
+    },
     {
       "id": "IDEA-032",
       "title": "AI project initialization wizard — full codebase audit on first run",
@@ -496,12 +954,29 @@
       "category": "core",
       "priority": "critical",
       "description": "When dev-track init runs on a new project, the AI should audit the entire codebase end-to-end: parse all source files, find docs/READMEs, read package.json/configs, scan git commit history for changelog, look for existing sprint plans/product plans/TODOs/FIXMEs. It synthesizes everything into dev-track: populates state.json with system ratings, creates backlog items from TODOs and weak areas, creates issues from known bugs and security concerns, captures ideas, rates architectural health, identifies what's half-baked vs production-ready. Should work on mid-stream projects like Pillar and Landmark — not just greenfield.",
-      "pros": ["Zero-to-productive in one command", "Works on existing projects mid-stream", "AI finds things humans miss (security gaps, incomplete features)", "Git history becomes changelog automatically", "Differentiating feature — no other tool does this"],
-      "cons": ["Expensive — full codebase + git history analysis", "Quality depends on AI model capability", "Large codebases may need chunked analysis", "Risk of generating noise (too many low-value issues)"],
-      "open_questions": ["Which model tier? Needs to be smart enough for architecture assessment", "How to handle monorepos vs single projects?", "Should it ask the user to confirm before populating, or just do it?", "How deep into git history — last 50 commits? All?"],
+      "pros": [
+        "Zero-to-productive in one command",
+        "Works on existing projects mid-stream",
+        "AI finds things humans miss (security gaps, incomplete features)",
+        "Git history becomes changelog automatically",
+        "Differentiating feature — no other tool does this"
+      ],
+      "cons": [
+        "Expensive — full codebase + git history analysis",
+        "Quality depends on AI model capability",
+        "Large codebases may need chunked analysis",
+        "Risk of generating noise (too many low-value issues)"
+      ],
+      "open_questions": [
+        "Which model tier? Needs to be smart enough for architecture assessment",
+        "How to handle monorepos vs single projects?",
+        "Should it ask the user to confirm before populating, or just do it?",
+        "How deep into git history — last 50 commits? All?"
+      ],
       "notes": "User explicitly wants: come into midstream on Pillar/Landmark, AI populates dev-track top-to-bottom with where it thinks everything is. Not just docs — actual code analysis. Security weaknesses, incomplete features, architecture gaps. Loads suggestions as actions, issues, ideas, backlog items.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-033",
@@ -510,12 +985,26 @@
       "category": "integration",
       "priority": "high",
       "description": "Sync git commit history directly into DevTrack. Parse commits into changelog entries, detect patterns (feature work, bug fixes, refactors). GitHub integration already exists — extend it to pull commit history on init and keep it synced. AI can then search DevTrack's own data instead of re-parsing git every time. Enables: 'what changed last week', 'when was auth last touched', 'show me all commits related to the payment system'.",
-      "pros": ["Rich project history without manual entry", "AI can search structured commit data", "Connects code changes to backlog/issues automatically", "GitHub integration already has git CLI access"],
-      "cons": ["Commit messages vary wildly in quality", "Large repos = lots of data", "Need to handle merge commits, squashes, rebases"],
-      "open_questions": ["Parse on init only or keep syncing?", "How to map commits to backlog items/issues?", "Store raw commits or AI-summarized versions?"],
+      "pros": [
+        "Rich project history without manual entry",
+        "AI can search structured commit data",
+        "Connects code changes to backlog/issues automatically",
+        "GitHub integration already has git CLI access"
+      ],
+      "cons": [
+        "Commit messages vary wildly in quality",
+        "Large repos = lots of data",
+        "Need to handle merge commits, squashes, rebases"
+      ],
+      "open_questions": [
+        "Parse on init only or keep syncing?",
+        "How to map commits to backlog items/issues?",
+        "Store raw commits or AI-summarized versions?"
+      ],
       "notes": "User wants: load all previous git commits so AI can search them within DevTrack. GitHub integration already uses local git CLI.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-034",
@@ -524,14 +1013,28 @@
       "category": "architecture",
       "priority": "high",
       "description": "The data model needs an audit. Current entities: Backlog (features/tasks with horizons), Issues (bugs with severity), Ideas (captured concepts), Actions (tracked features with health/diagnostics), Sessions, Changelog, Brain Notes. Questions: Are Actions redundant with Backlog? Should Issues auto-create from Backlog items? Should Ideas promote directly to Backlog? Is this Notion + Jira + GitHub? What's the relationship graph between entities? User explicitly wants clarity on what each entity IS and how they flow into each other. This is the product definition of DevTrack itself.",
-      "pros": ["Cleaner mental model for users", "Reduces confusion about where to put things", "Enables better AI automation (knows the flow)", "Forces us to define what DevTrack IS as a product"],
-      "cons": ["May require data model changes", "Migration of existing data", "Risk of over-engineering the taxonomy"],
-      "open_questions": ["Should Actions be merged into Backlog?", "What's the lifecycle: Idea → Backlog → Issue? Or are they independent?", "Do we need all these entities or can some be collapsed?", "What does 'Notion + Jira + GitHub driven by AI' actually mean in entity terms?"],
+      "pros": [
+        "Cleaner mental model for users",
+        "Reduces confusion about where to put things",
+        "Enables better AI automation (knows the flow)",
+        "Forces us to define what DevTrack IS as a product"
+      ],
+      "cons": [
+        "May require data model changes",
+        "Migration of existing data",
+        "Risk of over-engineering the taxonomy"
+      ],
+      "open_questions": [
+        "Should Actions be merged into Backlog?",
+        "What's the lifecycle: Idea → Backlog → Issue? Or are they independent?",
+        "Do we need all these entities or can some be collapsed?",
+        "What does 'Notion + Jira + GitHub driven by AI' actually mean in entity terms?"
+      ],
       "notes": "User called out that Actions aren't being used. Wants to audit the full product management suite. This is a product definition exercise, not just code.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
-    }
-    ,
+      "updated": "2026-02-08",
+      "tags": []
+    },
     {
       "id": "IDEA-035",
       "title": "Opinionated git/commit settings page — AI behavior controls for version control",
@@ -539,12 +1042,23 @@
       "category": "feature",
       "priority": "high",
       "description": "Settings page section for git behavior. Conventional commit format (feat/fix/chore/etc), commit frequency preferences, push-on-session-end toggle, changelog generation from commits, how AI should handle branching. Settings inject into cursor rules so the coding AI follows them. Sliders/toggles for: auto-commit frequency, commit message verbosity, branch strategy, push policy, changelog linkage.",
-      "pros": ["Opinionated defaults that teach good git practices", "AI follows user preferences consistently", "Conventional commits enable auto-changelog from git"],
-      "cons": ["Many git workflows to support", "Settings can conflict with team policies"],
-      "open_questions": ["How to inject settings into cursor rules dynamically?", "Default to conventional commits or let user choose format?"],
+      "pros": [
+        "Opinionated defaults that teach good git practices",
+        "AI follows user preferences consistently",
+        "Conventional commits enable auto-changelog from git"
+      ],
+      "cons": [
+        "Many git workflows to support",
+        "Settings can conflict with team policies"
+      ],
+      "open_questions": [
+        "How to inject settings into cursor rules dynamically?",
+        "Default to conventional commits or let user choose format?"
+      ],
       "notes": "User wants this to opinionate the coding AI's git behavior via cursor rule injection. Good product feature — teaches users proper git etiquette while they use the tool.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-036",
@@ -553,12 +1067,23 @@
       "category": "feature",
       "priority": "medium",
       "description": "Track project versions (semver), bundle changelog entries into release notes per version, manage version bumps (major/minor/patch). AI can auto-suggest version bumps based on changelog types (feat = minor, fix = patch, breaking = major). Release notes page showing version history with bundled changes.",
-      "pros": ["Professional release management", "AI auto-suggests version bumps", "Release notes auto-generated from changelog"],
-      "cons": ["Adds complexity for solo devs", "Version management is opinionated"],
-      "open_questions": ["When to auto-bump vs manual?", "How does this interact with npm/package.json versions?"],
+      "pros": [
+        "Professional release management",
+        "AI auto-suggests version bumps",
+        "Release notes auto-generated from changelog"
+      ],
+      "cons": [
+        "Adds complexity for solo devs",
+        "Version management is opinionated"
+      ],
+      "open_questions": [
+        "When to auto-bump vs manual?",
+        "How does this interact with npm/package.json versions?"
+      ],
       "notes": "User called out need for version management and release notes on major releases.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     },
     {
       "id": "IDEA-037",
@@ -567,12 +1092,25 @@
       "category": "feature",
       "priority": "critical",
       "description": "Purpose-built views that are impossible without AI: real-time system health inference (not manual ratings), predictive velocity ('payment system ships in ~4 sessions'), knowledge graph across all entities, vector search ('what did we decide about auth?'), risk heat maps, dependency impact analysis ('if we change this, what breaks?'), auto-generated architecture narratives, technical debt scoring, team capability matching. These are the views that make DevTrack impossible to replicate with human-only tools. Consider: vector DB (Pinecone/Weaviate), Neo4j for knowledge graph, GraphQL for cross-entity queries.",
-      "pros": ["Killer differentiator", "Impossible without AI", "Makes DevTrack irreplaceable"],
-      "cons": ["Expensive to build and run", "Quality depends on model capability", "Infrastructure heavy (vector DB, graph DB)"],
-      "open_questions": ["Which AI-unique views are most valuable first?", "Vector DB vs simple search?", "Neo4j vs simpler graph representation?"],
+      "pros": [
+        "Killer differentiator",
+        "Impossible without AI",
+        "Makes DevTrack irreplaceable"
+      ],
+      "cons": [
+        "Expensive to build and run",
+        "Quality depends on model capability",
+        "Infrastructure heavy (vector DB, graph DB)"
+      ],
+      "open_questions": [
+        "Which AI-unique views are most valuable first?",
+        "Vector DB vs simple search?",
+        "Neo4j vs simpler graph representation?"
+      ],
       "notes": "User's key insight: existing tools assume the human IS the loop. DevTrack should build views that only exist because AI is managing the data. This is the moat.",
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "tags": []
     }
   ],
   "next_id": 38

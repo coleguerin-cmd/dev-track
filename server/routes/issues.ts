@@ -1,7 +1,7 @@
 import { Hono } from 'hono';
 import { getStore } from '../store.js';
 import { broadcast } from '../ws.js';
-import type { Issue, IssueStatus, IssueSeverity } from '../../shared/types.js';
+import type { Issue, IssueStatus, IssueSeverity, IssueType } from '../../shared/types.js';
 
 const app = new Hono();
 
@@ -10,14 +10,18 @@ app.get('/', (c) => {
   const store = getStore();
   const status = c.req.query('status') as IssueStatus | undefined;
   const severity = c.req.query('severity') as IssueSeverity | undefined;
-  const action_id = c.req.query('action_id');
+  const type = c.req.query('type') as IssueType | undefined;
   const assignee = c.req.query('assignee');
+  const milestone_id = c.req.query('milestone_id');
+  const epic_id = c.req.query('epic_id');
 
   let issues = store.issues.issues;
   if (status) issues = issues.filter(i => i.status === status);
   if (severity) issues = issues.filter(i => i.severity === severity);
-  if (action_id) issues = issues.filter(i => i.action_id === action_id);
+  if (type) issues = issues.filter(i => i.type === type);
   if (assignee) issues = issues.filter(i => i.assignee === assignee);
+  if (milestone_id) issues = issues.filter(i => i.milestone_id === milestone_id);
+  if (epic_id) issues = issues.filter(i => i.epic_id === epic_id);
 
   return c.json({
     ok: true,
@@ -48,36 +52,38 @@ app.post('/', async (c) => {
   const issue: Issue = {
     id: `ISS-${String(store.issues.next_id).padStart(3, '0')}`,
     title: body.title,
-    action_id: body.action_id || null,
     status: 'open',
     severity: body.severity || 'medium',
-    assignee: body.assignee || null,
-    discovered: new Date().toISOString().split('T')[0],
-    discovered_in_run: body.discovered_in_run || null,
+    type: body.type || 'bug',
     symptoms: body.symptoms || '',
     root_cause: body.root_cause || null,
-    files: body.files || [],
-    backlog_item: body.backlog_item || null,
     resolution: null,
+    files: body.files || [],
+    roadmap_item: body.roadmap_item || null,
+    epic_id: body.epic_id || null,
+    milestone_id: body.milestone_id || null,
+    blocked_by_issue: body.blocked_by_issue || null,
+    assignee: body.assignee || null,
+    tags: body.tags || [],
+    discovered: new Date().toISOString().split('T')[0],
+    discovered_by: body.discovered_by || 'user',
     resolved: null,
-    notes: body.notes || '',
+    notes: body.notes || null,
   };
 
   store.issues.issues.push(issue);
   store.issues.next_id++;
-
-  // Update action open_issues count
-  if (issue.action_id) {
-    const action = store.actions.actions.find(a => a.id === issue.action_id);
-    if (action) {
-      action.open_issues = store.issues.issues.filter(
-        i => i.action_id === issue.action_id && (i.status === 'open' || i.status === 'in_progress')
-      ).length;
-      store.saveActions();
-    }
-  }
-
   store.saveIssues();
+
+  store.addActivity({
+    type: 'issue_opened',
+    entity_type: 'issue',
+    entity_id: issue.id,
+    title: `Issue opened: ${issue.title}`,
+    actor: issue.discovered_by,
+    metadata: { severity: issue.severity, type: issue.type },
+  });
+
   broadcast({ type: 'issue_created', data: issue, timestamp: new Date().toISOString() });
   return c.json({ ok: true, data: issue }, 201);
 });
@@ -92,11 +98,16 @@ app.patch('/:id', async (c) => {
   if (body.title !== undefined) issue.title = body.title;
   if (body.status !== undefined) issue.status = body.status;
   if (body.severity !== undefined) issue.severity = body.severity;
-  if (body.assignee !== undefined) issue.assignee = body.assignee;
+  if (body.type !== undefined) issue.type = body.type;
   if (body.symptoms !== undefined) issue.symptoms = body.symptoms;
   if (body.root_cause !== undefined) issue.root_cause = body.root_cause;
   if (body.files !== undefined) issue.files = body.files;
-  if (body.backlog_item !== undefined) issue.backlog_item = body.backlog_item;
+  if (body.roadmap_item !== undefined) issue.roadmap_item = body.roadmap_item;
+  if (body.epic_id !== undefined) issue.epic_id = body.epic_id;
+  if (body.milestone_id !== undefined) issue.milestone_id = body.milestone_id;
+  if (body.blocked_by_issue !== undefined) issue.blocked_by_issue = body.blocked_by_issue;
+  if (body.assignee !== undefined) issue.assignee = body.assignee;
+  if (body.tags !== undefined) issue.tags = body.tags;
   if (body.notes !== undefined) issue.notes = body.notes;
 
   store.saveIssues();
@@ -115,18 +126,23 @@ app.post('/:id/resolve', async (c) => {
   issue.resolution = body.resolution || 'Resolved';
   issue.resolved = new Date().toISOString().split('T')[0];
 
-  // Update action open_issues count
-  if (issue.action_id) {
-    const action = store.actions.actions.find(a => a.id === issue.action_id);
-    if (action) {
-      action.open_issues = store.issues.issues.filter(
-        i => i.action_id === issue.action_id && (i.status === 'open' || i.status === 'in_progress')
-      ).length;
-      store.saveActions();
-    }
+  store.saveIssues();
+
+  // Update milestone blocking count
+  if (issue.milestone_id) {
+    store.recomputeMilestoneProgress(issue.milestone_id);
+    store.saveMilestones();
   }
 
-  store.saveIssues();
+  store.addActivity({
+    type: 'issue_resolved',
+    entity_type: 'issue',
+    entity_id: issue.id,
+    title: `Issue resolved: ${issue.title}`,
+    actor: 'user',
+    metadata: { severity: issue.severity },
+  });
+
   broadcast({ type: 'issue_resolved', data: issue, timestamp: new Date().toISOString() });
   return c.json({ ok: true, data: issue });
 });
@@ -145,18 +161,13 @@ app.post('/:id/reopen', async (c) => {
   issue.resolution = null;
   issue.resolved = null;
 
-  // Update action open_issues count
-  if (issue.action_id) {
-    const action = store.actions.actions.find(a => a.id === issue.action_id);
-    if (action) {
-      action.open_issues = store.issues.issues.filter(
-        i => i.action_id === issue.action_id && (i.status === 'open' || i.status === 'in_progress')
-      ).length;
-      store.saveActions();
-    }
+  store.saveIssues();
+
+  if (issue.milestone_id) {
+    store.recomputeMilestoneProgress(issue.milestone_id);
+    store.saveMilestones();
   }
 
-  store.saveIssues();
   broadcast({ type: 'issue_updated', data: issue, timestamp: new Date().toISOString() });
   return c.json({ ok: true, data: issue });
 });

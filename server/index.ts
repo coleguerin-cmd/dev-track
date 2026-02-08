@@ -20,14 +20,18 @@ import { getStore, reloadStore } from './store.js';
 import { setupWebSocket } from './ws.js';
 import { startWatcher } from './watcher.js';
 
-// Route imports
+// Route imports — v2 entities
 import stateRoutes from './routes/state.js';
 import sessionRoutes from './routes/session.js';
-import backlogRoutes from './routes/backlog.js';
+import roadmapRoutes from './routes/roadmap.js';
+import epicsRoutes from './routes/epics.js';
+import milestonesRoutes from './routes/milestones.js';
+import releasesRoutes from './routes/releases.js';
+import systemsRoutes from './routes/systems.js';
 import issuesRoutes from './routes/issues.js';
-import actionsRoutes from './routes/actions.js';
 import changelogRoutes from './routes/changelog.js';
-import runsRoutes from './routes/runs.js';
+import labelsRoutes from './routes/labels.js';
+import automationsRoutes from './routes/automations.js';
 import metricsRoutes from './routes/metrics.js';
 import docsRoutes from './routes/docs.js';
 import configRoutes from './routes/config.js';
@@ -76,7 +80,6 @@ const app = new Hono();
 
 app.use('*', cors({
   origin: (origin) => {
-    // Allow any localhost port for development
     if (!origin) return `http://localhost:${PORT}`;
     if (origin.includes('localhost') || origin.includes('127.0.0.1')) return origin;
     return `http://localhost:${PORT}`;
@@ -85,25 +88,35 @@ app.use('*', cors({
   allowHeaders: ['Content-Type'],
 }));
 
-// ─── API Routes ─────────────────────────────────────────────────────────────
+// ─── API Routes (v2) ────────────────────────────────────────────────────────
 
-app.route('/api/v1/state', stateRoutes);
-app.route('/api/v1/session', sessionRoutes);
-app.route('/api/v1/backlog', backlogRoutes);
+// Core entities
+app.route('/api/v1/roadmap', roadmapRoutes);
+app.route('/api/v1/epics', epicsRoutes);
+app.route('/api/v1/milestones', milestonesRoutes);
+app.route('/api/v1/releases', releasesRoutes);
+app.route('/api/v1/systems', systemsRoutes);
 app.route('/api/v1/issues', issuesRoutes);
-app.route('/api/v1/actions', actionsRoutes);
 app.route('/api/v1/changelog', changelogRoutes);
-app.route('/api/v1/runs', runsRoutes);
+app.route('/api/v1/session', sessionRoutes);
+app.route('/api/v1/ideas', ideasRoutes);
+app.route('/api/v1/labels', labelsRoutes);
+app.route('/api/v1/automations', automationsRoutes);
+
+// Supporting
+app.route('/api/v1/state', stateRoutes);
 app.route('/api/v1/metrics', metricsRoutes);
 app.route('/api/v1/docs', docsRoutes);
 app.route('/api/v1/config', configRoutes);
 app.route('/api/v1/integrations', integrationsRoutes);
 app.route('/api/v1/brain', brainRoutes);
-app.route('/api/v1/ideas', ideasRoutes);
 app.route('/api/v1/activity', activityRoutes);
 app.route('/api/v1/codebase', codebaseRoutes);
 app.route('/api/v1/git', gitRoutes);
 app.route('/api/v1/ai', aiRoutes);
+
+// Backward compat: /api/v1/backlog → /api/v1/roadmap
+app.route('/api/v1/backlog', roadmapRoutes);
 
 // Quick status shortcut
 app.get('/api/v1/quick-status', (c) => {
@@ -159,24 +172,18 @@ app.post('/api/v1/projects/switch', async (c) => {
     return c.json({ ok: false, error: `Project "${projectId}" not found in registry` }, 404);
   }
 
-  // Resolve the data directory
   const dataDir = project.dataDir.replace(/^~/, os.homedir());
   if (!fs.existsSync(dataDir)) {
     return c.json({ ok: false, error: `Data directory not found: ${dataDir}` }, 404);
   }
 
-  // Hot-swap: update data dir, project root, and reload the store
   setDataDir(dataDir);
   setProjectRoot(project.path);
 
-  // Update last accessed
   project.lastAccessed = new Date().toISOString();
   registerProject(project);
 
-  // Reload the store with new data
   reloadStore();
-
-  // Restart the file watcher on the new data dir
   startWatcher();
 
   const store = getStore();
@@ -209,13 +216,10 @@ app.get('/api/health', (c) => {
 
 // ─── Static File Serving (built UI) ────────────────────────────────────────
 
-// In production, serve from dist/ui relative to the dev-track package location
-// In development, serve from the workspace
 const PACKAGE_ROOT = path.resolve(new URL('.', import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1'), '..');
 const UI_DIST = path.resolve(PACKAGE_ROOT, 'dist', 'ui');
 
 app.get('*', (c) => {
-  // Try to serve from dist/ui first (production build)
   const reqPath = c.req.path === '/' ? '/index.html' : c.req.path;
   const filePath = path.join(UI_DIST, reqPath);
 
@@ -237,7 +241,6 @@ app.get('*', (c) => {
       });
     }
 
-    // SPA fallback — serve index.html for all unmatched routes
     const indexPath = path.join(UI_DIST, 'index.html');
     if (fs.existsSync(indexPath)) {
       const content = fs.readFileSync(indexPath, 'utf-8');
@@ -247,7 +250,6 @@ app.get('*', (c) => {
     // Fall through
   }
 
-  // Dev mode fallback — show message pointing to Vite dev server
   return c.html(`
     <!DOCTYPE html>
     <html>
@@ -270,14 +272,13 @@ app.get('*', (c) => {
 const projectName = getProjectName();
 
 console.log('\n  ╔══════════════════════════════════════╗');
-console.log('  ║         dev-track server              ║');
+console.log('  ║         dev-track server v2           ║');
 console.log('  ╚══════════════════════════════════════╝\n');
 
-// Initialize store (loads all data files)
 const store = getStore();
 console.log(`  Project:  ${projectName}`);
 console.log(`  Data:     ${getDataDir()}`);
-console.log(`  Health:   ${store.state.overall_completion}%`);
+console.log(`  Health:   ${store.state.overall_health}%`);
 console.log(`  Status:   ${store.getQuickStatusLine()}\n`);
 
 const server = serve({
@@ -290,10 +291,7 @@ const server = serve({
   console.log(`  WS:      ws://127.0.0.1:${info.port}/ws\n`);
 });
 
-// Attach WebSocket to the HTTP server
 setupWebSocket(server as unknown as import('http').Server);
-
-// Start file watcher
 startWatcher();
 
 console.log('  Ready.\n');

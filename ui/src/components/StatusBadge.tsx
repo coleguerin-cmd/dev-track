@@ -1,13 +1,14 @@
-import type { ActionHealth, IssueSeverity, IssueStatus, ItemStatus, Size, Horizon } from '@shared/types';
+import type { IssueSeverity, IssueStatus, ItemStatus, Size, Horizon, SystemStatus } from '@shared/types';
 
-export function HealthDot({ health }: { health: ActionHealth }) {
-  const colors: Record<ActionHealth, string> = {
-    green: 'bg-status-pass',
-    yellow: 'bg-status-warn',
-    red: 'bg-status-fail',
+export function HealthDot({ status }: { status: SystemStatus | string }) {
+  const colors: Record<string, string> = {
+    healthy: 'bg-status-pass',
+    degraded: 'bg-status-warn',
+    critical: 'bg-status-fail',
     unknown: 'bg-status-neutral',
+    planned: 'bg-accent-blue',
   };
-  return <span className={`inline-block w-2.5 h-2.5 rounded-full ${colors[health]}`} />;
+  return <span className={`inline-block w-2.5 h-2.5 rounded-full ${colors[status] || 'bg-status-neutral'}`} />;
 }
 
 export function SizeBadge({ size }: { size: Size }) {
@@ -24,6 +25,7 @@ export function StatusBadge({ status }: { status: ItemStatus | IssueStatus }) {
   const config: Record<string, { bg: string; text: string; label: string }> = {
     pending: { bg: 'bg-surface-4', text: 'text-text-tertiary', label: 'Pending' },
     in_progress: { bg: 'bg-accent-blue/15', text: 'text-accent-blue', label: 'In Progress' },
+    in_review: { bg: 'bg-accent-purple/15', text: 'text-accent-purple', label: 'In Review' },
     completed: { bg: 'bg-status-pass/15', text: 'text-status-pass', label: 'Done' },
     cancelled: { bg: 'bg-surface-4', text: 'text-text-tertiary', label: 'Cancelled' },
     open: { bg: 'bg-accent-red/15', text: 'text-accent-red', label: 'Open' },
@@ -46,13 +48,25 @@ export function SeverityBadge({ severity }: { severity: IssueSeverity }) {
 }
 
 export function HorizonBadge({ horizon }: { horizon: Horizon }) {
-  const config: Record<Horizon, { bg: string; text: string }> = {
+  const config: Record<string, { bg: string; text: string }> = {
     now: { bg: 'bg-accent-blue/15', text: 'text-accent-blue' },
     next: { bg: 'bg-accent-purple/15', text: 'text-accent-purple' },
     later: { bg: 'bg-surface-4', text: 'text-text-tertiary' },
+    shipped: { bg: 'bg-status-pass/15', text: 'text-status-pass' },
   };
-  const c = config[horizon];
+  const c = config[horizon] || config.later;
   return <span className={`badge ${c.bg} ${c.text}`}>{horizon.toUpperCase()}</span>;
+}
+
+export function PriorityBadge({ priority }: { priority: string }) {
+  const config: Record<string, { bg: string; text: string }> = {
+    P0: { bg: 'bg-accent-red/15', text: 'text-accent-red' },
+    P1: { bg: 'bg-accent-orange/15', text: 'text-accent-orange' },
+    P2: { bg: 'bg-accent-yellow/15', text: 'text-accent-yellow' },
+    P3: { bg: 'bg-surface-4', text: 'text-text-tertiary' },
+  };
+  const c = config[priority] || config.P2;
+  return <span className={`badge ${c.bg} ${c.text}`}>{priority}</span>;
 }
 
 export function CategoryTag({ category }: { category: string }) {
@@ -63,13 +77,14 @@ export function CategoryTag({ category }: { category: string }) {
   );
 }
 
-export function PassRate({ passed, total }: { passed: number; total: number }) {
-  if (total === 0) return <span className="text-text-tertiary text-xs">No runs</span>;
-  const pct = Math.round((passed / total) * 100);
-  const color = pct >= 90 ? 'text-status-pass' : pct >= 70 ? 'text-status-warn' : 'text-status-fail';
+export function HealthBar({ score }: { score: number }) {
+  const color = score >= 80 ? 'bg-emerald-500' : score >= 60 ? 'bg-amber-500' : 'bg-red-500';
   return (
-    <span className={`text-xs font-medium ${color}`}>
-      {passed}/{total} pass
-    </span>
+    <div className="flex items-center gap-1.5">
+      <div className="w-16 h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+        <div className={`h-full rounded-full ${color}`} style={{ width: `${score}%` }} />
+      </div>
+      <span className="text-xs text-muted w-8 text-right">{score}%</span>
+    </div>
   );
 }

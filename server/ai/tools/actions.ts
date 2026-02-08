@@ -1,73 +1,83 @@
 import { getStore } from '../../store.js';
 import type { ToolModule } from './types.js';
 
+// v2: Actions are deprecated. These tools now proxy to Systems.
 export const actionTools: ToolModule = {
-  domain: 'actions',
+  domain: 'systems',
   tools: [
     {
       definition: { type: 'function', function: {
-        name: 'list_actions',
-        description: 'List all tracked actions/features with their health status',
-        parameters: { type: 'object', properties: {} },
-      }},
-      label: 'Listing actions',
-      execute: async () => {
-        const store = getStore();
-        return { actions: store.actions.actions || [], total: (store.actions.actions || []).length };
-      },
-    },
-    {
-      definition: { type: 'function', function: {
-        name: 'create_action',
-        description: 'Create a new tracked action/feature with health monitoring',
+        name: 'list_systems',
+        description: 'List all systems with their health status and scores',
         parameters: { type: 'object', properties: {
-          id: { type: 'string', description: 'Unique action ID (kebab-case)' },
-          name: { type: 'string', description: 'Action name' },
-          description: { type: 'string', description: 'What this action/feature does' },
-          health: { type: 'string', enum: ['green', 'yellow', 'red', 'unknown'], description: 'Current health status' },
-          owner: { type: 'string', description: 'Who owns this action' },
-          playbook: { type: 'string', description: 'Path to playbook/runbook file' },
-        }, required: ['id', 'name', 'description'] },
+          status: { type: 'string', enum: ['healthy', 'degraded', 'critical', 'unknown', 'planned'], description: 'Filter by status' },
+        }},
       }},
-      label: 'Creating action',
+      label: 'Listing systems',
       execute: async (args) => {
         const store = getStore();
-        const action = {
-          id: args.id, name: args.name, description: args.description,
-          health: args.health || 'unknown', owner: args.owner || null,
-          playbook: args.playbook || null,
-          pass_rate: { passed: 0, failed: 0, total: 0 },
-          open_issues: 0, last_run: null,
-          created: new Date().toISOString().split('T')[0],
-        };
-        store.actions.actions.push(action as any);
-        store.saveActions();
-        return { created: action };
+        let systems = store.systems.systems;
+        if (args.status) systems = systems.filter((s: any) => s.status === args.status);
+        return { systems, total: systems.length };
       },
     },
     {
       definition: { type: 'function', function: {
-        name: 'update_action',
-        description: 'Update an action (health, description, owner, etc.)',
+        name: 'update_system',
+        description: 'Update a system\'s health, description, status, or tech stack',
         parameters: { type: 'object', properties: {
-          id: { type: 'string', description: 'Action ID' },
-          health: { type: 'string', enum: ['green', 'yellow', 'red', 'unknown'] },
+          id: { type: 'string', description: 'System ID' },
+          status: { type: 'string', enum: ['healthy', 'degraded', 'critical', 'unknown', 'planned'] },
+          health_score: { type: 'number', description: 'Health score 0-100' },
           description: { type: 'string' },
           name: { type: 'string' },
-          owner: { type: 'string' },
-          open_issues: { type: 'number' },
+          tech_stack: { type: 'array', items: { type: 'string' } },
         }, required: ['id'] },
       }},
-      label: 'Updating action',
+      label: 'Updating system',
       execute: async (args) => {
         const store = getStore();
-        const action = (store.actions.actions || []).find((a: any) => a.id === args.id);
-        if (!action) return { error: `Action ${args.id} not found` };
-        for (const key of ['health', 'description', 'name', 'owner', 'open_issues']) {
-          if (args[key] !== undefined) (action as any)[key] = args[key];
+        const system = store.systems.systems.find((s: any) => s.id === args.id);
+        if (!system) return { error: `System ${args.id} not found` };
+        for (const key of ['status', 'health_score', 'description', 'name', 'tech_stack']) {
+          if (args[key] !== undefined) (system as any)[key] = args[key];
         }
-        store.saveActions();
-        return { updated: action };
+        system.updated = new Date().toISOString().split('T')[0];
+        system.last_assessed = system.updated;
+        store.saveSystems();
+        return { updated: system };
+      },
+    },
+    {
+      definition: { type: 'function', function: {
+        name: 'create_system',
+        description: 'Create a new system entry for the architecture map',
+        parameters: { type: 'object', properties: {
+          id: { type: 'string', description: 'Unique system ID (kebab-case)' },
+          name: { type: 'string', description: 'Display name' },
+          description: { type: 'string', description: 'What this system does' },
+          status: { type: 'string', enum: ['healthy', 'degraded', 'critical', 'unknown', 'planned'] },
+          health_score: { type: 'number', description: 'Initial health score 0-100' },
+          tech_stack: { type: 'array', items: { type: 'string' }, description: 'Technologies used' },
+        }, required: ['id', 'name', 'description'] },
+      }},
+      label: 'Creating system',
+      execute: async (args) => {
+        const store = getStore();
+        const now = new Date().toISOString().split('T')[0];
+        const system = {
+          id: args.id, name: args.name, description: args.description,
+          status: args.status || 'unknown',
+          health_score: args.health_score ?? 50,
+          health_signals: [], last_assessed: now,
+          owner: null, tech_stack: args.tech_stack || [],
+          modules: [], dependencies: [], dependents: [],
+          open_issues: 0, recent_commits: 0, test_coverage: null,
+          tags: [], created: now, updated: now,
+        };
+        store.systems.systems.push(system as any);
+        store.saveSystems();
+        return { created: system };
       },
     },
   ],

@@ -1,0 +1,21 @@
+{
+  "milestones": [
+    {
+      "id": "v0-2-entity-model",
+      "title": "v0.2 Entity Model",
+      "description": "v0.2 milestone: Entity model v2 refactor (types, store, routes, tools, UI), AI chat agent polish, multi-project architecture, UI design system. Foundation for dogfooding on real projects.",
+      "version": "0.2.0",
+      "status": "active",
+      "target_date": null,
+      "completed_date": null,
+      "total_items": 0,
+      "completed_items": 0,
+      "progress_pct": 0,
+      "blocking_issues": 0,
+      "tags": [],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "ai_prediction": null
+    }
+  ]
+}

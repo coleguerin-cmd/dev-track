@@ -167,33 +167,43 @@ function NotificationIcon({ type }: { type: string }) {
   }
 }
 
-// Map file_changed event types to notification types
+// Map WS events to notification types (v2 event types)
 export function wsEventToNotification(event: any): Notification | null {
-  if (event.type !== 'file_changed' || !event.data) return null;
-
-  const { type: dataType } = event.data;
   const id = `notif-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`;
   const timestamp = event.timestamp || new Date().toISOString();
 
-  switch (dataType) {
-    case 'issue':
+  // Handle direct event types (v2)
+  switch (event.type) {
     case 'issue_created':
-      return { id, type: 'issue', title: `Issue updated`, detail: event.data.issue?.title, timestamp, read: false };
-    case 'backlog':
-    case 'backlog_updated':
-      return { id, type: 'backlog', title: `Backlog updated`, detail: event.data.item?.title, timestamp, read: false };
-    case 'changelog':
-    case 'changelog_entry':
-      return { id, type: 'changelog', title: `New changelog entry`, detail: event.data.entry?.title, timestamp, read: false };
-    case 'idea':
-    case 'idea_created':
-      return { id, type: 'idea', title: `New idea captured`, detail: event.data.idea?.title, timestamp, read: false };
-    case 'brain_note':
-      return { id, type: 'brain_note', title: `AI brain note`, detail: event.data.note?.title, timestamp, read: false };
-    case 'session_started':
-      return { id, type: 'session', title: `Session started`, timestamp, read: false };
-    case 'session_ended':
-      return { id, type: 'session', title: `Session ended`, timestamp, read: false };
+    case 'issue_updated':
+    case 'issue_resolved':
+      return { id, type: 'issue', title: `Issue ${event.type.split('_')[1]}`, detail: event.data?.title, timestamp, read: false };
+    case 'roadmap_updated':
+      return { id, type: 'backlog', title: `Roadmap updated`, detail: event.data?.title, timestamp, read: false };
+    case 'epic_updated':
+      return { id, type: 'backlog', title: `Epic updated`, detail: event.data?.title, timestamp, read: false };
+    case 'milestone_updated':
+      return { id, type: 'backlog', title: `Milestone updated`, detail: event.data?.title, timestamp, read: false };
+    case 'changelog_updated':
+      return { id, type: 'changelog', title: `New changelog entry`, detail: event.data?.title, timestamp, read: false };
+    case 'idea_updated':
+      return { id, type: 'idea', title: `Idea updated`, detail: event.data?.title, timestamp, read: false };
+    case 'session_updated':
+      return { id, type: 'session', title: `Session updated`, timestamp, read: false };
+    case 'system_updated':
+      return { id, type: 'brain_note', title: `System health changed`, detail: event.data?.name, timestamp, read: false };
+    case 'release_updated':
+      return { id, type: 'changelog', title: `Release updated`, detail: event.data?.title, timestamp, read: false };
+    case 'activity_event':
+      return { id, type: 'brain_note', title: `Activity`, detail: event.data?.title, timestamp, read: false };
+    case 'file_changed': {
+      // Legacy file_changed events with nested data types
+      const dataType = event.data?.type;
+      if (dataType === 'brain_note') {
+        return { id, type: 'brain_note', title: `AI brain note`, detail: event.data.note?.title, timestamp, read: false };
+      }
+      return null;
+    }
     default:
       return null;
   }

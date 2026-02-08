@@ -67,13 +67,20 @@ export function startWatcher(): void {
 }
 
 function getEventType(relativePath: string): WSEvent['type'] | null {
-  if (relativePath === 'state.json') return 'state_updated';
-  if (relativePath.startsWith('backlog/')) return 'backlog_updated';
+  if (relativePath === 'state.json') return 'system_updated';
+  if (relativePath.startsWith('roadmap/items')) return 'roadmap_updated';
+  if (relativePath.startsWith('backlog/')) return 'roadmap_updated';
+  if (relativePath.startsWith('roadmap/epics')) return 'epic_updated';
+  if (relativePath.startsWith('roadmap/milestones')) return 'milestone_updated';
+  if (relativePath.startsWith('releases/')) return 'release_updated';
+  if (relativePath.startsWith('systems/')) return 'system_updated';
   if (relativePath.startsWith('session/')) return 'session_updated';
   if (relativePath.startsWith('issues/')) return 'issue_updated';
   if (relativePath.startsWith('changelog/')) return 'changelog_updated';
-  if (relativePath.startsWith('actions/')) return 'action_health_changed';
-  if (relativePath.startsWith('runs/')) return 'run_completed';
+  if (relativePath.startsWith('ideas/')) return 'idea_updated';
+  if (relativePath.startsWith('labels/')) return 'label_updated';
+  if (relativePath.startsWith('automations/')) return 'automation_updated';
+  if (relativePath.startsWith('activity/')) return 'activity_event';
   if (relativePath === 'config.json') return 'settings_changed';
   return 'file_changed';
 }

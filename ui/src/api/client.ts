@@ -16,8 +16,6 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
 export const state = {
   get: () => request<any>('/state'),
   update: (data: any) => request<any>('/state', { method: 'PATCH', body: JSON.stringify(data) }),
-  updateSystem: (id: string, data: any) =>
-    request<any>(`/state/systems/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
 };
 
 // ─── Session ────────────────────────────────────────────────────────────────
@@ -27,39 +25,107 @@ export const session = {
   start: (data: any) => request<any>('/session/start', { method: 'POST', body: JSON.stringify(data) }),
   updateCurrent: (data: any) => request<any>('/session/current', { method: 'PATCH', body: JSON.stringify(data) }),
   end: (data: any) => request<any>('/session/end', { method: 'POST', body: JSON.stringify(data) }),
-  getLog: (limit = 10) => request<any>(`/session/log?limit=${limit}`),
+  getLog: (limit = 20) => request<any>(`/session/log?limit=${limit}`),
   getLatest: () => request<any>('/session/log/latest'),
 };
 
-// ─── Backlog ────────────────────────────────────────────────────────────────
+// ─── Roadmap (v2, also accessible as backlog) ───────────────────────────────
 
-export const backlog = {
-  list: (params?: { horizon?: string; status?: string; category?: string }) => {
+export const roadmap = {
+  list: (params?: { horizon?: string; status?: string; category?: string; epic_id?: string; milestone_id?: string }) => {
     const qs = new URLSearchParams();
     if (params?.horizon) qs.set('horizon', params.horizon);
     if (params?.status) qs.set('status', params.status);
     if (params?.category) qs.set('category', params.category);
-    return request<any>(`/backlog?${qs}`);
+    if (params?.epic_id) qs.set('epic_id', params.epic_id);
+    if (params?.milestone_id) qs.set('milestone_id', params.milestone_id);
+    return request<any>(`/roadmap?${qs}`);
   },
-  get: (id: string) => request<any>(`/backlog/${id}`),
-  create: (data: any) => request<any>('/backlog', { method: 'POST', body: JSON.stringify(data) }),
+  get: (id: string) => request<any>(`/roadmap/${id}`),
+  create: (data: any) => request<any>('/roadmap', { method: 'POST', body: JSON.stringify(data) }),
   update: (id: string, data: any) =>
-    request<any>(`/backlog/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
-  complete: (id: string) => request<any>(`/backlog/${id}/complete`, { method: 'POST' }),
-  reopen: (id: string) => request<any>(`/backlog/${id}/reopen`, { method: 'POST' }),
+    request<any>(`/roadmap/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  complete: (id: string) => request<any>(`/roadmap/${id}/complete`, { method: 'POST' }),
+  reopen: (id: string) => request<any>(`/roadmap/${id}/reopen`, { method: 'POST' }),
   move: (id: string, horizon: string) =>
-    request<any>(`/backlog/${id}/move`, { method: 'POST', body: JSON.stringify({ horizon }) }),
-  remove: (id: string) => request<any>(`/backlog/${id}`, { method: 'DELETE' }),
+    request<any>(`/roadmap/${id}/move`, { method: 'POST', body: JSON.stringify({ horizon }) }),
+  remove: (id: string) => request<any>(`/roadmap/${id}`, { method: 'DELETE' }),
+};
+
+/** @deprecated Use roadmap */
+export const backlog = roadmap;
+
+// ─── Epics ──────────────────────────────────────────────────────────────────
+
+export const epics = {
+  list: (params?: { status?: string; milestone_id?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set('status', params.status);
+    if (params?.milestone_id) qs.set('milestone_id', params.milestone_id);
+    return request<any>(`/epics?${qs}`);
+  },
+  get: (id: string) => request<any>(`/epics/${id}`),
+  create: (data: any) => request<any>('/epics', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/epics/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  remove: (id: string) => request<any>(`/epics/${id}`, { method: 'DELETE' }),
+};
+
+// ─── Milestones ─────────────────────────────────────────────────────────────
+
+export const milestones = {
+  list: (params?: { status?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set('status', params.status);
+    return request<any>(`/milestones?${qs}`);
+  },
+  get: (id: string) => request<any>(`/milestones/${id}`),
+  create: (data: any) => request<any>('/milestones', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/milestones/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  remove: (id: string) => request<any>(`/milestones/${id}`, { method: 'DELETE' }),
+};
+
+// ─── Releases ───────────────────────────────────────────────────────────────
+
+export const releases = {
+  list: (params?: { status?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set('status', params.status);
+    return request<any>(`/releases?${qs}`);
+  },
+  get: (id: string) => request<any>(`/releases/${id}`),
+  create: (data: any) => request<any>('/releases', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/releases/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  publish: (id: string) => request<any>(`/releases/${id}/publish`, { method: 'POST' }),
+};
+
+// ─── Systems (replaces Actions) ─────────────────────────────────────────────
+
+export const systems = {
+  list: (params?: { status?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.status) qs.set('status', params.status);
+    return request<any>(`/systems?${qs}`);
+  },
+  get: (id: string) => request<any>(`/systems/${id}`),
+  create: (data: any) => request<any>('/systems', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/systems/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  remove: (id: string) => request<any>(`/systems/${id}`, { method: 'DELETE' }),
+  health: () => request<any>('/systems/health'),
 };
 
 // ─── Issues ─────────────────────────────────────────────────────────────────
 
 export const issues = {
-  list: (params?: { status?: string; severity?: string; action_id?: string }) => {
+  list: (params?: { status?: string; severity?: string; type?: string; milestone_id?: string }) => {
     const qs = new URLSearchParams();
     if (params?.status) qs.set('status', params.status);
     if (params?.severity) qs.set('severity', params.severity);
-    if (params?.action_id) qs.set('action_id', params.action_id);
+    if (params?.type) qs.set('type', params.type);
+    if (params?.milestone_id) qs.set('milestone_id', params.milestone_id);
     return request<any>(`/issues?${qs}`);
   },
   get: (id: string) => request<any>(`/issues/${id}`),
@@ -71,43 +137,51 @@ export const issues = {
   reopen: (id: string) => request<any>(`/issues/${id}/reopen`, { method: 'POST' }),
 };
 
-// ─── Actions ────────────────────────────────────────────────────────────────
-
-export const actions = {
-  list: () => request<any>('/actions'),
-  get: (id: string) => request<any>(`/actions/${id}`),
-  create: (data: any) => request<any>('/actions', { method: 'POST', body: JSON.stringify(data) }),
-  run: (id: string, trigger = 'manual') =>
-    request<any>(`/actions/${id}/run`, { method: 'POST', body: JSON.stringify({ trigger }) }),
-  updateRun: (actionId: string, runId: string, data: any) =>
-    request<any>(`/actions/${actionId}/runs/${runId}`, { method: 'PATCH', body: JSON.stringify(data) }),
-  getPlaybook: (id: string) => request<any>(`/actions/${id}/playbook`),
-};
-
 // ─── Changelog ──────────────────────────────────────────────────────────────
 
 export const changelog = {
-  list: (params?: { limit?: number; since?: string; category?: string }) => {
+  list: (params?: { limit?: number; since?: string; type?: string; scope?: string }) => {
     const qs = new URLSearchParams();
     if (params?.limit) qs.set('limit', String(params.limit));
     if (params?.since) qs.set('since', params.since);
-    if (params?.category) qs.set('category', params.category);
+    if (params?.type) qs.set('type', params.type);
+    if (params?.scope) qs.set('scope', params.scope);
     return request<any>(`/changelog?${qs}`);
   },
   create: (data: any) => request<any>('/changelog', { method: 'POST', body: JSON.stringify(data) }),
-  getSummaries: () => request<any>('/changelog/summaries'),
 };
 
-// ─── Runs ───────────────────────────────────────────────────────────────────
+// ─── Labels ─────────────────────────────────────────────────────────────────
 
-export const runs = {
-  list: (params?: { action_id?: string; limit?: number }) => {
+export const labels = {
+  list: () => request<any>('/labels'),
+  create: (data: any) => request<any>('/labels', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/labels/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  remove: (id: string) => request<any>(`/labels/${id}`, { method: 'DELETE' }),
+};
+
+// ─── Automations ────────────────────────────────────────────────────────────
+
+export const automations = {
+  list: () => request<any>('/automations'),
+  create: (data: any) => request<any>('/automations', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/automations/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  toggle: (id: string) => request<any>(`/automations/${id}/toggle`, { method: 'POST' }),
+  remove: (id: string) => request<any>(`/automations/${id}`, { method: 'DELETE' }),
+};
+
+// ─── Activity Feed ──────────────────────────────────────────────────────────
+
+export const activity = {
+  list: (params?: { limit?: number; type?: string; entity_type?: string }) => {
     const qs = new URLSearchParams();
-    if (params?.action_id) qs.set('action_id', params.action_id);
     if (params?.limit) qs.set('limit', String(params.limit));
-    return request<any>(`/runs?${qs}`);
+    if (params?.type) qs.set('type', params.type);
+    if (params?.entity_type) qs.set('entity_type', params.entity_type);
+    return request<any>(`/activity?${qs}`);
   },
-  get: (id: string) => request<any>(`/runs/${id}`),
 };
 
 // ─── Metrics ────────────────────────────────────────────────────────────────

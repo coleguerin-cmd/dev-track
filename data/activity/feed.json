@@ -1,0 +1,57 @@
+{
+  "events": [
+    {
+      "type": "item_created",
+      "entity_type": "milestone",
+      "entity_id": "v0-2-entity-model",
+      "title": "Milestone created: v0.2 Entity Model",
+      "actor": "user",
+      "metadata": {
+        "version": "0.2.0",
+        "target_date": null
+      },
+      "id": "ACT-0001",
+      "timestamp": "2026-02-08T03:41:12.177Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "epic",
+      "entity_id": "entity-model-v2",
+      "title": "Epic created: Entity Model v2",
+      "actor": "user",
+      "metadata": {
+        "priority": "P0"
+      },
+      "id": "ACT-0002",
+      "timestamp": "2026-02-08T03:41:22.564Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "entity-model-v2-refactor",
+      "title": "Created: Entity Model v2 refactor",
+      "actor": "user",
+      "metadata": {
+        "horizon": "now",
+        "size": "XL",
+        "type": "infrastructure"
+      },
+      "id": "ACT-0003",
+      "timestamp": "2026-02-08T03:46:02.008Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-043",
+      "title": "refactor: Entity Model v2 - complete type system, data migration, store, routes, tools, and UI refactor",
+      "actor": "user",
+      "metadata": {
+        "type": "refactor",
+        "scope": "core"
+      },
+      "id": "ACT-0004",
+      "timestamp": "2026-02-08T03:46:17.045Z"
+    }
+  ],
+  "next_id": 5
+}

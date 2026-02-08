@@ -1,0 +1,21 @@
+{
+  "epics": [
+    {
+      "id": "entity-model-v2",
+      "title": "Entity Model v2",
+      "description": "Complete rewrite of data model, types, store, routes, tools, and UI",
+      "status": "completed",
+      "priority": "P0",
+      "color": "#f59e0b",
+      "milestone_id": "v0-2-entity-model",
+      "item_count": 1,
+      "completed_count": 1,
+      "progress_pct": 100,
+      "tags": [],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": "2026-02-08",
+      "ai_summary": "Entity model v2 refactor complete. 14 entity types defined, data migrated, store rewritten, 7 new route files, AI tools updated, UI overhauled. Foundation for enterprise-grade PM."
+    }
+  ]
+}

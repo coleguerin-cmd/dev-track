@@ -507,7 +507,8 @@ async function handleResourceCommand(resource: string, action: string, rest: str
         if (flags.action) params.set('action_id', flags.action);
         const data = await api(`/issues?${params}`);
         for (const issue of data.issues) {
-          const sev = { critical: '🔴', high: '🟠', medium: '🟡', low: '⚪' }[issue.severity] || '⚪';
+          const sevMap: Record<string, string> = { critical: '🔴', high: '🟠', medium: '🟡', low: '⚪' };
+          const sev = sevMap[issue.severity] || '⚪';
           console.log(`${sev} ${issue.id} ${issue.title} [${issue.status}]`);
         }
         console.log(`\nOpen: ${data.counts.open} | Critical: ${data.counts.critical}`);
@@ -527,7 +528,8 @@ async function handleResourceCommand(resource: string, action: string, rest: str
       if (action === 'list' || action === 'health') {
         const data = await api('/actions');
         for (const a of data.actions) {
-          const health = { green: '🟢', yellow: '🟡', red: '🔴', unknown: '⚪' }[a.health];
+          const healthMap: Record<string, string> = { healthy: '🟢', degraded: '🟡', critical: '🔴', unknown: '⚪', planned: '📋' };
+          const health = healthMap[a.status] || '⚪';
           console.log(`${health} ${a.name} — ${a.pass_rate.passed}/${a.pass_rate.total} pass — ${a.open_issues} issues`);
         }
       } else if (action === 'run') {

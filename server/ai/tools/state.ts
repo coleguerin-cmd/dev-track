@@ -7,11 +7,20 @@ export const stateTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'get_project_state',
-        description: 'Get the current project state including health ratings for all systems',
+        description: 'Get the current project state including overall health and system statuses',
         parameters: { type: 'object', properties: {} },
       }},
       label: 'Checking project state',
-      execute: async () => getStore().state,
+      execute: async () => {
+        const store = getStore();
+        return {
+          ...store.state,
+          systems: store.systems.systems.map(s => ({
+            id: s.id, name: s.name, status: s.status,
+            health_score: s.health_score, description: s.description,
+          })),
+        };
+      },
     },
     {
       definition: { type: 'function', function: {
@@ -25,36 +34,31 @@ export const stateTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'update_project_state',
-        description: 'Update project state — overall health, summary, or a specific system rating',
+        description: 'Update project state — overall health, summary, or a specific system',
         parameters: { type: 'object', properties: {
-          overall_completion: { type: 'number', description: 'Overall health percentage (0-100)' },
+          overall_health: { type: 'number', description: 'Overall health percentage (0-100)' },
           summary: { type: 'string', description: 'Updated project summary' },
           system_id: { type: 'string', description: 'System ID to update (e.g., "server", "web-ui")' },
-          system_rating: { type: 'number', description: 'New rating for the system (1-10)' },
-          system_notes: { type: 'string', description: 'Updated notes for the system' },
-          system_status: { type: 'string', description: 'New status for the system' },
+          system_health_score: { type: 'number', description: 'New health score for the system (0-100)' },
+          system_description: { type: 'string', description: 'Updated description for the system' },
+          system_status: { type: 'string', enum: ['healthy', 'degraded', 'critical', 'unknown', 'planned'] },
         }},
       }},
       label: 'Updating project state',
       execute: async (args) => {
         const store = getStore();
-        if (args.overall_completion !== undefined) store.state.overall_completion = args.overall_completion;
+        if (args.overall_health !== undefined) store.state.overall_health = args.overall_health;
         if (args.summary) store.state.summary = args.summary;
         if (args.system_id) {
-          const sys = store.state.systems.find((s: any) => s.id === args.system_id);
+          const sys = store.systems.systems.find(s => s.id === args.system_id);
           if (sys) {
-            if (args.system_rating !== undefined) (sys as any).rating = args.system_rating;
-            if (args.system_notes) (sys as any).notes = args.system_notes;
-            if (args.system_status) (sys as any).status = args.system_status;
-          } else {
-            // Create new system entry
-            store.state.systems.push({
-              id: args.system_id, name: args.system_id,
-              status: args.system_status || 'unknown',
-              rating: args.system_rating || 5,
-              notes: args.system_notes || '',
-            } as any);
+            if (args.system_health_score !== undefined) sys.health_score = args.system_health_score;
+            if (args.system_description) sys.description = args.system_description;
+            if (args.system_status) sys.status = args.system_status as any;
+            sys.updated = new Date().toISOString().split('T')[0];
+            sys.last_assessed = sys.updated;
           }
+          store.saveSystems();
         }
         store.state.last_updated = new Date().toISOString().split('T')[0];
         store.saveState();

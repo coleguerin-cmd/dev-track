@@ -1,0 +1,4356 @@
+{
+  "scanned_at": "2026-02-07T20:21:53.495Z",
+  "project_root": "C:\\Users\\realk\\Projects\\dev-track",
+  "stats": {
+    "total_files": 59,
+    "total_lines": 10003,
+    "total_functions": 19,
+    "total_components": 22,
+    "total_api_routes": 16,
+    "total_pages": 12,
+    "total_external_services": 6,
+    "file_types": {
+      "other": 10,
+      "utility": 9,
+      "schema": 2,
+      "api_route": 16,
+      "config": 3,
+      "hook": 1,
+      "component": 6,
+      "page": 12
+    }
+  },
+  "files": [
+    {
+      "path": "cli/index.ts",
+      "name": "index.ts",
+      "extension": ".ts",
+      "lines": 293,
+      "size": 11288,
+      "type": "other",
+      "exports": [],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/analyzer/scanner.ts",
+      "name": "scanner.ts",
+      "extension": ".ts",
+      "lines": 878,
+      "size": 34080,
+      "type": "other",
+      "exports": [
+        {
+          "name": "scanCodebase",
+          "kind": "function",
+          "line": 109,
+          "isDefault": false,
+          "params": "(projectRoot: string, srcDir?: string)"
+        },
+        {
+          "name": "generateEdgeLabel",
+          "kind": "function",
+          "line": 796,
+          "isDefault": false,
+          "params": "(\r\n  sourceModule: SystemModule,\r\n  targetModule: SystemModule,\r\n  importNames: string[],\r\n)"
+        },
+        {
+          "name": "FileInfo",
+          "kind": "type",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "ExportInfo",
+          "kind": "type",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "ImportInfo",
+          "kind": "type",
+          "line": 41,
+          "isDefault": false
+        },
+        {
+          "name": "ExternalCall",
+          "kind": "type",
+          "line": 48,
+          "isDefault": false
+        },
+        {
+          "name": "ApiRoute",
+          "kind": "type",
+          "line": 54,
+          "isDefault": false
+        },
+        {
+          "name": "PageRoute",
+          "kind": "type",
+          "line": 61,
+          "isDefault": false
+        },
+        {
+          "name": "SystemModule",
+          "kind": "type",
+          "line": 67,
+          "isDefault": false
+        },
+        {
+          "name": "CodebaseAnalysis",
+          "kind": "type",
+          "line": 79,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 358
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 358
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 379
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 379
+        },
+        {
+          "service": "deepgram",
+          "detail": "deepgram",
+          "line": 359
+        },
+        {
+          "service": "deepgram",
+          "detail": "deepgram",
+          "line": 359
+        },
+        {
+          "service": "deepgram",
+          "detail": "deepgram",
+          "line": 380
+        },
+        {
+          "service": "deepgram",
+          "detail": "deepgram",
+          "line": 380
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 381
+        }
+      ],
+      "dbOperations": [
+        "SCHEMA"
+      ]
+    },
+    {
+      "path": "server/context-sync.ts",
+      "name": "context-sync.ts",
+      "extension": ".ts",
+      "lines": 129,
+      "size": 4828,
+      "type": "other",
+      "exports": [
+        {
+          "name": "generateContextFile",
+          "kind": "function",
+          "line": 29,
+          "isDefault": false,
+          "params": "(platform: Platform, projectRoot: string)"
+        },
+        {
+          "name": "syncAllPlatforms",
+          "kind": "function",
+          "line": 53,
+          "isDefault": false,
+          "params": "(projectRoot: string, platforms: Platform[])"
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/index.ts",
+      "name": "index.ts",
+      "extension": ".ts",
+      "lines": 160,
+      "size": 5979,
+      "type": "other",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "hono/cors",
+          "names": [
+            "cors"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "@hono/node-server",
+          "names": [
+            "serve"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "http",
+          "names": [
+            "createServer"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./ws.js",
+          "names": [
+            "setupWebSocket"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./watcher.js",
+          "names": [
+            "startWatcher"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/state.js",
+          "names": [
+            "stateRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/session.js",
+          "names": [
+            "sessionRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/backlog.js",
+          "names": [
+            "backlogRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/issues.js",
+          "names": [
+            "issuesRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/actions.js",
+          "names": [
+            "actionsRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/changelog.js",
+          "names": [
+            "changelogRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/runs.js",
+          "names": [
+            "runsRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/metrics.js",
+          "names": [
+            "metricsRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/docs.js",
+          "names": [
+            "docsRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/config.js",
+          "names": [
+            "configRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/integrations.js",
+          "names": [
+            "integrationsRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/brain.js",
+          "names": [
+            "brainRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/ideas.js",
+          "names": [
+            "ideasRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/activity.js",
+          "names": [
+            "activityRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/codebase.js",
+          "names": [
+            "codebaseRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/git.js",
+          "names": [
+            "gitRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/aws-ec2.ts",
+      "name": "aws-ec2.ts",
+      "extension": ".ts",
+      "lines": 123,
+      "size": 4616,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "ec2Plugin",
+          "kind": "constant",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/cloudflare.ts",
+      "name": "cloudflare.ts",
+      "extension": ".ts",
+      "lines": 167,
+      "size": 6192,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "cloudflarePlugin",
+          "kind": "constant",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [
+        {
+          "service": "cloudflare",
+          "detail": "https://api.cloudflare.com/client/v4/user/tokens/verify",
+          "line": 65
+        },
+        {
+          "service": "cloudflare",
+          "detail": "https://api.cloudflare.com/client/v4/accounts/${creds.account_id}",
+          "line": 81
+        },
+        {
+          "service": "cloudflare",
+          "detail": "https://api.cloudflare.com/client/v4/zones?account.id=${creds.account_id}&per_pa",
+          "line": 90
+        },
+        {
+          "service": "cloudflare",
+          "detail": "https://api.cloudflare.com/client/v4/accounts/${creds.account_id}/workers/script",
+          "line": 97
+        },
+        {
+          "service": "cloudflare",
+          "detail": "https://api.cloudflare.com/client/v4/accounts/${creds.account_id}/pages/projects",
+          "line": 123
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/github.ts",
+      "name": "github.ts",
+      "extension": ".ts",
+      "lines": 308,
+      "size": 10195,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "getGitStatus",
+          "kind": "function",
+          "line": 51,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGitLog",
+          "kind": "function",
+          "line": 93,
+          "isDefault": false,
+          "params": "(limit = 20)"
+        },
+        {
+          "name": "getGitBranches",
+          "kind": "function",
+          "line": 107,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGitDiffStats",
+          "kind": "function",
+          "line": 118,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGhPullRequests",
+          "kind": "function",
+          "line": 140,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGhCIStatus",
+          "kind": "function",
+          "line": 147,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getGhIssues",
+          "kind": "function",
+          "line": 154,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "githubPlugin",
+          "kind": "constant",
+          "line": 163,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "child_process",
+          "names": [
+            "execSync"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "github",
+          "detail": "https://api.github.com/repos/${status?.owner}/${status?.repo}",
+          "line": 235
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/helicone.ts",
+      "name": "helicone.ts",
+      "extension": ".ts",
+      "lines": 133,
+      "size": 4404,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "heliconePlugin",
+          "kind": "constant",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "https://api.helicone.ai/v1/request/query",
+          "line": 36
+        },
+        {
+          "service": "helicone",
+          "detail": "https://api.helicone.ai/v1/request/query",
+          "line": 60
+        },
+        {
+          "service": "helicone",
+          "detail": "https://api.helicone.ai/v1/request/query",
+          "line": 100
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 3
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 4
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 5
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 8
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 13
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 16
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 21
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 23
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 23
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 36
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 47
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 49
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 60
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 72
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 94
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 100
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 125
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 129
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/manager.ts",
+      "name": "manager.ts",
+      "extension": ".ts",
+      "lines": 220,
+      "size": 7048,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "getIntegrationManager",
+          "kind": "function",
+          "line": 216,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "IntegrationManager",
+          "kind": "class",
+          "line": 63,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./github.js",
+          "names": [
+            "githubPlugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./vercel.js",
+          "names": [
+            "vercelPlugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./supabase.js",
+          "names": [
+            "supabasePlugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./sentry.js",
+          "names": [
+            "sentryPlugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./helicone.js",
+          "names": [
+            "heliconePlugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./upstash.js",
+          "names": [
+            "upstashPlugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./aws-ec2.js",
+          "names": [
+            "ec2Plugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./cloudflare.js",
+          "names": [
+            "cloudflarePlugin"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 8
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 8
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 20
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 20
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 7
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/sentry.ts",
+      "name": "sentry.ts",
+      "extension": ".ts",
+      "lines": 124,
+      "size": 4668,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "sentryPlugin",
+          "kind": "constant",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [
+        {
+          "service": "sentry",
+          "detail": "https://sentry.io/api/0/projects/${creds.org}/${creds.project}/",
+          "line": 55
+        },
+        {
+          "service": "sentry",
+          "detail": "https://sentry.io/api/0/projects/${creds.org}/${creds.project}/issues/?query=is:",
+          "line": 74
+        },
+        {
+          "service": "sentry",
+          "detail": "https://sentry.io/api/0/projects/${creds.org}/${creds.project}/issues/?query=is:",
+          "line": 95
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 8
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 25
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 39
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 45
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 56
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 75
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 96
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 118
+        },
+        {
+          "service": "sentry",
+          "detail": "sentry.",
+          "line": 119
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/supabase.ts",
+      "name": "supabase.ts",
+      "extension": ".ts",
+      "lines": 124,
+      "size": 4351,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "supabasePlugin",
+          "kind": "constant",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/types.ts",
+      "name": "types.ts",
+      "extension": ".ts",
+      "lines": 66,
+      "size": 1735,
+      "type": "schema",
+      "exports": [
+        {
+          "name": "IntegrationHealth",
+          "kind": "type",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "IntegrationEvent",
+          "kind": "type",
+          "line": 9,
+          "isDefault": false
+        },
+        {
+          "name": "IntegrationAction",
+          "kind": "type",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "CredentialField",
+          "kind": "type",
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "IntegrationPlugin",
+          "kind": "type",
+          "line": 32,
+          "isDefault": false
+        },
+        {
+          "name": "IntegrationConfig",
+          "kind": "type",
+          "line": 55,
+          "isDefault": false
+        },
+        {
+          "name": "IntegrationsStore",
+          "kind": "type",
+          "line": 63,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/upstash.ts",
+      "name": "upstash.ts",
+      "extension": ".ts",
+      "lines": 85,
+      "size": 2877,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "upstashPlugin",
+          "kind": "constant",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/integrations/vercel.ts",
+      "name": "vercel.ts",
+      "extension": ".ts",
+      "lines": 150,
+      "size": 6249,
+      "type": "utility",
+      "exports": [
+        {
+          "name": "vercelPlugin",
+          "kind": "constant",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [
+        {
+          "service": "vercel",
+          "detail": "https://api.vercel.com/v9/projects/${creds.project_id}?${teamParam}",
+          "line": 65
+        },
+        {
+          "service": "vercel",
+          "detail": "https://api.vercel.com/v6/deployments?projectId=${creds.project_id}&limit=3${tea",
+          "line": 88
+        },
+        {
+          "service": "vercel",
+          "detail": "https://api.vercel.com/v6/deployments?projectId=${creds.project_id}&limit=5${tea",
+          "line": 119
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/actions.ts",
+      "name": "actions.ts",
+      "extension": ".ts",
+      "lines": 163,
+      "size": 5930,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../script-runner.js",
+          "names": [
+            "runScript"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/activity.ts",
+      "name": "activity.ts",
+      "extension": ".ts",
+      "lines": 96,
+      "size": 3220,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/backlog.ts",
+      "name": "backlog.ts",
+      "extension": ".ts",
+      "lines": 196,
+      "size": 7299,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "server/routes/brain.ts",
+      "name": "brain.ts",
+      "extension": ".ts",
+      "lines": 167,
+      "size": 6233,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/changelog.ts",
+      "name": "changelog.ts",
+      "extension": ".ts",
+      "lines": 56,
+      "size": 1831,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/codebase.ts",
+      "name": "codebase.ts",
+      "extension": ".ts",
+      "lines": 417,
+      "size": 14333,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../analyzer/scanner.js",
+          "names": [
+            "scanCodebase",
+            "generateEdgeLabel",
+            "type CodebaseAnalysis"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/config.ts",
+      "name": "config.ts",
+      "extension": ".ts",
+      "lines": 54,
+      "size": 1557,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/docs.ts",
+      "name": "docs.ts",
+      "extension": ".ts",
+      "lines": 37,
+      "size": 1195,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/git.ts",
+      "name": "git.ts",
+      "extension": ".ts",
+      "lines": 96,
+      "size": 2860,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../integrations/github.js",
+          "names": [
+            "getGitStatus",
+            "getGitLog",
+            "getGitBranches",
+            "getGitDiffStats",
+            "getGhPullRequests",
+            "getGhCIStatus",
+            "getGhIssues"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/ideas.ts",
+      "name": "ideas.ts",
+      "extension": ".ts",
+      "lines": 113,
+      "size": 4426,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/integrations.ts",
+      "name": "integrations.ts",
+      "extension": ".ts",
+      "lines": 92,
+      "size": 3327,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../integrations/manager.js",
+          "names": [
+            "getIntegrationManager"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/issues.ts",
+      "name": "issues.ts",
+      "extension": ".ts",
+      "lines": 165,
+      "size": 5937,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/metrics.ts",
+      "name": "metrics.ts",
+      "extension": ".ts",
+      "lines": 35,
+      "size": 1188,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/runs.ts",
+      "name": "runs.ts",
+      "extension": ".ts",
+      "lines": 28,
+      "size": 783,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/session.ts",
+      "name": "session.ts",
+      "extension": ".ts",
+      "lines": 120,
+      "size": 4013,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/state.ts",
+      "name": "state.ts",
+      "extension": ".ts",
+      "lines": 55,
+      "size": 1836,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/script-runner.ts",
+      "name": "script-runner.ts",
+      "extension": ".ts",
+      "lines": 80,
+      "size": 1869,
+      "type": "other",
+      "exports": [
+        {
+          "name": "runScript",
+          "kind": "function",
+          "line": 12,
+          "isDefault": false,
+          "params": "(\r\n  command: string,\r\n  options: {\r\n    cwd?: string;\r\n    timeout?: number;\r\n    onOutput?: (chunk: string)"
+        },
+        {
+          "name": "ScriptResult",
+          "kind": "type",
+          "line": 5,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "child_process",
+          "names": [
+            "spawn"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/store.ts",
+      "name": "store.ts",
+      "extension": ".ts",
+      "lines": 332,
+      "size": 11060,
+      "type": "other",
+      "exports": [
+        {
+          "name": "getStore",
+          "kind": "function",
+          "line": 323,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "reloadStore",
+          "kind": "function",
+          "line": 328,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "Store",
+          "kind": "class",
+          "line": 70,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/watcher.ts",
+      "name": "watcher.ts",
+      "extension": ".ts",
+      "lines": 72,
+      "size": 2348,
+      "type": "other",
+      "exports": [
+        {
+          "name": "startWatcher",
+          "kind": "function",
+          "line": 9,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "chokidar",
+          "names": [
+            "chokidar"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ws.ts",
+      "name": "ws.ts",
+      "extension": ".ts",
+      "lines": 44,
+      "size": 1219,
+      "type": "other",
+      "exports": [
+        {
+          "name": "setupWebSocket",
+          "kind": "function",
+          "line": 8,
+          "isDefault": false,
+          "params": "(server: Server)"
+        },
+        {
+          "name": "broadcast",
+          "kind": "function",
+          "line": 36,
+          "isDefault": false,
+          "params": "(event: WSEvent)"
+        }
+      ],
+      "imports": [
+        {
+          "source": "ws",
+          "names": [
+            "WebSocketServer",
+            "WebSocket"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "shared/types.ts",
+      "name": "types.ts",
+      "extension": ".ts",
+      "lines": 430,
+      "size": 11453,
+      "type": "schema",
+      "exports": [
+        {
+          "name": "Horizon",
+          "kind": "type",
+          "line": 3,
+          "isDefault": false
+        },
+        {
+          "name": "Size",
+          "kind": "type",
+          "line": 4,
+          "isDefault": false
+        },
+        {
+          "name": "ItemStatus",
+          "kind": "type",
+          "line": 5,
+          "isDefault": false
+        },
+        {
+          "name": "IssueSeverity",
+          "kind": "type",
+          "line": 6,
+          "isDefault": false
+        },
+        {
+          "name": "IssueStatus",
+          "kind": "type",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "ActionHealth",
+          "kind": "type",
+          "line": 8,
+          "isDefault": false
+        },
+        {
+          "name": "SystemStatus",
+          "kind": "type",
+          "line": 9,
+          "isDefault": false
+        },
+        {
+          "name": "SessionStatus",
+          "kind": "type",
+          "line": 10,
+          "isDefault": false
+        },
+        {
+          "name": "RunResult",
+          "kind": "type",
+          "line": 11,
+          "isDefault": false
+        },
+        {
+          "name": "RunTrigger",
+          "kind": "type",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "Verbosity",
+          "kind": "type",
+          "line": 14,
+          "isDefault": false
+        },
+        {
+          "name": "DiagnosticVerbosity",
+          "kind": "type",
+          "line": 15,
+          "isDefault": false
+        },
+        {
+          "name": "AIContextLevel",
+          "kind": "type",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "DevTrackConfig",
+          "kind": "type",
+          "line": 20,
+          "isDefault": false
+        },
+        {
+          "name": "Developer",
+          "kind": "type",
+          "line": 46,
+          "isDefault": false
+        },
+        {
+          "name": "ProjectState",
+          "kind": "type",
+          "line": 54,
+          "isDefault": false
+        },
+        {
+          "name": "SystemRating",
+          "kind": "type",
+          "line": 66,
+          "isDefault": false
+        },
+        {
+          "name": "RemainingItem",
+          "kind": "type",
+          "line": 74,
+          "isDefault": false
+        },
+        {
+          "name": "SessionPlan",
+          "kind": "type",
+          "line": 82,
+          "isDefault": false
+        },
+        {
+          "name": "SessionItem",
+          "kind": "type",
+          "line": 95,
+          "isDefault": false
+        },
+        {
+          "name": "SessionLog",
+          "kind": "type",
+          "line": 101,
+          "isDefault": false
+        },
+        {
+          "name": "SessionEntry",
+          "kind": "type",
+          "line": 105,
+          "isDefault": false
+        },
+        {
+          "name": "ShippedItem",
+          "kind": "type",
+          "line": 120,
+          "isDefault": false
+        },
+        {
+          "name": "BacklogItem",
+          "kind": "type",
+          "line": 128,
+          "isDefault": false
+        },
+        {
+          "name": "BacklogData",
+          "kind": "type",
+          "line": 145,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogEntry",
+          "kind": "type",
+          "line": 151,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogData",
+          "kind": "type",
+          "line": 164,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogSummary",
+          "kind": "type",
+          "line": 168,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogSummaries",
+          "kind": "type",
+          "line": 179,
+          "isDefault": false
+        },
+        {
+          "name": "ActionScript",
+          "kind": "type",
+          "line": 185,
+          "isDefault": false
+        },
+        {
+          "name": "ExpectedOutcome",
+          "kind": "type",
+          "line": 192,
+          "isDefault": false
+        },
+        {
+          "name": "Action",
+          "kind": "type",
+          "line": 197,
+          "isDefault": false
+        },
+        {
+          "name": "ActionsRegistry",
+          "kind": "type",
+          "line": 211,
+          "isDefault": false
+        },
+        {
+          "name": "Issue",
+          "kind": "type",
+          "line": 217,
+          "isDefault": false
+        },
+        {
+          "name": "IssuesData",
+          "kind": "type",
+          "line": 235,
+          "isDefault": false
+        },
+        {
+          "name": "RunOutcome",
+          "kind": "type",
+          "line": 242,
+          "isDefault": false
+        },
+        {
+          "name": "DiagnosticRun",
+          "kind": "type",
+          "line": 248,
+          "isDefault": false
+        },
+        {
+          "name": "SessionMetric",
+          "kind": "type",
+          "line": 264,
+          "isDefault": false
+        },
+        {
+          "name": "MetricsTotals",
+          "kind": "type",
+          "line": 276,
+          "isDefault": false
+        },
+        {
+          "name": "VelocityData",
+          "kind": "type",
+          "line": 286,
+          "isDefault": false
+        },
+        {
+          "name": "QuickStatus",
+          "kind": "type",
+          "line": 294,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNoteType",
+          "kind": "type",
+          "line": 305,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNotePriority",
+          "kind": "type",
+          "line": 306,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNote",
+          "kind": "type",
+          "line": 308,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNotesData",
+          "kind": "type",
+          "line": 323,
+          "isDefault": false
+        },
+        {
+          "name": "UserPreference",
+          "kind": "type",
+          "line": 328,
+          "isDefault": false
+        },
+        {
+          "name": "LearnedPattern",
+          "kind": "type",
+          "line": 336,
+          "isDefault": false
+        },
+        {
+          "name": "BrainPreferences",
+          "kind": "type",
+          "line": 344,
+          "isDefault": false
+        },
+        {
+          "name": "ContextRecovery",
+          "kind": "type",
+          "line": 349,
+          "isDefault": false
+        },
+        {
+          "name": "IdeaStatus",
+          "kind": "type",
+          "line": 359,
+          "isDefault": false
+        },
+        {
+          "name": "IdeaCategory",
+          "kind": "type",
+          "line": 360,
+          "isDefault": false
+        },
+        {
+          "name": "Idea",
+          "kind": "type",
+          "line": 362,
+          "isDefault": false
+        },
+        {
+          "name": "IdeasData",
+          "kind": "type",
+          "line": 379,
+          "isDefault": false
+        },
+        {
+          "name": "ActivityType",
+          "kind": "type",
+          "line": 386,
+          "isDefault": false
+        },
+        {
+          "name": "ActivityItem",
+          "kind": "type",
+          "line": 396,
+          "isDefault": false
+        },
+        {
+          "name": "APIResponse",
+          "kind": "type",
+          "line": 408,
+          "isDefault": false
+        },
+        {
+          "name": "WSEvent",
+          "kind": "type",
+          "line": 414,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/postcss.config.js",
+      "name": "postcss.config.js",
+      "extension": ".js",
+      "lines": 12,
+      "size": 275,
+      "type": "config",
+      "exports": [],
+      "imports": [
+        {
+          "source": "url",
+          "names": [
+            "fileURLToPath"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "dirname",
+            "join"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/api/client.ts",
+      "name": "client.ts",
+      "extension": ".ts",
+      "lines": 148,
+      "size": 6671,
+      "type": "other",
+      "exports": [
+        {
+          "name": "state",
+          "kind": "constant",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "session",
+          "kind": "constant",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "backlog",
+          "kind": "constant",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "issues",
+          "kind": "constant",
+          "line": 57,
+          "isDefault": false
+        },
+        {
+          "name": "actions",
+          "kind": "constant",
+          "line": 76,
+          "isDefault": false
+        },
+        {
+          "name": "changelog",
+          "kind": "constant",
+          "line": 89,
+          "isDefault": false
+        },
+        {
+          "name": "runs",
+          "kind": "constant",
+          "line": 103,
+          "isDefault": false
+        },
+        {
+          "name": "metrics",
+          "kind": "constant",
+          "line": 115,
+          "isDefault": false
+        },
+        {
+          "name": "docs",
+          "kind": "constant",
+          "line": 122,
+          "isDefault": false
+        },
+        {
+          "name": "git",
+          "kind": "constant",
+          "line": 131,
+          "isDefault": false
+        },
+        {
+          "name": "config",
+          "kind": "constant",
+          "line": 143,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/api/useWebSocket.ts",
+      "name": "useWebSocket.ts",
+      "extension": ".ts",
+      "lines": 63,
+      "size": 1740,
+      "type": "hook",
+      "exports": [
+        {
+          "name": "useWebSocket",
+          "kind": "hook",
+          "line": 6,
+          "isDefault": false,
+          "params": "(onMessage?: WSHandler)"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useRef",
+            "useCallback",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "ui/src/App.tsx",
+      "name": "App.tsx",
+      "extension": ".tsx",
+      "lines": 55,
+      "size": 2187,
+      "type": "component",
+      "exports": [
+        {
+          "name": "App",
+          "kind": "component",
+          "line": 19,
+          "isDefault": true
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useState",
+            "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "./api/useWebSocket",
+          "names": [
+            "useWebSocket"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./components/Sidebar",
+          "names": [
+            "Sidebar"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Dashboard",
+          "names": [
+            "Dashboard"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Backlog",
+          "names": [
+            "Backlog"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Actions",
+          "names": [
+            "Actions"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Issues",
+          "names": [
+            "Issues"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Sessions",
+          "names": [
+            "Sessions"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Changelog",
+          "names": [
+            "Changelog"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Docs",
+          "names": [
+            "Docs"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Metrics",
+          "names": [
+            "Metrics"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Settings",
+          "names": [
+            "Settings"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Ideas",
+          "names": [
+            "Ideas"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./views/Codebase",
+          "names": [
+            "Codebase"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/graph/GraphEdge.tsx",
+      "name": "GraphEdge.tsx",
+      "extension": ".tsx",
+      "lines": 125,
+      "size": 3987,
+      "type": "component",
+      "exports": [
+        {
+          "name": "edgeTypes",
+          "kind": "constant",
+          "line": 122,
+          "isDefault": false
+        },
+        {
+          "name": "GraphEdgeData",
+          "kind": "type",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useState",
+            "memo"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow",
+          "names": [
+            "getBezierPath",
+            "EdgeLabelRenderer",
+            "type EdgeProps"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/graph/GraphNode.tsx",
+      "name": "GraphNode.tsx",
+      "extension": ".tsx",
+      "lines": 164,
+      "size": 8028,
+      "type": "component",
+      "exports": [
+        {
+          "name": "nodeTypes",
+          "kind": "constant",
+          "line": 158,
+          "isDefault": false
+        },
+        {
+          "name": "GraphNodeData",
+          "kind": "type",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "memo"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow",
+          "names": [
+            "Handle",
+            "Position",
+            "type NodeProps"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/graph/NodeDetailPanel.tsx",
+      "name": "NodeDetailPanel.tsx",
+      "extension": ".tsx",
+      "lines": 486,
+      "size": 21202,
+      "type": "component",
+      "exports": [
+        {
+          "name": "NodeDetailPanel",
+          "kind": "component",
+          "line": 33,
+          "isDefault": false,
+          "params": "({ nodeId, nodeType, nodeData, connectedEdges, connectedNodes, onClose }: NodeDetailProps)"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 478
+        },
+        {
+          "service": "deepgram",
+          "detail": "deepgram",
+          "line": 479
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/Sidebar.tsx",
+      "name": "Sidebar.tsx",
+      "extension": ".tsx",
+      "lines": 100,
+      "size": 4317,
+      "type": "component",
+      "exports": [
+        {
+          "name": "Sidebar",
+          "kind": "component",
+          "line": 26,
+          "isDefault": false,
+          "params": "({ activeView, onViewChange, connected }: SidebarProps)"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/StatusBadge.tsx",
+      "name": "StatusBadge.tsx",
+      "extension": ".tsx",
+      "lines": 76,
+      "size": 3294,
+      "type": "component",
+      "exports": [
+        {
+          "name": "HealthDot",
+          "kind": "component",
+          "line": 3,
+          "isDefault": false,
+          "params": "({ health }: { health: ActionHealth })"
+        },
+        {
+          "name": "SizeBadge",
+          "kind": "component",
+          "line": 13,
+          "isDefault": false,
+          "params": "({ size }: { size: Size })"
+        },
+        {
+          "name": "StatusBadge",
+          "kind": "component",
+          "line": 23,
+          "isDefault": false,
+          "params": "({ status }: { status: ItemStatus | IssueStatus })"
+        },
+        {
+          "name": "SeverityBadge",
+          "kind": "component",
+          "line": 37,
+          "isDefault": false,
+          "params": "({ severity }: { severity: IssueSeverity })"
+        },
+        {
+          "name": "HorizonBadge",
+          "kind": "component",
+          "line": 48,
+          "isDefault": false,
+          "params": "({ horizon }: { horizon: Horizon })"
+        },
+        {
+          "name": "CategoryTag",
+          "kind": "component",
+          "line": 58,
+          "isDefault": false,
+          "params": "({ category }: { category: string })"
+        },
+        {
+          "name": "PassRate",
+          "kind": "component",
+          "line": 66,
+          "isDefault": false,
+          "params": "({ passed, total }: { passed: number; total: number })"
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/main.tsx",
+      "name": "main.tsx",
+      "extension": ".tsx",
+      "lines": 11,
+      "size": 255,
+      "type": "other",
+      "exports": [],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "React"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "react-dom/client",
+          "names": [
+            "ReactDOM"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./App",
+          "names": [
+            "App"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./styles/globals.css",
+          "names": [],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Actions.tsx",
+      "name": "Actions.tsx",
+      "extension": ".tsx",
+      "lines": 176,
+      "size": 7515,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Actions",
+          "kind": "component",
+          "line": 6,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/StatusBadge",
+          "names": [
+            "HealthDot",
+            "PassRate"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Backlog.tsx",
+      "name": "Backlog.tsx",
+      "extension": ".tsx",
+      "lines": 327,
+      "size": 12050,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Backlog",
+          "kind": "component",
+          "line": 6,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState",
+            "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/StatusBadge",
+          "names": [
+            "SizeBadge",
+            "StatusBadge",
+            "CategoryTag"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "UPDATE"
+      ]
+    },
+    {
+      "path": "ui/src/views/Changelog.tsx",
+      "name": "Changelog.tsx",
+      "extension": ".tsx",
+      "lines": 90,
+      "size": 3587,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Changelog",
+          "kind": "component",
+          "line": 6,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/StatusBadge",
+          "names": [
+            "CategoryTag"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Codebase.tsx",
+      "name": "Codebase.tsx",
+      "extension": ".tsx",
+      "lines": 411,
+      "size": 18509,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Codebase",
+          "kind": "component",
+          "line": 29,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState",
+            "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "./CodebaseGraph",
+          "names": [
+            "CodebaseGraph"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/CodebaseGraph.tsx",
+      "name": "CodebaseGraph.tsx",
+      "extension": ".tsx",
+      "lines": 307,
+      "size": 11524,
+      "type": "page",
+      "exports": [
+        {
+          "name": "CodebaseGraph",
+          "kind": "component",
+          "line": 67,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useCallback",
+            "useEffect",
+            "useMemo",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow",
+          "names": [
+            "ReactFlow",
+            "Background",
+            "Controls",
+            "MiniMap",
+            "useNodesState",
+            "useEdgesState",
+            "type Node",
+            "type Edge",
+            "BackgroundVariant",
+            "Panel"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "dagre",
+          "names": [
+            "dagre"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "reactflow/dist/style.css",
+          "names": [],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/graph/GraphNode",
+          "names": [
+            "nodeTypes"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../components/graph/GraphEdge",
+          "names": [
+            "edgeTypes"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../components/graph/NodeDetailPanel",
+          "names": [
+            "NodeDetailPanel"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Dashboard.tsx",
+      "name": "Dashboard.tsx",
+      "extension": ".tsx",
+      "lines": 287,
+      "size": 13647,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Dashboard",
+          "kind": "component",
+          "line": 12,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/StatusBadge",
+          "names": [
+            "HealthDot",
+            "SizeBadge",
+            "StatusBadge",
+            "PassRate",
+            "SeverityBadge"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Docs.tsx",
+      "name": "Docs.tsx",
+      "extension": ".tsx",
+      "lines": 262,
+      "size": 12312,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Docs",
+          "kind": "component",
+          "line": 27,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState",
+            "useMemo",
+            "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "react-markdown",
+          "names": [
+            "ReactMarkdown"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "remark-gfm",
+          "names": [
+            "remarkGfm"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Ideas.tsx",
+      "name": "Ideas.tsx",
+      "extension": ".tsx",
+      "lines": 215,
+      "size": 10275,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Ideas",
+          "kind": "component",
+          "line": 21,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState",
+            "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Issues.tsx",
+      "name": "Issues.tsx",
+      "extension": ".tsx",
+      "lines": 202,
+      "size": 8541,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Issues",
+          "kind": "component",
+          "line": 6,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState",
+            "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/StatusBadge",
+          "names": [
+            "SeverityBadge",
+            "StatusBadge"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Metrics.tsx",
+      "name": "Metrics.tsx",
+      "extension": ".tsx",
+      "lines": 154,
+      "size": 6928,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Metrics",
+          "kind": "component",
+          "line": 5,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Sessions.tsx",
+      "name": "Sessions.tsx",
+      "extension": ".tsx",
+      "lines": 130,
+      "size": 5959,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Sessions",
+          "kind": "component",
+          "line": 6,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/StatusBadge",
+          "names": [
+            "SizeBadge"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Settings.tsx",
+      "name": "Settings.tsx",
+      "extension": ".tsx",
+      "lines": 278,
+      "size": 11741,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Settings",
+          "kind": "component",
+          "line": 30,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/tailwind.config.js",
+      "name": "tailwind.config.js",
+      "extension": ".js",
+      "lines": 87,
+      "size": 2462,
+      "type": "config",
+      "exports": [],
+      "imports": [
+        {
+          "source": "url",
+          "names": [
+            "fileURLToPath"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "dirname"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/vite.config.ts",
+      "name": "vite.config.ts",
+      "extension": ".ts",
+      "lines": 29,
+      "size": 579,
+      "type": "config",
+      "exports": [],
+      "imports": [
+        {
+          "source": "vite",
+          "names": [
+            "defineConfig"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "@vitejs/plugin-react",
+          "names": [
+            "react"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    }
+  ],
+  "api_routes": [
+    {
+      "path": "/api/v1/actions",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/actions.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/activity",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/activity.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/backlog",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/backlog.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/brain",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/brain.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/changelog",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/changelog.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/codebase",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/codebase.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/config",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/config.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/docs",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/docs.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/git",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/git.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/ideas",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/ideas.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/integrations",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/integrations.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/issues",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/issues.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/metrics",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/metrics.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/runs",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/runs.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/session",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/session.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/state",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/state.ts",
+      "handlers": [
+        "GET"
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "path": "ui/src/views/Actions.tsx",
+      "file": "ui/src/views/Actions.tsx",
+      "components": [
+        "HealthDot",
+        "PassRate"
+      ]
+    },
+    {
+      "path": "ui/src/views/Backlog.tsx",
+      "file": "ui/src/views/Backlog.tsx",
+      "components": [
+        "SizeBadge",
+        "StatusBadge",
+        "CategoryTag"
+      ]
+    },
+    {
+      "path": "ui/src/views/Changelog.tsx",
+      "file": "ui/src/views/Changelog.tsx",
+      "components": [
+        "CategoryTag"
+      ]
+    },
+    {
+      "path": "ui/src/views/Codebase.tsx",
+      "file": "ui/src/views/Codebase.tsx",
+      "components": [
+        "CodebaseGraph"
+      ]
+    },
+    {
+      "path": "ui/src/views/CodebaseGraph.tsx",
+      "file": "ui/src/views/CodebaseGraph.tsx",
+      "components": [
+        "NodeDetailPanel"
+      ]
+    },
+    {
+      "path": "ui/src/views/Dashboard.tsx",
+      "file": "ui/src/views/Dashboard.tsx",
+      "components": [
+        "HealthDot",
+        "SizeBadge",
+        "StatusBadge",
+        "PassRate",
+        "SeverityBadge"
+      ]
+    },
+    {
+      "path": "ui/src/views/Docs.tsx",
+      "file": "ui/src/views/Docs.tsx",
+      "components": []
+    },
+    {
+      "path": "ui/src/views/Ideas.tsx",
+      "file": "ui/src/views/Ideas.tsx",
+      "components": []
+    },
+    {
+      "path": "ui/src/views/Issues.tsx",
+      "file": "ui/src/views/Issues.tsx",
+      "components": [
+        "SeverityBadge",
+        "StatusBadge"
+      ]
+    },
+    {
+      "path": "ui/src/views/Metrics.tsx",
+      "file": "ui/src/views/Metrics.tsx",
+      "components": []
+    },
+    {
+      "path": "ui/src/views/Sessions.tsx",
+      "file": "ui/src/views/Sessions.tsx",
+      "components": [
+        "SizeBadge"
+      ]
+    },
+    {
+      "path": "ui/src/views/Settings.tsx",
+      "file": "ui/src/views/Settings.tsx",
+      "components": []
+    }
+  ],
+  "modules": [
+    {
+      "name": "Server Routes",
+      "description": "This module handles all the HTTP API endpoints for the application. It contains 16 route files covering: actions, activity, backlog, brain, changelog, codebase, and 10 more. Routes receive HTTP requests, process them, and return JSON responses. It reads and writes data to the persistence layer.",
+      "shortDescription": "Handles API requests for 16 endpoints",
+      "files": [
+        "server/routes/actions.ts",
+        "server/routes/activity.ts",
+        "server/routes/backlog.ts",
+        "server/routes/brain.ts",
+        "server/routes/changelog.ts",
+        "server/routes/codebase.ts",
+        "server/routes/config.ts",
+        "server/routes/docs.ts",
+        "server/routes/git.ts",
+        "server/routes/ideas.ts",
+        "server/routes/integrations.ts",
+        "server/routes/issues.ts",
+        "server/routes/metrics.ts",
+        "server/routes/runs.ts",
+        "server/routes/session.ts",
+        "server/routes/state.ts"
+      ],
+      "exports": [],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "api_route": 16
+      },
+      "keyExports": []
+    },
+    {
+      "name": "UI Views",
+      "description": "These are the main pages of the web application - what users see and interact with. Includes 12 screens: Actions, Backlog, Changelog, Codebase, CodebaseGraph, Dashboard, and 6 more. Each page fetches data from the API and renders interactive UI.",
+      "shortDescription": "12 main screens of the web app",
+      "files": [
+        "ui/src/views/Actions.tsx",
+        "ui/src/views/Backlog.tsx",
+        "ui/src/views/Changelog.tsx",
+        "ui/src/views/Codebase.tsx",
+        "ui/src/views/CodebaseGraph.tsx",
+        "ui/src/views/Dashboard.tsx",
+        "ui/src/views/Docs.tsx",
+        "ui/src/views/Ideas.tsx",
+        "ui/src/views/Issues.tsx",
+        "ui/src/views/Metrics.tsx",
+        "ui/src/views/Sessions.tsx",
+        "ui/src/views/Settings.tsx"
+      ],
+      "exports": [
+        {
+          "name": "Actions",
+          "kind": "component",
+          "file": "ui/src/views/Actions.tsx"
+        },
+        {
+          "name": "Backlog",
+          "kind": "component",
+          "file": "ui/src/views/Backlog.tsx"
+        },
+        {
+          "name": "Changelog",
+          "kind": "component",
+          "file": "ui/src/views/Changelog.tsx"
+        },
+        {
+          "name": "Codebase",
+          "kind": "component",
+          "file": "ui/src/views/Codebase.tsx"
+        },
+        {
+          "name": "CodebaseGraph",
+          "kind": "component",
+          "file": "ui/src/views/CodebaseGraph.tsx"
+        },
+        {
+          "name": "Dashboard",
+          "kind": "component",
+          "file": "ui/src/views/Dashboard.tsx"
+        },
+        {
+          "name": "Docs",
+          "kind": "component",
+          "file": "ui/src/views/Docs.tsx"
+        },
+        {
+          "name": "Ideas",
+          "kind": "component",
+          "file": "ui/src/views/Ideas.tsx"
+        },
+        {
+          "name": "Issues",
+          "kind": "component",
+          "file": "ui/src/views/Issues.tsx"
+        },
+        {
+          "name": "Metrics",
+          "kind": "component",
+          "file": "ui/src/views/Metrics.tsx"
+        },
+        {
+          "name": "Sessions",
+          "kind": "component",
+          "file": "ui/src/views/Sessions.tsx"
+        },
+        {
+          "name": "Settings",
+          "kind": "component",
+          "file": "ui/src/views/Settings.tsx"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "page": 12
+      },
+      "keyExports": [
+        "Actions",
+        "Backlog",
+        "Changelog",
+        "Codebase",
+        "CodebaseGraph",
+        "Dashboard",
+        "Docs",
+        "Ideas"
+      ]
+    },
+    {
+      "name": "Server Integrations",
+      "description": "Handles connections to external tools and services. Integrates with: cloudflare, github, helicone, sentry, vercel. Each integration can be configured with API credentials and provides data to the rest of the application.",
+      "shortDescription": "Connects to external services (cloudflare, github, helicone, sentry, vercel)",
+      "files": [
+        "server/integrations/aws-ec2.ts",
+        "server/integrations/cloudflare.ts",
+        "server/integrations/github.ts",
+        "server/integrations/helicone.ts",
+        "server/integrations/manager.ts",
+        "server/integrations/sentry.ts",
+        "server/integrations/supabase.ts",
+        "server/integrations/types.ts",
+        "server/integrations/upstash.ts",
+        "server/integrations/vercel.ts"
+      ],
+      "exports": [
+        {
+          "name": "ec2Plugin",
+          "kind": "constant",
+          "file": "server/integrations/aws-ec2.ts"
+        },
+        {
+          "name": "cloudflarePlugin",
+          "kind": "constant",
+          "file": "server/integrations/cloudflare.ts"
+        },
+        {
+          "name": "getGitStatus",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGitLog",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGitBranches",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGitDiffStats",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGhPullRequests",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGhCIStatus",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "getGhIssues",
+          "kind": "function",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "githubPlugin",
+          "kind": "constant",
+          "file": "server/integrations/github.ts"
+        },
+        {
+          "name": "heliconePlugin",
+          "kind": "constant",
+          "file": "server/integrations/helicone.ts"
+        },
+        {
+          "name": "getIntegrationManager",
+          "kind": "function",
+          "file": "server/integrations/manager.ts"
+        },
+        {
+          "name": "IntegrationManager",
+          "kind": "class",
+          "file": "server/integrations/manager.ts"
+        },
+        {
+          "name": "sentryPlugin",
+          "kind": "constant",
+          "file": "server/integrations/sentry.ts"
+        },
+        {
+          "name": "supabasePlugin",
+          "kind": "constant",
+          "file": "server/integrations/supabase.ts"
+        },
+        {
+          "name": "upstashPlugin",
+          "kind": "constant",
+          "file": "server/integrations/upstash.ts"
+        },
+        {
+          "name": "vercelPlugin",
+          "kind": "constant",
+          "file": "server/integrations/vercel.ts"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "cloudflare",
+        "github",
+        "helicone",
+        "sentry",
+        "vercel"
+      ],
+      "fileTypeSummary": {
+        "utility": 9,
+        "schema": 1
+      },
+      "keyExports": [
+        "getGitStatus",
+        "getGitLog",
+        "getGitBranches",
+        "getGitDiffStats",
+        "getGhPullRequests",
+        "getGhCIStatus",
+        "getGhIssues",
+        "getIntegrationManager"
+      ]
+    },
+    {
+      "name": "Server",
+      "description": "The core server that runs the application. It starts the HTTP server, mounts API routes, and manages the application lifecycle. Connects to: helicone, deepgram, sentry.",
+      "shortDescription": "Core HTTP server and application entry point",
+      "files": [
+        "server/context-sync.ts",
+        "server/index.ts",
+        "server/script-runner.ts",
+        "server/store.ts",
+        "server/watcher.ts",
+        "server/ws.ts",
+        "server/analyzer/scanner.ts"
+      ],
+      "exports": [
+        {
+          "name": "generateContextFile",
+          "kind": "function",
+          "file": "server/context-sync.ts"
+        },
+        {
+          "name": "syncAllPlatforms",
+          "kind": "function",
+          "file": "server/context-sync.ts"
+        },
+        {
+          "name": "runScript",
+          "kind": "function",
+          "file": "server/script-runner.ts"
+        },
+        {
+          "name": "getStore",
+          "kind": "function",
+          "file": "server/store.ts"
+        },
+        {
+          "name": "reloadStore",
+          "kind": "function",
+          "file": "server/store.ts"
+        },
+        {
+          "name": "Store",
+          "kind": "class",
+          "file": "server/store.ts"
+        },
+        {
+          "name": "startWatcher",
+          "kind": "function",
+          "file": "server/watcher.ts"
+        },
+        {
+          "name": "setupWebSocket",
+          "kind": "function",
+          "file": "server/ws.ts"
+        },
+        {
+          "name": "broadcast",
+          "kind": "function",
+          "file": "server/ws.ts"
+        },
+        {
+          "name": "scanCodebase",
+          "kind": "function",
+          "file": "server/analyzer/scanner.ts"
+        },
+        {
+          "name": "generateEdgeLabel",
+          "kind": "function",
+          "file": "server/analyzer/scanner.ts"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "helicone",
+        "deepgram",
+        "sentry"
+      ],
+      "fileTypeSummary": {
+        "other": 7
+      },
+      "keyExports": [
+        "generateContextFile",
+        "syncAllPlatforms",
+        "runScript",
+        "getStore",
+        "reloadStore",
+        "Store",
+        "startWatcher",
+        "setupWebSocket"
+      ]
+    },
+    {
+      "name": "UI",
+      "description": "Configuration files that control how the project is built, tested, and deployed.",
+      "shortDescription": "Project configuration files",
+      "files": [
+        "ui/postcss.config.js",
+        "ui/tailwind.config.js",
+        "ui/vite.config.ts",
+        "ui/src/App.tsx",
+        "ui/src/main.tsx"
+      ],
+      "exports": [
+        {
+          "name": "App",
+          "kind": "component",
+          "file": "ui/src/App.tsx"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "config": 3,
+        "component": 1,
+        "other": 1
+      },
+      "keyExports": [
+        "App"
+      ]
+    },
+    {
+      "name": "UI Components",
+      "description": "A library of reusable UI components that the pages are built from. Contains 9 components: NodeDetailPanel, Sidebar, HealthDot, SizeBadge, StatusBadge.... These handle individual pieces of the interface like buttons, panels, cards, and visualizations.",
+      "shortDescription": "Reusable UI building blocks (9 components)",
+      "files": [
+        "ui/src/components/graph/GraphEdge.tsx",
+        "ui/src/components/graph/GraphNode.tsx",
+        "ui/src/components/graph/NodeDetailPanel.tsx",
+        "ui/src/components/Sidebar.tsx",
+        "ui/src/components/StatusBadge.tsx"
+      ],
+      "exports": [
+        {
+          "name": "edgeTypes",
+          "kind": "constant",
+          "file": "ui/src/components/graph/GraphEdge.tsx"
+        },
+        {
+          "name": "nodeTypes",
+          "kind": "constant",
+          "file": "ui/src/components/graph/GraphNode.tsx"
+        },
+        {
+          "name": "NodeDetailPanel",
+          "kind": "component",
+          "file": "ui/src/components/graph/NodeDetailPanel.tsx"
+        },
+        {
+          "name": "Sidebar",
+          "kind": "component",
+          "file": "ui/src/components/Sidebar.tsx"
+        },
+        {
+          "name": "HealthDot",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "SizeBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "StatusBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "SeverityBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "HorizonBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "CategoryTag",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
+          "name": "PassRate",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "helicone",
+        "deepgram"
+      ],
+      "fileTypeSummary": {
+        "component": 5
+      },
+      "keyExports": [
+        "NodeDetailPanel",
+        "Sidebar",
+        "HealthDot",
+        "SizeBadge",
+        "StatusBadge",
+        "SeverityBadge",
+        "HorizonBadge",
+        "CategoryTag"
+      ]
+    },
+    {
+      "name": "UI",
+      "description": "This module contains 4 files with 277 lines of code. Key exports: App, useWebSocket.",
+      "shortDescription": "4 files, 1 functions",
+      "files": [
+        "ui/src/App.tsx",
+        "ui/src/main.tsx",
+        "ui/src/api/client.ts",
+        "ui/src/api/useWebSocket.ts"
+      ],
+      "exports": [
+        {
+          "name": "App",
+          "kind": "component",
+          "file": "ui/src/App.tsx"
+        },
+        {
+          "name": "state",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "session",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "backlog",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "issues",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "actions",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "changelog",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "runs",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "metrics",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "docs",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "git",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "config",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "useWebSocket",
+          "kind": "hook",
+          "file": "ui/src/api/useWebSocket.ts"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "component": 1,
+        "other": 2,
+        "hook": 1
+      },
+      "keyExports": [
+        "App",
+        "useWebSocket"
+      ]
+    },
+    {
+      "name": "CLI",
+      "description": "Provides a command-line interface for interacting with the application from the terminal.",
+      "shortDescription": "Command-line interface",
+      "files": [
+        "cli/index.ts"
+      ],
+      "exports": [],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "other": 1
+      },
+      "keyExports": []
+    },
+    {
+      "name": "Shared",
+      "description": "Contains shared type definitions and data structures used across the project. Defines 57 types and interfaces. This ensures the server, UI, and other modules all agree on the shape of data.",
+      "shortDescription": "Shared type definitions and data structures",
+      "files": [
+        "shared/types.ts"
+      ],
+      "exports": [],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "schema": 1
+      },
+      "keyExports": []
+    }
+  ],
+  "external_services": [
+    {
+      "name": "helicone",
+      "usage_count": 4,
+      "files": [
+        "server/analyzer/scanner.ts",
+        "server/integrations/helicone.ts",
+        "server/integrations/manager.ts",
+        "ui/src/components/graph/NodeDetailPanel.tsx"
+      ]
+    },
+    {
+      "name": "sentry",
+      "usage_count": 3,
+      "files": [
+        "server/analyzer/scanner.ts",
+        "server/integrations/manager.ts",
+        "server/integrations/sentry.ts"
+      ]
+    },
+    {
+      "name": "deepgram",
+      "usage_count": 2,
+      "files": [
+        "server/analyzer/scanner.ts",
+        "ui/src/components/graph/NodeDetailPanel.tsx"
+      ]
+    },
+    {
+      "name": "cloudflare",
+      "usage_count": 1,
+      "files": [
+        "server/integrations/cloudflare.ts"
+      ]
+    },
+    {
+      "name": "github",
+      "usage_count": 1,
+      "files": [
+        "server/integrations/github.ts"
+      ]
+    },
+    {
+      "name": "vercel",
+      "usage_count": 1,
+      "files": [
+        "server/integrations/vercel.ts"
+      ]
+    }
+  ],
+  "dependency_edges": [
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/api/useWebSocket.ts",
+      "imports": [
+        "useWebSocket"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/components/Sidebar.tsx",
+      "imports": [
+        "Sidebar"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Dashboard.tsx",
+      "imports": [
+        "Dashboard"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Backlog.tsx",
+      "imports": [
+        "Backlog"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Actions.tsx",
+      "imports": [
+        "Actions"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Issues.tsx",
+      "imports": [
+        "Issues"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Sessions.tsx",
+      "imports": [
+        "Sessions"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Changelog.tsx",
+      "imports": [
+        "Changelog"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Docs.tsx",
+      "imports": [
+        "Docs"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Metrics.tsx",
+      "imports": [
+        "Metrics"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Settings.tsx",
+      "imports": [
+        "Settings"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Ideas.tsx",
+      "imports": [
+        "Ideas"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/views/Codebase.tsx",
+      "imports": [
+        "Codebase"
+      ]
+    },
+    {
+      "from": "ui/src/main.tsx",
+      "to": "ui/src/App.tsx",
+      "imports": [
+        "App"
+      ]
+    },
+    {
+      "from": "ui/src/views/Actions.tsx",
+      "to": "ui/src/components/StatusBadge.tsx",
+      "imports": [
+        "HealthDot",
+        "PassRate"
+      ]
+    },
+    {
+      "from": "ui/src/views/Backlog.tsx",
+      "to": "ui/src/components/StatusBadge.tsx",
+      "imports": [
+        "SizeBadge",
+        "StatusBadge",
+        "CategoryTag"
+      ]
+    },
+    {
+      "from": "ui/src/views/Changelog.tsx",
+      "to": "ui/src/components/StatusBadge.tsx",
+      "imports": [
+        "CategoryTag"
+      ]
+    },
+    {
+      "from": "ui/src/views/Codebase.tsx",
+      "to": "ui/src/views/CodebaseGraph.tsx",
+      "imports": [
+        "CodebaseGraph"
+      ]
+    },
+    {
+      "from": "ui/src/views/CodebaseGraph.tsx",
+      "to": "ui/src/components/graph/GraphNode.tsx",
+      "imports": [
+        "nodeTypes"
+      ]
+    },
+    {
+      "from": "ui/src/views/CodebaseGraph.tsx",
+      "to": "ui/src/components/graph/GraphEdge.tsx",
+      "imports": [
+        "edgeTypes"
+      ]
+    },
+    {
+      "from": "ui/src/views/CodebaseGraph.tsx",
+      "to": "ui/src/components/graph/NodeDetailPanel.tsx",
+      "imports": [
+        "NodeDetailPanel"
+      ]
+    },
+    {
+      "from": "ui/src/views/Dashboard.tsx",
+      "to": "ui/src/components/StatusBadge.tsx",
+      "imports": [
+        "HealthDot",
+        "SizeBadge",
+        "StatusBadge",
+        "PassRate",
+        "SeverityBadge"
+      ]
+    },
+    {
+      "from": "ui/src/views/Issues.tsx",
+      "to": "ui/src/components/StatusBadge.tsx",
+      "imports": [
+        "SeverityBadge",
+        "StatusBadge"
+      ]
+    },
+    {
+      "from": "ui/src/views/Sessions.tsx",
+      "to": "ui/src/components/StatusBadge.tsx",
+      "imports": [
+        "SizeBadge"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,278 @@
+{
+  "systems": [
+    {
+      "id": "server",
+      "name": "Server (Hono API)",
+      "description": "22 route files (v2: roadmap, epics, milestones, releases, systems, labels, automations + existing). Hono framework, WebSocket + file watcher. Multi-project hot-swap. Build passes clean.",
+      "status": "healthy",
+      "health_score": 90,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "Hono",
+        "TypeScript",
+        "Node.js"
+      ],
+      "modules": [],
+      "dependencies": [
+        "data-layer"
+      ],
+      "dependents": [
+        "web-ui",
+        "cli"
+      ],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "web-ui",
+      "name": "Web UI (React + Tailwind)",
+      "description": "12+ views: Dashboard, Roadmap (kanban DnD), Systems (new), Issues, Ideas, Codebase (react-flow graph), Sessions, Changelog, Docs, Metrics, Settings. AI chat sidebar. Notification tray. Project switcher. Lucide icons throughout.",
+      "status": "healthy",
+      "health_score": 75,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "React",
+        "Vite",
+        "Tailwind",
+        "TypeScript"
+      ],
+      "modules": [],
+      "dependencies": [
+        "server"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "ai-intelligence",
+      "name": "AI Intelligence Layer",
+      "description": "AIService across OpenAI/Anthropic/Google with Helicone proxy. Auto-model-discovery. Task-aware ModelRouter with fallback chains. ~40 tools across 16 domain modules (server/ai/tools/). ChatService with multi-turn agent loop. SSE streaming. User profiles injected into system prompts.",
+      "status": "healthy",
+      "health_score": 75,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "OpenAI",
+        "Anthropic",
+        "Google AI",
+        "TypeScript"
+      ],
+      "modules": [],
+      "dependencies": [
+        "server",
+        "data-layer"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "cli",
+      "name": "CLI",
+      "description": "Full command set (init, start, status, backlog, issues, changelog, context, projects). Multi-project support (init, start, list). Never fully tested against live server.",
+      "status": "healthy",
+      "health_score": 55,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "TypeScript",
+        "Node.js"
+      ],
+      "modules": [],
+      "dependencies": [
+        "server"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "data-layer",
+      "name": "Data Layer (JSON + TypeScript)",
+      "description": "v2 entity model: 14 entities, ~500 lines of shared types. Store reads from v2 paths with backward compat. File watcher syncs. JSON-based with typed interfaces. Data directories: roadmap/, systems/, releases/, activity/, labels/, automations/, docs/, issues/, ideas/, session/, brain/, ai/, metrics/.",
+      "status": "healthy",
+      "health_score": 95,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "TypeScript",
+        "JSON"
+      ],
+      "modules": [],
+      "dependencies": [],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "integrations",
+      "name": "Integration Plugins",
+      "description": "8 plugins: GitHub (zero-config via gh CLI), Vercel, Supabase, Sentry, Helicone, Upstash, AWS EC2, Cloudflare. Helicone BYOK configured for AI cost tracking. Others untested with real creds (ISS-003).",
+      "status": "healthy",
+      "health_score": 60,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "TypeScript"
+      ],
+      "modules": [],
+      "dependencies": [
+        "server"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "codebase-visualizer",
+      "name": "Codebase Architecture Visualizer",
+      "description": "react-flow graph with 3 views (module, file, dependency). Plain-English module descriptions and relationship labels. Rich detail panel. Scanner-generated descriptions from code analysis.",
+      "status": "healthy",
+      "health_score": 80,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "React",
+        "react-flow",
+        "dagre"
+      ],
+      "modules": [],
+      "dependencies": [
+        "codebase-scanner",
+        "server"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "codebase-scanner",
+      "name": "Codebase Scanner",
+      "description": "Generic module inference via directory analysis. generateModuleDescription() and generateEdgeLabel() for rich descriptions. Auto-discovery approach — no annotations needed.",
+      "status": "healthy",
+      "health_score": 80,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "TypeScript"
+      ],
+      "modules": [],
+      "dependencies": [
+        "data-layer"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "brain",
+      "name": "AI Brain System",
+      "description": "AI memory system: notes (observations, suggestions, warnings, decisions), user preferences, context recovery for session handoff, user profiles with AI-observed intelligence scoring. Loaded by AI chat at every conversation start.",
+      "status": "healthy",
+      "health_score": 85,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [
+        "TypeScript",
+        "JSON"
+      ],
+      "modules": [],
+      "dependencies": [
+        "data-layer"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "cursor-rule",
+      "name": "Cursor Rule / AI Context",
+      "description": "alwaysApply frontmatter, mandatory pre/post checklist at top, inline Quick Status + Last Session Briefing (auto-regenerated), file map, session lifecycle instructions, AI autonomy permissions, standing instructions. ISS-006 (AI drift) partially addressed — structural enforcement still needed.",
+      "status": "healthy",
+      "health_score": 70,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [],
+      "modules": [],
+      "dependencies": [],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "session-tracking",
+      "name": "Session Tracking & Velocity",
+      "description": "6 sessions logged (v2 unified Session type). 19+ changelog entries. Velocity tracked with point values. Session log migrated to v2 format with session IDs.",
+      "status": "healthy",
+      "health_score": 75,
+      "health_signals": [],
+      "last_assessed": "2026-02-08",
+      "owner": null,
+      "tech_stack": [],
+      "modules": [],
+      "dependencies": [
+        "data-layer"
+      ],
+      "dependents": [],
+      "open_issues": 0,
+      "recent_commits": 0,
+      "test_coverage": null,
+      "tags": [],
+      "created": "2026-02-07",
+      "updated": "2026-02-08"
+    }
+  ]
+}
