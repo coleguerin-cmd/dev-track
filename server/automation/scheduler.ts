@@ -5,7 +5,10 @@
  * Fires daily/weekly automations based on last_fired timestamps.
  */
 
+import fs from 'fs';
+import path from 'path';
 import { getStore } from '../store.js';
+import { getDataDir } from '../project-config.js';
 import { getAutomationEngine } from './engine.js';
 
 const CHECK_INTERVAL = 60_000; // 1 minute
@@ -32,6 +35,15 @@ export function stopScheduler(): void {
 }
 
 async function checkScheduledAutomations(): Promise<void> {
+  // Check master kill switch
+  try {
+    const configPath = path.join(getDataDir(), 'ai/config.json');
+    if (fs.existsSync(configPath)) {
+      const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+      if (!config?.automations?.enabled || !config?.automations?.scheduler_enabled) return;
+    }
+  } catch { /* ignore */ }
+
   const store = getStore();
   const engine = getAutomationEngine();
   const now = new Date();

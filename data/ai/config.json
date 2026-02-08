@@ -14,10 +14,20 @@
     "context_generation": { "enabled": true, "model_override": null },
     "codebase_qa": { "enabled": true, "model_override": null }
   },
+  "automations": {
+    "enabled": false,
+    "scheduler_enabled": false,
+    "triggers_enabled": false,
+    "default_model_tier": "standard",
+    "max_concurrent": 2,
+    "cooldown_minutes": 60
+  },
   "budget": {
     "daily_limit_usd": 5.00,
     "warn_at_usd": 3.00,
-    "pause_on_limit": true
+    "pause_on_limit": true,
+    "total_spent_usd": 19.28,
+    "last_reset": "2026-02-08"
   },
   "defaults": {
     "chat_model": "claude-sonnet-4-5-20250929",

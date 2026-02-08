@@ -5,7 +5,10 @@
  * Supports both rigid condition-based and AI-driven automations.
  */
 
+import fs from 'fs';
+import path from 'path';
 import { getStore } from '../store.js';
+import { getDataDir } from '../project-config.js';
 import { broadcast } from '../ws.js';
 import { runAgent } from '../ai/runner.js';
 import type { Automation, AutomationCondition } from '../../shared/types.js';
@@ -24,9 +27,25 @@ class AutomationEngine {
   /**
    * Fire a trigger — finds matching automations and executes them.
    * Runs async (non-blocking). Logs results to activity feed.
+   * Respects the master kill switch in ai/config.json.
    */
   async fire(context: TriggerContext): Promise<void> {
     const store = getStore();
+
+    // Master kill switch — check ai/config.json automations.enabled
+    const aiConfig = this.getAIConfig();
+    if (!aiConfig?.automations?.enabled) return;
+
+    // Check if triggers are enabled (separate from scheduler)
+    if (context.trigger !== 'scheduled' && !aiConfig?.automations?.triggers_enabled) return;
+    if (context.trigger === 'scheduled' && !aiConfig?.automations?.scheduler_enabled) return;
+
+    // Budget check — stop if daily limit exceeded
+    if (aiConfig?.budget?.pause_on_limit && aiConfig?.budget?.total_spent_usd >= aiConfig?.budget?.daily_limit_usd) {
+      console.log(`[automation] Budget limit reached ($${aiConfig.budget.total_spent_usd}/$${aiConfig.budget.daily_limit_usd}). Skipping.`);
+      return;
+    }
+
     const automations = store.automations.automations.filter(a =>
       a.enabled && a.trigger === context.trigger
     );
@@ -42,12 +61,22 @@ class AutomationEngine {
         continue;
       }
 
-      // Mark last_fired immediately to prevent scheduler re-firing during execution
-      const store = getStore();
-      const auto = store.automations.automations.find(a => a.id === automation.id);
+      // Cooldown check — don't re-fire within cooldown window
+      const cooldownMin = aiConfig?.automations?.cooldown_minutes || 60;
+      if (automation.last_fired) {
+        const elapsed = (Date.now() - new Date(automation.last_fired).getTime()) / 60000;
+        if (elapsed < cooldownMin) {
+          console.log(`[automation] Skipping ${automation.id} — cooldown (${Math.round(elapsed)}/${cooldownMin} min)`);
+          continue;
+        }
+      }
+
+      // Mark last_fired immediately to prevent re-firing during execution
+      const store2 = getStore();
+      const auto = store2.automations.automations.find(a => a.id === automation.id);
       if (auto) {
         auto.last_fired = new Date().toISOString();
-        store.saveAutomations();
+        store2.saveAutomations();
       }
 
       // Run async, don't block the caller
@@ -150,12 +179,20 @@ class AutomationEngine {
       automation.ai_prompt || '',
     ].join('\n');
 
+    // Use model tier from config (default: standard to save cost)
+    const cfg = this.getAIConfig();
+    const modelTier = cfg?.automations?.default_model_tier || 'standard';
+    const taskType = modelTier === 'premium' ? 'deep_audit' : 'incremental_update';
+
     const result = await runAgent(systemPrompt, contextSummary, {
-      task: 'deep_audit',
-      maxIterations: 20,
+      task: taskType,
+      maxIterations: 15,
     });
 
     console.log(`[automation] AI agent for "${automation.name}" completed: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);
+
+    // Track cost
+    this.trackCost(result.cost);
   }
 
   private async executeActions(automation: Automation, context: TriggerContext): Promise<void> {
@@ -183,6 +220,26 @@ class AutomationEngine {
           console.log(`[automation] Unknown action type: ${action.type}`);
       }
     }
+  }
+
+  private getAIConfig(): any {
+    try {
+      const configPath = path.join(getDataDir(), 'ai/config.json');
+      if (fs.existsSync(configPath)) {
+        return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+      }
+    } catch { /* ignore */ }
+    return null;
+  }
+
+  private trackCost(cost: number): void {
+    try {
+      const configPath = path.join(getDataDir(), 'ai/config.json');
+      const config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
+      config.budget = config.budget || {};
+      config.budget.total_spent_usd = (config.budget.total_spent_usd || 0) + cost;
+      fs.writeFileSync(configPath, JSON.stringify(config, null, 2) + '\n', 'utf-8');
+    } catch { /* ignore */ }
   }
 }
 
