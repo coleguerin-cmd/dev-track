@@ -14,7 +14,7 @@ import path from 'path';
 import { getAIService, type AIMessage, type AIToolCall, type StreamEvent } from './service.js';
 import { TOOL_DEFINITIONS, TOOL_LABELS, executeTool } from './tools/index.js';
 import { getStore } from '../store.js';
-import { getDataDir } from '../project-config.js';
+import { getDataDir, getLocalDataDir } from '../project-config.js';
 import type { TaskType } from './router.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -121,7 +121,7 @@ function buildSystemPrompt(): string {
   // Load user profile
   let profileBlock = '';
   try {
-    const profilesPath = path.join(getDataDir(), 'ai/profiles.json');
+    const profilesPath = path.join(getLocalDataDir(), 'profiles.json');
     if (fs.existsSync(profilesPath)) {
       const profiles = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
       const user = profiles.profiles?.[0];
@@ -287,6 +287,11 @@ export async function* runChat(
         model,
         tools: TOOL_DEFINITIONS,
         max_tokens: 4096,
+        heliconeProperties: {
+          Source: 'chat',
+          ConversationId: conversationId,
+          User: 'user',
+        },
       });
 
       for await (const event of stream) {

@@ -933,7 +933,65 @@
       "resolution": "Removed the setRefreshKey increment from the WS handler and removed key={refreshKey} from all view components. Views now persist their internal state across WS events. Views that need live data should manage their own data freshness (polling, WS subscriptions) rather than being force-remounted.",
       "resolved": "2026-02-08",
       "notes": "This was a foundational architecture bug — the refreshKey pattern was a quick hack for live data that made the entire app feel broken. The correct pattern is for each view to manage its own data lifecycle. Some views (Dashboard, Activity) might want to poll on an interval; others (Settings) should only fetch on mount and user action."
+    },
+    {
+      "id": "ISS-040",
+      "type": "bug",
+      "title": "Anthropic rate limiting — 429 errors at 450K input tokens/min during automation runs",
+      "status": "resolved",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_by": "session-10",
+      "symptoms": "Helicone shows 429 Error responses from Anthropic API during automation runs. Rate limit: 450,000 input tokens per minute (org-level). Automation runs can hit this limit because they send large system prompts with full context to Sonnet 4.5. A single automation run can exceed 450K input tokens across multiple rapid tool-call iterations. Error: 'This request would exceed your organization's rate limit of 450,000 Input tokens per minute.'",
+      "root_cause": "No rate limiting or throttling in the AI service layer. runAgent() iterates rapidly with large context windows. Multiple automations could fire near-simultaneously. No backoff/retry logic when 429 is returned.",
+      "files": [
+        "server/ai/service.ts",
+        "server/ai/runner.ts",
+        "server/automation/engine.ts"
+      ],
+      "resolution": "Three-layer rate limit protection in AIService: (1) withRetry() wrapper with exponential backoff (5s/15s/45s) on 429 errors for all provider API calls. (2) TokenRateTracker with per-provider 60s sliding window. (3) Preemptive delay when approaching known limits (Anthropic 400K buffer of 450K limit).",
+      "resolved": "2026-02-08",
+      "roadmap_item": "ai-rate-limiting",
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "tags": [
+        "ai",
+        "rate-limiting",
+        "anthropic",
+        "cost"
+      ],
+      "notes": "User provided Helicone screenshot showing the 429. Model: claude-sonnet-4-5-20250929. Fixed with retry + preemptive throttling."
+    },
+    {
+      "id": "ISS-041",
+      "type": "bug",
+      "title": "Docs tab may not render page content — user reports headers showing but content missing",
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_by": "session-10",
+      "symptoms": "User reports the Docs tab shows table of contents and headers in the left sidebar, but actual page content does not render in the main content area. Needs verification — the API chain (docs route → store.getDocContent → readMarkdown) looks correct, and .md files have content.",
+      "root_cause": null,
+      "files": [
+        "ui/src/views/Docs.tsx",
+        "server/routes/docs.ts",
+        "server/store.ts"
+      ],
+      "resolution": null,
+      "resolved": "2026-02-08",
+      "roadmap_item": "docs-wiki-overhaul",
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "tags": [
+        "ui",
+        "docs"
+      ],
+      "notes": "API chain analysis: GET /docs/:id → store.getDocContent(id) → readMarkdown('docs/{id}.md') → path.join(getDataDir(), ...). The .md files exist with content (system-overview.md has 137 lines). Need to verify in browser — could be a path issue, CSS issue, or rendering bug."
     }
   ],
-  "next_id": 40
+  "next_id": 42
 }

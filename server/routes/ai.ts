@@ -12,7 +12,7 @@ import {
   deleteConversation,
   type ChatStreamEvent,
 } from '../ai/chat.js';
-import { getDataDir, getCredentialsPath } from '../project-config.js';
+import { getDataDir, getLocalDataDir, getCredentialsPath } from '../project-config.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -282,11 +282,24 @@ app.get('/usage', (c) => {
   }
 });
 
-// ─── Profiles ────────────────────────────────────────────────────────────────
+// ─── Profiles (personal data — stored in local/gitignored directory) ─────────
+
+function getProfilesPath(): string {
+  const localDir = getLocalDataDir();
+  const localPath = path.join(localDir, 'profiles.json');
+  // Migration: copy from old path if exists but not in local yet
+  if (!fs.existsSync(localPath)) {
+    const oldPath = path.join(getDataDir(), 'ai/profiles.json');
+    if (fs.existsSync(oldPath)) {
+      fs.copyFileSync(oldPath, localPath);
+    }
+  }
+  return localPath;
+}
 
 // GET /api/v1/ai/profiles — Get all user profiles
 app.get('/profiles', (c) => {
-  const profilesPath = path.join(getDataDir(), 'ai/profiles.json');
+  const profilesPath = getProfilesPath();
   try {
     if (!fs.existsSync(profilesPath)) return c.json({ ok: true, data: { profiles: [] } });
     const profiles = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
@@ -298,7 +311,7 @@ app.get('/profiles', (c) => {
 
 // GET /api/v1/ai/profile — Get the active user profile (first one)
 app.get('/profile', (c) => {
-  const profilesPath = path.join(getDataDir(), 'ai/profiles.json');
+  const profilesPath = getProfilesPath();
   try {
     if (!fs.existsSync(profilesPath)) return c.json({ ok: true, data: null });
     const data = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
@@ -311,7 +324,7 @@ app.get('/profile', (c) => {
 
 // PUT /api/v1/ai/profile — Update the active user profile
 app.put('/profile', async (c) => {
-  const profilesPath = path.join(getDataDir(), 'ai/profiles.json');
+  const profilesPath = getProfilesPath();
   const body = await c.req.json().catch(() => ({}));
 
   try {
@@ -335,6 +348,8 @@ app.put('/profile', async (c) => {
       });
     }
 
+    const dir = path.dirname(profilesPath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
     fs.writeFileSync(profilesPath, JSON.stringify(data, null, 2));
     return c.json({ ok: true, data: data.profiles[0] });
   } catch (err: any) {

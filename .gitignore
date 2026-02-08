@@ -4,3 +4,7 @@ cache.db
 *.tsbuildinfo
 .env
 .credentials.json
+
+# Personal data (user-specific, not project-level)
+data/local/
+data/ai/conversations/

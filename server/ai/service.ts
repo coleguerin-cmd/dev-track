@@ -51,6 +51,8 @@ export interface AICompletionOptions {
   max_tokens?: number;
   tools?: AIToolDefinition[];
   stream?: boolean;
+  /** Custom properties sent to Helicone for tracking (user, session, automation, etc.) */
+  heliconeProperties?: Record<string, string>;
 }
 
 export interface AICompletionResult {
@@ -125,6 +127,89 @@ const MODEL_COSTS: Record<string, { input: number; output: number }> = {
 function estimateCost(model: string, inputTokens: number, outputTokens: number): number {
   const costs = MODEL_COSTS[model] || { input: 3.0, output: 15.0 };
   return (inputTokens * costs.input + outputTokens * costs.output) / 1_000_000;
+}
+
+// ─── Rate Limit Retry ────────────────────────────────────────────────────────
+
+const MAX_RETRIES = 3;
+const BASE_DELAY_MS = 5000; // 5 seconds initial delay
+
+/**
+ * Simple per-minute token usage tracker per provider.
+ * Preemptively delays requests when approaching known rate limits.
+ */
+class TokenRateTracker {
+  private windows: Map<string, { tokens: number; timestamp: number }[]> = new Map();
+  
+  // Known rate limits (input tokens per minute)
+  private limits: Record<string, number> = {
+    anthropic: 400000,  // 450K limit, leave 50K buffer
+    openai: 800000,     // Typically higher
+    google: 1000000,
+  };
+
+  recordUsage(provider: string, inputTokens: number) {
+    const now = Date.now();
+    if (!this.windows.has(provider)) this.windows.set(provider, []);
+    const window = this.windows.get(provider)!;
+    window.push({ tokens: inputTokens, timestamp: now });
+    // Prune entries older than 60s
+    const cutoff = now - 60000;
+    while (window.length > 0 && window[0].timestamp < cutoff) {
+      window.shift();
+    }
+  }
+
+  async waitIfNeeded(provider: string, estimatedTokens: number) {
+    const limit = this.limits[provider];
+    if (!limit) return;
+
+    const now = Date.now();
+    const window = this.windows.get(provider) || [];
+    const cutoff = now - 60000;
+    const recentTokens = window
+      .filter(w => w.timestamp >= cutoff)
+      .reduce((sum, w) => sum + w.tokens, 0);
+
+    if (recentTokens + estimatedTokens > limit) {
+      // Find when oldest entry in window will expire
+      const oldest = window.find(w => w.timestamp >= cutoff);
+      const waitMs = oldest ? (oldest.timestamp + 60000 - now + 1000) : 10000;
+      console.warn(`[ai] Token rate approaching limit for ${provider} (${recentTokens}/${limit} in last 60s). Waiting ${Math.round(waitMs / 1000)}s...`);
+      await new Promise(r => setTimeout(r, Math.min(waitMs, 30000)));
+    }
+  }
+}
+
+const tokenTracker = new TokenRateTracker();
+
+/**
+ * Retry wrapper with exponential backoff for rate limit (429) errors.
+ * Delays: 5s, 15s, 45s (base * 3^attempt)
+ */
+async function withRetry<T>(fn: () => Promise<T>, label: string): Promise<T> {
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      return await fn();
+    } catch (err: any) {
+      const status = err?.status || err?.statusCode || err?.error?.status;
+      const isRateLimit = status === 429 || (err?.message || '').includes('rate_limit');
+      
+      if (!isRateLimit || attempt >= MAX_RETRIES) {
+        throw err; // Not a rate limit error, or exhausted retries
+      }
+
+      // Extract retry-after header if available, otherwise use exponential backoff
+      const retryAfter = err?.headers?.['retry-after'];
+      const delayMs = retryAfter
+        ? parseInt(retryAfter, 10) * 1000
+        : BASE_DELAY_MS * Math.pow(3, attempt);
+
+      console.warn(`[ai] Rate limited (${label}), retry ${attempt + 1}/${MAX_RETRIES} in ${Math.round(delayMs / 1000)}s...`);
+      await new Promise(r => setTimeout(r, delayMs));
+    }
+  }
+  throw new Error(`[ai] Exhausted ${MAX_RETRIES} retries for ${label}`);
 }
 
 // ─── Provider Detection ──────────────────────────────────────────────────────
@@ -232,6 +317,23 @@ export class AIService {
     }
   }
 
+  // ─── Helicone Headers ──────────────────────────────────────────────────────
+
+  /** Build Helicone custom property headers from options */
+  private buildHeliconeHeaders(options: AICompletionOptions): Record<string, string> {
+    const headers: Record<string, string> = {};
+    if (options.heliconeProperties) {
+      for (const [key, value] of Object.entries(options.heliconeProperties)) {
+        headers[`Helicone-Property-${key}`] = value;
+      }
+    }
+    // Always send session ID if available
+    if (options.task) {
+      headers['Helicone-Property-Task'] = options.task;
+    }
+    return headers;
+  }
+
   // ─── Public API ────────────────────────────────────────────────────────────
 
   /** Non-streaming completion */
@@ -239,13 +341,22 @@ export class AIService {
     const model = options.model || this.router.route(options.task || 'chat');
     const provider = getProvider(model);
 
+    // Preemptive rate limit check — estimate input tokens roughly (4 chars ≈ 1 token)
+    const estimatedTokens = messages.reduce((sum, m) => sum + Math.ceil((m.content || '').length / 4), 0);
+    await tokenTracker.waitIfNeeded(provider, estimatedTokens);
+
+    let result: AICompletionResult;
     if (provider === 'anthropic') {
-      return this.completeAnthropic(messages, model, options);
+      result = await this.completeAnthropic(messages, model, options);
     } else if (provider === 'google') {
-      return this.completeGoogle(messages, model, options);
+      result = await this.completeGoogle(messages, model, options);
     } else {
-      return this.completeOpenAI(messages, model, options);
+      result = await this.completeOpenAI(messages, model, options);
     }
+
+    // Record actual usage for rate tracking
+    tokenTracker.recordUsage(provider, result.usage.input_tokens);
+    return result;
   }
 
   /** Streaming completion — yields StreamEvents */
@@ -298,6 +409,7 @@ export class AIService {
   private async completeOpenAI(messages: AIMessage[], model: string, options: AICompletionOptions): Promise<AICompletionResult> {
     if (!this.openai) throw new Error('OpenAI not configured');
 
+    const heliconeHeaders = this.buildHeliconeHeaders(options);
     const params: any = {
       model,
       messages: messages.map(m => ({
@@ -311,7 +423,11 @@ export class AIService {
     };
     if (options.tools?.length) params.tools = options.tools;
 
-    const response = await this.openai.chat.completions.create(params);
+    const reqOpts = Object.keys(heliconeHeaders).length > 0 ? { headers: heliconeHeaders } : undefined;
+    const response = await withRetry(
+      () => this.openai!.chat.completions.create(params, reqOpts),
+      `OpenAI ${model}`
+    );
     const choice = response.choices[0];
     const usage = response.usage || { prompt_tokens: 0, completion_tokens: 0, total_tokens: 0 };
 
@@ -347,7 +463,10 @@ export class AIService {
     };
     if (options.tools?.length) params.tools = options.tools;
 
-    const stream = await this.openai.chat.completions.create(params);
+    const stream = await withRetry(
+      () => this.openai!.chat.completions.create(params),
+      `OpenAI stream ${model}`
+    );
     const toolCalls: Map<number, AIToolCall> = new Map();
     let usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
 
@@ -409,6 +528,8 @@ export class AIService {
   private async completeAnthropic(messages: AIMessage[], model: string, options: AICompletionOptions): Promise<AICompletionResult> {
     if (!this.anthropic) throw new Error('Anthropic not configured');
 
+    const heliconeHeaders = this.buildHeliconeHeaders(options);
+
     // Separate system message from conversation
     const systemMsg = messages.find(m => m.role === 'system')?.content || '';
     const convMessages = messages
@@ -431,7 +552,11 @@ export class AIService {
       }));
     }
 
-    const response = await this.anthropic.messages.create(params);
+    const reqOpts = Object.keys(heliconeHeaders).length > 0 ? { headers: heliconeHeaders } : undefined;
+    const response = await withRetry(
+      () => this.anthropic!.messages.create(params, reqOpts as any),
+      `Anthropic ${model}`
+    );
 
     let content = '';
     const toolCalls: AIToolCall[] = [];
@@ -490,7 +615,11 @@ export class AIService {
       }));
     }
 
-    const stream = this.anthropic.messages.stream(params);
+    // For streaming, retry on rate limit by re-creating the stream
+    const stream = await withRetry(
+      () => Promise.resolve(this.anthropic!.messages.stream(params)),
+      `Anthropic stream ${model}`
+    );
     let currentToolCall: AIToolCall | null = null;
     let toolCallArgs = '';
     let usage = { input_tokens: 0, output_tokens: 0, total_tokens: 0 };
@@ -590,7 +719,10 @@ export class AIService {
       systemInstruction: systemMsg || undefined,
     });
 
-    const result = await chat.sendMessage(lastMsg.parts[0].text);
+    const result = await withRetry(
+      () => chat.sendMessage(lastMsg.parts[0].text),
+      `Google ${model}`
+    );
     const response = result.response;
     const text = response.text();
     const usageMeta = response.usageMetadata;

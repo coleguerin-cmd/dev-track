@@ -4,8 +4,21 @@ import { getDataDir } from '../../project-config.js';
 import { getStore } from '../../store.js';
 import type { ToolModule } from './types.js';
 
-function getProfilesPath() { return path.join(getDataDir(), 'ai/profiles.json'); }
-function markProfileWrite() { try { getStore().markWrite('ai/profiles.json'); } catch {} }
+function getProfilesPath() {
+  // Profiles are personal data — stored in local (gitignored) directory
+  const { getLocalDataDir } = require('../../project-config.js');
+  const localDir = getLocalDataDir();
+  const localPath = path.join(localDir, 'profiles.json');
+  // Migration: if profiles exist at old path but not new, copy them
+  if (!fs.existsSync(localPath)) {
+    const oldPath = path.join(getDataDir(), 'ai/profiles.json');
+    if (fs.existsSync(oldPath)) {
+      fs.copyFileSync(oldPath, localPath);
+    }
+  }
+  return localPath;
+}
+function markProfileWrite() { try { getStore().markWrite('local/profiles.json'); } catch {} }
 
 export const profileTools: ToolModule = {
   domain: 'profiles',

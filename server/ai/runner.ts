@@ -21,6 +21,8 @@ export interface AgentOptions {
   model?: string;
   /** Optional audit recorder to capture every step */
   recorder?: AuditRecorder;
+  /** Custom Helicone properties for request tracking */
+  heliconeProperties?: Record<string, string>;
 }
 
 export interface AgentResult {
@@ -63,6 +65,7 @@ export async function runAgent(
       task,
       tools: tools.length > 0 ? tools : undefined,
       model: options.model,
+      heliconeProperties: options.heliconeProperties,
     } as any);
 
     totalTokens += result.usage?.total_tokens || 0;

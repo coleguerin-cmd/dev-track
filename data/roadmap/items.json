@@ -122,13 +122,13 @@
     },
     {
       "id": "docs-wiki-overhaul",
-      "title": "Docs tab — end-to-end project wiki with live updates",
-      "summary": "Turn Docs into a full living wiki: auto-generated docs from codebase changes, nested nav with sections, search, and real-time updates when architecture changes. Phase 1 (markdown rendering, ToC, nav) is done. Phase 2: auto-generation, cross-referencing, richer content.",
+      "title": "Docs tab — end-to-end project wiki with AI init/update automation",
+      "summary": "Full living wiki with AI-powered initialization and incremental updates. Phase 1 (markdown rendering, ToC, nav) done. Phase 2 (session 10): fix content rendering, restructure tab (wiki + design docs), add Initialize/Update buttons, build AI automation pipeline for deep codebase scan → doc generation. Two modes: Initialize (full scan, builds from scratch) and Update (incremental, scans recent changes). Agent-triggerable + manual buttons in UI.",
       "type": "enhancement",
       "horizon": "now",
-      "priority": "P2",
+      "priority": "P1",
       "size": "L",
-      "status": "pending",
+      "status": "in_progress",
       "category": "ui",
       "epic_id": "codebase-intelligence",
       "milestone_id": null,
@@ -1389,6 +1389,80 @@
       "completed": "2026-02-08",
       "ai_notes": null,
       "estimated_sessions": null
+    },
+    {
+      "id": "ai-rate-limiting",
+      "title": "AI request rate limiting — retry with backoff, token-aware throttling",
+      "summary": "SHIPPED (session 10). Three-layer rate limit protection: withRetry() wrapper with exponential backoff (5s/15s/45s) on 429 errors, TokenRateTracker with per-provider sliding window, preemptive delay when approaching known limits. All provider API calls wrapped. ISS-040 resolved.",
+      "type": "fix",
+      "horizon": "shipped",
+      "priority": "P1",
+      "size": "M",
+      "status": "completed",
+      "category": "core",
+      "epic_id": "ai-intelligence-engine",
+      "milestone_id": null,
+      "depends_on": [],
+      "blocked_by": [],
+      "related_issues": [
+        "ISS-040"
+      ],
+      "spawned_from": null,
+      "assignee": null,
+      "tags": [
+        "ai",
+        "rate-limiting",
+        "reliability"
+      ],
+      "design_doc": null,
+      "acceptance_criteria": [
+        "429 responses trigger automatic retry with exponential backoff",
+        "Token usage tracked per minute to preemptively avoid rate limits",
+        "Automation runs complete successfully without 429 errors",
+        "Rate limit state visible in Helicone/AI config"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "started": null,
+      "completed": null,
+      "ai_notes": "User provided Helicone screenshot showing 429 from claude-sonnet-4-5. 450K input tokens/min org limit. Single automation run can exceed this across rapid tool iterations.",
+      "estimated_sessions": 1
+    },
+    {
+      "id": "multi-user-prep",
+      "title": "Multi-user prep — separate personal vs project data, credential management",
+      "summary": "SHIPPED (session 10). Personal data (profiles) moved to data/local/ (gitignored). Automatic migration from old path. All profile references updated (routes, chat, tools, init). .gitignore expanded for local/ and conversations/. Credentials already gitignored. Project data committed for git-based collaboration.",
+      "type": "feature",
+      "horizon": "shipped",
+      "priority": "P1",
+      "size": "M",
+      "status": "completed",
+      "category": "core",
+      "epic_id": "platform-distribution",
+      "milestone_id": null,
+      "depends_on": [],
+      "blocked_by": [],
+      "related_issues": [],
+      "spawned_from": null,
+      "assignee": null,
+      "tags": [
+        "multi-user",
+        "security",
+        "landmark"
+      ],
+      "design_doc": null,
+      "acceptance_criteria": [
+        "Profiles stored in gitignored personal directory",
+        "Credentials never committed to git",
+        "Helicone receives user and session properties with AI requests",
+        "Two users on same project don't conflict on personal data"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "started": null,
+      "completed": null,
+      "ai_notes": "User porting DevTrack to Landmark next, has a collaborator. Must work with git-committed project data + gitignored personal data.",
+      "estimated_sessions": 1
     },
     {
       "id": "audit-ai-tools",

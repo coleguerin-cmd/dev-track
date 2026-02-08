@@ -26,6 +26,30 @@ class AutomationEngine {
   private _running = new Map<string, boolean>();
 
   /**
+   * Force-run a specific automation by ID, bypassing cooldown and trigger matching.
+   * Used by manual "Run Now" button in Settings UI.
+   */
+  async forceRun(automationId: string): Promise<void> {
+    const store = getStore();
+    const automation = store.automations.automations.find(a => a.id === automationId);
+    if (!automation) throw new Error(`Automation "${automationId}" not found`);
+
+    // Skip if already running (prevent overlap)
+    if (this._running.get(automation.id)) {
+      throw new Error(`Automation "${automationId}" is already running`);
+    }
+
+    console.log(`[automation] Force-running: ${automation.name} (bypassing cooldown)`);
+
+    // Mark last_fired immediately
+    automation.last_fired = new Date().toISOString();
+    store.saveAutomations();
+
+    // Execute directly — no cooldown check, no trigger matching
+    await this.executeAutomation(automation, { trigger: 'manual', data: { force: true } });
+  }
+
+  /**
    * Fire a trigger — finds matching automations and executes them.
    * Runs async (non-blocking). Logs results to activity feed.
    * Respects the master kill switch in ai/config.json.
@@ -206,6 +230,12 @@ class AutomationEngine {
         task: taskType,
         maxIterations: 15,
         recorder,
+        heliconeProperties: {
+          Source: 'automation',
+          AutomationId: automation.id,
+          AutomationName: automation.name,
+          Trigger: context.trigger,
+        },
       });
 
       console.log(`[automation] AI agent for "${automation.name}" completed: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);

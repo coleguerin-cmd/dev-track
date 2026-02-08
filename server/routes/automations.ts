@@ -119,15 +119,32 @@ app.post('/trigger', async (c) => {
 });
 
 // POST /api/v1/automations/:id/fire — manually fire a specific automation
+// Pass { force: true } in body to bypass cooldown
 app.post('/:id/fire', async (c) => {
   const store = getStore();
   const automation = store.automations.automations.find(a => a.id === c.req.param('id'));
   if (!automation) return c.json({ ok: false, error: 'Automation not found' }, 404);
 
-  const engine = getAutomationEngine();
-  await engine.fire({ trigger: automation.trigger as any, data: { manual: true, automation_id: automation.id } });
+  let force = false;
+  try {
+    const body = await c.req.json();
+    force = body?.force === true;
+  } catch { /* no body is fine */ }
 
-  return c.json({ ok: true, data: { fired: automation.id } });
+  const engine = getAutomationEngine();
+
+  if (force) {
+    // Bypass cooldown — used by "Run Now" button
+    try {
+      await engine.forceRun(automation.id);
+      return c.json({ ok: true, data: { fired: automation.id, forced: true } });
+    } catch (err: any) {
+      return c.json({ ok: false, error: err.message }, 400);
+    }
+  } else {
+    await engine.fire({ trigger: automation.trigger as any, data: { manual: true, automation_id: automation.id } });
+    return c.json({ ok: true, data: { fired: automation.id } });
+  }
 });
 
 export default app;

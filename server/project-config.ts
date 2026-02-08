@@ -124,6 +124,19 @@ export function getProjectRoot(): string {
 }
 
 /**
+ * Get the local (personal, gitignored) data directory.
+ * Used for user profiles, preferences, and other user-specific data.
+ * Created automatically if it doesn't exist.
+ */
+export function getLocalDataDir(): string {
+  const localDir = path.join(getDataDir(), 'local');
+  if (!fs.existsSync(localDir)) {
+    fs.mkdirSync(localDir, { recursive: true });
+  }
+  return localDir;
+}
+
+/**
  * Get the credentials file path.
  */
 export function getCredentialsPath(): string {
@@ -300,7 +313,7 @@ export function scaffoldDataDir(dataDir: string, projectName: string): void {
       budget: { daily_limit_usd: 5.0, warn_at_usd: 3.0, pause_on_limit: true },
       defaults: { chat_model: '', fast_model: '', reasoning_model: '' },
     },
-    'ai/profiles.json': { profiles: [] },
+    'local/profiles.json': { profiles: [] },
   };
 
   for (const [file, content] of Object.entries(defaults)) {

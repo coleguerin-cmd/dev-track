@@ -1467,6 +1467,104 @@
       "backlog_item": null,
       "issues_resolved": ["ISS-035", "ISS-039"],
       "breaking": false
+    },
+    {
+      "id": "CL-078",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Manual 'Run Now' button on automations — bypass cooldown for immediate execution",
+      "description": "Added forceRun() method to AutomationEngine that bypasses cooldown check. Updated POST /automations/:id/fire to accept { force: true } body parameter. Added 'Run Now' button to each automation card in Settings > AI Configuration with spinner state and auto-refresh of automation list after firing. API client updated with automations.fire() method.",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/automation/engine.ts",
+        "server/routes/automations.ts",
+        "ui/src/views/Settings.tsx",
+        "ui/src/api/client.ts"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-079",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Docs tab restructured — wiki + design docs, Initialize/Update buttons, route fix",
+      "description": "Rewrote Docs.tsx with: (1) Top header bar with Initialize/Update Docs buttons that trigger the docs-refresh automation with force bypass. (2) Design docs from data/designs/ shown in left nav under 'Design Docs' section alongside wiki docs. (3) Docs grouped into Guides, Systems, and Design Docs categories. (4) Fixed Hono route ordering bug — legacy /designs and /decisions routes were shadowed by /:id dynamic route. Moved legacy routes before /:id. (5) AI-generated badge, page counts, last-updated timestamps in header.",
+      "type": "enhancement",
+      "scope": "full-stack",
+      "files_changed": [
+        "ui/src/views/Docs.tsx",
+        "server/routes/docs.ts"
+      ],
+      "backlog_item": "docs-wiki-overhaul",
+      "breaking": false
+    },
+    {
+      "id": "CL-080",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Docs AI generation pipeline — Initialize and Update modes with audit recording",
+      "description": "Built POST /api/v1/docs/generate endpoint with two modes: (1) Initialize — deep codebase scan, reads all source files, systems, roadmap, issues, changelog, sessions, git log, then generates comprehensive wiki content for every doc in the registry. 30 iteration max, premium model. (2) Update — incremental scan of recent changes, updates only stale docs. 15 iteration max, standard model. Both modes use AuditRecorder for full visibility in the Audits tab, track cost to budget, and broadcast WebSocket events on completion. Route ordering fixed — /generate placed before /:id to prevent Hono shadowing. API client updated with docs.generate() method. UI buttons wire through to this endpoint with polling for live updates.",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/routes/docs.ts",
+        "ui/src/api/client.ts",
+        "ui/src/views/Docs.tsx"
+      ],
+      "backlog_item": "docs-wiki-overhaul",
+      "breaking": false
+    },
+    {
+      "id": "CL-081",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "AI rate limiting — retry with exponential backoff + preemptive token rate tracking",
+      "description": "Three-layer rate limit protection: (1) withRetry() wrapper with exponential backoff (5s/15s/45s) on 429 errors, applied to all provider API calls (OpenAI complete/stream, Anthropic complete/stream, Google complete). Respects retry-after headers when available. (2) TokenRateTracker class with per-provider sliding window (60s) that tracks input tokens and preemptively delays requests when approaching known limits (Anthropic: 400K buffer of 450K limit). (3) Token estimation in complete() method using rough 4-chars-per-token heuristic for preemptive checks. ISS-040 resolved.",
+      "type": "fix",
+      "scope": "server",
+      "files_changed": [
+        "server/ai/service.ts"
+      ],
+      "backlog_item": "ai-rate-limiting",
+      "issues_resolved": ["ISS-040"],
+      "breaking": false
+    },
+    {
+      "id": "CL-082",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Multi-user prep — personal data separation, gitignore setup, profile migration",
+      "description": "Separated personal vs project data for multi-user support. Created data/local/ directory (gitignored) for user-specific data. Moved profiles.json from data/ai/ to data/local/ with automatic migration — code checks for existing profiles at old path and copies to new on first access. Updated all profile references: routes/ai.ts (3 endpoints), ai/chat.ts (system prompt injection), ai/tools/profiles.ts (AI tool), project-config.ts (init defaults). Added getLocalDataDir() helper to project-config.ts. Updated .gitignore to exclude data/local/ and data/ai/conversations/. Credentials (.credentials.json) was already gitignored. Project data (roadmap, issues, docs, config, etc.) remains committed for git-based collaboration.",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        ".gitignore",
+        "server/project-config.ts",
+        "server/routes/ai.ts",
+        "server/ai/chat.ts",
+        "server/ai/tools/profiles.ts"
+      ],
+      "backlog_item": "multi-user-prep",
+      "breaking": false
+    },
+    {
+      "id": "CL-083",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Helicone enrichment — custom properties on all AI requests (user, session, automation)",
+      "description": "Added heliconeProperties field to AICompletionOptions. Builds Helicone-Property-* headers from the properties map. Chat requests include Source=chat, ConversationId, User. Automation requests include Source=automation, AutomationId, AutomationName, Trigger. Task type always included. Headers injected into both OpenAI and Anthropic API calls via per-request options. Runner passes properties through from caller. Enables per-user cost tracking, session attribution, and automation cost breakdown in Helicone dashboard.",
+      "type": "feature",
+      "scope": "server",
+      "files_changed": [
+        "server/ai/service.ts",
+        "server/ai/runner.ts",
+        "server/ai/chat.ts",
+        "server/automation/engine.ts"
+      ],
+      "backlog_item": null,
+      "breaking": false
     }
   ]
 }

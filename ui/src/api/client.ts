@@ -169,6 +169,8 @@ export const automations = {
   update: (id: string, data: any) =>
     request<any>(`/automations/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   toggle: (id: string) => request<any>(`/automations/${id}/toggle`, { method: 'POST' }),
+  fire: (id: string, force = false) =>
+    request<any>(`/automations/${id}/fire`, { method: 'POST', body: JSON.stringify({ force }) }),
   remove: (id: string) => request<any>(`/automations/${id}`, { method: 'DELETE' }),
 };
 
@@ -230,6 +232,8 @@ export const docs = {
     request<any>(`/docs/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
   remove: (id: string) => request<any>(`/docs/${id}`, { method: 'DELETE' }),
   regenerate: (id: string) => request<any>(`/docs/${id}/regenerate`, { method: 'POST' }),
+  generate: (mode: 'initialize' | 'update') =>
+    request<any>('/docs/generate', { method: 'POST', body: JSON.stringify({ mode }) }),
   // Legacy (backward compat)
   listDesigns: () => request<any>('/docs/designs'),
   getDesign: (filename: string) => request<any>(`/docs/designs/${filename}`),

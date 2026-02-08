@@ -700,6 +700,31 @@ function AISection() {
     }).catch(() => {});
   }, []);
 
+  const [runningAutomation, setRunningAutomation] = useState<string | null>(null);
+
+  const fireAutomation = async (id: string) => {
+    setRunningAutomation(id);
+    try {
+      const res = await fetch(`${BASE}/automations/${id}/fire`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ force: true }),
+      });
+      const d = await res.json();
+      if (d.ok) {
+        // Refresh automations list to get updated last_fired
+        const listRes = await fetch(`${BASE}/automations`);
+        const listData = await listRes.json();
+        if (listData.ok) setAutomationsList(listData.data.automations || []);
+      }
+    } catch (err) {
+      console.error('Failed to fire automation:', err);
+    } finally {
+      // Keep spinner for at least 2s to show it's running (actual execution is async)
+      setTimeout(() => setRunningAutomation(null), 2000);
+    }
+  };
+
   const toggleAutomation = async (id: string) => {
     try {
       const res = await fetch(`${BASE}/automations/${id}/toggle`, { method: 'POST' });
@@ -1046,10 +1071,31 @@ function AISection() {
                         )}
                       </div>
                     </div>
-                    <ToggleSwitch
-                      checked={auto.enabled}
-                      onChange={() => toggleAutomation(auto.id)}
-                    />
+                    <div className="flex items-center gap-2 flex-shrink-0">
+                      <button
+                        onClick={() => fireAutomation(auto.id)}
+                        disabled={runningAutomation === auto.id}
+                        className={`text-[10px] font-medium px-2 py-1 rounded transition-colors ${
+                          runningAutomation === auto.id
+                            ? 'bg-accent-blue/20 text-accent-blue cursor-wait'
+                            : 'bg-surface-4 text-text-secondary hover:bg-accent-blue/10 hover:text-accent-blue'
+                        }`}
+                        title="Run now — bypasses cooldown"
+                      >
+                        {runningAutomation === auto.id ? (
+                          <span className="flex items-center gap-1">
+                            <span className="animate-spin inline-block w-2.5 h-2.5 border border-accent-blue border-t-transparent rounded-full" />
+                            Running...
+                          </span>
+                        ) : (
+                          'Run Now'
+                        )}
+                      </button>
+                      <ToggleSwitch
+                        checked={auto.enabled}
+                        onChange={() => toggleAutomation(auto.id)}
+                      />
+                    </div>
                   </div>
                 ))}
               </div>
