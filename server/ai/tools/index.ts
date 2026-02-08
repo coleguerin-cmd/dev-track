@@ -28,12 +28,20 @@ import { metricsTools } from './metrics.js';
 import { configTools } from './config.js';
 import { profileTools } from './profiles.js';
 import { integrationTools } from './integrations.js';
+import { epicTools } from './epics.js';
+import { milestoneTools } from './milestones.js';
+import { releaseTools } from './releases.js';
+import { activityTools } from './activity.js';
+import { auditTools } from './audits.js';
 
 // ─── Module Registry ────────────────────────────────────────────────────────
 // Add new tool modules here. Order determines tool listing order.
 
 const MODULES: ToolModule[] = [
   backlogTools,
+  epicTools,
+  milestoneTools,
+  releaseTools,
   issueTools,
   changelogTools,
   ideaTools,
@@ -49,6 +57,8 @@ const MODULES: ToolModule[] = [
   configTools,
   profileTools,
   integrationTools,
+  activityTools,
+  auditTools,
 ];
 
 // ─── Build Registry ─────────────────────────────────────────────────────────

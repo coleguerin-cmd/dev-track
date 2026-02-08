@@ -11,7 +11,8 @@ import { getStore } from '../store.js';
 import { getDataDir } from '../project-config.js';
 import { broadcast } from '../ws.js';
 import { runAgent } from '../ai/runner.js';
-import type { Automation, AutomationCondition } from '../../shared/types.js';
+import { AuditRecorder } from './recorder.js';
+import type { Automation, AutomationCondition, AuditTriggerType } from '../../shared/types.js';
 
 export type TriggerType = 'issue_created' | 'item_completed' | 'session_ended' | 'health_changed' | 'scheduled' | 'file_changed' | 'manual';
 
@@ -62,7 +63,7 @@ class AutomationEngine {
       }
 
       // Cooldown check — don't re-fire within cooldown window
-      const cooldownMin = aiConfig?.automations?.cooldown_minutes || 60;
+      const cooldownMin = aiConfig?.automations?.cooldown_minutes ?? 60;
       if (automation.last_fired) {
         const elapsed = (Date.now() - new Date(automation.last_fired).getTime()) / 60000;
         if (elapsed < cooldownMin) {
@@ -155,6 +156,22 @@ class AutomationEngine {
   private async runAIAutomation(automation: Automation, context: TriggerContext): Promise<void> {
     const store = getStore();
 
+    // Map trigger type to audit trigger type
+    const triggerTypeMap: Record<string, AuditTriggerType> = {
+      scheduled: 'scheduled',
+      manual: 'manual',
+    };
+    const auditTriggerType: AuditTriggerType = triggerTypeMap[context.trigger] || 'event';
+
+    // Create audit recorder
+    const recorder = new AuditRecorder(
+      automation.id,
+      automation.name,
+      auditTriggerType,
+      context.trigger,
+      context.data || {},
+    );
+
     // Build context summary for the AI
     const contextSummary = [
       `Trigger: ${context.trigger}`,
@@ -184,15 +201,24 @@ class AutomationEngine {
     const modelTier = cfg?.automations?.default_model_tier || 'standard';
     const taskType = modelTier === 'premium' ? 'deep_audit' : 'incremental_update';
 
-    const result = await runAgent(systemPrompt, contextSummary, {
-      task: taskType,
-      maxIterations: 15,
-    });
+    try {
+      const result = await runAgent(systemPrompt, contextSummary, {
+        task: taskType,
+        maxIterations: 15,
+        recorder,
+      });
 
-    console.log(`[automation] AI agent for "${automation.name}" completed: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);
+      console.log(`[automation] AI agent for "${automation.name}" completed: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);
 
-    // Track cost
-    this.trackCost(result.cost);
+      // Finalize audit run
+      recorder.finalize(result.content, result.iterations);
+
+      // Track cost
+      this.trackCost(result.cost);
+    } catch (err: any) {
+      recorder.fail(err.message || 'Unknown error');
+      throw err;
+    }
   }
 
   private async executeActions(automation: Automation, context: TriggerContext): Promise<void> {

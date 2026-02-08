@@ -1,0 +1,44 @@
+{
+  "runs": [
+    {
+      "id": "run-0002",
+      "automation_id": "change-tracker",
+      "automation_name": "Change Tracker",
+      "trigger_type": "event",
+      "trigger_source": "item_completed",
+      "started_at": "2026-02-08T19:32:33.291Z",
+      "ended_at": "2026-02-08T19:34:27.646Z",
+      "duration_seconds": 114,
+      "status": "completed",
+      "model": "claude-sonnet-4-5-20250929",
+      "cost_usd": 2.6462010000000005,
+      "iterations": 14,
+      "summary": "## Change Tracker Automation Report\n\n**Trigger:** `item_completed` (manual trigger) | **Project:** dev-track | **Date:** 2026-02-08 | **Status:** ✅ Completed successfully\n\n### Changes Detected\n\n**7 roadmap items completed** from the `automation-audits` epic. Updated epic status to completed, parent item shipped, velocity +7 items/+21 points, created CL-072, updated project state. No duplicates found. Automation audits epic fully delivered and operational.",
+      "changes_count": 10,
+      "changes_by_action": { "created": 2, "updated": 8, "deleted": 0, "resolved": 0 },
+      "suggestions_count": 0,
+      "suggestions_pending": 0,
+      "errors_count": 0
+    },
+    {
+      "id": "run-0001",
+      "automation_id": "change-tracker",
+      "automation_name": "Change Tracker",
+      "trigger_type": "event",
+      "trigger_source": "item_completed",
+      "started_at": "2026-02-08T19:16:47.635Z",
+      "ended_at": "2026-02-08T19:16:47.643Z",
+      "duration_seconds": 0,
+      "status": "failed",
+      "model": "",
+      "cost_usd": 0,
+      "iterations": 0,
+      "summary": "Failed: No AI models available. Add API keys in Settings → AI.",
+      "changes_count": 0,
+      "suggestions_count": 0,
+      "suggestions_pending": 0,
+      "errors_count": 1
+    }
+  ],
+  "next_id": 3
+}

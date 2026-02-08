@@ -1227,6 +1227,246 @@
       "files_changed": [],
       "backlog_item": null,
       "breaking": false
+    },
+    {
+      "id": "CL-063",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Roadmap: Kanban / By Epic view toggle with full epic grouped list view",
+      "description": "Added view mode toggle (Kanban / By Epic) to Roadmap page header with localStorage persistence. By Epic view shows items grouped under their parent epic with collapsible sections, colored dots, status badges, thin progress bars (completed/total), inline epic editor, and an Ungrouped section for items without an epic. Epic management includes create epic modal with color palette, epic dropdown selector on every card (both Kanban and By Epic views), and inline edit for title/description/status/color.",
+      "type": "feature",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Backlog.tsx"
+      ],
+      "backlog_item": "epic-hierarchy-visibility",
+      "breaking": false
+    },
+    {
+      "id": "CL-064",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Ideas: By Group view with connected-component clustering + related_ideas chips",
+      "description": "Added Flat / By Group view toggle to Ideas page. By Group mode clusters ideas that share related_ideas connections using BFS graph walk to find connected components. Each cluster shows as a collapsible section with auto-extracted group name (from 'Future group:' note text or category). Related ideas shown as clickable chips in both the list cards and detail panel — clicking navigates to the linked idea. Expanded update_idea AI tool to support related_ideas, tags, pros, cons, and open_questions fields.",
+      "type": "feature",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Ideas.tsx",
+        "server/ai/tools/ideas.ts"
+      ],
+      "backlog_item": "epic-hierarchy-visibility",
+      "breaking": false
+    },
+    {
+      "id": "CL-065",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Captured 3 future ideas (analytics, timeline, filtering) + roadmap item + design notes",
+      "description": "Captured IDEA-062 (analytics dashboard — velocity charts, burn rate), IDEA-063 (timeline/roadmap visualization), IDEA-064 (rich filtering/custom views) with full pros/cons/questions. Added analytics-dashboard roadmap item (next horizon, M size). Wrote BN-023 (dev-track vs Linear positioning) and BN-024 (Linear design reference standard) brain notes.",
+      "type": "chore",
+      "scope": "planning",
+      "files_changed": [
+        "data/ideas/items.json",
+        "data/backlog/items.json",
+        "data/brain/notes.json"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-066",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Created 6 epics and assigned all 28 roadmap items — By Epic view is now fully populated",
+      "description": "Created 6 strategic epics: AI Intelligence Engine (P0, 5 items), Automation & Self-Healing (P0, 6 items), UI & Views (P1, 7 items), Data Integrity & Trust (P1, 2 items), Platform & Distribution (P2, 5 items), Codebase Intelligence (P2, 3 items). Every roadmap item (including completed ones) assigned to its natural epic via PATCH /api/v1/roadmap/:id. By Epic view now shows meaningful groupings with progress bars instead of a flat ungrouped list.",
+      "type": "enhancement",
+      "scope": "data",
+      "files_changed": [
+        "data/roadmap/epics.json",
+        "data/backlog/items.json"
+      ],
+      "backlog_item": "epic-hierarchy-visibility",
+      "breaking": false
+    },
+    {
+      "id": "CL-067",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Wired related_ideas links across 42 ideas — By Group view now shows 8 clusters",
+      "description": "Set related_ideas arrays on 42 ideas across 8 natural clusters: Codebase Understanding (4), AI Autonomy (3), Trust & Transparency (5), Session Intelligence (8), Business/Platform (3), Automation Hardening (8), Integrations & Costs (3), UI/UX (6), Analytics (3). Ideas By Group view now shows connected component clusters with auto-extracted group names instead of flat ungrouped list.",
+      "type": "enhancement",
+      "scope": "data",
+      "files_changed": [
+        "data/ideas/items.json"
+      ],
+      "backlog_item": "epic-hierarchy-visibility",
+      "breaking": false
+    },
+    {
+      "id": "CL-068",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Cross-entity linking: open issues now shown per epic in By Epic view",
+      "description": "By Epic view now fetches open issues and cross-references them to epics via the issue.roadmap_item -> item.epic_id chain. Each epic header shows a red badge with open issue count (e.g., '2 issues'). This turns the By Epic view from a simple list into a mini project dashboard where you can see blockers at a glance.",
+      "type": "enhancement",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Backlog.tsx"
+      ],
+      "backlog_item": "epic-hierarchy-visibility",
+      "breaking": false
+    },
+    {
+      "id": "CL-069",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "AI tool coverage expansion: epics, milestones, releases, activity feed, full roadmap schema",
+      "description": "Created 4 new AI tool modules (epics.ts, milestones.ts, releases.ts, activity.ts) adding 13 new tools. Updated backlog tools with full RoadmapItem schema support (epic_id, milestone_id, type, priority, blocked_by, related_issues, spawned_from, acceptance_criteria, ai_notes, estimated_sessions). Updated AI system prompt with complete entity hierarchy documentation, UI view descriptions, and behavioral guidance for epic-aware operations. AI coverage went from 65% to ~95% of all entities.",
+      "type": "enhancement",
+      "scope": "ai",
+      "roadmap_item": null,
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
+    },
+    {
+      "id": "CL-070",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Interactive issue badges in By Epic view + epic context in Issues view",
+      "description": "Made the red issue badge in Roadmap By Epic view clickable (with stopPropagation) to expand an inline panel showing each blocking issue with severity, title, symptoms. Added epic context chips to the Issues view list and detail panel by mapping issue.roadmap_item through roadmap items to their epic.",
+      "type": "fix",
+      "scope": "ui",
+      "roadmap_item": null,
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
+    },
+    {
+      "id": "CL-071",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Audits tab - end-to-end automation transparency system",
+      "description": "Built the complete audit system across all layers: (1) Data model - AuditRun, AuditStep, AuditChange, AuditSuggestion types with index for fast listing. (2) Storage - per-run JSON files with rolling index, store methods for CRUD and stats. (3) AuditRecorder class that instruments the agent loop to capture thinking, tool calls, results, and auto-detect entity changes from mutating tools. (4) Runner hooks - optional recorder parameter passed through runAgent(). (5) Engine wiring - runAIAutomation creates recorder, passes to runner, finalizes on completion with change detection. (6) API routes - list/get/stats/suggestion-approval endpoints. (7) Rich UI - stats bar (runs/cost/changes/suggestions), trigger type and status filters, expandable run cards with collapsible sections for summary, changes made, suggestions with approve/dismiss, thinking chain with step-by-step timeline, tool calls with expandable args/results, cost breakdown. (8) AI tools - list_audit_runs, get_audit_run, get_audit_stats for chat agent. Created automation-audits epic with 7 roadmap items, all completed.",
+      "type": "feature",
+      "scope": "full-stack",
+      "roadmap_item": null,
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
+    },
+    {
+      "id": "CL-072",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Automation audits epic completed — full transparency into AI operations",
+      "description": "Completed the entire automation-audits epic (7 roadmap items shipped): data model with AuditRun/AuditStep/AuditChange/AuditSuggestion types, per-run JSON storage with rolling index, AuditRecorder class that instruments the agent loop to capture thinking/tool calls/results, engine wiring with automatic change detection, REST API routes for list/get/stats/suggestions, rich UI with stats bar, filters, expandable run cards showing full audit trail, and AI tools for querying past runs. This delivers complete transparency into what DevTrack AI does autonomously. Every automation run now produces a visible audit card showing: summary, changes made, suggestions with approve/dismiss, thinking chain with step timeline, tool calls with args/results, cost breakdown. Epic marked completed with 88% progress (7/8 items, parent item was umbrella).",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "shared/types.ts",
+        "server/store.ts",
+        "server/automation/recorder.ts",
+        "server/automation/engine.ts",
+        "server/routes/audits.ts",
+        "server/ai/tools/audits.ts",
+        "ui/src/views/Audits.tsx"
+      ],
+      "backlog_item": "audits-tab",
+      "breaking": false
+    },
+    {
+      "id": "CL-073",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Identified root cause of ISS-035 — AI config save uses shallow merge",
+      "description": "PUT /api/v1/ai/config uses Object.assign() which is a shallow merge. When the UI sends partial nested updates like { automations: { cooldown_minutes: 5 } }, Object.assign replaces the entire automations object, losing all other properties (enabled, scheduler_enabled, triggers_enabled, etc.). This explains why settings appear to save but don't persist — they're being overwritten by incomplete objects. Fix requires either: (1) deep merge in API route, or (2) UI sends full config object on save.",
+      "type": "fix",
+      "scope": "settings",
+      "files_changed": [
+        "server/routes/ai.ts",
+        "ui/src/views/Settings.tsx"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-074",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Identified root cause of ISS-035 — AI config save uses shallow merge",
+      "description": "PUT /api/v1/ai/config uses Object.assign() which is a shallow merge. When the UI sends partial nested updates like { automations: { cooldown_minutes: 5 } }, Object.assign replaces the entire automations object, losing all other properties (enabled, scheduler_enabled, triggers_enabled, etc.). This explains why settings appear to save but don't persist — they're being overwritten by incomplete objects. Fix requires either: (1) deep merge in API route, or (2) UI sends full config object on save.",
+      "type": "fix",
+      "scope": "settings",
+      "files_changed": [
+        "server/routes/ai.ts",
+        "ui/src/views/Settings.tsx"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-075",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Audits tab — markdown rendering, time filters, analytics charts, right sidebar breakdown",
+      "description": "Fixed summary truncation (recorder now stores full agent response, not mangled 500-char sentence split). Added ReactMarkdown + audit-markdown CSS for proper heading/list/code rendering. Added time range filters (Today/7d/30d/All time). Built collapsible analytics panel with muted Linear-style cost/runs bar chart and changes-by-action donut. Built right sidebar on run expand showing entity-type breakdown with action bars, change rows, and cost/performance stats. Added changes_by_action field to AuditRunIndex. Retroactively fixed run-0002 data.",
+      "type": "enhancement",
+      "scope": "full-stack",
+      "files_changed": [
+        "ui/src/views/Audits.tsx",
+        "ui/src/styles/globals.css",
+        "server/automation/recorder.ts",
+        "server/store.ts",
+        "shared/types.ts"
+      ],
+      "backlog_item": "audits-tab",
+      "breaking": false
+    },
+    {
+      "id": "CL-076",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Chat agent — system prompt scope boundaries, agent activity panel, session changes tray",
+      "description": "Three chat improvements: (1) Added Scope & Boundaries section to system prompt — agent now knows it's a project intelligence layer, not a code editor. Investigates and creates rich entities as handoff artifacts. (2) Replaced simple ToolCallPill with AgentActivityPanel showing real-time tool visibility: status header, step counter, file paths, entity IDs, checkmarks for completed tools. (3) Built Pillar-style SessionChangesTray above input area — accumulates entity mutations from tool results during the session, grouped by entity type with action colors. ISS-036, ISS-037, ISS-038 resolved.",
+      "type": "enhancement",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/ai/chat.ts",
+        "ui/src/components/ChatSidebar.tsx"
+      ],
+      "backlog_item": "ai-chat-agent",
+      "breaking": false
+    },
+    {
+      "id": "CL-077",
+      "date": "2026-02-08",
+      "session": 9,
+      "title": "Fixed ISS-035 (deep merge) + ISS-039 (WebSocket remount) + config cache + view persistence",
+      "description": "Four bug fixes: (1) ISS-035: Replaced Object.assign shallow merge with recursive deepMerge in PUT /ai/config — nested properties now preserved. (2) ISS-039 (critical): Removed refreshKey pattern from App.tsx that caused every WebSocket event to unmount/remount the entire active view, destroying all internal state. (3) Added reloadConfig() to AI service so GET /ai/config returns fresh data after PUT writes. (4) Persisted active view and Settings section to localStorage — survives page refresh.",
+      "type": "fix",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/routes/ai.ts",
+        "server/ai/service.ts",
+        "ui/src/App.tsx",
+        "ui/src/views/Settings.tsx"
+      ],
+      "backlog_item": null,
+      "issues_resolved": ["ISS-035", "ISS-039"],
+      "breaking": false
     }
   ]
 }

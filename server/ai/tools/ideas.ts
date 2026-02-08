@@ -89,13 +89,18 @@ export const ideaTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'update_idea',
-        description: 'Update an existing idea (status, priority, notes, pros, cons, etc.)',
+        description: 'Update an existing idea (status, priority, notes, pros, cons, related_ideas, etc.)',
         parameters: { type: 'object', properties: {
           id: { type: 'string', description: 'Idea ID (e.g., IDEA-015)' },
-          status: { type: 'string', enum: ['captured', 'exploring', 'validated', 'promoted', 'dismissed'] },
+          status: { type: 'string', enum: ['captured', 'exploring', 'validated', 'promoted', 'dismissed', 'parked'] },
           priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },
           notes: { type: 'string' },
           promoted_to: { type: 'string', description: 'Backlog item ID if promoted' },
+          related_ideas: { type: 'array', items: { type: 'string' }, description: 'Array of related idea IDs (e.g., ["IDEA-015", "IDEA-023"])' },
+          tags: { type: 'array', items: { type: 'string' }, description: 'Tags for the idea' },
+          pros: { type: 'array', items: { type: 'string' } },
+          cons: { type: 'array', items: { type: 'string' } },
+          open_questions: { type: 'array', items: { type: 'string' } },
         }, required: ['id'] },
       }},
       label: 'Updating idea',
@@ -103,7 +108,7 @@ export const ideaTools: ToolModule = {
         const data = readIdeas();
         const idea = data.ideas.find((i: any) => i.id === args.id);
         if (!idea) return { error: `Idea ${args.id} not found` };
-        for (const key of ['status', 'priority', 'notes', 'promoted_to']) {
+        for (const key of ['status', 'priority', 'notes', 'promoted_to', 'related_ideas', 'tags', 'pros', 'cons', 'open_questions']) {
           if (args[key] !== undefined) idea[key] = args[key];
         }
         idea.updated = new Date().toISOString().split('T')[0];

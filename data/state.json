@@ -1,5 +1,5 @@
 {
   "last_updated": "2026-02-08",
   "overall_health": 76,
-  "summary": "Session 8 complete. Project at 76% health (stable). 89 items shipped / 293 points across 8 sessions. 6 issues open (ISS-003, ISS-006, ISS-012, ISS-022, ISS-031, ISS-034). Activity log live in sidebar. Automations ON (standard tier, $10/day budget). CRITICAL PATH BLOCKER: AI chat agent in_progress 9+ days without browser testing — blocks all dogfooding. Next: browser test AI chat, validate headless runner, dogfood on Pillar, commit pending changes to git (27 modified files)."
+  "summary": "Session complete. Project at 76% health (stable). 96 items shipped / 314 points across 8 sessions. 6 issues open (ISS-003, ISS-006, ISS-012, ISS-022, ISS-031, ISS-034). Automation audits epic COMPLETED — full transparency into AI operations with audit UI, thinking chains, cost tracking, and suggestion approval. Automations ON (standard tier, $10/day budget). CRITICAL PATH BLOCKER: AI chat agent in_progress 9+ days without browser testing — blocks all dogfooding. Next: browser test AI chat, validate headless runner, dogfood on Pillar, commit pending changes to git (27 modified files)."
 }

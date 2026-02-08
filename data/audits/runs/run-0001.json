@@ -1,0 +1,59 @@
+{
+  "id": "run-0001",
+  "automation_id": "change-tracker",
+  "automation_name": "Change Tracker",
+  "trigger": {
+    "type": "event",
+    "source": "item_completed",
+    "context": {
+      "id": "audit-data-model",
+      "title": "Audit data model - types for AuditRun, AuditStep, AuditChange, AuditSuggestion",
+      "summary": "Define all TypeScript types for the audit system in shared/types.ts",
+      "type": "infrastructure",
+      "horizon": "next",
+      "priority": "P0",
+      "size": "S",
+      "status": "completed",
+      "category": "core",
+      "epic_id": "automation-audits",
+      "milestone_id": null,
+      "depends_on": [],
+      "blocked_by": [],
+      "related_issues": [],
+      "spawned_from": null,
+      "assignee": null,
+      "tags": [
+        "audit",
+        "types"
+      ],
+      "design_doc": null,
+      "acceptance_criteria": [],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "started": null,
+      "completed": "2026-02-08",
+      "ai_notes": null,
+      "estimated_sessions": null
+    }
+  },
+  "started_at": "2026-02-08T19:16:47.635Z",
+  "ended_at": "2026-02-08T19:16:47.643Z",
+  "duration_seconds": 0,
+  "status": "failed",
+  "model": "",
+  "provider": "",
+  "iterations": 0,
+  "tokens": {
+    "input": 0,
+    "output": 0,
+    "total": 0
+  },
+  "cost_usd": 0,
+  "steps": [],
+  "summary": "Failed: No AI models available. Add API keys in Settings → AI.",
+  "changes_made": [],
+  "suggestions": [],
+  "errors": [
+    "No AI models available. Add API keys in Settings → AI."
+  ]
+}

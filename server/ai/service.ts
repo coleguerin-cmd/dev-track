@@ -289,6 +289,8 @@ export class AIService {
   }
 
   getConfig() { return this.config; }
+  /** Reload config from disk — call after external writes to ai/config.json */
+  reloadConfig() { this.config = this.loadConfig(); }
   getRouter() { return this.router; }
 
   // ─── OpenAI Provider ───────────────────────────────────────────────────────

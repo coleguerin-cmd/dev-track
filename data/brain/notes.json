@@ -340,7 +340,91 @@
       ],
       "created": "2026-02-08T17:00:46.085Z",
       "updated": "2026-02-08T17:00:46.085Z"
+    },
+    {
+      "id": "BN-023",
+      "type": "decision",
+      "priority": "high",
+      "title": "Dev-track is NOT rebuilding Linear — different engine, shared view layer",
+      "content": "Key architectural distinction established in Session 9: Linear is a team coordination tool (assignments, reviews, handoffs between humans). Dev-track is an AI-native project intelligence tool (context recovery, auto-issues, brain notes, profile observations, automation). The overlap is purely in the visualization layer — both need to show work items, progress, and trends. Linear's design is worth learning from for views, but the engine underneath is fundamentally different. Sessions = dev-track's cycles (2-6hr work blocks vs Linear's 1-2wk sprints). Velocity data exists, just needs charts. Non-goals: team-centric features, complex workflow states, Git integration for auto-closing (file watcher is better).",
+      "context": "Session 9 — product positioning discussion, 2026-02-08",
+      "actionable": false,
+      "action_taken": false,
+      "related_items": [
+        "IDEA-062",
+        "IDEA-063",
+        "IDEA-064"
+      ],
+      "created": "2026-02-08T18:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-024",
+      "type": "preference",
+      "priority": "medium",
+      "title": "Linear design as reference standard for dev-track views",
+      "content": "User identified Linear as the design benchmark for dev-track's visualization layer. Key Linear design patterns to reference: (1) Dark theme with tight spacing, status dots instead of badges, thin progress bars (2-3px). (2) Cycle analytics with burndown charts, velocity graphing, debugging stats — beautiful line charts on dark bg. (3) Timeline views with horizontal bars grouped by project. (4) Pill-style filter chips for custom views. (5) Clean information density. NON-goals from Linear: Jira-style tree views, heavy workflow states, team-centric UI. Dev-track should feel like Linear's aesthetic + AI intelligence engine.",
+      "context": "Session 9 — design reference discussion, 2026-02-08",
+      "actionable": true,
+      "action_taken": false,
+      "related_items": [
+        "IDEA-062",
+        "IDEA-063",
+        "IDEA-064",
+        "ui-design-overhaul"
+      ],
+      "created": "2026-02-08T18:00:00Z",
+      "expires": null,
+      "dismissed": false
+    },
+    {
+      "id": "BN-025",
+      "type": "observation",
+      "content": "Epic hierarchy visibility delivered in session 9 via view mode toggles. Roadmap By Epic view shows items grouped under epics with progress tracking. Ideas By Group view clusters related ideas. This was the #1 readability gap identified by user. The data model already supported it (epic_id, milestone_id) but UI was flat. Now the hierarchy is visible and actionable.",
+      "priority": "medium",
+      "related_items": [
+        "epic-hierarchy-ui",
+        "CL-063",
+        "CL-064",
+        "CL-066",
+        "CL-067",
+        "CL-068"
+      ],
+      "created": "2026-02-08T19:33:43.695Z",
+      "updated": "2026-02-08T19:33:43.695Z"
+    },
+    {
+      "id": "BN-026",
+      "type": "observation",
+      "content": "Change tracker automation executed successfully after 7 audit-related items completed. Key actions: (1) Updated automation-audits epic to completed status with AI summary, (2) Marked audits-tab parent item as completed, (3) Updated velocity totals (+7 items, +21 points → 96 items/314 points total), (4) Created comprehensive changelog entry (CL-072), (5) Updated project state summary to reflect completed epic, (6) Marked epic-hierarchy-ui as in_progress (partially shipped in session 9), (7) Promoted IDEA-060 to audits-tab. No duplicates or overlapping items found. All related entities updated correctly. The audit system is now fully transparent and operational.",
+      "priority": "high",
+      "related_items": [
+        "audits-tab",
+        "automation-audits",
+        "CL-072",
+        "IDEA-060"
+      ],
+      "created": "2026-02-08T19:34:00.944Z",
+      "updated": "2026-02-08T19:34:00.944Z"
+    },
+    {
+      "id": "BN-027",
+      "type": "architecture",
+      "content": "Session 9 key insight: The chat agent's role crystallized as 'investigation + handoff layer.' It found ISS-035 live, documented root cause with file/line refs and proposed solutions, created a rich issue — then Cursor implemented the fix. This is the ISS-012 bridge pattern in action. The refreshKey bug (ISS-039) was foundational — every WS event was unmounting/remounting all views. This explains months of instability reports. The fix (remove global refresh, persist view state to localStorage) is simple but changes the entire app feel. The AI config cache miss (getConfig returning stale in-memory data after PUT writes to disk) is a common pattern in our codebase — any singleton service that reads config on startup and caches it will have this problem. Should audit for similar patterns in store.ts and automation engine.",
+      "priority": "high",
+      "related_items": [
+        "ISS-035",
+        "ISS-039",
+        "ISS-036",
+        "ISS-037",
+        "ISS-038",
+        "IDEA-065",
+        "IDEA-067"
+      ],
+      "created": "2026-02-08T22:00:00.000Z",
+      "updated": "2026-02-08T22:00:00.000Z"
     }
   ],
-  "next_id": 23
+  "next_id": 28
 }

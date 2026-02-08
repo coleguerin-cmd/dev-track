@@ -108,7 +108,16 @@ const SECTIONS: { id: Section; label: string; icon: typeof User }[] = [
 ];
 
 export function Settings() {
-  const [section, setSection] = useState<Section>('profile');
+  const [section, setSection] = useState<Section>(() => {
+    try { const s = localStorage.getItem('dt-settings-section'); if (s === 'ai' || s === 'integrations') return s; } catch {}
+    return 'profile';
+  });
+
+  // Persist active section
+  const changeSection = (s: Section) => {
+    setSection(s);
+    try { localStorage.setItem('dt-settings-section', s); } catch {}
+  };
 
   return (
     <div className="max-w-6xl mx-auto">
@@ -122,7 +131,7 @@ export function Settings() {
             return (
               <button
                 key={s.id}
-                onClick={() => setSection(s.id)}
+                onClick={() => changeSection(s.id)}
                 className={`w-full flex items-center gap-2.5 px-3 py-2 text-[13px] rounded-md transition-colors ${
                   section === s.id
                     ? 'bg-surface-3 text-text-primary font-medium'

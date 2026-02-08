@@ -656,6 +656,104 @@ export interface SessionEntry {
   handoff_message?: string;
 }
 
+// ─── 15. Audit Runs ─────────────────────────────────────────────────────────
+
+export type AuditTriggerType = 'scheduled' | 'event' | 'manual' | 'requested';
+export type AuditRunStatus = 'running' | 'completed' | 'failed' | 'cancelled';
+export type AuditStepType = 'thinking' | 'tool_call' | 'tool_result';
+export type AuditSuggestionStatus = 'pending' | 'approved' | 'dismissed';
+
+export interface AuditStep {
+  index: number;
+  type: AuditStepType;
+  timestamp: string;
+  // For thinking steps
+  content?: string;
+  // For tool_call / tool_result steps
+  tool_name?: string;
+  tool_args?: Record<string, any>;
+  tool_result?: string;
+  tool_result_preview?: string;
+  // Per-step cost tracking
+  tokens?: { input: number; output: number };
+  cost_usd?: number;
+}
+
+export interface AuditChange {
+  entity_type: string;
+  entity_id: string;
+  action: 'created' | 'updated' | 'deleted' | 'resolved';
+  description: string;
+  tool_name: string;
+  field?: string;
+  before?: any;
+  after?: any;
+}
+
+export interface AuditSuggestion {
+  id: string;
+  description: string;
+  reasoning: string;
+  priority: 'low' | 'medium' | 'high';
+  status: AuditSuggestionStatus;
+  entity_type?: string;
+  entity_id?: string;
+}
+
+export interface AuditRun {
+  id: string;
+  automation_id: string;
+  automation_name: string;
+  trigger: {
+    type: AuditTriggerType;
+    source: string;
+    context: Record<string, any>;
+  };
+  started_at: string;
+  ended_at: string | null;
+  duration_seconds: number;
+  status: AuditRunStatus;
+  model: string;
+  provider: string;
+  iterations: number;
+  tokens: { input: number; output: number; total: number };
+  cost_usd: number;
+  steps: AuditStep[];
+  summary: string;
+  changes_made: AuditChange[];
+  suggestions: AuditSuggestion[];
+  errors: string[];
+}
+
+/** Lightweight index entry for listing without loading full run files */
+export interface AuditRunIndex {
+  id: string;
+  automation_id: string;
+  automation_name: string;
+  trigger_type: AuditTriggerType;
+  trigger_source: string;
+  started_at: string;
+  ended_at: string | null;
+  duration_seconds: number;
+  status: AuditRunStatus;
+  model: string;
+  cost_usd: number;
+  iterations: number;
+  summary: string;
+  changes_count: number;
+  changes_by_action?: { created: number; updated: number; deleted: number; resolved: number };
+  suggestions_count: number;
+  suggestions_pending: number;
+  errors_count: number;
+}
+
+export interface AuditIndexData {
+  runs: AuditRunIndex[];
+  next_id: number;
+}
+
+// ─── Deprecated ─────────────────────────────────────────────────────────────
+
 /** @deprecated v1 session log — use SessionsData instead */
 export interface SessionLog {
   sessions: SessionEntry[];

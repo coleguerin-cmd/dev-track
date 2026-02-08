@@ -24,8 +24,8 @@
       "actions": [],
       "ai_driven": true,
       "ai_prompt": "A change just occurred in DevTrack. Review the change and check:\n\n1. Does this completion affect any epics or milestones? Update progress.\n2. Are there related issues that should be updated or resolved?\n3. Should a changelog entry be created for this work?\n4. Are there duplicate or overlapping items in the roadmap that should be merged?\n5. If a new idea or issue came in, check existing items for semantic overlap. Keep the more complete version, merge context from the other.\n\nOnly make changes that are clearly warranted. Don't over-edit.",
-      "last_fired": null,
-      "fire_count": 0,
+      "last_fired": "2026-02-08T19:34:27.663Z",
+      "fire_count": 1,
       "created": "2026-02-08"
     },
     {

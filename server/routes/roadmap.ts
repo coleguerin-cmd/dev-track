@@ -159,6 +159,12 @@ app.patch('/:id', async (c) => {
   if (body.estimated_sessions !== undefined) item.estimated_sessions = body.estimated_sessions;
 
   item.updated = new Date().toISOString().split('T')[0];
+
+  // State transition validation: completed/cancelled items must be in shipped horizon
+  if ((item.status === 'completed' || item.status === 'cancelled') && item.horizon !== 'shipped') {
+    item.horizon = 'shipped' as any;
+  }
+
   store.saveRoadmap();
 
   // Recompute progress for affected epics/milestones

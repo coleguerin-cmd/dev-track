@@ -8,11 +8,32 @@ export function Issues() {
   const [filter, setFilter] = useState<'all' | 'open' | 'resolved'>('open');
   const [showForm, setShowForm] = useState(false);
   const [selectedIssue, setSelectedIssue] = useState<string | null>(null);
+  const [epicMap, setEpicMap] = useState<Map<string, { name: string; color: string }>>(new Map());
 
   const load = useCallback(() => {
     const params = filter === 'all' ? {} : filter === 'open' ? { status: 'open' } : { status: 'resolved' };
     api.issues.list(params).then((d: any) => setIssues(d?.issues || [])).catch(() => {});
   }, [filter]);
+
+  // Build a map: roadmap_item_id -> epic info for showing epic context on issues
+  useEffect(() => {
+    Promise.all([
+      api.roadmap.list().then((d: any) => d?.items || []),
+      api.epics.list().then((d: any) => d?.epics || []),
+    ]).then(([items, epics]: [any[], any[]]) => {
+      const epicLookup = new Map<string, { name: string; color: string }>();
+      for (const ep of epics) {
+        epicLookup.set(ep.id, { name: ep.title, color: ep.color || '#6366f1' });
+      }
+      const map = new Map<string, { name: string; color: string }>();
+      for (const item of items) {
+        if (item.epic_id && epicLookup.has(item.epic_id)) {
+          map.set(item.id, epicLookup.get(item.epic_id)!);
+        }
+      }
+      setEpicMap(map);
+    }).catch(() => {});
+  }, []);
 
   useEffect(() => { load(); }, [load]);
 
@@ -53,32 +74,47 @@ export function Issues() {
       <div className="grid grid-cols-5 gap-5">
         {/* Issue list */}
         <div className="col-span-3 space-y-2">
-          {issues.map(issue => (
-            <div
-              key={issue.id}
-              onClick={() => setSelectedIssue(issue.id)}
-              className={`card-hover p-3 ${selectedIssue === issue.id ? 'ring-1 ring-accent-blue/40' : ''}`}
-            >
-              <div className="flex items-start gap-2">
-                <SeverityBadge severity={issue.severity} />
-                <div className="flex-1 min-w-0">
-                  <span className="text-sm font-medium">{issue.title}</span>
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-2xs text-text-tertiary">{issue.id}</span>
-                    <span className="text-2xs text-text-tertiary">·</span>
-                    <span className="text-2xs text-text-tertiary">{issue.discovered}</span>
-                    {issue.action_id && (
-                      <>
-                        <span className="text-2xs text-text-tertiary">·</span>
-                        <span className="text-2xs text-accent-blue">{issue.action_id}</span>
-                      </>
-                    )}
+          {issues.map(issue => {
+            const ext = issue as any;
+            const epicInfo = ext.roadmap_item ? epicMap.get(ext.roadmap_item) : null;
+            return (
+              <div
+                key={issue.id}
+                onClick={() => setSelectedIssue(issue.id)}
+                className={`card-hover p-3 ${selectedIssue === issue.id ? 'ring-1 ring-accent-blue/40' : ''}`}
+              >
+                <div className="flex items-start gap-2">
+                  <SeverityBadge severity={issue.severity} />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-medium">{issue.title}</span>
+                    <div className="flex items-center gap-2 mt-1 flex-wrap">
+                      <span className="text-2xs text-text-tertiary">{issue.id}</span>
+                      <span className="text-2xs text-text-tertiary">·</span>
+                      <span className="text-2xs text-text-tertiary">{issue.discovered}</span>
+                      {epicInfo && (
+                        <>
+                          <span className="text-2xs text-text-tertiary">·</span>
+                          <span
+                            className="text-[9px] px-1.5 py-0.5 rounded-full font-medium"
+                            style={{ backgroundColor: epicInfo.color + '20', color: epicInfo.color }}
+                          >
+                            {epicInfo.name}
+                          </span>
+                        </>
+                      )}
+                      {!epicInfo && ext.roadmap_item && (
+                        <>
+                          <span className="text-2xs text-text-tertiary">·</span>
+                          <span className="text-2xs text-accent-blue">{ext.roadmap_item}</span>
+                        </>
+                      )}
+                    </div>
                   </div>
+                  <StatusBadge status={issue.status} />
                 </div>
-                <StatusBadge status={issue.status} />
               </div>
-            </div>
-          ))}
+            );
+          })}
           {issues.length === 0 && (
             <div className="card p-8 text-center text-text-tertiary">
               <p>{filter === 'open' ? 'No open issues!' : 'No issues found'}</p>
@@ -88,12 +124,23 @@ export function Issues() {
 
         {/* Detail panel */}
         <div className="col-span-2">
-          {selected ? (
+          {selected ? (() => {
+            const selExt = selected as any;
+            const selEpicInfo = selExt.roadmap_item ? epicMap.get(selExt.roadmap_item) : null;
+            return (
             <div className="card p-4 space-y-3 sticky top-6">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 flex-wrap">
                 <SeverityBadge severity={selected.severity} />
                 <StatusBadge status={selected.status} />
                 <span className="text-2xs text-text-tertiary">{selected.id}</span>
+                {selEpicInfo && (
+                  <span
+                    className="text-[9px] px-1.5 py-0.5 rounded-full font-medium"
+                    style={{ backgroundColor: selEpicInfo.color + '20', color: selEpicInfo.color }}
+                  >
+                    {selEpicInfo.name}
+                  </span>
+                )}
               </div>
               <h3 className="text-base font-semibold">{selected.title}</h3>
 
@@ -156,7 +203,8 @@ export function Issues() {
                 </button>
               )}
             </div>
-          ) : (
+            );
+          })() : (
             <div className="card p-8 text-center text-text-tertiary">
               <p>Select an issue</p>
             </div>

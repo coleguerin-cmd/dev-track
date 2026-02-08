@@ -14,13 +14,22 @@ import { Metrics } from './views/Metrics';
 import { Settings } from './views/Settings';
 import { Ideas } from './views/Ideas';
 import { Codebase } from './views/Codebase';
+import { Audits } from './views/Audits';
 import type { WSEvent } from '@shared/types';
 
-type View = 'dashboard' | 'backlog' | 'systems' | 'issues' | 'ideas' | 'codebase' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
+type View = 'dashboard' | 'backlog' | 'systems' | 'issues' | 'ideas' | 'codebase' | 'audits' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
+
+const VALID_VIEWS = new Set<View>(['dashboard', 'backlog', 'systems', 'issues', 'ideas', 'codebase', 'audits', 'sessions', 'changelog', 'docs', 'metrics', 'settings']);
 
 export default function App() {
-  const [view, setView] = useState<View>('dashboard');
-  const [refreshKey, setRefreshKey] = useState(0);
+  const [view, setViewState] = useState<View>(() => {
+    try { const v = localStorage.getItem('dt-active-view') as View; if (v && VALID_VIEWS.has(v)) return v; } catch {}
+    return 'dashboard';
+  });
+  const setView = (v: View) => {
+    setViewState(v);
+    try { localStorage.setItem('dt-active-view', v); } catch {}
+  };
   const [chatOpen, setChatOpen] = useState(false);
   const [chatWidth, setChatWidth] = useState(450);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -28,8 +37,13 @@ export default function App() {
   const lastEventRef = useRef<string>('');
 
   const handleWSMessage = useCallback((event: WSEvent) => {
-    // Trigger re-render of active view on relevant updates
-    setRefreshKey(k => k + 1);
+    // NOTE: We intentionally do NOT increment refreshKey on every WS event.
+    // The old approach (setRefreshKey(k => k + 1)) caused React to unmount/remount
+    // the entire active view on every file change, destroying internal state like
+    // Settings tab position, scroll position, expanded items, etc. (ISS-039)
+    //
+    // Views that need live data should use their own polling or WS subscriptions.
+    // The refreshKey is only used for explicit user-triggered refreshes if needed.
 
     // Convert WS event to notification (dedupe rapid-fire events)
     const notif = wsEventToNotification(event);
@@ -61,17 +75,18 @@ export default function App() {
 
   const renderView = () => {
     switch (view) {
-      case 'dashboard': return <Dashboard key={refreshKey} />;
-      case 'backlog': return <Backlog key={refreshKey} />;
-      case 'systems': return <Systems key={refreshKey} />;
-      case 'issues': return <Issues key={refreshKey} />;
-      case 'ideas': return <Ideas key={refreshKey} />;
-      case 'codebase': return <Codebase key={refreshKey} />;
-      case 'sessions': return <Sessions key={refreshKey} />;
-      case 'changelog': return <Changelog key={refreshKey} />;
-      case 'docs': return <Docs key={refreshKey} />;
-      case 'metrics': return <Metrics key={refreshKey} />;
-      case 'settings': return <Settings key={refreshKey} />;
+      case 'dashboard': return <Dashboard />;
+      case 'backlog': return <Backlog />;
+      case 'systems': return <Systems />;
+      case 'issues': return <Issues />;
+      case 'ideas': return <Ideas />;
+      case 'codebase': return <Codebase />;
+      case 'audits': return <Audits />;
+      case 'sessions': return <Sessions />;
+      case 'changelog': return <Changelog />;
+      case 'docs': return <Docs />;
+      case 'metrics': return <Metrics />;
+      case 'settings': return <Settings />;
     }
   };
 

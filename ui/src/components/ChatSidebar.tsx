@@ -40,6 +40,16 @@ interface ConversationSummary {
   updated: string;
 }
 
+interface SessionEntityChange {
+  id: string;
+  action: 'created' | 'updated' | 'deleted' | 'resolved' | 'listed';
+  entityType: string;
+  entityId: string;
+  title: string;
+  toolName: string;
+  timestamp: string;
+}
+
 interface AvailableModel {
   id: string;
   provider: string;
@@ -87,6 +97,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
   const [isStreaming, setIsStreaming] = useState(false);
   const [streamingContent, setStreamingContent] = useState('');
   const [activeToolCalls, setActiveToolCalls] = useState<ToolCallEvent[]>([]);
+  const [sessionChanges, setSessionChanges] = useState<SessionEntityChange[]>([]);
   const [conversationId, setConversationId] = useState<string | null>(() => {
     try { return localStorage.getItem(STORAGE_KEY); } catch { return null; }
   });
@@ -275,6 +286,8 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
                 setActiveToolCalls([...toolCalls]);
               }, (convoId) => {
                 if (convoId) setConversationId(convoId);
+              }, (change) => {
+                setSessionChanges(prev => [change, ...prev]);
               });
 
               if (event.type === 'message_complete') {
@@ -321,6 +334,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
     setMessages([]);
     setStreamingContent('');
     setActiveToolCalls([]);
+    setSessionChanges([]);
     setShowConvoList(false);
     inputRef.current?.focus();
   };
@@ -523,34 +537,26 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
                 <MessageBubble key={msg.id} message={msg} />
               ))}
 
-              {/* Active tool calls */}
-              {activeToolCalls.length > 0 && (
-                <div className="space-y-1">
-                  {activeToolCalls.map(tc => (
-                    <ToolCallPill key={tc.id} toolCall={tc} />
-                  ))}
-                </div>
+              {/* Agent Activity Panel — shows tool calls + thinking state during streaming */}
+              {isStreaming && (activeToolCalls.length > 0 || !streamingContent) && (
+                <AgentActivityPanel toolCalls={activeToolCalls} isThinking={!streamingContent && activeToolCalls.length === 0} />
               )}
 
               {/* Streaming content */}
               {isStreaming && streamingContent && (
                 <div className="bg-surface-2 rounded-lg px-3 py-2">
-                  <div className="text-xs text-text-secondary prose-sm">
+                  <div className="text-xs text-text-secondary chat-markdown">
                     <ReactMarkdown remarkPlugins={[remarkGfm]}>{streamingContent}</ReactMarkdown>
                   </div>
-                </div>
-              )}
-
-              {isStreaming && !streamingContent && activeToolCalls.length === 0 && (
-                <div className="flex items-center gap-2 text-xs text-text-tertiary">
-                  <div className="w-1.5 h-1.5 rounded-full bg-accent-blue animate-pulse" />
-                  Thinking...
                 </div>
               )}
 
               <div ref={messagesEndRef} />
             </div>
           )}
+
+          {/* Changes Tray — session-level entity mutations */}
+          {sessionChanges.length > 0 && <SessionChangesTray changes={sessionChanges} />}
 
           {/* Input area */}
           {configured && (
@@ -582,6 +588,94 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
             </div>
           )}
         </>
+      )}
+    </div>
+  );
+}
+
+// ─── Session Changes Tray (Pillar-style) ─────────────────────────────────────
+
+const ENTITY_ICONS: Record<string, string> = {
+  issue: '🐛', idea: '💡', backlog: '📋', 'roadmap item': '📋', epic: '🏔',
+  changelog: '📝', 'brain note': '🧠', velocity: '📊', 'project state': '⚙️',
+  milestone: '🎯', release: '🚀', session: '📅',
+};
+
+const ACTION_COLORS: Record<string, string> = {
+  created: 'text-emerald-400',
+  updated: 'text-blue-400',
+  deleted: 'text-red-400',
+  resolved: 'text-violet-400',
+};
+
+function SessionChangesTray({ changes }: { changes: SessionEntityChange[] }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  // Group by entity type
+  const byType = useMemo(() => {
+    const map = new Map<string, SessionEntityChange[]>();
+    for (const c of changes) {
+      const key = c.entityType;
+      if (!map.has(key)) map.set(key, []);
+      map.get(key)!.push(c);
+    }
+    return map;
+  }, [changes]);
+
+  const created = changes.filter(c => c.action === 'created').length;
+  const updated = changes.filter(c => c.action === 'updated').length;
+  const resolved = changes.filter(c => c.action === 'resolved').length;
+  const deleted = changes.filter(c => c.action === 'deleted').length;
+
+  const summaryParts: string[] = [];
+  if (created) summaryParts.push(`${created} created`);
+  if (updated) summaryParts.push(`${updated} updated`);
+  if (resolved) summaryParts.push(`${resolved} resolved`);
+  if (deleted) summaryParts.push(`${deleted} deleted`);
+
+  return (
+    <div className="border-t border-border/60 flex-shrink-0">
+      {/* Header */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between px-3 py-1.5 hover:bg-surface-2/50 transition-colors"
+      >
+        <div className="flex items-center gap-2">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
+          <span className="text-[10px] font-medium text-text-secondary">
+            {changes.length} change{changes.length !== 1 ? 's' : ''} this session
+          </span>
+          <span className="text-[9px] text-text-tertiary">{summaryParts.join(' · ')}</span>
+        </div>
+        <span className={`text-text-tertiary text-[9px] transition-transform ${isOpen ? 'rotate-180' : ''}`}>▾</span>
+      </button>
+
+      {/* Expanded panel */}
+      {isOpen && (
+        <div className="max-h-[30vh] overflow-y-auto px-1 pb-1.5">
+          {[...byType.entries()].map(([type, items]) => (
+            <div key={type}>
+              {/* Type header */}
+              <div className="flex items-center gap-1.5 px-2 py-0.5">
+                <span className="text-[10px]">{ENTITY_ICONS[type] || '📦'}</span>
+                <span className="text-[9px] text-text-tertiary uppercase tracking-wider">{type}</span>
+                <span className="text-[9px] text-text-tertiary">({items.length})</span>
+              </div>
+              {/* Change rows */}
+              {items.map(c => (
+                <div key={c.id} className="flex items-center gap-1.5 px-2 py-1 mx-1 rounded hover:bg-surface-2/40 transition-colors">
+                  <span className={`text-[9px] font-medium flex-shrink-0 ${ACTION_COLORS[c.action] || 'text-text-tertiary'}`}>
+                    {c.action}
+                  </span>
+                  {c.entityId && (
+                    <span className="text-[8px] font-mono text-text-tertiary flex-shrink-0">{c.entityId}</span>
+                  )}
+                  <span className="text-[10px] text-text-secondary truncate">{c.title}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       )}
     </div>
   );
@@ -1185,30 +1279,135 @@ function RichToolCard({ toolCall }: { toolCall: ToolCallEvent }) {
   );
 }
 
-// ── Active Tool Call (streaming) ─────────────────────────────────────────────
+// ── Agent Activity Panel (streaming) ─────────────────────────────────────────
 
-function ToolCallPill({ toolCall }: { toolCall: ToolCallEvent }) {
-  const meta = getToolMeta(toolCall.name);
-  const isRunning = toolCall.status === 'running';
+function getToolContext(tc: ToolCallEvent): string {
+  // Extract meaningful context from tool name and arguments
+  try {
+    const args = tc.arguments ? JSON.parse(tc.arguments) : {};
+    if (tc.name === 'read_project_file' || tc.name === 'read_file') return args.path || args.file || '';
+    if (tc.name === 'search_code' || tc.name === 'search_codebase') return `"${args.query || args.pattern || ''}"`;
+    if (tc.name === 'git_status' || tc.name === 'git_diff' || tc.name === 'git_log') return '';
+    if (tc.name?.startsWith('list_')) return '';
+    if (tc.name?.startsWith('create_') || tc.name === 'capture_idea') return args.title || '';
+    if (tc.name?.startsWith('update_') || tc.name === 'resolve_issue') return args.id || '';
+    if (tc.name === 'add_changelog_entry') return args.title || '';
+    if (tc.name === 'add_brain_note') return args.content?.substring(0, 60) || '';
+    return args.id || args.title || '';
+  } catch { return ''; }
+}
+
+function getToolStatusText(tc: ToolCallEvent): string {
+  const name = tc.name || '';
+  if (name.startsWith('read_') || name === 'search_code' || name === 'search_codebase') return 'Reading';
+  if (name.startsWith('list_')) return 'Querying';
+  if (name.startsWith('create_') || name === 'capture_idea' || name === 'add_changelog_entry' || name === 'add_brain_note') return 'Creating';
+  if (name.startsWith('update_') || name === 'resolve_issue') return 'Updating';
+  if (name.startsWith('delete_')) return 'Deleting';
+  if (name.startsWith('git_')) return 'Checking';
+  return 'Running';
+}
+
+function AgentActivityPanel({ toolCalls, isThinking }: { toolCalls: ToolCallEvent[]; isThinking: boolean }) {
+  const completed = toolCalls.filter(tc => tc.status === 'complete');
+  const running = toolCalls.filter(tc => tc.status === 'running');
+  const errored = toolCalls.filter(tc => tc.status === 'error');
+
+  // Determine the current phase
+  const currentAction = running.length > 0
+    ? `${getToolStatusText(running[0])}...`
+    : isThinking ? 'Thinking...' : 'Processing...';
 
   return (
-    <div className={`flex items-center gap-2 px-2.5 py-1.5 rounded-lg text-[10px] ${
-      isRunning ? 'bg-accent-blue/5 border border-accent-blue/20' : 'bg-surface-2/30 border border-border/40'
-    }`}>
-      {isRunning ? (
+    <div className="border border-border/40 rounded-lg bg-surface-2/20 overflow-hidden">
+      {/* Status header */}
+      <div className="flex items-center gap-2 px-2.5 py-1.5 border-b border-border/20">
         <div className="w-3 h-3 border-[1.5px] border-accent-blue border-t-transparent rounded-full animate-spin" />
-      ) : toolCall.status === 'error' ? (
-        <span className="text-accent-red text-xs">✕</span>
-      ) : (
-        <span className="text-sm">{meta.icon}</span>
+        <span className="text-[10px] font-medium text-text-secondary">{currentAction}</span>
+        {toolCalls.length > 0 && (
+          <span className="text-[9px] text-text-tertiary ml-auto">
+            Step {completed.length + (running.length > 0 ? 1 : 0)}{running.length > 0 ? ` of ${toolCalls.length}+` : ''}
+          </span>
+        )}
+      </div>
+
+      {/* Tool call list */}
+      {toolCalls.length > 0 && (
+        <div className="px-1.5 py-1 space-y-0.5 max-h-48 overflow-y-auto">
+          {toolCalls.map(tc => {
+            const meta = getToolMeta(tc.name);
+            const context = getToolContext(tc);
+            const isRunning = tc.status === 'running';
+            const isError = tc.status === 'error';
+            const isComplete = tc.status === 'complete';
+
+            return (
+              <div key={tc.id} className={`flex items-center gap-1.5 px-1.5 py-1 rounded transition-colors ${
+                isRunning ? 'bg-accent-blue/5' : ''
+              }`}>
+                {/* Status icon */}
+                {isRunning ? (
+                  <div className="w-3 h-3 border-[1.5px] border-accent-blue border-t-transparent rounded-full animate-spin flex-shrink-0" />
+                ) : isError ? (
+                  <span className="text-accent-red text-[10px] flex-shrink-0 w-3 text-center">✕</span>
+                ) : isComplete ? (
+                  <span className="text-emerald-400 text-[10px] flex-shrink-0 w-3 text-center">✓</span>
+                ) : (
+                  <span className="text-text-tertiary text-[10px] flex-shrink-0 w-3 text-center">·</span>
+                )}
+
+                {/* Tool label */}
+                <span className={`text-[10px] flex-shrink-0 ${isRunning ? 'text-text-secondary font-medium' : 'text-text-tertiary'}`}>
+                  {tc.friendly_name || meta.label}
+                </span>
+
+                {/* Context (file path, query, entity id) */}
+                {context && (
+                  <span className={`text-[9px] font-mono truncate ${isRunning ? 'text-accent-blue/70' : 'text-text-tertiary/60'}`}>
+                    {context}
+                  </span>
+                )}
+              </div>
+            );
+          })}
+        </div>
       )}
-      <span className="font-medium text-text-secondary">{toolCall.friendly_name || meta.label}</span>
-      {isRunning && <span className="text-[8px] text-accent-blue ml-auto animate-pulse">running</span>}
     </div>
   );
 }
 
 // ─── Stream Event Handler ────────────────────────────────────────────────────
+
+/** Extract entity changes from a completed tool call result */
+function extractSessionChange(tc: { name: string; arguments?: string; result?: string }): SessionEntityChange | null {
+  const name = tc.name || '';
+  // Only track mutating operations
+  const isCreate = name.startsWith('create_') || name === 'capture_idea' || name === 'add_changelog_entry' || name === 'add_brain_note';
+  const isUpdate = name.startsWith('update_') || name === 'resolve_issue' || name === 'publish_release';
+  const isDelete = name.startsWith('delete_');
+  if (!isCreate && !isUpdate && !isDelete) return null;
+
+  try {
+    const result = tc.result ? JSON.parse(tc.result) : {};
+    if (result.duplicate) return null; // Dedup prevented — not a real change
+
+    const entity = result.created || result.updated || result.resolved || result.deleted || result.published;
+    if (!entity) return null;
+
+    const action = isCreate ? 'created' : isDelete ? 'deleted' : name === 'resolve_issue' ? 'resolved' : 'updated';
+    const entityType = name.replace(/^(create_|update_|delete_|resolve_|publish_|add_|capture_)/, '').replace(/_/g, ' ');
+
+    return {
+      id: `sc-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      action,
+      entityType,
+      entityId: entity.id || '',
+      title: entity.title || entity.content?.substring(0, 60) || entity.id || 'Unknown',
+      toolName: name,
+      timestamp: new Date().toISOString(),
+    };
+  } catch { return null; }
+}
 
 function handleStreamEvent(
   event: any,
@@ -1217,6 +1416,7 @@ function handleStreamEvent(
   setContent: (c: string) => void,
   setToolCalls: (tc: ToolCallEvent[]) => void,
   setConvoId: (id: string | null) => void,
+  addSessionChange?: (change: SessionEntityChange) => void,
 ) {
   switch (event.type) {
     case 'status':
@@ -1233,6 +1433,7 @@ function handleStreamEvent(
           id: event.tool_call.id,
           name: event.tool_call.name,
           friendly_name: event.tool_call.friendly_name,
+          arguments: event.tool_call.arguments,
           status: 'running',
         });
         setToolCalls(currentToolCalls);
@@ -1249,6 +1450,16 @@ function handleStreamEvent(
             status: 'complete',
           };
           setToolCalls(currentToolCalls);
+
+          // Extract session change for the tray
+          if (addSessionChange) {
+            const change = extractSessionChange({
+              name: currentToolCalls[idx].name,
+              arguments: event.tool_call.arguments,
+              result: event.tool_call.result,
+            });
+            if (change) addSessionChange(change);
+          }
         }
       }
       break;

@@ -45,6 +45,7 @@ import codebaseRoutes from './routes/codebase.js';
 import gitRoutes from './routes/git.js';
 import aiRoutes from './routes/ai.js';
 import initRoutes from './routes/init.js';
+import auditsRoutes from './routes/audits.js';
 
 // ─── Parse CLI flags ────────────────────────────────────────────────────────
 
@@ -118,6 +119,7 @@ app.route('/api/v1/codebase', codebaseRoutes);
 app.route('/api/v1/git', gitRoutes);
 app.route('/api/v1/ai', aiRoutes);
 app.route('/api/v1/init', initRoutes);
+app.route('/api/v1/audits', auditsRoutes);
 
 // Backward compat: /api/v1/backlog → /api/v1/roadmap
 app.route('/api/v1/backlog', roadmapRoutes);

@@ -81,14 +81,19 @@ export const issueTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'update_issue',
-        description: 'Update an issue (status, severity, symptoms, root_cause, notes)',
+        description: 'Update an issue. Can set any field. When setting status to "resolved", also provide resolution text.',
         parameters: { type: 'object', properties: {
           id: { type: 'string', description: 'Issue ID (e.g., ISS-007)' },
           status: { type: 'string', enum: ['open', 'in_progress', 'resolved'] },
           severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low'] },
           symptoms: { type: 'string' },
           root_cause: { type: 'string' },
+          resolution: { type: 'string', description: 'How it was fixed (required when resolving)' },
           notes: { type: 'string' },
+          type: { type: 'string' },
+          files: { type: 'array', items: { type: 'string' } },
+          roadmap_item: { type: 'string' },
+          tags: { type: 'array', items: { type: 'string' } },
         }, required: ['id'] },
       }},
       label: 'Updating issue',
@@ -96,8 +101,17 @@ export const issueTools: ToolModule = {
         const store = getStore();
         const issue = (store.issues.issues || []).find((i: any) => i.id === args.id);
         if (!issue) return { error: `Issue ${args.id} not found` };
-        for (const key of ['status', 'severity', 'symptoms', 'root_cause', 'notes']) {
+        const updatable = ['status', 'severity', 'symptoms', 'root_cause', 'resolution', 'notes', 'type', 'files', 'roadmap_item', 'tags'];
+        for (const key of updatable) {
           if (args[key] !== undefined) (issue as any)[key] = args[key];
+        }
+        // Auto-set resolved date when status changes to resolved
+        if (args.status === 'resolved' && !(issue as any).resolved) {
+          (issue as any).resolved = new Date().toISOString().split('T')[0];
+        }
+        // Clear resolved date if reopening
+        if (args.status === 'open') {
+          (issue as any).resolved = null;
         }
         store.saveIssues();
         return { updated: issue };

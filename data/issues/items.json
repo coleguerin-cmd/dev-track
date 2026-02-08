@@ -53,7 +53,7 @@
       "id": "ISS-003",
       "title": "Integration plugins untested with real API keys",
       "status": "open",
-      "severity": "medium",
+      "severity": "low",
       "type": "bug",
       "symptoms": "All 8 plugins have testConnection() methods but none have been called with real credentials.",
       "root_cause": "No credentials configured during initial build",
@@ -70,7 +70,7 @@
       "discovered": "2026-02-07",
       "discovered_by": "user",
       "resolved": null,
-      "notes": "Nightly audit #2 (Feb 9): Still open, no progress since last audit. Helicone still FAILING (last tested Feb 8 01:56 UTC). GitHub still passing (last tested Feb 7). 6 plugins still unconfigured. This issue has been open since Feb 7 with no resolution movement. Helicone failure blocks AI cost tracking which blocks responsible dogfooding. The credential sync fix (ISS-015) was applied but didn't resolve the underlying Helicone test failure. Next step: manually investigate Helicone API response to determine if it's a credential issue, endpoint issue, or configuration issue."
+      "notes": "Nightly audit #2 (Feb 9): Still open, no progress since last audit. Helicone still FAILING (last tested Feb 8 01:56 UTC). GitHub still passing (last tested Feb 7). 6 plugins still unconfigured. This issue has been open since Feb 7 with no resolution movement. Helicone failure blocks AI cost tracking which blocks responsible dogfooding. The credential sync fix (ISS-015) was applied but didn't resolve the underlying Helicone test failure. Next step: manually investigate Helicone API response to determine if it's a credential issue, endpoint issue, or configuration issue.\n\nISS-022 MERGED: Helicone shows $0 cost for Claude Opus 4.6 requests (49 requests at $0.00). Landmark project using Sonnet shows costs correctly. Root cause likely: Opus 4.6 missing from Helicone pricing database. Also 32 requests show n/a provider. This is the same underlying Helicone integration issue."
     },
     {
       "id": "ISS-004",
@@ -492,13 +492,13 @@
       "tags": [],
       "discovered": "2026-02-08",
       "discovered_by": "session-7",
-      "resolved": null,
+      "resolved": "2026-02-08",
       "notes": null
     },
     {
       "id": "ISS-022",
       "title": "Helicone shows $0 cost for Claude Opus 4.6 requests",
-      "status": "open",
+      "status": "resolved",
       "severity": "medium",
       "type": "bug",
       "symptoms": "Helicone dashboard shows 49 Claude Opus 4.6 requests at $0.00 cost. Landmark project (using Sonnet) shows costs correctly. Opus 4.6 likely missing from Helicone pricing database. Also 32 requests show n/a provider.",
@@ -515,10 +515,9 @@
       "tags": [],
       "discovered": "2026-02-08",
       "discovered_by": "session-7",
-      "resolved": null,
+      "resolved": "2026-02-08",
       "notes": null
-    }
-    ,
+    },
     {
       "id": "ISS-023",
       "title": "Roadmap items can't be expanded — ellipsis click does nothing",
@@ -526,20 +525,22 @@
       "severity": "high",
       "type": "bug",
       "symptoms": "Every roadmap item shows an ellipsis (…) at the end, but clicking it does nothing. No expand, no detail panel, no action. User can't see the full card content, acceptance criteria, related issues, or any detail beyond the one-line summary.",
-      "resolution": "Completely rewrote BacklogCard expanded section. Cards now show full summary, metadata grid (type, epic, milestone, spawned_from, assignee, estimated sessions), related issues, dependencies, design doc, tags, acceptance criteria, AI notes, and timestamps. Expand/collapse indicator (▸/▾) added to every card. Cursor pointer added.",
+      "resolution": "Completely rewrote BacklogCard expanded section. Cards now show full summary, metadata grid (type, epic, milestone, spawned_from, assignee, estimated sessions), related issues, dependencies, design doc, tags, acceptance criteria, AI notes, and timestamps. Expand/collapse indicator added to every card. Cursor pointer added.",
       "resolved": "2026-02-08",
       "root_cause": "Roadmap view likely missing expand/detail panel implementation. Cards may have truncated text with ellipsis CSS but no click handler or detail modal.",
-      "resolution": null,
-      "files": ["ui/src/views/Backlog.tsx"],
+      "files": [
+        "ui/src/views/Backlog.tsx"
+      ],
       "roadmap_item": null,
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "assignee": null,
-      "tags": ["ui"],
+      "tags": [
+        "ui"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
-      "resolved": null,
       "notes": "User needs to see full card content including summary, related issues, epics, acceptance criteria. Cards need expandable detail view like other entity views."
     },
     {
@@ -551,13 +552,20 @@
       "symptoms": "There is no visible running log of what has been changed, by whom, and when. The activity feed exists in data/activity/feed.json but nothing in the UI displays it. User can't see what DevTrack AI changed vs what they changed vs what was an external code change. Critical for trust in AI operations.",
       "root_cause": "Activity feed was built as server-side data (feed.json) but no UI view or sidebar component was created to display it. Provenance system (who made the change) also not implemented.",
       "resolution": "Built Activity Log as a tab in the right sidebar (ChatSidebar.tsx). Landmark-style timeline with: date grouping (Today/Yesterday/date), colored timeline dots per event type, actor provenance badges (You/DevTrack/Automation/External), entity type + ID chips, metadata display (trigger type, duration, severity, horizon), filters by actor (All/User/DevTrack/System) and entity type. Polls every 15s for live updates. Skeleton loading states.",
-      "files": ["ui/src/components/ChatSidebar.tsx", "data/activity/feed.json"],
+      "files": [
+        "ui/src/components/ChatSidebar.tsx",
+        "data/activity/feed.json"
+      ],
       "roadmap_item": "activity-log-ui",
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "assignee": null,
-      "tags": ["ui", "trust", "provenance"],
+      "tags": [
+        "ui",
+        "trust",
+        "provenance"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "resolved": "2026-02-08",
@@ -572,19 +580,25 @@
       "symptoms": "Docs page shows nothing. 14 auto-generated docs exist in data/docs/ with registry.json, but the page is empty.",
       "root_cause": "UI (Docs.tsx) calls legacy endpoints (/api/v1/docs/designs, /api/v1/docs/decisions). Server has new registry-based endpoint (GET /api/v1/docs) but UI was never updated. API client (client.ts) is also missing registry methods. Classic v1→v2 migration gap.",
       "resolution": "Rewrote Docs.tsx to use registry API. Added full docs CRUD methods to API client. Docs now grouped by category (Guides, Systems, Design Docs), auto-selects system-overview, shows auto-generated badges.",
-      "files": ["ui/src/views/Docs.tsx", "ui/src/api/client.ts", "server/routes/docs.ts"],
+      "files": [
+        "ui/src/views/Docs.tsx",
+        "ui/src/api/client.ts",
+        "server/routes/docs.ts"
+      ],
       "roadmap_item": null,
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "assignee": null,
-      "tags": ["ui", "regression"],
+      "tags": [
+        "ui",
+        "regression"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
-      "resolved": null,
+      "resolved": "2026-02-08",
       "notes": "14 docs in registry: system-overview, getting-started, data-model-reference, api-reference, and 10 system docs. All auto-generated by AI. Content is in individual .md files in data/docs/. Registry tracks metadata."
-    }
-    ,
+    },
     {
       "id": "ISS-026",
       "title": "AI chat creates duplicate entities — no dedup check before create",
@@ -595,17 +609,21 @@
       "resolution": "Added dedup checks to all three AI create tools: capture_idea (ideas.ts), create_issue (issues.ts), create_backlog_item (backlog.ts). Uses title normalization + word overlap (70% threshold) + containment matching. Returns duplicate flag with existing entity details so the AI gets clear guidance to use update instead.",
       "resolved": "2026-02-08",
       "root_cause": "AI tool executors call store.push() without checking for duplicates. The AI itself doesn't always remember what it just created within the same conversation turn.",
-      "resolution": null,
-      "files": ["server/ai/tools/ideas.ts", "server/ai/tools/"],
+      "files": [
+        "server/ai/tools/ideas.ts",
+        "server/ai/tools/"
+      ],
       "roadmap_item": "brain-note-dedup",
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "assignee": null,
-      "tags": ["ai", "dedup"],
+      "tags": [
+        "ai",
+        "dedup"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
-      "resolved": null,
       "notes": "User noticed during DevTrack AI conversation. IDEA-048 and IDEA-049 are identical. Tool-level dedup needed — check title similarity before creating. Also needs conversation-level awareness (the AI called create_idea twice in the same response)."
     },
     {
@@ -618,17 +636,21 @@
       "resolution": "Built rich tool call tray in ChatSidebar. Create ops show entity cards with ID, severity/priority badges, title, description. List ops show item counts with expandable entity rows. Update/resolve ops show entity changes. Duplicate prevention shows warning cards. All tool results persist with messages (toolResults field). Default fallback for unknown tools. Streaming pills show live status.",
       "resolved": "2026-02-08",
       "root_cause": "ChatSidebar.tsx shows tool call names but doesn't render rich results. Tool call results are raw JSON, not interactive cards. No navigation from chat to the created entity.",
-      "resolution": null,
-      "files": ["ui/src/components/ChatSidebar.tsx"],
+      "files": [
+        "ui/src/components/ChatSidebar.tsx"
+      ],
       "roadmap_item": null,
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "assignee": null,
-      "tags": ["ui", "chat", "ux"],
+      "tags": [
+        "ui",
+        "chat",
+        "ux"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
-      "resolved": null,
       "notes": "User: 'it added the idea which was amazing but it didn't show me that it added it... we really need that tray from Pillar style wired in here.' This is IDEA-019 (rich tool call tray) — should be promoted to roadmap as a high-priority item. Reference Pillar's SidebarChat tray system."
     },
     {
@@ -641,17 +663,21 @@
       "resolution": "Added timestamps to: Backlog cards (created, modified, started, completed in expanded view), Issues detail panel (discovered + resolved dates), Ideas detail panel (created + modified dates). Priority badges also added to Ideas detail.",
       "resolved": "2026-02-08",
       "root_cause": "UI card components were built for minimal display. Timestamps exist in data but aren't rendered.",
-      "resolution": null,
-      "files": ["ui/src/views/Backlog.tsx", "ui/src/views/Ideas.tsx", "ui/src/views/Issues.tsx"],
+      "files": [
+        "ui/src/views/Backlog.tsx",
+        "ui/src/views/Ideas.tsx",
+        "ui/src/views/Issues.tsx"
+      ],
       "roadmap_item": null,
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "assignee": null,
-      "tags": ["ui"],
+      "tags": [
+        "ui"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
-      "resolved": null,
       "notes": "User wants: created date, last modified date, and modifier label (User, DevTrack AI model name, External) on all entity cards. Ties into entity-provenance roadmap item."
     },
     {
@@ -664,11 +690,19 @@
       "resolution": "Refactored ideas.ts to use the store (store.ideas + store.saveIdeas()). Added store.markWrite() calls to brain.ts writeJSON wrapper and profiles.ts write operations. All AI tool writes now go through proper write tracking.",
       "resolved": "2026-02-08",
       "root_cause": "ideas.ts, brain.ts, profiles.ts were created before the unified store system and used direct fs.writeFileSync calls that bypassed the watcher debounce mechanism.",
-      "files": ["server/ai/tools/ideas.ts", "server/ai/tools/brain.ts", "server/ai/tools/profiles.ts"],
+      "files": [
+        "server/ai/tools/ideas.ts",
+        "server/ai/tools/brain.ts",
+        "server/ai/tools/profiles.ts"
+      ],
       "backlog_item": null,
       "action_id": null,
       "assignee": null,
-      "tags": ["architecture", "automations", "feedback-loop"],
+      "tags": [
+        "architecture",
+        "automations",
+        "feedback-loop"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "notes": "Ticking time bomb — would have caused infinite loops the moment a file_changed automation was added."
@@ -683,11 +717,16 @@
       "resolution": "Fixed AutomationItem interface to define trigger as string. Updated trigger badge rendering to read the string directly with proper color coding per trigger type (blue for scheduled, purple for session_ended, green for item_completed, etc.).",
       "resolved": "2026-02-08",
       "root_cause": "AutomationItem interface in Settings.tsx defined trigger as { type: string; event?: string } but the API returns automations with trigger as a plain string from the data file.",
-      "files": ["ui/src/views/Settings.tsx"],
+      "files": [
+        "ui/src/views/Settings.tsx"
+      ],
       "backlog_item": null,
       "action_id": null,
       "assignee": null,
-      "tags": ["ui", "settings"],
+      "tags": [
+        "ui",
+        "settings"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "notes": null
@@ -702,11 +741,16 @@
       "resolution": null,
       "resolved": null,
       "root_cause": "Engine was built with sequential execution per trigger fire. Concurrent execution would require tracking running count across multiple fire() calls and deferring excess automations.",
-      "files": ["server/automation/engine.ts"],
+      "files": [
+        "server/automation/engine.ts"
+      ],
       "backlog_item": null,
       "action_id": null,
       "assignee": null,
-      "tags": ["automations", "settings"],
+      "tags": [
+        "automations",
+        "settings"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "notes": "Marked as 'coming soon' in UI. Low priority since cooldown already prevents overlap."
@@ -721,11 +765,17 @@
       "resolution": "Added immediate API call (PUT /ai/config) after updating local state in resetBudget() so the change persists without requiring a separate save.",
       "resolved": "2026-02-08",
       "root_cause": "resetBudget() only called setConfig(updated) without any fetch() to persist.",
-      "files": ["ui/src/views/Settings.tsx"],
+      "files": [
+        "ui/src/views/Settings.tsx"
+      ],
       "backlog_item": null,
       "action_id": null,
       "assignee": null,
-      "tags": ["ui", "settings", "budget"],
+      "tags": [
+        "ui",
+        "settings",
+        "budget"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "notes": null
@@ -740,11 +790,19 @@
       "resolution": "Added dedup checks to all three create tools (capture_idea, create_issue, create_backlog_item) using title normalization and word overlap matching. Returns existing entity instead of creating duplicate.",
       "resolved": "2026-02-08",
       "root_cause": "Tool side-effects (entity creation) are not transactional with the conversation stream. If the stream dies after tool execution but before message_complete, entities are orphaned and retries create duplicates.",
-      "files": ["server/ai/tools/ideas.ts", "server/ai/tools/issues.ts", "server/ai/tools/backlog.ts"],
+      "files": [
+        "server/ai/tools/ideas.ts",
+        "server/ai/tools/issues.ts",
+        "server/ai/tools/backlog.ts"
+      ],
       "backlog_item": null,
       "action_id": null,
       "assignee": null,
-      "tags": ["ai", "chat", "data-integrity"],
+      "tags": [
+        "ai",
+        "chat",
+        "data-integrity"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "notes": "Root cause is architectural — tool calls execute before the response stream completes. Dedup is a mitigation, not a fix. True fix would be transactional tool execution."
@@ -753,23 +811,129 @@
       "id": "ISS-034",
       "title": "File watcher only fires generic file_changed — no semantic triggers from data edits",
       "status": "open",
-      "severity": "high",
+      "severity": "critical",
       "type": "architecture",
       "symptoms": "When data files are edited directly (Cursor, manual JSON edit, another AI), the file watcher detects the change but only fires a generic file_changed trigger. No typed triggers (session_ended, issue_created, item_completed) fire. This means automations like session-end-audit only work when changes go through the API routes, not when data is edited externally. Session 8 was closed by editing JSON directly and the session-end-audit never fired.",
       "root_cause": "The watcher (chokidar) sees file changes but doesn't diff before/after state. It can't distinguish 'session log changed because a session ended' from 'session log changed because someone edited a typo'. Typed triggers are only fired from API route handlers, creating a code-path dependency for automation.",
       "resolution": null,
-      "files": ["server/watcher.ts", "server/automation/engine.ts"],
+      "files": [
+        "server/watcher.ts",
+        "server/automation/engine.ts"
+      ],
       "roadmap_item": "ai-watcher",
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "assignee": null,
-      "tags": ["architecture", "automation", "watcher"],
+      "tags": [
+        "architecture",
+        "automation",
+        "watcher"
+      ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "resolved": null,
       "notes": "Fix: semantic file watcher that diffs entity state before/after changes and fires typed triggers. On session/log.json change: check if any session went active→completed → fire session_ended. On issues/items.json change: check for new issues → fire issue_created, check for status changes → fire issue_resolved. This makes triggers code-path-independent — works regardless of whether change came from API, Cursor, or direct file edit."
+    },
+    {
+      "id": "ISS-035",
+      "title": "AI Configuration settings don't persist — Save Changes button doesn't work",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": null,
+      "symptoms": "In Settings > AI Configuration tab, changing settings (cooldown minutes, pause at budget toggle, etc.) and clicking \"Save Changes\" appears to work (no error), but settings don't persist. Refresh the page and the old values are back. User reported: changed cooldown and disabled \"pause at budget reached\" — neither saved.",
+      "root_cause": "Object.assign in PUT /api/v1/ai/config (server/routes/ai.ts line 111) is a shallow merge. When UI sends { automations: { cooldown_minutes: 5 } }, it REPLACES the entire automations object, wiping enabled, scheduler_enabled, triggers_enabled, etc.",
+      "files": [
+        "server/routes/ai.ts"
+      ],
+      "backlog_item": null,
+      "resolution": "Replaced Object.assign with recursive deepMerge function that preserves nested object properties. Arrays and primitives are replaced, objects are merged recursively.",
+      "resolved": "2026-02-08",
+      "notes": "First bug discovered live by the dev-track chat agent during browser testing. Agent investigated, found root cause, proposed two solutions. Deep merge in API route was the cleaner fix. Notable: this is the exact handoff pattern we designed — agent investigates, creates rich issue, human (or Cursor) implements the fix."
+    },
+    {
+      "id": "ISS-036",
+      "type": "ux",
+      "title": "Chat agent suggests code edits it cannot perform — system prompt needs scope boundaries",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": null,
+      "symptoms": "When the chat agent investigates a bug (e.g. ISS-035 shallow merge), it concludes with 'Want me to implement the fix?' and proposes code changes with line numbers. The user sees a suggestion that looks actionable but the agent has no code editing tools — it can only manage DevTrack entities. This sets incorrect expectations and reduces trust.",
+      "root_cause": "System prompt in server/ai/chat.ts does not explicitly state the agent's scope boundaries. It says 'You have FULL access to the dev-track project management system through tools' and 'You can read any file in the project' which is accurate, but doesn't clarify that reading ≠ editing. The agent infers code editing capability from its file reading tools.",
+      "files": [
+        "server/ai/chat.ts"
+      ],
+      "backlog_item": "ai-chat-agent",
+      "resolution": "Added 'Scope & Boundaries' section to system prompt in server/ai/chat.ts. Agent now explicitly told: it's a project intelligence layer, not a code editor. Can read files but cannot edit. Must create rich entities as handoff artifacts. Must tell user to hand ISS-XXX to Cursor. Added guidance to pack maximum detail into entities and never offer code edits.",
+      "resolved": "2026-02-08",
+      "notes": "Fix: Add explicit scope boundaries to system prompt. Agent should: (1) investigate thoroughly using file reads, (2) document findings in rich issue/idea entities with root cause, affected files, and proposed solutions, (3) explicitly tell the user to hand the issue off to their coding AI (e.g. 'Give ISS-035 to Cursor for implementation'). This makes the agent a project intelligence layer, not a coding agent."
+    },
+    {
+      "id": "ISS-037",
+      "type": "ux",
+      "title": "Chat has zero process transparency — no thinking indicator, tool calls invisible during execution",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": null,
+      "symptoms": "When the chat agent processes a request, the user sees nothing happening for long periods. Can't see: (1) when it's thinking/reasoning, (2) what files it's reading, (3) what entities it's creating or updating, (4) how many tool calls are in progress. The current ToolCallPill component exists but shows minimal info — just a running spinner with tool friendly name. No step counter, no progress indication, no intermediate results visible.",
+      "root_cause": "ChatSidebar.tsx renders activeToolCalls as simple pills (lines 527-533) during streaming, but doesn't show: thinking states between tool batches, file names being read, entity IDs being created/updated, step progress (e.g. 'Step 3 of 8'). The SSE stream already sends tool_call_start and tool_call_result events with full data — the frontend just doesn't render the detail.",
+      "files": [
+        "ui/src/components/ChatSidebar.tsx"
+      ],
+      "backlog_item": "ai-chat-agent",
+      "resolution": "Replaced ToolCallPill with AgentActivityPanel component. Shows: status header with current action (Investigating/Reading/Creating/Thinking), step counter (Step 3 of 8+), each tool call as a row with checkmark/spinner/error, contextual detail (file paths, entity IDs, search queries). Scrollable for many tool calls.",
+      "resolved": "2026-02-08",
+      "notes": "Fix: (1) Add 'Investigating...' / 'Reading files...' / 'Creating issue...' status text based on active tool names, (2) Show step counter when multiple tools are running, (3) Show file paths being read inline, (4) Show entity mutations (created ISS-035, updated roadmap) as they happen. Reference: Cursor's tool call rendering pattern."
+    },
+    {
+      "id": "ISS-038",
+      "type": "ux",
+      "title": "Chat sidebar missing Pillar-style changes tray — no session-level entity mutation tracking",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": null,
+      "symptoms": "When the chat agent creates/updates/deletes entities during a conversation, there's no persistent session-level view of what changed. Tool results are shown inline in messages but scroll away. No way to see at a glance: 'this session created 2 issues, updated 3 roadmap items, and added 1 idea'. The Audits tab tracks automation changes, but interactive chat changes have no equivalent tray.",
+      "root_cause": "ChatSidebar.tsx has no session-level change tracking state. Tool results are attached to individual messages (toolResults array on ChatMessage) but not aggregated into a session-wide changes view. Pillar's SessionActivityTray.tsx (apps/web/src/components/work/SessionActivityTray.tsx) solves this with a collapsible tray that groups changes by source and time, with entity icons, action labels, expandable field-level detail, and before→after diffs.",
+      "files": [
+        "ui/src/components/ChatSidebar.tsx"
+      ],
+      "backlog_item": "ai-chat-agent",
+      "resolution": "Built SessionChangesTray component in ChatSidebar.tsx. Collapsible tray above input area shows session-level entity mutations grouped by type (issue, idea, roadmap item, etc.) with action colors (created=green, updated=blue, resolved=violet). extractSessionChange() parses tool results from SSE stream in real-time. Clears on new conversation. Modeled after Pillar's SessionActivityTray.",
+      "resolved": "2026-02-08",
+      "notes": "Implementation plan: Port Pillar's SessionActivityTray pattern. Key components: (1) useSessionChanges hook to accumulate mutations from tool_call_result events, (2) ChangeGroup objects grouping by message, (3) Collapsible tray above input area showing entity icon + name + action label + expandable detail, (4) Auto-expand when new changes arrive. DevTrack entity types: epic, roadmap_item, issue, idea, changelog, brain_note, velocity, project_state. Reference: c:\\Users\\realk\\Projects\\pillar\\apps\\web\\src\\components\\work\\SessionActivityTray.tsx"
+    },
+    {
+      "id": "ISS-039",
+      "type": "bug",
+      "title": "Every WebSocket event remounts the entire active view — destroys all internal state",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "critical",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": null,
+      "symptoms": "Any async update (file save, WebSocket event, chat streaming, automation trigger) causes the current page to reset. Settings jumps from AI Configuration tab back to Profile. Expanded items collapse. Scroll position resets. The entire app feels broken and unstable. User thought settings weren't saving — they were, but the view remounted before the user could see it.",
+      "root_cause": "App.tsx line 33: setRefreshKey(k => k + 1) fires on EVERY WebSocket event. Every view component uses key={refreshKey}, which tells React to unmount and remount the entire component tree from scratch. This destroys all internal state: useState values, scroll position, expanded/collapsed sections, active tabs. The file watcher fires WS events on every data file change, so any save/update/automation causes a full view reset.",
+      "files": [
+        "ui/src/App.tsx"
+      ],
+      "backlog_item": null,
+      "resolution": "Removed the setRefreshKey increment from the WS handler and removed key={refreshKey} from all view components. Views now persist their internal state across WS events. Views that need live data should manage their own data freshness (polling, WS subscriptions) rather than being force-remounted.",
+      "resolved": "2026-02-08",
+      "notes": "This was a foundational architecture bug — the refreshKey pattern was a quick hack for live data that made the entire app feel broken. The correct pattern is for each view to manage its own data lifecycle. Some views (Dashboard, Activity) might want to poll on an interval; others (Settings) should only fetch on mount and user action."
     }
   ],
-  "next_id": 35
+  "next_id": 40
 }

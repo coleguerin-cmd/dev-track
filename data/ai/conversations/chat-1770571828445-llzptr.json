@@ -1,0 +1,21 @@
+{
+  "id": "chat-1770571828445-llzptr",
+  "title": "Hello! List 3 of your tools.",
+  "messages": [
+    {
+      "id": "msg-1770571828446",
+      "role": "user",
+      "content": "Hello! List 3 of your tools.",
+      "timestamp": "2026-02-08T17:30:28.446Z"
+    },
+    {
+      "id": "msg-1770571833487",
+      "role": "assistant",
+      "content": "Here are 3 of my tools:\n\n1. **`create_backlog_item`** — Create new backlog items with title, summary, horizon (now/next/later), size (S/M/L/XL), category, tags, and dependencies.\n\n2. **`read_project_file`** — Read any file from the project directory to examine source code, configs, or documentation. Can specify offset and max lines for large files.\n\n3. **`add_brain_note`** — Add persistent observations, suggestions, warnings, decisions, preferences, or reminders with priority levels and related item references.\n\nI have **50+ tools** total covering backlog management, issues, changelog, ideas, codebase analysis, git operations, documentation, sessions, metrics, and more. Want to see more, or ready to dive into something specific?",
+      "timestamp": "2026-02-08T17:30:33.487Z"
+    }
+  ],
+  "model": null,
+  "created": "2026-02-08T17:30:28.445Z",
+  "updated": "2026-02-08T17:30:33.487Z"
+}

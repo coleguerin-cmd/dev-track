@@ -172,6 +172,28 @@ export const automations = {
   remove: (id: string) => request<any>(`/automations/${id}`, { method: 'DELETE' }),
 };
 
+// ─── Audits ─────────────────────────────────────────────────────────────
+
+export const audits = {
+  list: (params?: { trigger_type?: string; status?: string; automation_id?: string; since?: string; limit?: number; offset?: number }) => {
+    const qs = new URLSearchParams();
+    if (params?.trigger_type) qs.set('trigger_type', params.trigger_type);
+    if (params?.status) qs.set('status', params.status);
+    if (params?.automation_id) qs.set('automation_id', params.automation_id);
+    if (params?.since) qs.set('since', params.since);
+    if (params?.limit) qs.set('limit', String(params.limit));
+    if (params?.offset) qs.set('offset', String(params.offset));
+    return request<any>(`/audits?${qs}`);
+  },
+  get: (id: string) => request<any>(`/audits/${id}`),
+  stats: () => request<any>('/audits/stats'),
+  updateSuggestion: (runId: string, suggestionId: string, status: 'approved' | 'dismissed') =>
+    request<any>(`/audits/${runId}/suggestions/${suggestionId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ status }),
+    }),
+};
+
 // ─── Activity Feed ──────────────────────────────────────────────────────────
 
 export const activity = {

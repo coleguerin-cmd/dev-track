@@ -49,13 +49,13 @@
     "triggers_enabled": true,
     "default_model_tier": "standard",
     "max_concurrent": 2,
-    "cooldown_minutes": 60
+    "cooldown_minutes": 30
   },
   "budget": {
-    "daily_limit_usd": 10,
+    "daily_limit_usd": 13,
     "warn_at_usd": 7,
-    "pause_on_limit": true,
-    "total_spent_usd": 2.821368,
+    "pause_on_limit": false,
+    "total_spent_usd": 5.467569000000001,
     "last_reset": "2026-02-08"
   },
   "defaults": {

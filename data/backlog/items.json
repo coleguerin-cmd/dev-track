@@ -431,6 +431,23 @@
       "updated": "2026-02-08",
       "completed": null,
       "tags": ["v0.2", "ai", "memory"]
+    },
+    {
+      "id": "analytics-dashboard",
+      "title": "Analytics dashboard — velocity charts, issue burn rate, health trends",
+      "horizon": "next",
+      "size": "M",
+      "status": "pending",
+      "category": "ui",
+      "epic_id": "ui-views",
+      "summary": "Charting view using velocity.json data. Velocity line chart (items/points per session), issue burn rate, health trend. Linear-inspired dark theme charts. All data exists — this is pure visualization. Spawned from IDEA-062.",
+      "design_doc": null,
+      "depends_on": [],
+      "assignee": null,
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": null,
+      "tags": ["v0.2", "high-impact", "linear-inspired"]
     }
   ]
 }

@@ -14,9 +14,10 @@ import {
   Settings,
   ChevronDown,
   FolderOpen,
+  Shield,
 } from 'lucide-react';
 
-type View = 'dashboard' | 'backlog' | 'systems' | 'issues' | 'ideas' | 'codebase' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
+type View = 'dashboard' | 'backlog' | 'systems' | 'issues' | 'ideas' | 'codebase' | 'audits' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
 
 interface SidebarProps {
   activeView: View;
@@ -39,6 +40,7 @@ const NAV_ITEMS: { id: View; label: string; icon: typeof LayoutDashboard; shortc
   { id: 'issues', label: 'Issues', icon: CircleDot, shortcut: 'I', group: 'main' },
   { id: 'ideas', label: 'Ideas', icon: Lightbulb, shortcut: 'E', group: 'main' },
   { id: 'codebase', label: 'Codebase', icon: Code2, shortcut: 'X', group: 'main' },
+  { id: 'audits', label: 'Audits', icon: Shield, shortcut: 'A', group: 'main' },
   { id: 'sessions', label: 'Sessions', icon: Clock, shortcut: 'S', group: 'data' },
   { id: 'changelog', label: 'Changelog', icon: GitCommitHorizontal, shortcut: 'C', group: 'data' },
   { id: 'docs', label: 'Docs', icon: FileText, shortcut: 'O', group: 'data' },

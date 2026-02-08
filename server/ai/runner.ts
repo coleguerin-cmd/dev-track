@@ -8,6 +8,7 @@
 
 import { getAIService } from './service.js';
 import { TOOL_DEFINITIONS, executeTool } from './tools/index.js';
+import type { AuditRecorder } from '../automation/recorder.js';
 
 export interface AgentOptions {
   /** Task type for model routing (default: 'deep_audit' = premium tier) */
@@ -18,6 +19,8 @@ export interface AgentOptions {
   allowedTools?: string[];
   /** Override model ID directly */
   model?: string;
+  /** Optional audit recorder to capture every step */
+  recorder?: AuditRecorder;
 }
 
 export interface AgentResult {
@@ -34,6 +37,7 @@ export async function runAgent(
   options: AgentOptions = {},
 ): Promise<AgentResult> {
   const aiService = getAIService();
+  await aiService.waitForReady(10000);
   const maxIterations = options.maxIterations ?? 20;
   const task = options.task ?? 'deep_audit';
 
@@ -50,6 +54,7 @@ export async function runAgent(
   ];
 
   const toolCallLog: AgentResult['tool_calls_made'] = [];
+  const recorder = options.recorder;
   let totalTokens = 0;
   let totalCost = 0;
 
@@ -62,6 +67,17 @@ export async function runAgent(
 
     totalTokens += result.usage?.total_tokens || 0;
     totalCost += result.estimated_cost_usd || 0;
+
+    // Record thinking step
+    if (recorder) {
+      recorder.recordThinking(
+        result.content || '',
+        result.usage ? { input: result.usage.input_tokens, output: result.usage.output_tokens } : undefined,
+        result.estimated_cost_usd,
+        result.model,
+        result.provider,
+      );
+    }
 
     // Add assistant message
     messages.push({
@@ -88,12 +104,18 @@ export async function runAgent(
         ? JSON.parse(tc.function.arguments)
         : tc.function.arguments || {};
 
+      // Record tool call
+      if (recorder) recorder.recordToolCall(fnName, fnArgs);
+
       let toolResult: string;
       try {
         toolResult = await executeTool(fnName, fnArgs);
       } catch (err: any) {
         toolResult = JSON.stringify({ error: err.message || 'Tool execution failed' });
       }
+
+      // Record tool result
+      if (recorder) recorder.recordToolResult(fnName, toolResult);
 
       toolCallLog.push({
         name: fnName,

@@ -169,6 +169,42 @@ export class Store {
     });
 
     console.log(`[store] Loaded: ${this.roadmap.items.length} roadmap items, ${this.issues.issues.length} issues, ${this.systems.systems.length} systems, ${this.epics.epics.length} epics`);
+
+    // ─── Data Integrity Validation ─────────────────────────────────────
+    this.validateIntegrity();
+  }
+
+  /** Detect and auto-repair common data integrity issues */
+  private validateIntegrity(): void {
+    let fixes = 0;
+
+    // Issues: resolved status must have resolution text and date
+    for (const issue of (this.issues.issues || []) as any[]) {
+      if (issue.status === 'resolved' && !issue.resolution) {
+        console.warn(`[store] INTEGRITY: ${issue.id} is resolved but has no resolution text`);
+      }
+      if (issue.status === 'resolved' && !issue.resolved) {
+        console.warn(`[store] INTEGRITY: ${issue.id} is resolved but has no resolved date — auto-setting`);
+        issue.resolved = issue.discovered || new Date().toISOString().split('T')[0];
+        fixes++;
+      }
+    }
+
+    // Roadmap: completed/cancelled items must be in shipped horizon
+    for (const item of (this.roadmap.items || []) as any[]) {
+      if ((item.status === 'completed' || item.status === 'cancelled') &&
+          item.horizon && item.horizon !== 'shipped') {
+        console.warn(`[store] INTEGRITY: ${item.id} is ${item.status} but horizon is "${item.horizon}" — auto-moving to shipped`);
+        item.horizon = 'shipped';
+        fixes++;
+      }
+    }
+
+    if (fixes > 0) {
+      console.log(`[store] Auto-repaired ${fixes} integrity issues`);
+      this.saveIssues();
+      this.saveRoadmap();
+    }
   }
 
   // ─── Write Methods ──────────────────────────────────────────────────────
@@ -289,6 +325,169 @@ export class Store {
   saveVelocity(): void {
     this.markWrite('metrics/velocity.json');
     writeJSON('metrics/velocity.json', this.velocity);
+  }
+
+  // ─── Audit Run Helpers ──────────────────────────────────────────────────
+
+  private ensureAuditDir(): string {
+    const dir = path.join(getDataDir(), 'audits/runs');
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    return dir;
+  }
+
+  private getAuditIndexPath(): string {
+    return path.join(getDataDir(), 'audits/index.json');
+  }
+
+  private loadAuditIndex(): import('../shared/types.js').AuditIndexData {
+    const indexPath = this.getAuditIndexPath();
+    if (fs.existsSync(indexPath)) {
+      try { return JSON.parse(fs.readFileSync(indexPath, 'utf-8')); } catch {}
+    }
+    return { runs: [], next_id: 1 };
+  }
+
+  private saveAuditIndex(index: import('../shared/types.js').AuditIndexData): void {
+    const indexPath = this.getAuditIndexPath();
+    const dir = path.dirname(indexPath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(indexPath, JSON.stringify(index, null, 2) + '\n', 'utf-8');
+  }
+
+  saveAuditRun(run: import('../shared/types.js').AuditRun): void {
+    const dir = this.ensureAuditDir();
+    const filePath = path.join(dir, `${run.id}.json`);
+    fs.writeFileSync(filePath, JSON.stringify(run, null, 2) + '\n', 'utf-8');
+
+    // Update index
+    const index = this.loadAuditIndex();
+    const entry: import('../shared/types.js').AuditRunIndex = {
+      id: run.id,
+      automation_id: run.automation_id,
+      automation_name: run.automation_name,
+      trigger_type: run.trigger.type,
+      trigger_source: run.trigger.source,
+      started_at: run.started_at,
+      ended_at: run.ended_at,
+      duration_seconds: run.duration_seconds,
+      status: run.status,
+      model: run.model,
+      cost_usd: run.cost_usd,
+      iterations: run.iterations,
+      summary: run.summary.substring(0, 1000),
+      changes_count: run.changes_made.length,
+      changes_by_action: {
+        created: run.changes_made.filter(c => c.action === 'created').length,
+        updated: run.changes_made.filter(c => c.action === 'updated').length,
+        deleted: run.changes_made.filter(c => c.action === 'deleted').length,
+        resolved: run.changes_made.filter(c => c.action === 'resolved').length,
+      },
+      suggestions_count: run.suggestions.length,
+      suggestions_pending: run.suggestions.filter(s => s.status === 'pending').length,
+      errors_count: run.errors.length,
+    };
+    // Replace existing or append
+    const existing = index.runs.findIndex(r => r.id === run.id);
+    if (existing >= 0) index.runs[existing] = entry;
+    else index.runs.push(entry);
+    // Keep index sorted newest-first
+    index.runs.sort((a, b) => b.started_at.localeCompare(a.started_at));
+    // Rolling window — keep last 200
+    if (index.runs.length > 200) index.runs = index.runs.slice(0, 200);
+    index.next_id = Math.max(index.next_id, parseInt(run.id.replace('run-', '')) + 1 || index.next_id + 1);
+    this.saveAuditIndex(index);
+  }
+
+  listAuditRuns(filters?: {
+    trigger_type?: string;
+    status?: string;
+    automation_id?: string;
+    since?: string;
+    limit?: number;
+    offset?: number;
+  }): { runs: import('../shared/types.js').AuditRunIndex[]; total: number } {
+    const index = this.loadAuditIndex();
+    let runs = index.runs;
+    if (filters?.trigger_type) runs = runs.filter(r => r.trigger_type === filters.trigger_type);
+    if (filters?.status) runs = runs.filter(r => r.status === filters.status);
+    if (filters?.automation_id) runs = runs.filter(r => r.automation_id === filters.automation_id);
+    if (filters?.since) runs = runs.filter(r => r.started_at >= filters.since);
+    const total = runs.length;
+    const offset = filters?.offset || 0;
+    const limit = filters?.limit || 50;
+    runs = runs.slice(offset, offset + limit);
+    return { runs, total };
+  }
+
+  getAuditRun(id: string): import('../shared/types.js').AuditRun | null {
+    const dir = this.ensureAuditDir();
+    const filePath = path.join(dir, `${id}.json`);
+    if (!fs.existsSync(filePath)) return null;
+    try { return JSON.parse(fs.readFileSync(filePath, 'utf-8')); } catch { return null; }
+  }
+
+  updateAuditSuggestion(runId: string, suggestionId: string, status: 'approved' | 'dismissed'): boolean {
+    const run = this.getAuditRun(runId);
+    if (!run) return false;
+    const suggestion = run.suggestions.find(s => s.id === suggestionId);
+    if (!suggestion) return false;
+    suggestion.status = status;
+    this.saveAuditRun(run);
+    return true;
+  }
+
+  getAuditStats(): {
+    today: { runs: number; cost: number; changes: number; suggestions_pending: number };
+    week: { runs: number; cost: number; changes: number };
+    by_automation: { id: string; name: string; runs: number; cost: number }[];
+    by_trigger: { type: string; runs: number; cost: number }[];
+  } {
+    const index = this.loadAuditIndex();
+    const today = new Date().toISOString().split('T')[0];
+    const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+
+    const todayRuns = index.runs.filter(r => r.started_at.startsWith(today));
+    const weekRuns = index.runs.filter(r => r.started_at >= weekAgo);
+
+    // By automation
+    const autoMap = new Map<string, { id: string; name: string; runs: number; cost: number }>();
+    for (const r of index.runs) {
+      const e = autoMap.get(r.automation_id) || { id: r.automation_id, name: r.automation_name, runs: 0, cost: 0 };
+      e.runs++;
+      e.cost += r.cost_usd;
+      autoMap.set(r.automation_id, e);
+    }
+
+    // By trigger type
+    const trigMap = new Map<string, { type: string; runs: number; cost: number }>();
+    for (const r of index.runs) {
+      const e = trigMap.get(r.trigger_type) || { type: r.trigger_type, runs: 0, cost: 0 };
+      e.runs++;
+      e.cost += r.cost_usd;
+      trigMap.set(r.trigger_type, e);
+    }
+
+    return {
+      today: {
+        runs: todayRuns.length,
+        cost: todayRuns.reduce((s, r) => s + r.cost_usd, 0),
+        changes: todayRuns.reduce((s, r) => s + r.changes_count, 0),
+        suggestions_pending: todayRuns.reduce((s, r) => s + r.suggestions_pending, 0),
+      },
+      week: {
+        runs: weekRuns.length,
+        cost: weekRuns.reduce((s, r) => s + r.cost_usd, 0),
+        changes: weekRuns.reduce((s, r) => s + r.changes_count, 0),
+      },
+      by_automation: [...autoMap.values()],
+      by_trigger: [...trigMap.values()],
+    };
+  }
+
+  getNextAuditRunId(): string {
+    const index = this.loadAuditIndex();
+    const id = `run-${String(index.next_id).padStart(4, '0')}`;
+    return id;
   }
 
   // ─── Activity Feed Helper ─────────────────────────────────────────────

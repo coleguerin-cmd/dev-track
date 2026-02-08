@@ -417,7 +417,299 @@
       },
       "id": "ACT-0032",
       "timestamp": "2026-02-08T17:01:00.300Z"
+    },
+    {
+      "type": "item_moved",
+      "entity_type": "roadmap",
+      "entity_id": "test-integrations",
+      "title": "Moved \"Test integration plugins with real credentials\" from next → now",
+      "actor": "user",
+      "metadata": {
+        "from": "next",
+        "to": "now"
+      },
+      "id": "ACT-0033",
+      "timestamp": "2026-02-08T18:07:42.144Z"
+    },
+    {
+      "type": "item_moved",
+      "entity_type": "roadmap",
+      "entity_id": "test-integrations",
+      "title": "Moved \"Test integration plugins with real credentials\" from now → next",
+      "actor": "user",
+      "metadata": {
+        "from": "now",
+        "to": "next"
+      },
+      "id": "ACT-0034",
+      "timestamp": "2026-02-08T18:07:52.260Z"
+    },
+    {
+      "type": "item_moved",
+      "entity_type": "roadmap",
+      "entity_id": "docs-wiki-overhaul",
+      "title": "Moved \"Docs tab — end-to-end project wiki with live updates\" from next → now",
+      "actor": "user",
+      "metadata": {
+        "from": "next",
+        "to": "now"
+      },
+      "id": "ACT-0035",
+      "timestamp": "2026-02-08T18:15:05.020Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-069",
+      "title": "enhancement: AI tool coverage expansion: epics, milestones, releases, activity feed, full roadmap schema",
+      "actor": "user",
+      "metadata": {
+        "type": "enhancement",
+        "scope": "ai"
+      },
+      "id": "ACT-0036",
+      "timestamp": "2026-02-08T18:58:55.095Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-070",
+      "title": "fix: Interactive issue badges in By Epic view + epic context in Issues view",
+      "actor": "user",
+      "metadata": {
+        "type": "fix",
+        "scope": "ui"
+      },
+      "id": "ACT-0037",
+      "timestamp": "2026-02-08T18:59:06.666Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "epic",
+      "entity_id": "automation-audits",
+      "title": "Epic created: Automation Audits - Full Transparency into AI Operations",
+      "actor": "user",
+      "metadata": {
+        "priority": "P0"
+      },
+      "id": "ACT-0038",
+      "timestamp": "2026-02-08T19:09:49.192Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "audit-data-model",
+      "title": "Created: Audit data model - types for AuditRun, AuditStep, AuditChange, AuditSuggestion",
+      "actor": "user",
+      "metadata": {
+        "horizon": "next",
+        "size": "S",
+        "type": "infrastructure"
+      },
+      "id": "ACT-0039",
+      "timestamp": "2026-02-08T19:10:40.272Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "audit-storage-layer",
+      "title": "Created: Audit storage layer - per-run files with index for fast listing",
+      "actor": "user",
+      "metadata": {
+        "horizon": "next",
+        "size": "S",
+        "type": "infrastructure"
+      },
+      "id": "ACT-0040",
+      "timestamp": "2026-02-08T19:10:40.320Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "audit-recorder",
+      "title": "Created: AuditRecorder class - instruments agent loop to capture every step",
+      "actor": "user",
+      "metadata": {
+        "horizon": "next",
+        "size": "M",
+        "type": "feature"
+      },
+      "id": "ACT-0041",
+      "timestamp": "2026-02-08T19:10:40.331Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "audit-engine-wiring",
+      "title": "Created: Wire audit recording into automation engine and change detection",
+      "actor": "user",
+      "metadata": {
+        "horizon": "next",
+        "size": "M",
+        "type": "feature"
+      },
+      "id": "ACT-0042",
+      "timestamp": "2026-02-08T19:10:40.344Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "audit-api-routes",
+      "title": "Created: Audit API routes - list, get, stats, suggestion approval",
+      "actor": "user",
+      "metadata": {
+        "horizon": "next",
+        "size": "M",
+        "type": "feature"
+      },
+      "id": "ACT-0043",
+      "timestamp": "2026-02-08T19:10:40.361Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "audit-ui-view",
+      "title": "Created: Audits tab UI - stats bar, filters, run cards, expandable detail, suggestion approval",
+      "actor": "user",
+      "metadata": {
+        "horizon": "next",
+        "size": "L",
+        "type": "feature"
+      },
+      "id": "ACT-0044",
+      "timestamp": "2026-02-08T19:10:40.377Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "audit-ai-tools",
+      "title": "Created: AI tools for querying audit runs",
+      "actor": "user",
+      "metadata": {
+        "horizon": "next",
+        "size": "S",
+        "type": "feature"
+      },
+      "id": "ACT-0045",
+      "timestamp": "2026-02-08T19:10:40.393Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "audit-data-model",
+      "title": "Completed: Audit data model - types for AuditRun, AuditStep, AuditChange, AuditSuggestion",
+      "actor": "user",
+      "metadata": {
+        "size": "S",
+        "type": "infrastructure"
+      },
+      "id": "ACT-0046",
+      "timestamp": "2026-02-08T19:16:47.632Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "audit-storage-layer",
+      "title": "Completed: Audit storage layer - per-run files with index for fast listing",
+      "actor": "user",
+      "metadata": {
+        "size": "S",
+        "type": "infrastructure"
+      },
+      "id": "ACT-0047",
+      "timestamp": "2026-02-08T19:16:47.728Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "audit-recorder",
+      "title": "Completed: AuditRecorder class - instruments agent loop to capture every step",
+      "actor": "user",
+      "metadata": {
+        "size": "M",
+        "type": "feature"
+      },
+      "id": "ACT-0048",
+      "timestamp": "2026-02-08T19:16:47.737Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "audit-engine-wiring",
+      "title": "Completed: Wire audit recording into automation engine and change detection",
+      "actor": "user",
+      "metadata": {
+        "size": "M",
+        "type": "feature"
+      },
+      "id": "ACT-0049",
+      "timestamp": "2026-02-08T19:16:47.748Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "audit-api-routes",
+      "title": "Completed: Audit API routes - list, get, stats, suggestion approval",
+      "actor": "user",
+      "metadata": {
+        "size": "M",
+        "type": "feature"
+      },
+      "id": "ACT-0050",
+      "timestamp": "2026-02-08T19:16:47.769Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "audit-ui-view",
+      "title": "Completed: Audits tab UI - stats bar, filters, run cards, expandable detail, suggestion approval",
+      "actor": "user",
+      "metadata": {
+        "size": "L",
+        "type": "feature"
+      },
+      "id": "ACT-0051",
+      "timestamp": "2026-02-08T19:16:47.791Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "audit-ai-tools",
+      "title": "Completed: AI tools for querying audit runs",
+      "actor": "user",
+      "metadata": {
+        "size": "S",
+        "type": "feature"
+      },
+      "id": "ACT-0052",
+      "timestamp": "2026-02-08T19:16:47.813Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-071",
+      "title": "feature: Audits tab - end-to-end automation transparency system",
+      "actor": "user",
+      "metadata": {
+        "type": "feature",
+        "scope": "full-stack"
+      },
+      "id": "ACT-0053",
+      "timestamp": "2026-02-08T19:17:15.822Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "change-tracker",
+      "title": "Automation fired: Change Tracker",
+      "actor": "system",
+      "metadata": {
+        "trigger": "item_completed",
+        "duration_seconds": 114
+      },
+      "id": "ACT-0054",
+      "timestamp": "2026-02-08T19:34:27.664Z"
     }
   ],
-  "next_id": 33
+  "next_id": 55
 }

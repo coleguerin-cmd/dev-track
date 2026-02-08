@@ -107,9 +107,25 @@ app.put('/config', async (c) => {
     if (fs.existsSync(configPath)) {
       config = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
     }
-    // Merge updates
-    Object.assign(config, body);
+    // Deep merge — preserves nested properties (fixes ISS-035: Object.assign shallow merge)
+    function deepMerge(target: any, source: any): any {
+      for (const key in source) {
+        if (
+          source[key] && typeof source[key] === 'object' && !Array.isArray(source[key]) &&
+          target[key] && typeof target[key] === 'object' && !Array.isArray(target[key])
+        ) {
+          deepMerge(target[key], source[key]);
+        } else {
+          target[key] = source[key];
+        }
+      }
+      return target;
+    }
+    deepMerge(config, body);
     fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+    // Reload in-memory config so GET returns fresh data
+    const aiService = getAIService();
+    aiService.reloadConfig();
     return c.json({ ok: true, data: config });
   } catch (err: any) {
     return c.json({ ok: false, error: err.message }, 500);

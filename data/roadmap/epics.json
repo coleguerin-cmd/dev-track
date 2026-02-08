@@ -8,14 +8,155 @@
       "priority": "P0",
       "color": "#f59e0b",
       "milestone_id": "v0-2-entity-model",
-      "item_count": 1,
-      "completed_count": 1,
+      "item_count": 2,
+      "completed_count": 2,
       "progress_pct": 100,
       "tags": [],
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "completed": "2026-02-08",
       "ai_summary": "Entity model v2 refactor complete. 14 entity types defined, data migrated, store rewritten, 7 new route files, AI tools updated, UI overhauled. Foundation for enterprise-grade PM."
+    },
+    {
+      "id": "ai-intelligence-engine",
+      "title": "AI Intelligence Engine",
+      "description": "The core AI product: chat agent with full tool access, multi-provider model routing, memory/caching, and eventually background agents. This is the engine that makes DevTrack intelligent.",
+      "status": "active",
+      "priority": "P0",
+      "color": "#8b5cf6",
+      "milestone_id": null,
+      "item_count": 5,
+      "completed_count": 2,
+      "progress_pct": 40,
+      "tags": [
+        "core",
+        "ai"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": null,
+      "ai_summary": "The chat-first architecture: AI chat agent is the product. Multi-provider routing (OpenAI/Anthropic/Google), ~40 tools, SSE streaming. Memory caching and background agents are next-tier extensions."
+    },
+    {
+      "id": "automation-self-healing",
+      "title": "Automation & Self-Healing",
+      "description": "DevTrack manages itself: file watcher, session lifecycle, self-audits, automation engine hardening. The system that ensures nothing falls through the cracks.",
+      "status": "active",
+      "priority": "P0",
+      "color": "#10b981",
+      "milestone_id": null,
+      "item_count": 6,
+      "completed_count": 1,
+      "progress_pct": 17,
+      "tags": [
+        "automation",
+        "reliability"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": null,
+      "ai_summary": "Structural enforcement over passive instructions. File watcher, session lifecycle, self-audits, dedup, conversation logging. The fix for AI context drift (ISS-006)."
+    },
+    {
+      "id": "ui-views",
+      "title": "UI & Views",
+      "description": "Everything the user sees: design polish, new views (analytics, activity log), global search, view modes. Linear-inspired aesthetic with clean information density.",
+      "status": "active",
+      "priority": "P1",
+      "color": "#3b82f6",
+      "milestone_id": null,
+      "item_count": 6,
+      "completed_count": 3,
+      "progress_pct": 50,
+      "tags": [
+        "ui",
+        "design"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": null,
+      "ai_summary": "Design overhaul (Lucide icons, tight spacing), analytics dashboard, activity log, global search. The visualization layer that makes DevTrack's intelligence visible."
+    },
+    {
+      "id": "data-integrity-trust",
+      "title": "Data Integrity & Trust",
+      "description": "Knowing who did what: entity provenance (User/DevTrack AI/External attribution), data archival, audit trails. The foundation for trusting AI-managed data.",
+      "status": "planning",
+      "priority": "P1",
+      "color": "#ec4899",
+      "milestone_id": null,
+      "item_count": 2,
+      "completed_count": 0,
+      "progress_pct": 0,
+      "tags": [
+        "trust",
+        "provenance"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": null,
+      "ai_summary": "Three-label attribution (User, DevTrack AI, External) on all mutations. Auto-archival of stale data. The trust layer that makes autonomous AI operations acceptable."
+    },
+    {
+      "id": "platform-distribution",
+      "title": "Platform & Distribution",
+      "description": "Making DevTrack a product: CLI tooling, project initialization, context sync across AI platforms, and eventually paid product launch with daemon + web platform.",
+      "status": "planning",
+      "priority": "P2",
+      "color": "#f43f5e",
+      "milestone_id": null,
+      "item_count": 5,
+      "completed_count": 1,
+      "progress_pct": 20,
+      "tags": [
+        "platform",
+        "distribution"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": null,
+      "ai_summary": "npx dev-track init → scan codebase → AI infers systems → context sync to Cursor/Claude/Copilot. Then: paid tiers, daemon + web platform, teams."
+    },
+    {
+      "id": "codebase-intelligence",
+      "title": "Codebase Intelligence",
+      "description": "Understanding the code: living wiki docs, auto-generated documentation, structured annotations, codebase visualization improvements.",
+      "status": "planning",
+      "priority": "P2",
+      "color": "#06b6d4",
+      "milestone_id": null,
+      "item_count": 3,
+      "completed_count": 1,
+      "progress_pct": 33,
+      "tags": [
+        "docs",
+        "codebase"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": null,
+      "ai_summary": "Living project wiki, auto-generated docs from codebase changes, structured annotations for rich tooltips. Making the codebase self-documenting."
+    },
+    {
+      "id": "automation-audits",
+      "title": "Automation Audits - Full Transparency into AI Operations",
+      "description": "End-to-end audit system: data capture pipeline that records every step of automation runs (thinking chain, tool calls, changes, suggestions, cost), persistent storage with indexing, API routes, rich UI with filters/detail/analytics, and suggestion approval workflow.",
+      "status": "completed",
+      "priority": "P0",
+      "color": "#f59e0b",
+      "milestone_id": null,
+      "item_count": 8,
+      "completed_count": 7,
+      "progress_pct": 88,
+      "tags": [
+        "transparency",
+        "automation",
+        "trust"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "completed": "2026-02-08",
+      "ai_summary": "Complete audit system delivered: data model, storage layer with per-run files + index, AuditRecorder class for agent instrumentation, engine wiring with change detection, API routes (list/get/stats/suggestions), rich UI with expandable run cards showing thinking chain/tool calls/changes/suggestions, and AI tools for chat agent queries. 7/8 items completed (88% progress). Only audits-tab parent item remains in_progress. Foundation for full automation transparency and trust."
     }
   ]
 }

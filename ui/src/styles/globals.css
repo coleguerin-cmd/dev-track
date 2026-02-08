@@ -58,4 +58,56 @@
   .label {
     @apply text-xs font-medium text-text-tertiary uppercase tracking-wider;
   }
+
+  /* ─── Audit Markdown Prose ─────────────────────────────────────────────── */
+  .audit-markdown h1,
+  .audit-markdown h2,
+  .audit-markdown h3,
+  .audit-markdown h4 {
+    @apply text-text-primary font-semibold mt-4 mb-2;
+  }
+  .audit-markdown h1 { @apply text-base; }
+  .audit-markdown h2 { @apply text-sm; }
+  .audit-markdown h3 { @apply text-xs uppercase tracking-wide text-text-tertiary; }
+  .audit-markdown h4 { @apply text-xs; }
+  .audit-markdown h2:first-child,
+  .audit-markdown h3:first-child {
+    @apply mt-0;
+  }
+  .audit-markdown p {
+    @apply mb-2 last:mb-0;
+  }
+  .audit-markdown ul,
+  .audit-markdown ol {
+    @apply ml-4 mb-2 space-y-0.5;
+  }
+  .audit-markdown ul { list-style-type: disc; }
+  .audit-markdown ol { list-style-type: decimal; }
+  .audit-markdown li {
+    @apply text-text-secondary;
+  }
+  .audit-markdown strong {
+    @apply text-text-primary font-semibold;
+  }
+  .audit-markdown em {
+    @apply italic;
+  }
+  .audit-markdown code {
+    @apply text-accent-blue bg-surface-3 px-1 py-0.5 rounded text-[0.85em] font-mono;
+  }
+  .audit-markdown pre {
+    @apply bg-surface-0 border border-border rounded-md p-3 mb-2 overflow-x-auto;
+  }
+  .audit-markdown pre code {
+    @apply bg-transparent p-0;
+  }
+  .audit-markdown hr {
+    @apply border-border my-3;
+  }
+  .audit-markdown a {
+    @apply text-accent-blue hover:underline;
+  }
+  .audit-markdown blockquote {
+    @apply border-l-2 border-accent-blue/30 pl-3 ml-0 text-text-tertiary italic;
+  }
 }

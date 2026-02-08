@@ -5,7 +5,7 @@
       "title": "Structured code annotations for codebase explorer",
       "description": "A doc-comment format the tool can parse (like JSDoc but for dev-track — @dt-description, @dt-depends, @dt-external) that feeds into the Codebase Explorer. AI writes these as it develops, tool parses them for rich tooltips and explanations. Not just basic commenting — structured metadata the tool understands.",
       "category": "feature",
-      "status": "captured",
+      "status": "dismissed",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [
         "IDEA-002",
@@ -27,9 +27,9 @@
         "How do we handle annotation drift when code changes?",
         "Do we parse on scan or in real-time?"
       ],
-      "notes": "Requires the Codebase Explorer to be working and useful first so we know what annotations actually matter. Phase 3+.",
+      "notes": "Requires the Codebase Explorer to be working and useful first so we know what annotations actually matter. Phase 3+. DISMISSED: Superseded by scanner-driven approach (IDEA-017, promoted to ai-watcher). Code IS the source of truth — no special comments needed.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -70,7 +70,7 @@
       "title": "Multi-model support with context-aware budgeting",
       "description": "Different AI models have different context windows and costs. dev-track should adapt: Opus with 1M context gets the full story, GPT-4o-mini gets a compressed version, smaller models get just the Quick Status + Now items.",
       "category": "architecture",
-      "status": "captured",
+      "status": "dismissed",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [
         "IDEA-002"
@@ -89,9 +89,9 @@
         "Auto-detect model or manual config?",
         "Should we have preset profiles (heavy/medium/light)?"
       ],
-      "notes": "The verbosity settings already exist in config. This extends them with model-aware profiles.",
+      "notes": "The verbosity settings already exist in config. This extends them with model-aware profiles. DISMISSED: Verbosity settings (detailed/summary/minimal) already cover this use case. No need for separate model-aware budgeting.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -132,7 +132,9 @@
       "status": "promoted",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [
-        "IDEA-001"
+        "IDEA-001",
+        "IDEA-015",
+        "IDEA-017"
       ],
       "promoted_to": "codebase-visualizer",
       "pros": [
@@ -147,7 +149,7 @@
       "open_questions": [],
       "notes": "BUILDING NOW. Using react-flow + dagre. Three views: module architecture, file dependencies, API route map.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -156,7 +158,7 @@
       "title": "Always-on diagnostic triggers",
       "description": "Post-deploy hooks (Vercel webhook), Sentry webhook auto-create issues, cron-based health checks. Tool surfaces problems before the user even opens it.",
       "category": "architecture",
-      "status": "captured",
+      "status": "parked",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [],
       "promoted_to": null,
@@ -172,9 +174,9 @@
         "Local-only or need a cloud relay?",
         "Queue system needed?"
       ],
-      "notes": "Phase 4+. Requires working integrations first.",
+      "notes": "Phase 4+. Requires working integrations first. PARKED: Requires dev-track server running 24/7. Post-v1.0 feature.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -183,7 +185,7 @@
       "title": "Background AI agents for R&D, docs, design iteration",
       "description": "Lightweight agents that run against dev-track data. R&D agent explores ideas. Docs agent keeps documentation in sync. Design agent iterates mockups. Run on triggers or schedules, not in the IDE.",
       "category": "architecture",
-      "status": "captured",
+      "status": "parked",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [
         "IDEA-006"
@@ -201,9 +203,9 @@
         "Claude Code CLI as the agent runtime?",
         "How to trigger — schedule vs event?"
       ],
-      "notes": "Far future. The data layer supports it — agents just read/write data/ files.",
+      "notes": "Far future. The data layer supports it — agents just read/write data/ files. PARKED: Far future architecture, not v0.1-v0.3 scope.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -215,8 +217,9 @@
       "status": "captured",
       "source": "conversation 2026-02-07 (session 2)",
       "related_ideas": [
-        "IDEA-004",
-        "IDEA-007"
+        "IDEA-021",
+        "IDEA-022",
+        "IDEA-004"
       ],
       "promoted_to": null,
       "pros": [
@@ -233,7 +236,7 @@
       ],
       "notes": "Plant seeds in data model now. Build when local tool is fully validated.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -245,7 +248,9 @@
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [
-        "IDEA-006"
+        "IDEA-006",
+        "IDEA-013",
+        "IDEA-018"
       ],
       "promoted_to": null,
       "pros": [
@@ -264,7 +269,7 @@
       ],
       "notes": "Start with Sentry -> Issues and Helicone -> Metrics. Build the pattern, then extend.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -275,7 +280,11 @@
       "category": "ux",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-011",
+        "IDEA-012",
+        "IDEA-037"
+      ],
       "promoted_to": null,
       "pros": [
         "Fast navigation",
@@ -292,7 +301,7 @@
       ],
       "notes": "Codebase Explorer already has search within its view. This extends it globally.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -303,7 +312,10 @@
       "category": "ux",
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-010",
+        "IDEA-012"
+      ],
       "promoted_to": null,
       "pros": [
         "More professional appearance",
@@ -320,7 +332,7 @@
       ],
       "notes": "User specifically mentioned liking Cursor's navigation style. Lucide-react is already in package.json.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -332,7 +344,9 @@
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [
-        "IDEA-011"
+        "IDEA-010",
+        "IDEA-011",
+        "IDEA-019"
       ],
       "promoted_to": null,
       "pros": [
@@ -350,7 +364,7 @@
       ],
       "notes": "react-markdown is already in package.json. Could render descriptions as markdown in detail panels.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -362,7 +376,9 @@
       "status": "captured",
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [
-        "IDEA-009"
+        "IDEA-009",
+        "IDEA-018",
+        "IDEA-062"
       ],
       "promoted_to": null,
       "pros": [
@@ -380,7 +396,7 @@
       ],
       "notes": "User showed $733 Cursor spend in screenshot. Cost awareness is clearly important to them.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -393,7 +409,8 @@
       "source": "conversation 2026-02-07 (session 3 — meta discussion)",
       "related_ideas": [
         "IDEA-007",
-        "IDEA-006"
+        "IDEA-006",
+        "IDEA-017"
       ],
       "promoted_to": null,
       "pros": [
@@ -418,7 +435,7 @@
       ],
       "notes": "This is the real solution to the 'AI forgot to update changelog' problem. Instead of asking the coding AI to both write code AND track changes (competing attention), separate the concerns: coding AI writes code, watcher AI tracks changes. They communicate through dev-track data files — that's the protocol. Start simple: on git commit, run a cheap model against the diff and auto-update changelog + state.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -431,7 +448,8 @@
       "source": "conversation 2026-02-07 (session 3 — graph feedback)",
       "related_ideas": [
         "IDEA-005",
-        "IDEA-001"
+        "IDEA-001",
+        "IDEA-017"
       ],
       "promoted_to": null,
       "pros": [
@@ -451,7 +469,7 @@
       ],
       "notes": "The scanner has all the data — file types, exports, external services, DB ops. We can generate descriptions like: 'This module handles all HTTP API requests. It has 16 route files covering backlog, issues, sessions, metrics, and more. It depends on the Data Store for persistence and broadcasts changes via WebSocket.' The detail panel should show this prominently.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -531,7 +549,8 @@
       "status": "captured",
       "source": "conversation 2026-02-07 (session 4)",
       "related_ideas": [
-        "IDEA-013"
+        "IDEA-013",
+        "IDEA-009"
       ],
       "promoted_to": null,
       "pros": [
@@ -550,7 +569,7 @@
       ],
       "notes": "User set up BYOK in Helicone. Ready to integrate deeply.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -562,7 +581,8 @@
       "status": "promoted",
       "source": "conversation 2026-02-07 (session 4)",
       "related_ideas": [
-        "IDEA-005"
+        "IDEA-012",
+        "IDEA-037"
       ],
       "promoted_to": "rich-tool-tray",
       "pros": [
@@ -580,7 +600,7 @@
       ],
       "notes": "Reference: Pillar's SidebarChat tray system and Landmark's ToolCallDisplay component.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -623,8 +643,8 @@
       "status": "exploring",
       "source": "conversation 2026-02-07 (session 4)",
       "related_ideas": [
-        "IDEA-004",
-        "IDEA-008"
+        "IDEA-008",
+        "IDEA-022"
       ],
       "promoted_to": null,
       "pros": [
@@ -646,7 +666,7 @@
       ],
       "notes": "See detailed analysis in session 4 conversation. Multiple distribution options explored: desktop app, CLI, IDE extension, GitHub App, hybrid daemon+web. Hybrid wins because it preserves what makes dev-track unique (local real-time context) while enabling what requires cloud (teams, billing, AI budget).",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -677,7 +697,7 @@
       ],
       "notes": "User correctly identified this as a can of worms. Park until v0.2+.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -686,7 +706,7 @@
       "title": "Visual state capture — automated screenshots of every view for AI context",
       "description": "Dev-track automatically takes screenshots of each view/tab and maintains a visual state library. The AI can reference what the UI actually looks like without the user manually screenshotting. Could use Puppeteer/Playwright headless to capture each route. Stored in data/screenshots/ with timestamps. The chat agent can say 'here's what the dashboard looks like right now.' For development: instant visual feedback loop — AI sees what it built. For product: visual diffs between sessions, UI regression detection, onboarding screenshots.",
       "category": "feature",
-      "status": "captured",
+      "status": "parked",
       "source": "conversation 2026-02-07 (session 4)",
       "related_ideas": [
         "IDEA-020"
@@ -709,9 +729,9 @@
         "How to efficiently diff screenshots?",
         "Should the chat be able to request a fresh screenshot?"
       ],
-      "notes": "User currently does this manually constantly — screenshots to send to AI. Automating it is obvious. Could start simple: just capture on codebase scan and store the images.",
+      "notes": "User currently does this manually constantly — screenshots to send to AI. Automating it is obvious. Could start simple: just capture on codebase scan and store the images. PARKED: Good idea but Puppeteer is heavy dependency. Not pursuing until post-validation.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -742,7 +762,13 @@
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "tags": [],
-      "promoted_to": "session-lifecycle"
+      "promoted_to": "session-lifecycle",
+      "related_ideas": [
+        "IDEA-025",
+        "IDEA-026",
+        "IDEA-054",
+        "IDEA-029"
+      ]
     },
     {
       "id": "IDEA-025",
@@ -771,7 +797,12 @@
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "tags": [],
-      "promoted_to": "session-self-audit"
+      "promoted_to": "session-self-audit",
+      "related_ideas": [
+        "IDEA-024",
+        "IDEA-047",
+        "IDEA-054"
+      ]
     },
     {
       "id": "IDEA-026",
@@ -801,7 +832,13 @@
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "tags": [],
-      "promoted_to": "user-profiles"
+      "promoted_to": "user-profiles",
+      "related_ideas": [
+        "IDEA-024",
+        "IDEA-029",
+        "IDEA-030",
+        "IDEA-040"
+      ]
     },
     {
       "id": "IDEA-027",
@@ -891,7 +928,12 @@
       "notes": "User explicitly asked for this. The session_observations structure is already in the profile. Now needs: (1) cursor rule instruction to write observation at session end, (2) DevTrack AI consolidation job, (3) weighted score recalculation logic.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
-      "tags": []
+      "tags": [],
+      "related_ideas": [
+        "IDEA-026",
+        "IDEA-030",
+        "IDEA-039"
+      ]
     },
     {
       "id": "IDEA-030",
@@ -921,7 +963,12 @@
       "notes": "User's insight: 'how interesting would this data be to employers if you were ACTUALLY honest.' The answer is: extremely. But also extremely sensitive. The product opportunity is there but the ethics need to be right. Start with: portable across the user's own projects and AI tools. Later: opt-in sharing for teams.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
-      "tags": []
+      "tags": [],
+      "related_ideas": [
+        "IDEA-026",
+        "IDEA-029",
+        "IDEA-040"
+      ]
     },
     {
       "id": "IDEA-031",
@@ -1113,7 +1160,11 @@
       "notes": "Nightly audit #2 (Feb 9): Still exploring at critical priority. AI-unique views remain the key differentiator. The headless runner + automation engine provide infrastructure to power these views. However, none of the prerequisite systems (chat agent, headless runner) have been validated yet. This idea should stay at exploring until the AI infrastructure is proven. First candidate views to build: (1) predictive velocity ('payment system ships in ~4 sessions'), (2) risk heat map, (3) knowledge graph across entities. These could be built as dashboard widgets first before full views.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
-      "tags": []
+      "tags": [],
+      "related_ideas": [
+        "IDEA-010",
+        "IDEA-019"
+      ]
     },
     {
       "id": "IDEA-038",
@@ -1144,7 +1195,10 @@
       "status": "captured",
       "priority": "P1",
       "source": "conversation session-7",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-029",
+        "IDEA-026"
+      ],
       "promoted_to": null,
       "pros": [],
       "cons": [],
@@ -1167,8 +1221,8 @@
       "priority": "P1",
       "source": "conversation session-7",
       "related_ideas": [
-        "IDEA-038",
-        "IDEA-041"
+        "IDEA-026",
+        "IDEA-030"
       ],
       "promoted_to": null,
       "pros": [
@@ -1224,7 +1278,10 @@
       "status": "promoted",
       "priority": "P2",
       "source": "conversation session-7",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-046",
+        "IDEA-053"
+      ],
       "promoted_to": "brain-note-dedup",
       "pros": [],
       "cons": [],
@@ -1246,7 +1303,12 @@
       "status": "promoted",
       "priority": "P1",
       "source": "conversation session-7",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-044",
+        "IDEA-045",
+        "IDEA-060",
+        "IDEA-061"
+      ],
       "promoted_to": null,
       "pros": [
         "Full audit trail",
@@ -1279,7 +1341,11 @@
       "status": "captured",
       "priority": "P1",
       "source": "conversation session-7",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-043",
+        "IDEA-045",
+        "IDEA-060"
+      ],
       "promoted_to": null,
       "pros": [
         "Complete audit trail",
@@ -1315,7 +1381,8 @@
       "priority": "P2",
       "source": "conversation session-7",
       "related_ideas": [
-        "IDEA-043"
+        "IDEA-043",
+        "IDEA-044"
       ],
       "promoted_to": null,
       "pros": [
@@ -1348,7 +1415,11 @@
       "status": "promoted",
       "priority": "P1",
       "source": "conversation session-7",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-042",
+        "IDEA-047",
+        "IDEA-060"
+      ],
       "promoted_to": null,
       "pros": [
         "Full audit trail for automations",
@@ -1381,7 +1452,9 @@
       "priority": "P2",
       "source": "conversation session-7",
       "related_ideas": [
-        "IDEA-046"
+        "IDEA-046",
+        "IDEA-025",
+        "IDEA-051"
       ],
       "promoted_to": null,
       "pros": [
@@ -1411,7 +1484,7 @@
       "title": "AI-powered autonomous chaos testing — self-directed stress testing with virtual environments",
       "description": "An automated testing system where AI runs DevTrack headlessly in isolated virtual environments and invents its own test scenarios. The AI acts like a user: creates projects, adds backlog items, triggers automations, simulates file changes, tests edge cases, and reports back. Not traditional integration tests with fixed scripts — the AI **devises new situations** based on use cases and tries to break things.\n\n**How it works:**\n1. User sets constraints: max cost, max iterations, max time, number of parallel environments\n2. AI spins up N virtual DevTrack instances (Docker containers or separate data directories)\n3. AI generates test scenarios: \"What if a user creates 500 backlog items at once?\", \"What if automations trigger recursively?\", \"What if the user switches projects mid-conversation?\"\n4. AI executes scenarios via the headless runner and API calls\n5. AI observes: errors logged, performance metrics, data corruption, race conditions\n6. AI reports findings: issues discovered, edge cases hit, performance bottlenecks\n\n**Three modes:**\n- **Observer mode**: AI reports findings but doesn't edit code (safest)\n- **Assisted mode**: AI proposes fixes, user reviews before applying\n- **Autonomous mode**: AI fixes bugs it finds and commits (full self-healing)\n\n**Use cases:**\n- Stress testing before dogfooding on real projects\n- Continuous chaos testing in CI/CD\n- Discovering edge cases humans wouldn't think of\n- Load testing (100 concurrent chat sessions)\n- Race condition detection (parallel automation triggers)\n- Data integrity validation (does the data stay consistent?)\n\n**Infrastructure needed:**\n- Docker or isolated data directories for parallel environments\n- Headless runner already exists — just needs orchestration layer\n- Cost tracking per test run (Helicone sessions)\n- Test result aggregation and reporting\n- Rollback mechanism if autonomous mode breaks things\n\n**This is chaos engineering meets AI agents.** Netflix's Chaos Monkey but the monkey is an AI that invents new ways to break your system.",
       "category": "architecture",
-      "status": "captured",
+      "status": "dismissed",
       "priority": "critical",
       "source": "chat 2026-02-08",
       "related_ideas": [],
@@ -1444,7 +1517,7 @@
         "Should this integrate with CI/CD or be on-demand only?",
         "Autonomous mode: how much can the AI change before requiring human review?"
       ],
-      "notes": null,
+      "notes": "DUPLICATE of IDEA-049. Created by DevTrack AI conversation. Dismissed as duplicate.",
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -1513,11 +1586,11 @@
         "Should the senior model be able to ask for more detail on specific areas?",
         "How to handle when junior model makes a mistake in summarization?"
       ],
-      "notes": "User insight: 'smaller models educating bigger ones quickly so the big models can defer down to the runs the smaller models already did.' GPT-4.0 was recently deprecated. Haiku can run over the whole database and 20 commits for less than Opus doing a couple of diff operations.",
+      "notes": "User insight: 'smaller models educating bigger ones quickly so the big models can defer down to the runs the smaller models already did.' GPT-4.0 was recently deprecated. Haiku can run over the whole database and 20 commits for less than Opus doing a couple of diff operations. Future group: Tiered Audit System (with IDEA-051, IDEA-055).",
       "source": "conversation session-8",
       "related_ideas": [
-        "IDEA-003",
-        "IDEA-051"
+        "IDEA-051",
+        "IDEA-014"
       ],
       "promoted_to": null,
       "tags": [
@@ -1551,11 +1624,12 @@
         "Should memory be append-only or can the AI rewrite its own notes?",
         "TTL on decision cache — 7 days? Configurable per decision type?"
       ],
-      "notes": "User insight: 'we probably need some kind of way to cache memory for the AI... quick context retrieval of what it has decided in the past.' This is the structural fix for automation garbage data. Without this, turning automations on will create duplicates.",
+      "notes": "User insight: 'we probably need some kind of way to cache memory for the AI... quick context retrieval of what it has decided in the past.' This is the structural fix for automation garbage data. Without this, turning automations on will create duplicates. Future group: Tiered Audit System (with IDEA-050, IDEA-055).",
       "source": "conversation session-8",
       "related_ideas": [
         "IDEA-050",
-        "IDEA-042"
+        "IDEA-014",
+        "IDEA-047"
       ],
       "promoted_to": null,
       "tags": [
@@ -1594,7 +1668,10 @@
       "notes": "User called out: epics not in UI, ideas need wider grouping, roadmap needs parents/subsystems, docs need to show design docs/RFDs/ADRs distinctly. The data model v2 added epic_id and milestone_id to roadmap items but the UI never shows these groupings.",
       "source": "conversation session-8",
       "related_ideas": [
-        "IDEA-034"
+        "IDEA-034",
+        "IDEA-062",
+        "IDEA-063",
+        "IDEA-064"
       ],
       "promoted_to": null,
       "tags": [
@@ -1629,7 +1706,10 @@
       ],
       "notes": "User: 'Timeline automated archival... if things are active we're gonna lose them. You don't want to archive off changelogs and session logs.' Legitimate concern — a time-based rolling window would archive entries still referenced by open issues.",
       "source": "conversation session-8",
-      "related_ideas": [],
+      "related_ideas": [
+        "IDEA-042",
+        "IDEA-058"
+      ],
       "promoted_to": null,
       "tags": [
         "data",
@@ -1672,7 +1752,12 @@
         "multi-user"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "notes": "Direct structural fix for root cause of ISS-020. Sessions 6 & 7 were orphaned because the external AI (Cursor) forgot to end them. This ensures DevTrack's own AI catches what external agents forget. Estimated 1 session to build. Future group: Session Reliability (with IDEA-056).",
+      "related_ideas": [
+        "IDEA-024",
+        "IDEA-025"
+      ]
     },
     {
       "id": "IDEA-055",
@@ -1701,9 +1786,20 @@
         "Can we use git diff as the primary input for session audits instead of reading all files?",
         "What's the cost floor — can we get file-change audits under $0.005 with Haiku?"
       ],
-      "tags": ["cost", "architecture", "automation", "scalability"],
+      "tags": [
+        "cost",
+        "architecture",
+        "automation",
+        "scalability"
+      ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "notes": "XL item — should be broken down. Phase 1: AI state cache + file-change micro-audit. Phase 2: session audit using cache. Phase 3: optimize nightly/weekly to use cache. User quoted: '$2.82 per session is going to add up relatively fast.' Future group: Tiered Audit System (with IDEA-050, IDEA-051).",
+      "related_ideas": [
+        "IDEA-057",
+        "IDEA-059",
+        "IDEA-014"
+      ]
     },
     {
       "id": "IDEA-056",
@@ -1731,9 +1827,15 @@
         "Should there be a 'review before commit' step or fully automatic?",
         "What about .gitignore — data files may not be in git"
       ],
-      "tags": ["git", "sessions", "automation", "settings"],
+      "tags": [
+        "git",
+        "sessions",
+        "automation",
+        "settings"
+      ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "notes": "User flagged this after the session-end audit found 27 uncommitted files. Quick M-sized win with high impact. Future group: Session Reliability (with IDEA-054)."
     },
     {
       "id": "IDEA-057",
@@ -1758,9 +1860,17 @@
         "What's the right timeout before intervention?",
         "Should it notify the user before auto-fixing or just do it?"
       ],
-      "tags": ["automation", "data-quality", "architecture"],
+      "tags": [
+        "automation",
+        "data-quality",
+        "architecture"
+      ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "related_ideas": [
+        "IDEA-055",
+        "IDEA-059"
+      ]
     },
     {
       "id": "IDEA-058",
@@ -1784,9 +1894,17 @@
         "Should we read .gitignore and use that as the exclude base?",
         "How to handle monorepos with multiple packages?"
       ],
-      "tags": ["cost", "scalability", "settings"],
+      "tags": [
+        "cost",
+        "scalability",
+        "settings"
+      ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "related_ideas": [
+        "IDEA-053",
+        "IDEA-055"
+      ]
     },
     {
       "id": "IDEA-059",
@@ -1810,10 +1928,18 @@
         "How granular — one entry per commit? per feature? per session?",
         "How does the user annotate/override auto-generated entries?"
       ],
-      "tags": ["automation", "changelog", "process"],
+      "tags": [
+        "automation",
+        "changelog",
+        "process"
+      ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
-    }
+      "updated": "2026-02-08",
+      "related_ideas": [
+        "IDEA-055",
+        "IDEA-057",
+        "IDEA-014"
+      ]
     },
     {
       "id": "IDEA-060",
@@ -1821,7 +1947,7 @@
       "title": "Audits tab — view automation results, thinking chain, diffs, costs, suggestions",
       "description": "When an automation runs (session audit, nightly audit, weekly report, etc.), the results are invisible. The activity log shows 'took 164s' but not: what it changed, what it thought, what it decided not to act on, how much it cost, what files it touched. Need an Audits tab (or section within Activity) where each automation run has an expandable result card showing:\n\n(1) SUMMARY — plain English: 'Updated context recovery, found ISS-034, verified 6 open issues, flagged 27 uncommitted files.'\n(2) CHANGES MADE — list of files modified with before/after diffs or descriptions.\n(3) SUGGESTIONS NOT ACTED ON — things the AI noticed but didn't change (e.g., 'ai-watcher has been in_progress for 9 days — consider updating status').\n(4) THINKING CHAIN — condensed reasoning: why it made each decision.\n(5) COST — tokens used, model, estimated cost.\n(6) TOOL CALLS — expandable list of all tools called with args and results.\n\nThis requires the headless runner to return structured results that get persisted, not just logged to console.",
       "category": "feature",
-      "status": "exploring",
+      "status": "promoted",
       "priority": "critical",
       "source": "conversation session-8 (post-close)",
       "pros": [
@@ -1839,9 +1965,20 @@
         "How many runs to keep? Rolling window?",
         "Should the AI explicitly separate 'changes made' from 'suggestions' in its output?"
       ],
-      "tags": ["ui", "transparency", "automation", "trust"],
+      "tags": [
+        "ui",
+        "transparency",
+        "automation",
+        "trust"
+      ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-08",
+      "related_ideas": [
+        "IDEA-043",
+        "IDEA-044",
+        "IDEA-061",
+        "IDEA-046"
+      ]
     },
     {
       "id": "IDEA-061",
@@ -1868,10 +2005,250 @@
         "How long do suggestions stay valid before auto-expiring?",
         "Should there be a 'batch approve all' option for busy users?"
       ],
-      "tags": ["settings", "enterprise", "autonomy", "trust"],
+      "tags": [
+        "settings",
+        "enterprise",
+        "autonomy",
+        "trust"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08",
+      "related_ideas": [
+        "IDEA-060",
+        "IDEA-043"
+      ]
+    },
+    {
+      "id": "IDEA-062",
+      "title": "Analytics dashboard — velocity charts, issue burn rate, health trends",
+      "description": "Build a dedicated analytics/metrics view with real charts. All data already exists in velocity.json (per-session: items shipped, points, issues found/resolved). Needs: (1) velocity line chart (items + points over sessions), (2) issue burn rate (discovered vs resolved per session), (3) system health trend over time, (4) session throughput histogram. Reference Linear's cycle analytics and burndown charts for design inspiration. Dark theme, thin lines, minimal axes.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "high",
+      "source": "session-9 discussion",
+      "related_ideas": [
+        "IDEA-063",
+        "IDEA-064",
+        "IDEA-013"
+      ],
+      "promoted_to": null,
+      "pros": [
+        "All data already collected — zero backend work needed",
+        "Highest-impact visual improvement possible",
+        "Makes velocity tracking tangible instead of JSON numbers",
+        "Linear-inspired cycle charts as proven design reference"
+      ],
+      "cons": [
+        "Needs a charting library (recharts, chart.js, or visx)",
+        "Design polish required to match Linear quality"
+      ],
+      "open_questions": [
+        "Which charting library? recharts is lightest, visx is most flexible",
+        "Should charts be on a dedicated Analytics tab or embedded in Dashboard?",
+        "What time granularity? Per-session vs per-day vs per-week?"
+      ],
+      "notes": "Linear reference: their cycle burndown charts, debugging stats, and velocity graphing are best-in-class. Dark theme with thin colored lines on dark bg. Session-based (not sprint-based) since dev-track sessions are our equivalent of cycles. Data source: data/metrics/velocity.json already has per-session breakdowns.",
+      "tags": [
+        "analytics",
+        "charts",
+        "linear-inspired",
+        "high-impact"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-063",
+      "title": "Timeline / roadmap visualization — horizontal bar chart of work over time",
+      "description": "Build a horizontal timeline view for roadmap items, showing items as bars spanning their start-to-completion dates. Like Linear's timeline view or a lightweight Gantt chart. Needs target_date field on RoadmapItem (currently only has started/completed). Show epics as grouped swim lanes. Color by status or horizon.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "medium",
+      "source": "session-9 discussion",
+      "related_ideas": [
+        "IDEA-062",
+        "IDEA-064"
+      ],
+      "promoted_to": null,
+      "pros": [
+        "Visual representation of 'what ships when'",
+        "Natural grouping by epic on the Y-axis",
+        "Linear's timeline view is very popular — proven UX"
+      ],
+      "cons": [
+        "Needs target_date field added to RoadmapItem type and UI",
+        "Horizontal scrolling UX is tricky to get right",
+        "Less useful for solo dev than for teams"
+      ],
+      "open_questions": [
+        "Is target_date per-item or per-epic sufficient?",
+        "How to handle items with no dates? Omit from timeline?",
+        "Should this be a separate tab or a view mode within Roadmap?"
+      ],
+      "notes": "Linear reference: their timeline view shows items as horizontal bars grouped by project, with drag-to-resize for dates. Beautiful design with clean axis labels. For solo dev, this is lower priority than analytics but still valuable for planning.",
+      "tags": [
+        "timeline",
+        "visualization",
+        "linear-inspired"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-064",
+      "title": "Rich filtering and custom views across all entities",
+      "description": "Add a filter bar or command-K style filtering to any view. Filter by status, priority, epic, tags, assignee, date range. Save filter presets as 'custom views.' Like Linear's filter pills or Notion's database views. Should work across Roadmap, Issues, Ideas, Changelog.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "medium",
+      "source": "session-9 discussion",
+      "related_ideas": [
+        "IDEA-062",
+        "IDEA-063"
+      ],
+      "promoted_to": null,
+      "pros": [
+        "Makes large item lists manageable",
+        "Saved views reduce repetitive filtering",
+        "Linear and Notion prove this UX is essential at scale"
+      ],
+      "cons": [
+        "Significant UI engineering — filter bar, save/load, URL params",
+        "Cross-entity filtering adds query complexity"
+      ],
+      "open_questions": [
+        "Filter bar inline or command-palette style?",
+        "Save filters to localStorage or to data file?",
+        "Which views need filtering first? Roadmap and Issues most likely"
+      ],
+      "notes": "Linear reference: pill-style filter chips that stack horizontally. Click to add filter, dropdown to pick field + value. Very clean. Lower priority than analytics and epic views since we don't have enough items yet to need filtering.",
+      "tags": [
+        "filtering",
+        "views",
+        "linear-inspired"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-065",
+      "title": "Chat agent as investigation + handoff layer — rich entities as artifacts",
+      "description": "The chat agent's superpower isn't code editing — it's deep investigation followed by rich documentation. Pattern: user reports bug → agent reads files, traces root cause → creates ISS-XXX with root cause, affected files, code snippets, proposed solutions → user tells Cursor 'fix ISS-XXX'. The issue becomes a handoff artifact that gives the coding AI all context. This means entity detail richness matters more than we've been treating it. Issues should have full investigation notes, ideas should have thorough pros/cons/questions, roadmap items should have acceptance criteria. The agent should be trained to maximize entity quality.",
+      "category": "architecture",
+      "status": "exploring",
+      "priority": "high",
+      "source": "session-9 insight",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [
+        "Leverages agent's strength (reading, reasoning) without its weakness (writing code)",
+        "Creates persistent artifacts that survive conversation context limits",
+        "Bridges the gap between DevTrack and external coding AI (ISS-012)",
+        "Proven in session 9 — ISS-035 found and documented by chat agent, fixed by Cursor agent"
+      ],
+      "cons": [
+        "Requires discipline to keep entity detail rich — AI might create thin entities",
+        "Handoff UX needs polish — how does user 'send' an issue to Cursor?"
+      ],
+      "open_questions": [
+        "Should issues have a 'handoff_instructions' field specifically for external AI?",
+        "Can we auto-generate a Cursor-ready prompt from an issue entity?",
+        "How do we track that an issue was handed off and implemented externally?"
+      ],
+      "notes": "This pattern was validated live in session 9. The chat agent found ISS-035 (shallow merge bug), created the issue with full investigation detail, and the Cursor agent implemented the fix. This is the bridge pattern from ISS-012.",
+      "tags": ["architecture", "ai-handoff", "investigation-pattern"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-066",
+      "title": "Bi-directional context push — DevTrack pushes context to agent mid-conversation",
+      "description": "Currently the chat agent pulls context from DevTrack (reads files, queries entities). But there's no feedback loop where DevTrack pushes context back to the agent. Example: agent creates an issue, DevTrack's dedup check finds it overlaps with ISS-012 — but that context never reaches the agent mid-conversation. Could inject system messages or tool results that say 'Note: this issue overlaps with ISS-012 (high priority, open since session 3)'. Also: when agent reads a roadmap item, auto-inject related issues/ideas as context.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "medium",
+      "source": "session-9 upfactoring",
+      "related_ideas": ["IDEA-065"],
+      "promoted_to": null,
+      "pros": [
+        "Agent makes better decisions with more context",
+        "Prevents duplicate work — agent knows what already exists",
+        "Feels more like a real teammate that knows the project"
+      ],
+      "cons": [
+        "Adds complexity to tool execution layer",
+        "Could bloat context window with too much injected info",
+        "Hard to decide what's relevant to inject vs noise"
+      ],
+      "open_questions": [
+        "Inject as system messages or as tool result annotations?",
+        "How aggressive should the push be? Every tool call or only on key operations?",
+        "Can we use embeddings to determine relevance of pushed context?"
+      ],
+      "notes": "",
+      "tags": ["ai-intelligence", "context-management"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-067",
+      "title": "View-level data lifecycle — each view manages its own freshness instead of global refresh",
+      "description": "The refreshKey pattern (ISS-039) was a symptom of not having proper data lifecycle per view. Each view should decide: (1) fetch on mount, (2) poll on interval if it needs live data (Dashboard every 30s, Activity every 10s), (3) subscribe to specific WS event types it cares about (Issues view listens for issue_created/resolved, not every file change), (4) never remount just because unrelated data changed. Could implement a lightweight useEntityData hook that handles mount-fetch + WS-subscription + optimistic updates.",
+      "category": "infrastructure",
+      "status": "captured",
+      "priority": "high",
+      "source": "session-9 ISS-039 fix",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [
+        "Eliminates all the state-loss bugs from global refresh",
+        "Views only re-render when their data actually changes",
+        "Foundation for optimistic updates and real-time collaboration"
+      ],
+      "cons": [
+        "Requires touching every view component",
+        "Need to define which WS events each view cares about",
+        "Polling adds slight server load"
+      ],
+      "open_questions": [
+        "Start with a useEntityData hook or just add useEffect polling per view?",
+        "Which views need live data? Dashboard, Activity, Audits. Others probably don't.",
+        "Should we add typed WS event subscriptions or just filter client-side?"
+      ],
+      "notes": "Current state after ISS-039 fix: views fetch on mount but never refresh. This is better than the remount-everything pattern but means data goes stale. Medium priority since most views are fine with mount-only fetch for now.",
+      "tags": ["infrastructure", "state-management", "real-time"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-068",
+      "title": "Auto-generate Cursor-ready prompts from DevTrack entities",
+      "description": "When the chat agent creates a rich issue (ISS-035 with root cause, files, proposed fix), generate a one-click 'Copy for Cursor' prompt that includes: issue title, root cause, affected files with line numbers, proposed solution approach, acceptance criteria. User clicks the button, pastes into Cursor, and the coding AI has full context without re-investigation. Could also work for roadmap items with acceptance criteria and for ideas being promoted to implementation.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "medium",
+      "source": "session-9 upfactoring",
+      "related_ideas": ["IDEA-065"],
+      "promoted_to": null,
+      "pros": [
+        "Eliminates the manual context transfer between DevTrack and coding AI",
+        "Standardizes the handoff format",
+        "Makes the investigation→implementation pipeline seamless"
+      ],
+      "cons": [
+        "Prompt format depends on which coding AI the user uses",
+        "Needs to be kept updated as entity schema evolves"
+      ],
+      "open_questions": [
+        "Button on entity cards or a global 'Export to AI' action?",
+        "Different prompt templates for different target AIs?",
+        "Should it include the full entity or a condensed handoff summary?"
+      ],
+      "notes": "",
+      "tags": ["ai-handoff", "developer-experience"],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     }
   ],
-  "next_id": 62
+  "next_id": 69
 }
