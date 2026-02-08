@@ -142,11 +142,11 @@ const BASE_DELAY_MS = 5000; // 5 seconds initial delay
 class TokenRateTracker {
   private windows: Map<string, { tokens: number; timestamp: number }[]> = new Map();
   
-  // Known rate limits (input tokens per minute)
+  // Known rate limits (input tokens per minute) — divided by expected concurrency
   private limits: Record<string, number> = {
-    anthropic: 400000,  // 450K limit, leave 50K buffer
-    openai: 800000,     // Typically higher
-    google: 1000000,
+    anthropic: 130000,  // 450K limit / 3 concurrent agents, with buffer
+    openai: 300000,     // Typically higher, /3
+    google: 400000,     // /3
   };
 
   recordUsage(provider: string, inputTokens: number) {
