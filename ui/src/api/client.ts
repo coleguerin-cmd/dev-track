@@ -234,6 +234,7 @@ export const docs = {
   regenerate: (id: string) => request<any>(`/docs/${id}/regenerate`, { method: 'POST' }),
   generate: (mode: 'initialize' | 'update') =>
     request<any>('/docs/generate', { method: 'POST', body: JSON.stringify({ mode }) }),
+  generateStatus: () => request<any>('/docs/generate/status'),
   // Legacy (backward compat)
   listDesigns: () => request<any>('/docs/designs'),
   getDesign: (filename: string) => request<any>(`/docs/designs/${filename}`),
@@ -251,6 +252,12 @@ export const git = {
   prs: () => request<any>('/git/prs'),
   ci: () => request<any>('/git/ci'),
   summary: () => request<any>('/git/summary'),
+};
+
+// ─── Project Init ───────────────────────────────────────────────────────────
+
+export const init = {
+  run: () => request<any>('/init', { method: 'POST', body: JSON.stringify({}) }),
 };
 
 // ─── Config ─────────────────────────────────────────────────────────────────

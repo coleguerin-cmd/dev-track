@@ -107,15 +107,15 @@ export const docTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'update_doc',
-        description: 'Update an existing document content and/or metadata',
+        description: 'Update an existing document. The content parameter is REQUIRED when updating doc content — pass the FULL markdown text as a string, not a reference or filename. The content replaces the entire document.',
         parameters: { type: 'object', properties: {
-          id: { type: 'string', description: 'Doc ID to update' },
-          content: { type: 'string', description: 'New markdown content (replaces entire doc)' },
-          title: { type: 'string', description: 'Updated title' },
+          id: { type: 'string', description: 'Doc ID to update (e.g., "system-overview", "getting-started")' },
+          content: { type: 'string', description: 'REQUIRED for content updates. The complete markdown text of the document. Must be a string containing the full document content, not a reference. Example: "# Title\\n\\nParagraph text here..."' },
+          title: { type: 'string', description: 'Updated title (optional)' },
           status: { type: 'string', enum: ['draft', 'published', 'archived'] },
           systems: { type: 'array', items: { type: 'string' } },
           tags: { type: 'array', items: { type: 'string' } },
-        }, required: ['id'] },
+        }, required: ['id', 'content'] },
       }},
       label: 'Updating document',
       execute: async (args) => {
@@ -123,7 +123,11 @@ export const docTools: ToolModule = {
         const doc = store.docsRegistry.docs.find(d => d.id === args.id);
         if (!doc) return { error: `Doc ${args.id} not found` };
 
-        if (args.content) store.writeDocContent(args.id, args.content);
+        if (!args.content || args.content.length < 10) {
+          return { error: 'No content provided or content too short. Pass the FULL markdown text in the "content" parameter as a string. The content must be the complete document text.' };
+        }
+
+        store.writeDocContent(args.id, args.content);
         if (args.title) doc.title = args.title;
         if (args.status) doc.status = args.status as any;
         if (args.systems) doc.systems = args.systems;

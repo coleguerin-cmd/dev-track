@@ -997,7 +997,7 @@
       "id": "ISS-042",
       "type": "architecture",
       "title": "No resilience for long-running AI agent tasks — server restart kills in-flight work",
-      "status": "open",
+      "status": "resolved",
       "severity": "high",
       "assignee": null,
       "discovered": "2026-02-08",
@@ -1005,14 +1005,14 @@
       "symptoms": "Docs initialization cost $35.94 and only completed 4 of 14 docs because the server restarted mid-generation (tsx watch hot reload). The async IIFE in the route handler was killed. No checkpoint, no resume, no refund. User pays for all the context-building iterations that produced nothing.",
       "root_cause": "Long-running AI agent tasks run as fire-and-forget async functions inside the server process. Server restarts (tsx watch, crashes, EADDRINUSE) kill them. No checkpoint/resume mechanism. Each update_doc call persists but the agent loop state is lost.",
       "files": ["server/routes/docs.ts", "server/ai/runner.ts", "server/automation/engine.ts"],
-      "resolution": null,
-      "resolved": null,
-      "roadmap_item": null,
+      "resolution": "Hybrid docs generation architecture: (1) Update mode uses per-doc Sonnet coordinator — each doc is atomic, server restart loses at most 1 doc. (2) Both modes track completed_docs in status.json — re-running skips recently completed docs (resumability). (3) Tool descriptions fixed to prevent fumbling. (4) State cache replaces 130K raw context. (5) Conflict prevention (409 if already running).",
+      "resolved": "2026-02-08",
+      "roadmap_item": "docs-wiki-overhaul",
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
       "tags": ["architecture", "resilience", "cost", "critical-for-production"],
-      "notes": "Docs init: 17 API calls, 2.1M input tokens, $35.94. Agent spent 6 iterations ($14) fumbling with update_doc tool format. Zero prompt cache hits. Possible fixes: (1) run agent in child process that survives server restart, (2) checkpoint after each tool call iteration, (3) per-doc generation instead of monolithic agent run, (4) lock server from hot-reload during agent execution."
+      "notes": "Original problem: $36 docs init killed by server restart, agent wasted $14 on tool fumbling. Fixed with per-doc coordinator for updates (each doc atomic), checkpointing for init mode, better tool descriptions."
     },
     {
       "id": "ISS-043",

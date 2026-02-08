@@ -68,7 +68,20 @@ app.post('/', async (c) => {
       maxIterations: 20,
     });
 
-    console.log(`[init] Complete: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);
+    console.log(`[init] Entity population complete: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);
+
+    // Step 6: Trigger docs generation (async — don't wait)
+    console.log('[init] Step 5: Triggering docs generation...');
+    try {
+      // Import dynamically to avoid circular deps
+      const { default: fetch } = await import('node-fetch' as any).catch(() => ({ default: globalThis.fetch }));
+      // Fire docs generation in the background via internal API
+      fetch(`http://127.0.0.1:${process.env.PORT || 24680}/api/v1/docs/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'initialize' }),
+      }).catch(() => { /* fire and forget */ });
+    } catch { /* ignore — docs will be generated on next manual trigger */ }
 
     return c.json({
       ok: true,
@@ -77,6 +90,7 @@ app.post('/', async (c) => {
         tool_calls: result.tool_calls_made.length,
         iterations: result.iterations,
         cost: result.cost,
+        docs_generation: 'started',
       },
     });
   } catch (err: any) {

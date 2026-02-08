@@ -12,6 +12,7 @@ import { getDataDir } from '../project-config.js';
 import { broadcast } from '../ws.js';
 import { runAgent } from '../ai/runner.js';
 import { AuditRecorder } from './recorder.js';
+import { formatStateCacheForPrompt, invalidateStateCache } from '../ai/state-cache.js';
 import type { Automation, AutomationCondition, AuditTriggerType } from '../../shared/types.js';
 
 export type TriggerType = 'issue_created' | 'item_completed' | 'session_ended' | 'health_changed' | 'scheduled' | 'file_changed' | 'manual';
@@ -196,14 +197,13 @@ class AutomationEngine {
       context.data || {},
     );
 
-    // Build context summary for the AI
+    // Build context from state cache (compressed ~2-5K tokens instead of raw store reads)
+    const stateContext = formatStateCacheForPrompt();
     const contextSummary = [
       `Trigger: ${context.trigger}`,
-      context.data ? `Data: ${JSON.stringify(context.data).substring(0, 2000)}` : '',
-      `Project: ${store.config.project}`,
-      `Status: ${store.getQuickStatusLine()}`,
-      `Open issues: ${store.issues.issues.filter(i => i.status === 'open').length}`,
-      `Roadmap items (now): ${store.roadmap.items.filter(i => i.horizon === 'now' && i.status !== 'completed').map(i => i.title).join(', ') || 'none'}`,
+      context.data ? `Trigger data: ${JSON.stringify(context.data).substring(0, 1000)}` : '',
+      '',
+      stateContext,
     ].filter(Boolean).join('\n');
 
     const systemPrompt = [

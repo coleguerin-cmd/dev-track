@@ -123,7 +123,8 @@ const TASK_ROUTES: Record<TaskType, TaskRoute> = {
   // Premium-first tasks for automation + init (depth over cost)
   project_init:         { tiers: ['premium', 'standard'],  providers: ['anthropic', 'openai', 'google'] },
   deep_audit:           { tiers: ['premium', 'standard'],  providers: ['anthropic', 'openai', 'google'] },
-  doc_generation:       { tiers: ['premium', 'standard'],  providers: ['anthropic', 'openai', 'google'] },
+  // Doc generation defaults to standard (Sonnet) — initialize mode overrides to Opus via model param
+  doc_generation:       { tiers: ['standard', 'premium'],  providers: ['anthropic', 'openai', 'google'] },
   incremental_update:   { tiers: ['standard', 'budget'],   providers: ['anthropic', 'openai', 'google'] },
 };
 

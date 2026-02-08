@@ -1565,6 +1565,53 @@
       ],
       "backlog_item": null,
       "breaking": false
+    },
+    {
+      "id": "CL-084",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Doc generation model routing fix + tool description improvements",
+      "description": "Changed doc_generation task route from premium-first to standard-first (Sonnet default, Opus via model override). Initialize mode will explicitly pass Opus 4.5 model ID. Rewrote update_doc tool: content parameter now REQUIRED (was optional), description explains it must be full markdown text, added validation that rejects empty/short content with clear error message. Prevents the $14 tool-fumbling waste from the first docs run.",
+      "type": "fix",
+      "scope": "server",
+      "files_changed": ["server/ai/router.ts", "server/ai/tools/docs.ts"],
+      "backlog_item": "docs-wiki-overhaul",
+      "breaking": false
+    },
+    {
+      "id": "CL-085",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "AI State Cache — compressed project summary for efficient agent context",
+      "description": "New server/ai/state-cache.ts module. buildStateCache() reads all store data and compresses into ~2-5K token summary: project health, systems with scores, roadmap by horizon, open issues, recent changelog, velocity stats, docs status, active session. 30-minute TTL with memory + disk caching. getStateCache() returns fresh or cached. formatStateCacheForPrompt() outputs ready-to-inject text block. Replaces 130K+ token raw context building in automations and docs generator. Foundation for tiered audit system (IDEA-069).",
+      "type": "feature",
+      "scope": "server",
+      "files_changed": ["server/ai/state-cache.ts"],
+      "backlog_item": "docs-wiki-overhaul",
+      "breaking": false
+    },
+    {
+      "id": "CL-086",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Hybrid docs generation: monolithic Opus 4.5 init + per-doc Sonnet updates + progress tracking",
+      "description": "Complete rewrite of docs generation architecture. Initialize mode: monolithic Opus 4.5 agent (force model claude-opus-4-5-20251101 for Helicone cost tracking), 20 iterations, state cache context, resumability via completed_docs tracking. Update mode: per-doc Sonnet coordinator that loops through stale auto-generated docs, spawns focused 5-iteration agent per doc, atomic (server restart loses at most 1 doc). Both modes: generation status tracking (running/completed/errors/cost in module-level state + data/ai/docs-generation-status.json), GET /docs/generate/status endpoint, conflict prevention (409 if already running). UI: real-time progress bar in Docs tab header (polls every 3s), shows doc count, current doc name, running cost. Dashboard: Initialize Project + Generate Docs buttons. Init flow (POST /init) now triggers docs generation as final step. State cache wired into automation engine replacing raw 130K token context building.",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/routes/docs.ts",
+        "server/ai/state-cache.ts",
+        "server/ai/router.ts",
+        "server/ai/tools/docs.ts",
+        "server/automation/engine.ts",
+        "server/routes/init.ts",
+        "ui/src/views/Docs.tsx",
+        "ui/src/views/Dashboard.tsx",
+        "ui/src/api/client.ts"
+      ],
+      "backlog_item": "docs-wiki-overhaul",
+      "issues_resolved": ["ISS-042"],
+      "breaking": false
     }
   ]
 }

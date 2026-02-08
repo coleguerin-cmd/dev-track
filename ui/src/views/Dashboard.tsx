@@ -17,6 +17,9 @@ import {
   TrendingUp,
   X,
   Zap,
+  Play,
+  Loader2,
+  RefreshCw,
 } from 'lucide-react';
 import * as api from '../api/client';
 import { SizeBadge, StatusBadge, SeverityBadge } from '../components/StatusBadge';
@@ -58,11 +61,69 @@ export function Dashboard() {
     setBrainNotes(prev => prev.filter(n => n.id !== id));
   };
 
+  const [initRunning, setInitRunning] = useState(false);
+  const [docsRunning, setDocsRunning] = useState(false);
+
+  const runProjectInit = async () => {
+    setInitRunning(true);
+    try {
+      await api.init.run();
+      // Refresh all data after init
+      setTimeout(() => {
+        api.config.quickStatus().then((d: any) => setStatus(d?.status)).catch(() => {});
+        api.backlog.list({ horizon: 'now' }).then((d: any) => setNowItems(d?.items || [])).catch(() => {});
+        setInitRunning(false);
+      }, 5000);
+    } catch { setInitRunning(false); }
+  };
+
+  const runDocsInit = async () => {
+    setDocsRunning(true);
+    try {
+      await fetch(`${BASE}/docs/generate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mode: 'initialize' }),
+      });
+      setTimeout(() => setDocsRunning(false), 10000);
+    } catch { setDocsRunning(false); }
+  };
+
   const healthPct = status?.health ?? 0;
   const healthColor = healthPct >= 80 ? 'text-status-pass' : healthPct >= 60 ? 'text-accent-blue' : healthPct >= 40 ? 'text-accent-yellow' : 'text-status-fail';
 
   return (
     <div className="max-w-7xl mx-auto space-y-5">
+      {/* Project Actions Bar */}
+      <div className="flex items-center gap-2">
+        <button
+          onClick={runProjectInit}
+          disabled={initRunning}
+          className={`flex items-center gap-1.5 text-[10px] font-medium px-3 py-1.5 rounded transition-colors ${
+            initRunning
+              ? 'bg-accent-blue/20 text-accent-blue cursor-wait'
+              : 'bg-surface-2 text-text-secondary hover:bg-surface-3 hover:text-text-primary border border-border'
+          }`}
+          title="Run full AI project analysis — scans codebase, creates systems, roadmap items, issues, and triggers docs generation"
+        >
+          {initRunning ? <Loader2 size={10} className="animate-spin" /> : <Play size={10} />}
+          {initRunning ? 'Initializing Project...' : 'Initialize Project'}
+        </button>
+        <button
+          onClick={runDocsInit}
+          disabled={docsRunning}
+          className={`flex items-center gap-1.5 text-[10px] font-medium px-3 py-1.5 rounded transition-colors ${
+            docsRunning
+              ? 'bg-accent-purple/20 text-accent-purple cursor-wait'
+              : 'bg-surface-2 text-text-secondary hover:bg-surface-3 hover:text-text-primary border border-border'
+          }`}
+          title="Generate comprehensive documentation from codebase scan"
+        >
+          {docsRunning ? <Loader2 size={10} className="animate-spin" /> : <RefreshCw size={10} />}
+          {docsRunning ? 'Generating Docs...' : 'Generate Docs'}
+        </button>
+      </div>
+
       {/* Top row: Health + Quick Stats */}
       <div className="flex items-start gap-5">
         {/* Health ring */}

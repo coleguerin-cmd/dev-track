@@ -114,6 +114,7 @@ export function Docs() {
   const [activeSection, setActiveSection] = useState('');
   const [loading, setLoading] = useState(true);
   const [docsAction, setDocsAction] = useState<'idle' | 'initializing' | 'updating'>('idle');
+  const [genProgress, setGenProgress] = useState<{ docs_total: number; docs_completed: number; current_doc: string | null; errors: string[]; total_cost: number } | null>(null);
 
   // Check if docs have been initialized (have content)
   const isInitialized = useMemo(() => docs.length > 0, [docs]);
@@ -181,29 +182,35 @@ export function Docs() {
     }
   }, []);
 
+  // Poll generation status when running
+  useEffect(() => {
+    if (docsAction === 'idle') return;
+    const poll = setInterval(async () => {
+      try {
+        const status = await api.docs.generateStatus();
+        setGenProgress(status);
+        // Refresh docs list to see updates
+        const d = await api.docs.list();
+        setDocs(d?.docs || []);
+        // Check if done
+        if (!status?.running) {
+          setDocsAction('idle');
+          setGenProgress(null);
+          clearInterval(poll);
+        }
+      } catch { /* ignore */ }
+    }, 3000);
+    return () => clearInterval(poll);
+  }, [docsAction]);
+
   const handleDocsAction = async (action: 'initialize' | 'update') => {
     setDocsAction(action === 'initialize' ? 'initializing' : 'updating');
     try {
-      // Call the dedicated docs generation endpoint
       await fetch(`${BASE}/docs/generate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mode: action }),
       });
-      // Generation runs async — poll for updates
-      const pollInterval = setInterval(async () => {
-        try {
-          const d = await api.docs.list();
-          setDocs(d?.docs || []);
-        } catch { /* ignore poll errors */ }
-      }, 10000);
-      // Stop polling after a reasonable time
-      setTimeout(() => {
-        clearInterval(pollInterval);
-        setDocsAction('idle');
-        // Final refresh
-        api.docs.list().then((d: any) => setDocs(d?.docs || [])).catch(() => {});
-      }, action === 'initialize' ? 180000 : 60000); // 3min for init, 1min for update
     } catch {
       setDocsAction('idle');
     }
@@ -227,10 +234,29 @@ export function Docs() {
         </div>
         <div className="flex items-center gap-2">
           {docsAction !== 'idle' ? (
-            <span className="flex items-center gap-1.5 text-[10px] text-accent-blue">
-              <Loader2 size={12} className="animate-spin" />
-              {docsAction === 'initializing' ? 'Initializing docs...' : 'Updating docs...'}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="flex items-center gap-1.5 text-[10px] text-accent-blue">
+                <Loader2 size={12} className="animate-spin" />
+                {docsAction === 'initializing' ? 'Initializing docs' : 'Updating docs'}
+                {genProgress && genProgress.docs_total > 0 && (
+                  <span className="text-text-tertiary">
+                    {genProgress.docs_completed}/{genProgress.docs_total}
+                    {genProgress.current_doc && ` — ${genProgress.current_doc}`}
+                  </span>
+                )}
+              </span>
+              {genProgress && genProgress.docs_total > 0 && (
+                <div className="w-20 h-1.5 bg-surface-3 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-accent-blue rounded-full transition-all duration-500"
+                    style={{ width: `${Math.round((genProgress.docs_completed / genProgress.docs_total) * 100)}%` }}
+                  />
+                </div>
+              )}
+              {genProgress && genProgress.total_cost > 0 && (
+                <span className="text-[9px] text-text-tertiary">${genProgress.total_cost.toFixed(2)}</span>
+              )}
+            </div>
           ) : (
             <>
               {!isInitialized ? (
