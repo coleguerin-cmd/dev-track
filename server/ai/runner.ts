@@ -23,6 +23,8 @@ export interface AgentOptions {
   recorder?: AuditRecorder;
   /** Custom Helicone properties for request tracking */
   heliconeProperties?: Record<string, string>;
+  /** Max output tokens per AI call (default: 4096) — increase for tools that need large output like doc generation */
+  maxTokens?: number;
 }
 
 export interface AgentResult {
@@ -65,6 +67,7 @@ export async function runAgent(
       task,
       tools: tools.length > 0 ? tools : undefined,
       model: options.model,
+      max_tokens: options.maxTokens,
       heliconeProperties: options.heliconeProperties,
     } as any);
 

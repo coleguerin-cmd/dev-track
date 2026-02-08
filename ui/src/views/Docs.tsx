@@ -259,23 +259,28 @@ export function Docs() {
             </div>
           ) : (
             <>
-              {!isInitialized ? (
-                <button
-                  onClick={() => handleDocsAction('initialize')}
-                  className="flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded bg-accent-blue text-white hover:bg-accent-blue/90 transition-colors"
-                >
-                  <Play size={10} />
-                  Initialize Docs
-                </button>
-              ) : (
-                <button
-                  onClick={() => handleDocsAction('update')}
-                  className="flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded bg-surface-3 text-text-secondary hover:bg-surface-4 hover:text-text-primary transition-colors"
-                >
-                  <RefreshCw size={10} />
-                  Update Docs
-                </button>
-              )}
+              <button
+                onClick={() => {
+                  if (confirm('Update Docs: Refresh stale pages with Sonnet (~$3-5). New pages will be created for any missing systems. Continue?')) {
+                    handleDocsAction('update');
+                  }
+                }}
+                className="flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded bg-surface-3 text-text-secondary hover:bg-surface-4 hover:text-text-primary transition-colors"
+              >
+                <RefreshCw size={10} />
+                Update Docs
+              </button>
+              <button
+                onClick={() => {
+                  if (confirm('Reinitialize Docs: Full deep scan with Opus 4.5 (~$15-20). Regenerates ALL documentation from scratch. This costs real money. Continue?')) {
+                    handleDocsAction('initialize');
+                  }
+                }}
+                className="flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded bg-surface-3 text-text-secondary hover:bg-surface-4 hover:text-text-primary transition-colors"
+              >
+                <Sparkles size={10} />
+                Reinitialize
+              </button>
             </>
           )}
         </div>

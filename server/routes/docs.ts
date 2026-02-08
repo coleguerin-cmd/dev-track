@@ -201,10 +201,11 @@ ${skipNote}`;
   const recorder = new AuditRecorder('docs-initialize', 'Documentation Initialization', 'manual', 'manual', { mode: 'initialize' });
 
   try {
-    const result = await runAgent(systemPrompt, userMessage, {
+      const result = await runAgent(systemPrompt, userMessage, {
       task: 'doc_generation',
       model: 'claude-opus-4-5-20251101', // Force Opus 4.5 for Helicone cost tracking
-      maxIterations: 20,
+      maxIterations: 25,
+      maxTokens: 16384, // Docs need large output for full markdown content in tool calls
       recorder,
       heliconeProperties: {
         User: 'devtrack-docs-generator',
@@ -240,6 +241,28 @@ ${skipNote}`;
 async function runUpdateMode() {
   const store = getStore();
   const stateCache = formatStateCacheForPrompt();
+
+  // First: check if new docs need to be created (systems without docs, etc.)
+  const systems = store.systems?.systems || [];
+  const existingDocIds = new Set(store.docsRegistry.docs.map(d => d.id));
+  for (const sys of systems) {
+    const docId = `system-${sys.id}`;
+    if (!existingDocIds.has(docId)) {
+      // Create missing system doc
+      const now = new Date().toISOString().split('T')[0];
+      const newDoc = {
+        id: docId, title: `System: ${sys.name}`, type: 'auto-generated' as const, content: '',
+        systems: [sys.id], roadmap_items: [], epics: [],
+        auto_generated: true, last_generated: null, generation_sources: ['systems', 'codebase'],
+        author: 'ai', status: 'published' as const, tags: ['system', 'auto-generated'],
+        created: now, updated: now,
+      };
+      store.docsRegistry.docs.push(newDoc as any);
+      store.saveDocsRegistry();
+      console.log(`[docs-generate] Created missing doc: ${docId}`);
+    }
+  }
+
   const docs = store.docsRegistry.docs.filter(d => d.auto_generated);
 
   // Filter to stale docs: not recently completed, AND either never generated, dated before today, or content too thin
@@ -301,7 +324,7 @@ async function generateSingleDoc(doc: any, stateCache: string) {
     ? `This doc covers these systems: ${doc.systems.join(', ')}.`
     : '';
 
-  const systemPrompt = `You are a documentation writer for DevTrack. Update or generate content for a single document. Write for a layman. Be comprehensive but focused on this specific topic.`;
+  const systemPrompt = `You are a documentation writer for DevTrack. Your job is to update or completely rewrite a single document. Write for someone who has never seen the codebase. Be comprehensive and detailed. When you call update_doc, you MUST include the "content" parameter with the FULL markdown text as a string.`;
 
   const userMessage = `Update the document "${doc.title}" (id: ${doc.id}).
 
@@ -311,19 +334,22 @@ ${systemsContext}
 
 ## Instructions
 1. Read the current content of this doc using get_doc with id "${doc.id}".
-2. If the doc covers specific systems, read the relevant source files using read_project_file.
-3. Generate updated, comprehensive markdown content.
-4. Call update_doc with id "${doc.id}" and the FULL markdown content as a string in the content parameter.
-5. The content must be complete — not a reference, not a filename, but the actual markdown text.
+2. Read relevant source files using read_project_file to understand the actual implementation.
+3. Write comprehensive, rich markdown content — at least 80 lines for system docs, more for major docs.
+4. Call update_doc with BOTH parameters: id="${doc.id}" AND content="<your full markdown text here>".
 
-Write at least 50 lines of content. Include headings, descriptions, code examples where relevant, and cross-references to other docs.`;
+CRITICAL: The content parameter must be the COMPLETE markdown document as a string. Not a reference, not a filename — the actual text. Example:
+update_doc({ "id": "${doc.id}", "content": "# Title\\n\\n## Section 1\\n\\nContent here..." })
+
+Include: overview, key files/components, architecture, configuration, API endpoints (if applicable), code examples, cross-references to other docs, known issues.`;
 
   const recorder = new AuditRecorder(`docs-update-${doc.id}`, `Doc Update: ${doc.title}`, 'manual', 'manual', { doc_id: doc.id });
 
   try {
     const result = await runAgent(systemPrompt, userMessage, {
       task: 'incremental_update', // Routes to Sonnet
-      maxIterations: 5,
+      maxIterations: 8,
+      maxTokens: 16384, // Must be large enough for full doc content in tool call arguments
       recorder,
       heliconeProperties: {
         User: 'devtrack-docs-generator',
