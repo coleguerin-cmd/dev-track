@@ -25,6 +25,7 @@
     "dagre": "^0.8.5",
     "glob": "^10.3.0",
     "hono": "^4.0.0",
+    "mermaid": "^11.12.2",
     "openai": "^6.18.0",
     "reactflow": "^11.11.4",
     "rehype-highlight": "^7.0.2",

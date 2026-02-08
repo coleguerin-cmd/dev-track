@@ -1,30 +1,36 @@
 {
-  "last_generated": "2026-02-09T03:00:00.000Z",
-  "briefing": "Session 9 was the biggest session yet — 47 files changed, 7400 lines, 15 items shipped, 48 points. Key deliverables: (1) Audits tab end-to-end with markdown rendering, time filters, analytics charts, right sidebar entity breakdown. (2) Chat agent reframed as 'investigation + handoff layer' — system prompt scoped, AgentActivityPanel for real-time tool visibility, SessionChangesTray for Pillar-style entity mutation tracking. (3) Five bugs fixed including ISS-039 (critical) — the refreshKey pattern was remounting ALL views on every WebSocket event, destroying state app-wide. Also fixed ISS-035 (config deep merge + cache invalidation), ISS-036 (agent scope), ISS-037 (transparency), ISS-038 (changes tray). Git is clean — all work committed and pushed to origin/master. Automations ON ($10/day, standard tier).",
+  "last_generated": "2026-02-09T05:00:00.000Z",
+  "briefing": "Session 10 was the deepest architectural session yet — 18 items shipped, 62 points, 9 commits, ~15K lines changed. Core deliverable: complete docs generation system rewrite. Discovery agent scans projects and produces a doc plan (generic, not DevTrack-hardcoded). Per-doc writers with 4-layer prompts (architecture/operational/implementation/design). Parallel execution pool, phased generation by layer, checkpoint/resume on restart, graceful degradation. Three-column UI (left page tree, center content, right On This Page ToC). Sub-page support. Edit provenance tracking. Also shipped: automation Run Now button, AI rate limiting (retry + backoff + TokenRateTracker), multi-user data separation (profiles to gitignored data/local/), Helicone custom properties (User-Id, Project, Source, AutomationId). AI State Cache for compressed context (~5K tokens vs 130K raw). Docs generation runs totaled ~$47 across Opus 4.6 ($36), Opus 4.5 ($3), and Sonnet ($8). Key insight: max_tokens=4096 was truncating tool call arguments — the $14 tool fumbling bug. Fixed to 16384. Git clean — all work committed and pushed.",
   "hot_context": [
-    "Git clean — all session 9 work committed and pushed (commit 001cfd7)",
-    "AI chat agent browser-tested this session — activity panel, changes tray, scope boundaries all working",
-    "ISS-039 (critical) fixed: refreshKey pattern was destroying view state on every WS event",
-    "Chat agent role crystallized: investigation + handoff layer, NOT a code editor",
-    "Audits tab fully built: recorder, engine wiring, API, rich UI with entity breakdowns",
-    "Automations ON — standard tier, $10/day budget, 60min cooldown",
-    "Entity model expanded: epics, milestones, releases AI tools added",
-    "4 upfactoring ideas captured: IDEA-065 (handoff pattern), IDEA-066 (bidirectional context), IDEA-067 (view lifecycle), IDEA-068 (Cursor-ready prompts)",
-    "Open issues: ISS-003 (Helicone), ISS-006 (AI drift), ISS-012 (conversation bridge), ISS-022 (Helicone $0), ISS-031 (max concurrent), ISS-034 (semantic watcher)"
+    "Git clean — all session 10 work committed (9 commits, latest: 2188d5e)",
+    "Docs generation engine completely rewritten: server/ai/docs-generator.ts (290 lines, clean module)",
+    "Discovery agent produces DocPlan JSON — generic prompts work for ANY project, not just DevTrack",
+    "Per-doc writers use 4-layer framework: architecture, operational, implementation, design",
+    "Three-column Docs UI: left page tree nav, center content, right On This Page ToC",
+    "14 docs generated: 4 core docs (Opus, 20-33KB each), 8 system docs (Sonnet, 17-33KB), 4 still thin",
+    "max_tokens bug found and fixed: 4096 was truncating tool call args, now 16384",
+    "Rate limiting: withRetry() + TokenRateTracker + concurrency-aware budgets per provider",
+    "Multi-user: profiles in data/local/ (gitignored), credentials already gitignored",
+    "Helicone: User-Id header + custom properties (Source, Project, AutomationId, etc.)",
+    "AI State Cache: server/ai/state-cache.ts, 30-min TTL, replaces 130K raw context in automations",
+    "Plan exists for session 11: c:\\Users\\realk\\.cursor\\plans\\docs_system_final_form_3609d378.plan.md",
+    "Open issues: ISS-003 (integrations), ISS-006 (AI drift), ISS-012 (conversation bridge), ISS-034 (semantic watcher), ISS-043 (prompt caching), ISS-031 (max concurrent)"
   ],
   "warnings": [
+    "ISS-043 (high): Anthropic prompt caching shows 0 cache reads — biggest single cost optimization remaining ($28 savings on a $36 run)",
     "ISS-034 (critical): Semantic file watcher still broken — blocks reliable automation triggers",
-    "Helicone integration still FAILING (ISS-003) — no real cost data flowing",
-    "View-level data lifecycle not implemented yet (IDEA-067) — global refresh removed but views may miss updates",
-    "ai-watcher and ui-design-overhaul both stalled in_progress — need status updates or demotion",
-    "Large brain notes (BN-015, 018, 019, 020) still bloat context"
+    "Docs generation cost ~$47 total this session across 3 runs — need cost modal before production",
+    "4 system docs still have thin content (brain, integrations, data-layer, session-tracking) — staleness check missed them",
+    "Helicone shows $0 for Opus 4.6 requests — ISS-022 still unresolved by Helicone's pricing database",
+    "The docs-generator.ts module is new and untested end-to-end with the discovery agent — needs a full test run"
   ],
   "suggestions": [
-    "PRIORITY 1: Fix ISS-034 (semantic file watcher) — critical for automation reliability",
-    "PRIORITY 2: Browser test chat improvements fully (activity panel, changes tray, handoff behavior)",
-    "PRIORITY 3: Build view-level data lifecycle (IDEA-067) to replace removed global refresh",
-    "Consider: promote IDEA-065 (handoff pattern) and IDEA-068 (Cursor-ready prompts) to roadmap",
-    "Consider: dogfood DevTrack on Pillar now that chat agent and audits are working",
-    "Consider: archive large brain notes to reduce context loading"
+    "PRIORITY 1: Install mermaid + rehype-highlight, test three-column layout in browser",
+    "PRIORITY 2: Run the new discovery-based initialization (test the full pipeline end-to-end)",
+    "PRIORITY 3: Build diff-based update system — git diff per doc for $0.10-0.20 updates",
+    "PRIORITY 4: Investigate ISS-043 (prompt caching) — could save 90% on repeated context",
+    "Consider: cost estimation modal before any generation run",
+    "Consider: port DevTrack to Landmark and test docs initialization on a real second project",
+    "Consider: session wrap automation — this manual data entry should be automated"
   ]
 }

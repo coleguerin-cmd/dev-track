@@ -16,13 +16,82 @@
 
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 import { getStore } from '../store.js';
-import { getDataDir } from '../project-config.js';
+import { getDataDir, getProjectRoot } from '../project-config.js';
 import { broadcast } from '../ws.js';
 import { runAgent } from './runner.js';
 import { AuditRecorder } from '../automation/recorder.js';
 import { formatStateCacheForPrompt, getStateCache, buildStateCache } from './state-cache.js';
 import type { DocPlan, DocPlanPage, DocLayer, DocEdit } from '../../shared/types.js';
+
+// ─── Git Diff Utilities ──────────────────────────────────────────────────────
+
+/**
+ * Get git diff for specific files since a given commit or date.
+ * Returns a summary of changes, not the full diff (to keep token count low).
+ */
+function getGitDiffSummary(sinceDate?: string, files?: string[]): string {
+  try {
+    const root = getProjectRoot();
+    const since = sinceDate || '7 days ago';
+    const fileFilter = files?.length ? `-- ${files.join(' ')}` : '';
+    
+    // Get changed files with stats
+    const stat = execSync(
+      `git diff --stat --since="${since}" HEAD ${fileFilter}`,
+      { cwd: root, encoding: 'utf-8', timeout: 10000 }
+    ).trim();
+
+    // Get commit messages
+    const log = execSync(
+      `git log --oneline --since="${since}" -20`,
+      { cwd: root, encoding: 'utf-8', timeout: 10000 }
+    ).trim();
+
+    if (!stat && !log) return 'No changes detected.';
+
+    return [
+      log ? `Recent commits:\n${log}` : '',
+      stat ? `\nFile changes:\n${stat}` : '',
+    ].filter(Boolean).join('\n');
+  } catch {
+    return 'Git diff unavailable.';
+  }
+}
+
+/**
+ * Check if source files relevant to a doc have changed since the doc was last generated.
+ */
+function hasSourceFilesChanged(doc: any): boolean {
+  if (!doc.last_generated) return true; // Never generated
+  
+  try {
+    const root = getProjectRoot();
+    // Check if any relevant files changed since last generation
+    const systems = doc.systems || [];
+    const systemDirs = systems.map((s: string) => {
+      // Map system IDs to likely directory paths
+      if (s === 'server') return 'server/';
+      if (s === 'web-ui') return 'ui/';
+      if (s === 'cli') return 'cli/';
+      if (s === 'data-layer') return 'shared/';
+      return `server/${s.replace(/-/g, '')}/`;
+    });
+
+    if (systemDirs.length === 0) return true; // Can't determine relevance, assume stale
+
+    const since = doc.last_generated;
+    const changes = execSync(
+      `git log --oneline --since="${since}" -- ${systemDirs.join(' ')}`,
+      { cwd: root, encoding: 'utf-8', timeout: 5000 }
+    ).trim();
+
+    return changes.length > 0;
+  } catch {
+    return true; // On error, assume stale
+  }
+}
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -285,23 +354,51 @@ async function writeDoc(page: DocPlanPage, stateCache: string, mode: 'initialize
     ? `Key source files to read: ${page.source_files.join(', ')}`
     : 'Use list_directory and read_project_file to find relevant source files.';
 
+  // For update mode: provide diff context so the agent knows what changed
+  let diffContext = '';
+  if (mode === 'update' && doc) {
+    const lastGen = (doc as any).last_generated || (doc as any).updated;
+    const gitDiff = getGitDiffSummary(lastGen, page.source_files.length > 0 ? page.source_files : undefined);
+    
+    // Get recent changelog entries
+    const store2 = getStore();
+    const recentChangelog = store2.changelog.entries
+      .filter((e: any) => !lastGen || e.date >= lastGen)
+      .slice(-5)
+      .map((e: any) => `- [${e.id}] ${e.title}`)
+      .join('\n');
+
+    if (gitDiff !== 'No changes detected.' || recentChangelog) {
+      diffContext = `\n## What Changed Since Last Generation (${lastGen || 'unknown'})
+
+### Git Changes
+${gitDiff}
+
+### Recent Changelog
+${recentChangelog || 'No new entries.'}
+
+Update the document to reflect these changes. Maintain existing structure — only change what needs updating.`;
+    }
+  }
+
   const systemPrompt = `You are a documentation writer. ${layerPrompt}
 
 When you call update_doc, you MUST include the "content" parameter with the FULL markdown text as a string.
 Use Mermaid syntax for diagrams (\`\`\`mermaid blocks), NOT ASCII art.
 Write at least 80 lines of content. Be comprehensive and specific to THIS project.`;
 
-  const userMessage = `Generate documentation for: "${page.title}" (id: ${page.id})
+  const userMessage = `${mode === 'update' ? 'Update' : 'Generate'} documentation for: "${page.title}" (id: ${page.id})
 Layer: ${page.layer}
 Description: ${page.description}
 
 ${stateCache}
 
 ${sourceFilesHint}
+${diffContext}
 
 ## Instructions
 1. Read the current content using get_doc with id "${page.id}" (if it exists).
-2. Read relevant source files to understand the actual implementation.
+2. ${mode === 'update' ? 'Check the diff context above. Read any changed source files.' : 'Read relevant source files to understand the actual implementation.'}
 3. Write comprehensive content appropriate for the "${page.layer}" layer.
 4. Call update_doc with id="${page.id}" and content="<your full markdown text>".
 
@@ -394,6 +491,20 @@ export async function generateDocs(mode: 'initialize' | 'update'): Promise<void>
   });
 
   try {
+    // Step 0: For update mode, pre-check which docs actually have source changes
+    if (mode === 'update') {
+      const store = getStore();
+      const autoDocs = store.docsRegistry.docs.filter(d => d.auto_generated);
+      const staleCount = autoDocs.filter(d => hasSourceFilesChanged(d)).length;
+      const thinCount = autoDocs.filter(d => (store.getDocContent(d.id)?.length || 0) < 5000).length;
+      console.log(`[docs-gen] Pre-check: ${staleCount} docs with source changes, ${thinCount} with thin content`);
+      if (staleCount === 0 && thinCount === 0) {
+        console.log('[docs-gen] All docs are current — nothing to update');
+        updateStatus({ running: false, phase: 'done', docs_total: 0, docs_completed: 0 });
+        return;
+      }
+    }
+
     // Step 1: Discovery — produce doc plan
     console.log(`[docs-gen] Step 1: Running discovery agent (${mode})...`);
     const plan = await runDiscoveryAgent(mode);

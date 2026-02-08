@@ -1612,6 +1612,24 @@
       "backlog_item": "docs-wiki-overhaul",
       "issues_resolved": ["ISS-042"],
       "breaking": false
+    },
+    {
+      "id": "CL-087",
+      "date": "2026-02-08",
+      "session": 10,
+      "title": "Docs system final form: discovery agent, 4-layer framework, sub-pages, three-column UI, provenance tracking",
+      "description": "Complete docs generation rewrite. New server/ai/docs-generator.ts module with: discovery agent (scans project, produces doc plan as JSON), per-doc writers with layer-specific prompts (architecture/operational/implementation/design), parallel execution pool with configurable concurrency, phased generation by layer, plan persistence + checkpoint/resume on restart, graceful degradation (skip failed docs, continue). Generic prompts not hardcoded to DevTrack. Doc type extended with parent_id, sort_order, layer, edit_history, last_edited_by, generation_context. UI: three-column layout (left page tree, center content, right On This Page ToC), sub-page tree navigation with expand/collapse, provenance display (AI/User badge + timestamp), callout blocks (Note/Warning/Tip), alternating table row colors. Concurrency-aware rate limiter (per-agent token budgets). Routes cleaned: docs.ts went from 574 to 193 lines.",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/ai/docs-generator.ts",
+        "server/routes/docs.ts",
+        "server/ai/service.ts",
+        "shared/types.ts",
+        "ui/src/views/Docs.tsx"
+      ],
+      "backlog_item": "docs-wiki-overhaul",
+      "breaking": false
     }
   ]
 }

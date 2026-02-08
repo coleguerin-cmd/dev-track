@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { FileText, BookOpen, Code, RefreshCw, Sparkles, FolderOpen, Loader2, Clock, ChevronRight, User, Bot, AlertTriangle, Info, Lightbulb } from 'lucide-react';
+import { MermaidDiagram } from '../components/MermaidDiagram';
 import * as api from '../api/client';
 
 const BASE = '/api/v1';
@@ -100,6 +101,7 @@ export function Docs() {
   const [docsAction, setDocsAction] = useState<'idle' | 'initializing' | 'updating'>('idle');
   const [genProgress, setGenProgress] = useState<any>(null);
   const [expandedParents, setExpandedParents] = useState<Set<string>>(new Set());
+  const [costModal, setCostModal] = useState<{ mode: 'initialize' | 'update'; show: boolean }>({ mode: 'update', show: false });
 
   useEffect(() => {
     Promise.all([
@@ -200,11 +202,11 @@ export function Docs() {
             </div>
           ) : (
             <>
-              <button onClick={() => { if (confirm('Update Docs: Sonnet per-doc refresh (~$3-8). Continue?')) handleDocsAction('update'); }}
+              <button onClick={() => setCostModal({ mode: 'update', show: true })}
                 className="flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded bg-surface-3 text-text-secondary hover:bg-surface-4 hover:text-text-primary transition-colors">
                 <RefreshCw size={10} /> Update Docs
               </button>
-              <button onClick={() => { if (confirm('Reinitialize: Full discovery + generation (~$15-30). This costs real money. Continue?')) handleDocsAction('initialize'); }}
+              <button onClick={() => setCostModal({ mode: 'initialize', show: true })}
                 className="flex items-center gap-1.5 text-[10px] font-medium px-2.5 py-1.5 rounded bg-surface-3 text-text-secondary hover:bg-surface-4 hover:text-text-primary transition-colors">
                 <Sparkles size={10} /> Reinitialize
               </button>
@@ -325,6 +327,11 @@ export function Docs() {
                   ol: ({ children }) => <ol className="text-sm text-text-secondary list-decimal list-outside ml-5 mb-4 space-y-1">{children}</ol>,
                   li: ({ children }) => <li className="leading-relaxed">{children}</li>,
                   code: ({ className, children }) => {
+                    // Mermaid diagrams
+                    if (className?.includes('language-mermaid')) {
+                      const code = String(children).replace(/\n$/, '');
+                      return <MermaidDiagram code={code} />;
+                    }
                     if (className?.includes('language-')) {
                       return <code className="block text-xs font-mono text-text-primary bg-surface-2 rounded-lg p-4 mb-4 overflow-x-auto border border-border/50">{children}</code>;
                     }
@@ -387,6 +394,84 @@ export function Docs() {
           </div>
         )}
       </div>
+
+      {/* Cost Confirmation Modal */}
+      {costModal.show && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div className="bg-surface-1 border border-border rounded-xl shadow-2xl w-[420px] overflow-hidden">
+            <div className="px-5 py-4 border-b border-border">
+              <h3 className="text-sm font-semibold text-text-primary">
+                {costModal.mode === 'initialize' ? 'Reinitialize Documentation' : 'Update Documentation'}
+              </h3>
+            </div>
+            <div className="px-5 py-4 space-y-3">
+              {costModal.mode === 'initialize' ? (
+                <>
+                  <p className="text-xs text-text-secondary">Full deep scan of the codebase with AI discovery agent. Generates comprehensive documentation across all four layers.</p>
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Model</div>
+                      <div className="text-text-primary font-medium">Opus 4.5</div>
+                    </div>
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Est. Cost</div>
+                      <div className="text-text-primary font-medium">$15 - $30</div>
+                    </div>
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Est. Time</div>
+                      <div className="text-text-primary font-medium">20 - 45 min</div>
+                    </div>
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Pages</div>
+                      <div className="text-text-primary font-medium">{docs.length || '14-30'} (AI decides)</div>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-2 bg-accent-yellow/5 border border-accent-yellow/20 rounded-lg px-3 py-2">
+                    <AlertTriangle size={12} className="text-accent-yellow flex-shrink-0 mt-0.5" />
+                    <p className="text-[10px] text-text-secondary">This costs real money and takes time. The AI will scan your codebase, create a doc plan, and generate pages in phases. You can monitor progress in the header bar.</p>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs text-text-secondary">Incremental update of stale documentation. Only docs with source code changes or thin content will be regenerated.</p>
+                  <div className="grid grid-cols-2 gap-2 text-[11px]">
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Model</div>
+                      <div className="text-text-primary font-medium">Sonnet 4.5</div>
+                    </div>
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Est. Cost</div>
+                      <div className="text-text-primary font-medium">$3 - $10</div>
+                    </div>
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Est. Time</div>
+                      <div className="text-text-primary font-medium">5 - 20 min</div>
+                    </div>
+                    <div className="bg-surface-2 rounded-lg px-3 py-2">
+                      <div className="text-text-tertiary">Scope</div>
+                      <div className="text-text-primary font-medium">Changed docs only</div>
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex justify-end gap-2 px-5 py-3 border-t border-border bg-surface-2/50">
+              <button
+                onClick={() => setCostModal({ ...costModal, show: false })}
+                className="text-[11px] font-medium px-3 py-1.5 rounded bg-surface-3 text-text-secondary hover:bg-surface-4 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => { setCostModal({ ...costModal, show: false }); handleDocsAction(costModal.mode); }}
+                className="text-[11px] font-medium px-3 py-1.5 rounded bg-accent-blue text-white hover:bg-accent-blue/90 transition-colors"
+              >
+                {costModal.mode === 'initialize' ? 'Reinitialize' : 'Update'} Docs
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
