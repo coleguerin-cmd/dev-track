@@ -381,11 +381,28 @@ export interface SessionsData {
 
 // ─── 10. Docs ───────────────────────────────────────────────────────────────
 
+export type DocLayer = 'architecture' | 'operational' | 'implementation' | 'design';
+
+export interface DocEdit {
+  timestamp: string;
+  actor: 'ai' | 'user';
+  actor_detail: string;       // "Sonnet 4.5 (docs-update)" or "cole@email.com"
+  summary: string;            // "Updated architecture diagram and system table"
+  cost_usd?: number;          // If AI-generated
+}
+
 export interface Doc {
   id: string;
   title: string;
   type: DocType;
   content: string;
+
+  // Hierarchy
+  parent_id: string | null;   // For sub-pages — null = top-level page
+  sort_order: number;         // Display order within parent
+
+  // Classification
+  layer: DocLayer | null;     // Which documentation layer this belongs to
 
   // Relationships
   systems: string[];
@@ -396,6 +413,16 @@ export interface Doc {
   auto_generated: boolean;
   last_generated: string | null;
   generation_sources: string[];
+  generation_context?: {      // What was the state when this was last generated
+    git_commit?: string;
+    changelog_id?: string;
+    source_files_hash?: string;
+  };
+
+  // Provenance
+  last_edited_by: 'ai' | 'user';
+  last_edited_at: string;
+  edit_history: DocEdit[];
 
   // Metadata
   author: string;
@@ -403,6 +430,28 @@ export interface Doc {
   tags: string[];
   created: string;
   updated: string;
+}
+
+// Doc plan — output of the discovery agent
+export interface DocPlanPage {
+  id: string;
+  title: string;
+  layer: DocLayer;
+  description: string;
+  source_files: string[];
+  parent_id?: string;
+  sort_order: number;
+  exists: boolean;            // Whether this doc already exists in registry
+}
+
+export interface DocPlan {
+  id: string;
+  mode: 'initialize' | 'update';
+  created_at: string;
+  model: string;
+  pages: DocPlanPage[];
+  estimated_cost_usd: number;
+  estimated_minutes: number;
 }
 
 export interface DocsRegistryData {
