@@ -1,5 +1,5 @@
 {
   "last_updated": "2026-02-08",
-  "overall_health": 76,
-  "summary": "Session complete. Project at 76% health (stable). 96 items shipped / 314 points across 8 sessions. 6 issues open (ISS-003, ISS-006, ISS-012, ISS-022, ISS-031, ISS-034). Automation audits epic COMPLETED — full transparency into AI operations with audit UI, thinking chains, cost tracking, and suggestion approval. Automations ON (standard tier, $10/day budget). CRITICAL PATH BLOCKER: AI chat agent in_progress 9+ days without browser testing — blocks all dogfooding. Next: browser test AI chat, validate headless runner, dogfood on Pillar, commit pending changes to git (27 modified files)."
+  "overall_health": 80,
+  "summary": "Session 9 complete. Project at 80% health (+4). 111 items shipped / 362 points across 9 sessions. Git clean — all work pushed. 6 issues open (ISS-003, ISS-006, ISS-012, ISS-022, ISS-031, ISS-034). Biggest session yet: 47 files, 7400 lines. Audits tab fully operational. Chat agent reframed as investigation + handoff layer with real-time transparency. ISS-039 (critical: WS remount) fixed — app stability dramatically improved. Entity model expanded with epics, milestones, releases. Automations ON (standard, $10/day). Next: fix ISS-034 (semantic watcher), build view-level data lifecycle (IDEA-067), dogfood on Pillar."
 }

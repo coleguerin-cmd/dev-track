@@ -1,30 +1,30 @@
 {
-  "last_generated": "2026-02-08T17:00:25.438Z",
-  "briefing": "Session 8 ended with a comprehensive audit. The project is at 76% health with 89 items shipped across 8 sessions. The #1 critical blocker remains unchanged: the AI chat agent has been in_progress for 9+ days without browser testing. Session 8 shipped 12 items including: automation settings UI (completed), activity log sidebar tab, rich tool tray in chat, entity dedup, backlog card expansion, and multiple UI fixes. 11 issues were resolved. However, the chat agent itself—the core product—has never been tested in a real browser conversation. 27 files are modified and uncommitted to git. Automations are ON (standard tier, $10/day budget). The next session MUST browser-test the AI chat or change its status to reflect reality.",
+  "last_generated": "2026-02-09T03:00:00.000Z",
+  "briefing": "Session 9 was the biggest session yet — 47 files changed, 7400 lines, 15 items shipped, 48 points. Key deliverables: (1) Audits tab end-to-end with markdown rendering, time filters, analytics charts, right sidebar entity breakdown. (2) Chat agent reframed as 'investigation + handoff layer' — system prompt scoped, AgentActivityPanel for real-time tool visibility, SessionChangesTray for Pillar-style entity mutation tracking. (3) Five bugs fixed including ISS-039 (critical) — the refreshKey pattern was remounting ALL views on every WebSocket event, destroying state app-wide. Also fixed ISS-035 (config deep merge + cache invalidation), ISS-036 (agent scope), ISS-037 (transparency), ISS-038 (changes tray). Git is clean — all work committed and pushed to origin/master. Automations ON ($10/day, standard tier).",
   "hot_context": [
-    "AI chat agent in_progress 9+ days, never browser-tested — this is the #1 blocker",
-    "27 modified files uncommitted to git (including all session 8 work)",
-    "Automations are ON — standard tier, $10/day budget, 60min cooldown",
-    "Activity log tab built and working in sidebar",
-    "automation-settings-ui completed in session 8",
-    "ISS-020 (velocity gap) resolved via session backfill",
-    "6 issues open: ISS-003 (Helicone), ISS-006 (AI drift), ISS-012 (conversation bridge), ISS-022 (Helicone $0 cost), ISS-031 (max concurrent), ISS-034 (semantic watcher)",
-    "IDEA-049 dismissed as duplicate of IDEA-048",
-    "Brain notes BN-015/018/019/020 are large summaries that bloat context"
+    "Git clean — all session 9 work committed and pushed (commit 001cfd7)",
+    "AI chat agent browser-tested this session — activity panel, changes tray, scope boundaries all working",
+    "ISS-039 (critical) fixed: refreshKey pattern was destroying view state on every WS event",
+    "Chat agent role crystallized: investigation + handoff layer, NOT a code editor",
+    "Audits tab fully built: recorder, engine wiring, API, rich UI with entity breakdowns",
+    "Automations ON — standard tier, $10/day budget, 60min cooldown",
+    "Entity model expanded: epics, milestones, releases AI tools added",
+    "4 upfactoring ideas captured: IDEA-065 (handoff pattern), IDEA-066 (bidirectional context), IDEA-067 (view lifecycle), IDEA-068 (Cursor-ready prompts)",
+    "Open issues: ISS-003 (Helicone), ISS-006 (AI drift), ISS-012 (conversation bridge), ISS-022 (Helicone $0), ISS-031 (max concurrent), ISS-034 (semantic watcher)"
   ],
   "warnings": [
-    "AI chat agent is the critical path — 9+ days in_progress with zero browser validation",
-    "27 uncommitted files — risk of losing session 8 work",
-    "Helicone integration still FAILING (ISS-003) — blocks AI cost tracking",
-    "Large brain notes (BN-015, 018, 019, 020) may bloat context in future sessions",
-    "ai-watcher and ui-design-overhaul both stalled in_progress status — need status updates"
+    "ISS-034 (critical): Semantic file watcher still broken — blocks reliable automation triggers",
+    "Helicone integration still FAILING (ISS-003) — no real cost data flowing",
+    "View-level data lifecycle not implemented yet (IDEA-067) — global refresh removed but views may miss updates",
+    "ai-watcher and ui-design-overhaul both stalled in_progress — need status updates or demotion",
+    "Large brain notes (BN-015, 018, 019, 020) still bloat context"
   ],
   "suggestions": [
-    "PRIORITY 1: Open browser, test AI chat end-to-end (send message, verify tool calls, check responses)",
-    "PRIORITY 2: Commit all pending changes to git (27 modified files)",
-    "PRIORITY 3: Update ai-chat-agent status based on browser test results",
-    "Consider: dogfood on Pillar if chat works, or pivot to fixing what's broken if it doesn't",
-    "Consider: archive or summarize large brain notes to reduce context bloat",
-    "Consider: investigate Helicone failure (ISS-003) — credential sync was fixed but test still fails"
+    "PRIORITY 1: Fix ISS-034 (semantic file watcher) — critical for automation reliability",
+    "PRIORITY 2: Browser test chat improvements fully (activity panel, changes tray, handoff behavior)",
+    "PRIORITY 3: Build view-level data lifecycle (IDEA-067) to replace removed global refresh",
+    "Consider: promote IDEA-065 (handoff pattern) and IDEA-068 (Cursor-ready prompts) to roadmap",
+    "Consider: dogfood DevTrack on Pillar now that chat agent and audits are working",
+    "Consider: archive large brain notes to reduce context loading"
   ]
 }

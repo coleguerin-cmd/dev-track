@@ -20,18 +20,19 @@ Before moving to the next task, do ALL of these:
 This is not optional. Do it inline, not at session end.
 
 ## Quick Status (auto-updated at session end)
-dev-track | 76% health | Now: AI chat agent (L, in_progress), AI watcher (L, in_progress) | 8 sessions, 89 items shipped, 293 points | Open issues: 5 (0 crit, 2 high) | 54 ideas captured
+dev-track | 80% health | Now: AI chat agent (L, in_progress), AI watcher (L, in_progress) | 9 sessions, 111 items shipped, 362 points | Open issues: 6 (1 crit, 2 high) | 68 ideas captured
 
 ## Last Session Briefing (auto-updated at session end)
-Session 8 complete (Feb 8 afternoon). Audit + shipping session. 12 items shipped, 11 issues resolved (record), 5 ideas captured. Fixed: docs page (legacy API mismatch), automation settings UI (kill switch, scheduler, triggers, budget — ISS-021), backlog card expansion (rich detail — ISS-023), Pillar-style rich tool tray in chat (ISS-027), entity dedup in 3 AI tools (ISS-026), timestamps on entity views (ISS-028), AI tool write tracking (ISS-029), Settings UI audit (ISS-030, ISS-031, ISS-032). Built Activity Log as right sidebar tab — Landmark-style timeline with provenance badges, filters, live polling (ISS-024). Backfilled sessions 6-7 from activity data (ISS-020). Promoted IDEA-054 (session heartbeat + stale detector) to roadmap. Automations ON (standard tier, $10/day, 60min cooldown). Next: test AI chat in browser (#1 blocker — 4 sessions without testing), build session heartbeat, dogfood on Pillar, git commit.
+Session 9 complete (Feb 8 evening). Biggest session yet — 47 files, 7400 lines, 15 items shipped, 48 points. Git clean (pushed). Built Audits tab end-to-end: markdown rendering, time filters, analytics charts, right sidebar entity breakdown. Reframed chat agent as investigation + handoff layer: scoped system prompt (no code editing), AgentActivityPanel (real-time tool visibility), SessionChangesTray (Pillar-style entity mutation tracking). Fixed 5 issues: ISS-035 (config deep merge), ISS-036 (agent scope), ISS-037 (transparency), ISS-038 (changes tray), ISS-039 (CRITICAL — refreshKey pattern remounting all views on every WS event, destroying app state). Added localStorage persistence for views. Entity model expanded: epics, milestones, releases AI tools. 4 upfactoring ideas captured (IDEA-065-068). Automations ON (standard, $10/day). Next: fix ISS-034 (semantic watcher), build view-level data lifecycle (IDEA-067), browser test chat improvements, dogfood on Pillar.
 
 ## Warnings
 - AUTOMATIONS ARE ON. Standard model tier, $10/day budget, 60min cooldown. Kill switch in data/ai/config.json.
+- ISS-034 (critical): Semantic file watcher broken — blocks reliable automation triggers.
 - ISS-006 (high): AI context drift — automation engine is the structural fix but needs testing with automations ON.
 - ISS-012 (high): No bridge between external AI conversations and DevTrack. Not started.
 - ISS-022 (medium): Helicone shows $0 for Opus 4.6 — model not in pricing database.
 - ISS-031 (low): Max Concurrent setting not enforced by automation engine. UI shows "COMING SOON".
-- AI chat agent STILL not browser-tested — 4 sessions in a row. #1 critical path blocker.
+- View-level data lifecycle not built yet (IDEA-067) — global refresh removed but views may miss updates.
 - Server crashes on tsx watch reload when port is held (EADDRINUSE). Kill node processes before restart.
 
 ## User Profile
