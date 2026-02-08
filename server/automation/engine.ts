@@ -42,6 +42,14 @@ class AutomationEngine {
         continue;
       }
 
+      // Mark last_fired immediately to prevent scheduler re-firing during execution
+      const store = getStore();
+      const auto = store.automations.automations.find(a => a.id === automation.id);
+      if (auto) {
+        auto.last_fired = new Date().toISOString();
+        store.saveAutomations();
+      }
+
       // Run async, don't block the caller
       this.executeAutomation(automation, context).catch(err => {
         console.error(`[automation] Error in ${automation.id}:`, err.message);

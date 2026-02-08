@@ -100,7 +100,7 @@
       "title": "dev-track as an open-source product",
       "description": "Open-source the file format + cursor rule + basic UI. File format becoming a standard is more valuable than the tool itself.",
       "category": "business",
-      "status": "exploring",
+      "status": "dismissed",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [],
       "promoted_to": null,
@@ -118,9 +118,9 @@
         "When to extract? After how much dogfooding?",
         "License: MIT? Apache? AGPL?"
       ],
-      "notes": "Dogfood for 2-3 weeks. Extract when the data model is stable and the UI is polished.",
+      "notes": "Nightly audit: Dismissed. BN-013 explicitly rejects open source. User said 'fuck open source I wanna get paid.' IDEA-021 (paid product distribution) supersedes this. Status was 'exploring' but the decision has been made.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -494,14 +494,14 @@
       "title": "Scanner-driven code understanding — no special comments needed",
       "description": "Instead of requiring the coding AI to write special annotations (@dt-description etc.), make the scanner smart enough to understand code from its existing structure. The scanner already has file types, exports, imports, function signatures, external services, and DB operations. From this, it can generate plain-English descriptions. The background watcher (IDEA-014) should analyze git diffs holistically (full commits) rather than individual file changes, so it gets context. This sidesteps the 'who writes the comments' and 'different comment syntax per language' problems entirely.",
       "category": "architecture",
-      "status": "validated",
+      "status": "promoted",
       "source": "conversation 2026-02-07 (session 4 — architecture discussion)",
       "related_ideas": [
         "IDEA-001",
         "IDEA-014",
         "IDEA-015"
       ],
-      "promoted_to": null,
+      "promoted_to": "ai-watcher",
       "pros": [
         "No code pollution with special comments",
         "Works across all languages",
@@ -517,9 +517,9 @@
         "Should we add optional manual override for auto-descriptions?",
         "How to handle projects with unusual structures?"
       ],
-      "notes": "This was validated in session 4. The generateModuleDescription() function produces descriptions like 'This module handles all the HTTP API endpoints for the application. It contains 16 route files covering...' — far better than any annotation system could produce because it has the full module context. IDEA-001 (structured annotations) is now deprioritized in favor of this approach.",
+      "notes": "Nightly audit: This idea (scanner-driven code understanding) is validated and effectively promoted. The approach has been implemented in the codebase scanner (generateModuleDescription, generateEdgeLabel). The background watcher aspect maps to the 'ai-watcher' backlog item. Marking as promoted.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-08",
       "priority": "P2",
       "tags": []
     },
@@ -718,7 +718,7 @@
     {
       "id": "IDEA-024",
       "title": "Session lifecycle system — clear start/end with AI-driven closure",
-      "status": "captured",
+      "status": "promoted",
       "category": "core",
       "priority": "high",
       "description": "Every coding session needs a clear start and end. When a user starts a new chat window, the AI recognizes it's a new session and logs it in DevTrack. The AI is trained to push users toward session closure at the right time — especially users who overload context windows. Based on user profile (behavior patterns, context window habits), the AI prompts: 'Good stopping point. Let's push, update dev-track, and pick up in a fresh session.' Loads user profile at session start so any AI picking up knows how to handle this specific user.",
@@ -738,15 +738,16 @@
         "Should there be a hard context limit that forces a new session?",
         "How does this work across different AI platforms (Cursor, Claude, etc)?"
       ],
-      "notes": "User self-describes as someone who throws too much too fast. This is a training mechanism — like training a user like a dog (their words). The AI needs to be the guardrail.",
+      "notes": "Nightly audit: Already has a corresponding backlog item 'session-lifecycle'. Marking as promoted.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
-      "tags": []
+      "tags": [],
+      "promoted_to": "session-lifecycle"
     },
     {
       "id": "IDEA-025",
       "title": "Session-end self-audit — DevTrack audits its own data freshness",
-      "status": "captured",
+      "status": "promoted",
       "category": "core",
       "priority": "high",
       "description": "At the end of every session, DevTrack should audit itself: go through backlog, actions, issues, ideas, codebase, session notes, changelog, docs. Flag anything stale, contradicting, or out of date. Automatically clean up superseded brain notes, update statuses, archive old data. The system should be self-healing — if the AI missed a changelog entry or left an issue open that was fixed, the audit catches it.",
@@ -766,15 +767,16 @@
         "Should it make changes automatically or just flag them?",
         "Run at session end only, or periodically?"
       ],
-      "notes": "User explicitly frustrated by stale brain notes contradicting current decisions. This is the structural fix for ISS-006 (AI context drift) — don't rely on the coding AI to maintain tracking, have a separate audit process.",
+      "notes": "Nightly audit: Already has a corresponding backlog item 'session-self-audit'. Automation engine now built with nightly-audit seeded. Marking as promoted.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
-      "tags": []
+      "tags": [],
+      "promoted_to": "session-self-audit"
     },
     {
       "id": "IDEA-026",
       "title": "User behavior profiles — experience levels, habits, interaction patterns",
-      "status": "captured",
+      "status": "promoted",
       "category": "core",
       "priority": "high",
       "description": "Build rich user profiles that go beyond basic info. Include: experience levels as a web diagram (frontend, backend, devops, AI, etc.), intelligence/capability ratings, behavioral patterns (context window habits, session length preferences, communication style), and how the AI should handle this user (push to closure? let them run? explain more? explain less?). Profile is loaded at every session start and injected into AI system prompts.",
@@ -795,15 +797,16 @@
         "Should profiles be editable by the user?",
         "How granular should behavior tracking be?"
       ],
-      "notes": "User already has a basic profile in data/ai/profiles.json. This would expand it significantly with behavior modeling and make it central to the AI experience.",
+      "notes": "Nightly audit: User profiles are SHIPPED. IQ scoring, radar charts, deep assessment, session observations, AI-to-AI guidance — all built. Marking as promoted to 'user-profiles' (completed).",
       "created": "2026-02-08",
       "updated": "2026-02-08",
-      "tags": []
+      "tags": [],
+      "promoted_to": "user-profiles"
     },
     {
       "id": "IDEA-027",
       "title": "AI conversation bridge — extension/CLI that passes logs from any AI tool to DevTrack",
-      "status": "captured",
+      "status": "exploring",
       "category": "core",
       "priority": "critical",
       "description": "A lightweight extension/CLI daemon that watches AI conversations in Cursor, Claude, Gemini, etc. Captures user messages + AI final response messages (not intermediate file changes). Passes logs to DevTrack's backend AI for lightweight parsing. Extracts: issues reported, decisions made, ideas captured, action items. Also detects session start (new chat window) and session end (wrap-up language or inactivity). The backend AI can then create issues, update backlog, write brain notes — filling in what the coding AI missed. This is the bridge that makes DevTrack truly intelligent across all AI platforms.",
@@ -826,7 +829,7 @@
         "Should it capture in real-time or batch at intervals?",
         "How much context does the parsing AI need — just messages or also file change summaries?"
       ],
-      "notes": "User's key insight: 'Don't pass all the changes while it's making them. Pass the user message and the AI's wrap-up response.' This keeps cost low and context manageable. The backend AI can then correlate with git diffs to understand what actually changed.",
+      "notes": "Nightly audit #2 (Feb 9): Still exploring at critical priority. No progress on implementation. This remains the most architecturally important idea — it solves ISS-006 and ISS-012 structurally. Server-side infrastructure exists (automation engine, headless runner). The capture mechanism (extension/CLI) is the missing piece. Should be actively explored once AI chat agent is validated. Estimated effort: L-XL (2-3 sessions). Could start with a simple approach: CLI command that reads Cursor's conversation log files (if accessible) and feeds them to the DevTrack AI for parsing.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "tags": []
@@ -950,7 +953,7 @@
     {
       "id": "IDEA-032",
       "title": "AI project initialization wizard — full codebase audit on first run",
-      "status": "captured",
+      "status": "validated",
       "category": "core",
       "priority": "critical",
       "description": "When dev-track init runs on a new project, the AI should audit the entire codebase end-to-end: parse all source files, find docs/READMEs, read package.json/configs, scan git commit history for changelog, look for existing sprint plans/product plans/TODOs/FIXMEs. It synthesizes everything into dev-track: populates state.json with system ratings, creates backlog items from TODOs and weak areas, creates issues from known bugs and security concerns, captures ideas, rates architectural health, identifies what's half-baked vs production-ready. Should work on mid-stream projects like Pillar and Landmark — not just greenfield.",
@@ -973,7 +976,7 @@
         "Should it ask the user to confirm before populating, or just do it?",
         "How deep into git history — last 50 commits? All?"
       ],
-      "notes": "User explicitly wants: come into midstream on Pillar/Landmark, AI populates dev-track top-to-bottom with where it thinks everything is. Not just docs — actual code analysis. Security weaknesses, incomplete features, architecture gaps. Loads suggestions as actions, issues, ideas, backlog items.",
+      "notes": "Nightly audit #2 (Feb 9): Still validated at critical priority. The init-wizard backlog item exists but has narrower scope than this idea. IDEA-032 adds full codebase audit, security analysis, git history parsing, TODO/FIXME extraction. The POST /api/v1/init endpoint has been built (commit ca10e5e) with scanner + git + AI agent — this idea is partially implemented. The remaining gap is: the init endpoint exists but hasn't been tested on a real project (only Pillar was initialized via CLI, not the full AI-powered audit). Consider promoting to a separate backlog item 'ai-powered-init-audit' that extends init-wizard, or updating init-wizard's scope to include this. Deferring promotion until chat agent is validated — the init endpoint depends on the headless runner which depends on working AI.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "tags": []
@@ -1009,9 +1012,9 @@
     {
       "id": "IDEA-034",
       "title": "Product management audit — clarify Actions vs Backlog vs Issues vs Ideas relationships",
-      "status": "captured",
+      "status": "exploring",
       "category": "architecture",
-      "priority": "high",
+      "priority": "medium",
       "description": "The data model needs an audit. Current entities: Backlog (features/tasks with horizons), Issues (bugs with severity), Ideas (captured concepts), Actions (tracked features with health/diagnostics), Sessions, Changelog, Brain Notes. Questions: Are Actions redundant with Backlog? Should Issues auto-create from Backlog items? Should Ideas promote directly to Backlog? Is this Notion + Jira + GitHub? What's the relationship graph between entities? User explicitly wants clarity on what each entity IS and how they flow into each other. This is the product definition of DevTrack itself.",
       "pros": [
         "Cleaner mental model for users",
@@ -1030,7 +1033,7 @@
         "Do we need all these entities or can some be collapsed?",
         "What does 'Notion + Jira + GitHub driven by AI' actually mean in entity terms?"
       ],
-      "notes": "User called out that Actions aren't being used. Wants to audit the full product management suite. This is a product definition exercise, not just code.",
+      "notes": "Nightly audit #2 (Feb 9): Entity Model v2 shipped, which resolved the core entity confusion. The 14-entity model provides clear separation. However, the 'Actions' entity question noted in this idea persists — the Actions entity type exists in the type system but its relationship to Roadmap items is unclear. Are Actions being used? The AI tools have an actions module (server/ai/tools/actions.ts) but the entity may be redundant with roadmap items. This idea is partially resolved but the remaining product definition question should be addressed. Downgrading from validated to exploring — the urgent part (entity model) is done, the remaining part (Actions cleanup) is a smaller concern.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "tags": []
@@ -1088,7 +1091,7 @@
     {
       "id": "IDEA-037",
       "title": "AI-unique views — displays that only exist because AI can generate them",
-      "status": "captured",
+      "status": "exploring",
       "category": "feature",
       "priority": "critical",
       "description": "Purpose-built views that are impossible without AI: real-time system health inference (not manual ratings), predictive velocity ('payment system ships in ~4 sessions'), knowledge graph across all entities, vector search ('what did we decide about auth?'), risk heat maps, dependency impact analysis ('if we change this, what breaks?'), auto-generated architecture narratives, technical debt scoring, team capability matching. These are the views that make DevTrack impossible to replicate with human-only tools. Consider: vector DB (Pinecone/Weaviate), Neo4j for knowledge graph, GraphQL for cross-entity queries.",
@@ -1107,11 +1110,73 @@
         "Vector DB vs simple search?",
         "Neo4j vs simpler graph representation?"
       ],
-      "notes": "User's key insight: existing tools assume the human IS the loop. DevTrack should build views that only exist because AI is managing the data. This is the moat.",
+      "notes": "Nightly audit #2 (Feb 9): Still exploring at critical priority. AI-unique views remain the key differentiator. The headless runner + automation engine provide infrastructure to power these views. However, none of the prerequisite systems (chat agent, headless runner) have been validated yet. This idea should stay at exploring until the AI infrastructure is proven. First candidate views to build: (1) predictive velocity ('payment system ships in ~4 sessions'), (2) risk heat map, (3) knowledge graph across entities. These could be built as dashboard widgets first before full views.",
       "created": "2026-02-08",
       "updated": "2026-02-08",
       "tags": []
+    },
+    {
+      "id": "IDEA-038",
+      "title": "Project init must preserve existing cursor/editor settings",
+      "description": "When dev-track init runs on a project that already has .cursor/rules, cursor settings, or other AI platform configs, the agent must: (1) read and retain existing settings, (2) not override or conflict with them, (3) merge dev-track rules alongside existing rules, (4) factor existing settings into its understanding of the project. Dev-track delivers its own cursor rules but should respect what is already there. The init agent needs read access to .cursor/ directory and project-level settings.",
+      "category": "process",
+      "status": "captured",
+      "priority": "P1",
+      "source": "conversation session-7",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [],
+      "cons": [],
+      "open_questions": [],
+      "notes": null,
+      "tags": [
+        "init",
+        "settings"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-039",
+      "title": "Cron-based user profile iteration from ongoing conversations",
+      "description": "Add a scheduled automation that monitors recent AI conversations (from dev-track chat, and eventually from the conversation bridge) and iterates on the user profile. Look for: new skill demonstrations, behavioral pattern changes, preference signals, communication style shifts. Update cognitive/technical scores, add session observations, refine AI-to-AI guidance. This makes the profile a living document that improves with every interaction, not just a static snapshot.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "P1",
+      "source": "conversation session-7",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [],
+      "cons": [],
+      "open_questions": [],
+      "notes": null,
+      "tags": [
+        "profiles",
+        "automation",
+        "persona"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
+    ,
+    {
+      "id": "IDEA-040",
+      "title": "Infer developer persona from codebase and git history on init",
+      "description": "During project initialization, the AI agent should infer the developer persona from: git commit style and frequency, code conventions, README writing style, dependency choices, architecture patterns. For single-person teams, analyze specific user commits deeply. Populates user profile with initial cognitive/technical scores and behavioral patterns. Used to instruct both dev-track AI and project cursor rule.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "P1",
+      "source": "conversation session-7",
+      "related_ideas": ["IDEA-038", "IDEA-041"],
+      "promoted_to": null,
+      "pros": ["Immediate personalization from day 1", "No manual profile setup needed", "Code style analysis is objective data"],
+      "cons": ["Quality depends on git history depth", "Multi-contributor repos need disambiguation", "Privacy considerations if analyzing personal patterns"],
+      "open_questions": ["How deep to analyze (last 50 commits? all time?)", "How to handle repos with multiple contributors?"],
+      "notes": null,
+      "tags": ["init", "profiles", "persona"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
     }
   ],
-  "next_id": 38
+  "next_id": 41
 }

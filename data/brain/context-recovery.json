@@ -1,33 +1,32 @@
 {
-  "last_generated": "2026-02-08T03:30:00Z",
-  "briefing": "Session 6 complete (Feb 8, late night). Massive infrastructure session. Shipped: multi-project architecture (init/start/projects CLI, central registry at ~/.dev-track/, project switcher with hot-swap), modular AI tool registry (40 tools across 16 domains replacing monolithic tools.ts), Kanban DnD, AI provider keys in Integrations, Helicone org_id sync, 3 UI bug fixes (Changelog crash, Ideas click, Docs ToC scroll). Pillar initialized with isolated data. Deep product discussion: defined complete entity model v2 spec (14 entities) for enterprise-grade project management. ENTITY-MODEL-V2.md written as the blueprint. 47 files changed, committed. Next session: implement entity model v2 refactor top to bottom.",
+  "last_generated": "2026-02-08T04:18:52.247Z",
+  "briefing": "Nightly audit completed Feb 8. Project at 74% health (down from 76%). Key findings: (1) AI chat agent is the #1 priority — in_progress since Feb 7, foundation built but NEVER tested in browser with real conversations. This blocks everything downstream. (2) Entity Model v2 shipped successfully — 14 entities, migration complete, routes/tools/UI updated. (3) Automation engine, scheduler, and headless AI runner built (commit ca10e5e) but untested. (4) 3 open issues: ISS-003 (integrations untested, Helicone FAILING), ISS-006 (AI context drift — partial mitigations, structural fix via automation engine pending), ISS-012 (conversation bridge — large effort, not started). (5) CLI downgraded to degraded (50%) — never tested against live server, npm link crashes Cursor. (6) Integrations downgraded to degraded (45%) — Helicone test failing. (7) Codebase scan data stale since Feb 7 — needs fresh scan post-v2 refactor. (8) 5 ideas promoted to backlog, 1 dismissed (open source), 2 validated (init wizard, product audit). (9) Session velocity: avg 10.8 items/session, 32.2 points/session across 5 tracked sessions.",
   "hot_context": [
-    "ENTITY-MODEL-V2.md in data/designs/ — the COMPLETE blueprint for next session's refactor. Read this FIRST.",
-    "Dev servers: API on 24680, UI on 24681. npm run dev starts both.",
-    "Pillar initialized at ~/.dev-track/projects/pillar/data/. Landmark not yet initialized.",
-    "Tool registry at server/ai/tools/ — 16 modules, ~40 tools. Add new tools by creating files in this directory.",
-    "project-config.ts is the centralized config module — all server files use it instead of process.cwd().",
-    "ISS-006 (AI context drift) still open — structural enforcement still needed.",
-    "7 ideas captured this session (IDEA-031 through IDEA-037). Key: IDEA-035 (opinionated git settings), IDEA-037 (AI-unique views).",
-    "User wants: enterprise-grade PM tool that replaces Jira+Linear+Notion+GitHub, fully AI-managed.",
-    "User explicitly said: 'have more, not less' — build every feature, AI manages complexity, user sees clean views.",
-    "User wants AI to suggest milestones/releases, not manage them manually.",
-    "User wants periodic full AI audit — on session end, on changelog, or push-button."
+    "AI chat agent (ai-chat-agent) is in_progress in Now horizon — test in browser is the SINGLE most important next step",
+    "Helicone integration is FAILING (test_result=fail as of Feb 8 01:56 UTC) — investigate credential sync",
+    "Automation engine + scheduler + headless runner built but untested — 5 seeded automations (session-audit, change-tracker, nightly-audit, weekly-report, docs-refresh)",
+    "Codebase scan stale since Feb 7 20:21 UTC — needs fresh scan after entity model v2 + tool registry refactor",
+    "CLI is degraded (50%) — never tested against live server, npm link workaround needed",
+    "Context recovery was stale — referenced entity model v2 as future work but it's now shipped",
+    "IDEA-004 (open source) dismissed — contradicted BN-013 (paid product decision)",
+    "IDEA-027 (conversation bridge) elevated to critical/exploring — solves ISS-006 + ISS-012 structurally",
+    "Session tracking may be missing sessions 6-7 velocity data — only 5 sessions in velocity log",
+    "ISS-006 path to resolution: (1) chat agent working → (2) headless runner tested → (3) change-tracker automation validated"
   ],
   "warnings": [
-    "The entity model v2 refactor touches EVERY layer: types, store, routes, tools, UI. Plan the execution order carefully.",
-    "Migration path must preserve all existing data. backlog→roadmap, state.json→systems, actions→deprecated.",
-    "Context window was very long this session — user was throwing a lot. Fresh session for the refactor is critical.",
-    "npm link crashes Cursor — use 'npx tsx path/to/cli' for dogfooding commands.",
-    "Server crashes on tsx watch reload when port is held (EADDRINUSE). Kill node processes before restart.",
-    "Changelog entries use files_changed not files_touched — UI now handles both but types need updating in v2."
+    "AI chat agent has been in_progress for 2 days without browser testing — risk of accumulated bugs",
+    "Helicone integration failing — blocks AI cost tracking for dogfooding",
+    "Codebase scan data is 24+ hours stale — architecture graph may show outdated information",
+    "Velocity data incomplete — sessions 6-7 not in velocity log, totals may undercount",
+    "CLI never tested against live server — could have fundamental issues",
+    "5 seeded automations exist but none have been executed — automation engine is theoretical until tested"
   ],
   "suggestions": [
-    "FIRST: Read ENTITY-MODEL-V2.md. It has every entity, every field, every relationship, every enum, and the migration path.",
-    "Execution order: (1) shared/types.ts — new type definitions, (2) data migration script, (3) store.ts refactor, (4) API routes, (5) AI tools update, (6) UI views.",
-    "Start with types + data migration. Get the foundation right before touching any UI.",
-    "After refactor: initialize on Pillar and Landmark to validate the model with real projects.",
-    "The init wizard (IDEA-032) should come AFTER the entity model is solid — it needs stable entities to populate.",
-    "Consider: the entity model discussion captured in this session should become an ADR (Architecture Decision Record)."
+    "FIRST: Open browser, test AI chat with real conversation. Fix any issues. This unblocks everything.",
+    "SECOND: Investigate Helicone test failure — check credentials sync and API endpoint",
+    "Run fresh codebase scan to update stale architecture data",
+    "Log sessions 6-7 velocity data to keep metrics accurate",
+    "Test one automation (e.g., session-audit) via headless runner to validate the engine",
+    "Start dogfooding on Pillar — the forcing function for product validation"
   ]
 }

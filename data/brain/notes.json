@@ -9,7 +9,10 @@
       "context": "Initial build session 2026-02-07",
       "actionable": true,
       "action_taken": true,
-      "related_items": ["boot-ui", "ISS-001"],
+      "related_items": [
+        "boot-ui",
+        "ISS-001"
+      ],
       "created": "2026-02-07T17:00:00Z",
       "expires": null,
       "dismissed": true
@@ -37,7 +40,9 @@
       "context": "Business model discussion 2026-02-07",
       "actionable": false,
       "action_taken": false,
-      "related_items": ["open-source-launch"],
+      "related_items": [
+        "open-source-launch"
+      ],
       "created": "2026-02-07T14:00:00Z",
       "expires": null,
       "dismissed": true,
@@ -80,7 +85,9 @@
       "context": "Naming discussion 2026-02-07",
       "actionable": true,
       "action_taken": false,
-      "related_items": ["paid-product-launch"],
+      "related_items": [
+        "paid-product-launch"
+      ],
       "created": "2026-02-07T16:30:00Z",
       "expires": null,
       "dismissed": false
@@ -108,12 +115,13 @@
       "context": "Session 2 — first boot validation, 2026-02-07",
       "actionable": false,
       "action_taken": false,
-      "related_items": ["ISS-001"],
+      "related_items": [
+        "ISS-001"
+      ],
       "created": "2026-02-07T18:30:00Z",
       "expires": null,
       "dismissed": true
-    }
-    ,
+    },
     {
       "id": "BN-009",
       "type": "warning",
@@ -123,7 +131,10 @@
       "context": "Session 3 — meta-discussion about AI reliability, 2026-02-07",
       "actionable": true,
       "action_taken": false,
-      "related_items": ["ISS-006", "IDEA-014"],
+      "related_items": [
+        "ISS-006",
+        "IDEA-014"
+      ],
       "created": "2026-02-07T21:30:00Z",
       "expires": null,
       "dismissed": false
@@ -137,7 +148,10 @@
       "context": "Session 3 — user feedback on codebase visualizer, 2026-02-07",
       "actionable": true,
       "action_taken": true,
-      "related_items": ["ISS-007", "IDEA-015"],
+      "related_items": [
+        "ISS-007",
+        "IDEA-015"
+      ],
       "created": "2026-02-07T21:30:00Z",
       "expires": null,
       "dismissed": true
@@ -151,7 +165,10 @@
       "context": "Session 4 — architecture discussion, 2026-02-07",
       "actionable": false,
       "action_taken": false,
-      "related_items": ["ai-chat-agent", "IDEA-014"],
+      "related_items": [
+        "ai-chat-agent",
+        "IDEA-014"
+      ],
       "created": "2026-02-07T22:00:00Z",
       "expires": null,
       "dismissed": false
@@ -165,7 +182,9 @@
       "context": "Session 4 — debugging model routing failure, 2026-02-07",
       "actionable": false,
       "action_taken": true,
-      "related_items": ["ai-chat-agent"],
+      "related_items": [
+        "ai-chat-agent"
+      ],
       "created": "2026-02-07T22:30:00Z",
       "expires": null,
       "dismissed": false
@@ -179,7 +198,11 @@
       "context": "Session 4 — business model discussion, 2026-02-07",
       "actionable": true,
       "action_taken": false,
-      "related_items": ["IDEA-021", "IDEA-022", "open-source-launch"],
+      "related_items": [
+        "IDEA-021",
+        "IDEA-022",
+        "open-source-launch"
+      ],
       "created": "2026-02-07T23:00:00Z",
       "expires": null,
       "dismissed": false
@@ -193,11 +216,107 @@
       "context": "Session 4 — prioritization discussion, 2026-02-07",
       "actionable": true,
       "action_taken": false,
-      "related_items": ["ai-chat-agent", "ai-watcher"],
+      "related_items": [
+        "ai-chat-agent",
+        "ai-watcher"
+      ],
       "created": "2026-02-07T23:00:00Z",
       "expires": null,
       "dismissed": false
+    },
+    {
+      "id": "BN-015",
+      "type": "observation",
+      "content": "## Weekly Progress Report — Week of Feb 3-9, 2026\n\n### 📊 Velocity Summary\n- **Sessions:** 5 completed (Feb 7-8, project inception week)\n- **Total hours:** 22.5h across 5 sessions (avg 4.5h/session)\n- **Items shipped:** 54 total (avg 10.8/session) — 161 story points (avg 32.2/session)\n- **Throughput by size:** S:9, M:24, L:20, XL:1\n- **Throughput by category:** core:21, ui:8, bugfix:6, feature:6, architecture:2, design:1, integrations:1, docs:2, others:7\n\n### 🚀 What Shipped (by type)\n**Features (major):**\n- AI chat agent with ~40 tools across 16 domains, multi-provider routing (OpenAI/Anthropic/Google), SSE streaming\n- AI-observed user profiling with IQ-scale scoring, radar charts, deep cross-project assessment\n- Multi-project distribution architecture with CLI init/start/projects and in-app hot-swap\n- Notification tray with toast system and WebSocket integration\n- Entity Model v2 — 14 entity types, complete data migration, 7 new route files\n\n**Enhancements:**\n- UI overhaul: Lucide icons, Cursor-minimal design across all views\n- Settings page redesign with Profile, AI Config, and Integrations tabs\n- Kanban drag-and-drop with @dnd-kit\n- Architecture graph with plain-English descriptions for non-developers\n- Docs wiki with ToC navigation\n\n**Fixes (16 issues resolved):**\n- ISS-001: UI rendering (critical) — fixed Tailwind/PostCSS config\n- ISS-002: TypeScript build failure — fixed type mismatch\n- ISS-004: Kanban DnD — wired up @dnd-kit\n- ISS-005: Completed items vanishing — added archive section + reopen\n- ISS-007: Architecture graph meaningless — added layman descriptions\n- ISS-008: Chat duplicate messages — fixed SSE event handling\n- ISS-009: Stale brain notes on dashboard — data cleanup\n- ISS-010: Self-reported profiles → AI-observed\n- ISS-011: No notification system → built tray\n- ISS-013: Redundant API key locations → consolidated in Integrations\n- ISS-014: No project switcher → built hot-swap dropdown\n- ISS-015: Helicone credential sync → fixed namespace bridging\n- ISS-016: Missing AI tools → expanded from 25 to ~40 across 16 modules\n- ISS-017/018/019: UI crashes (Changelog, Ideas, Docs) — null safety fixes\n\n**Process:**\n- Established \"create issue before fix\" discipline\n- AI-to-AI operational guidance and session observation pipeline\n- Honest assessment overhaul — no more softening in profiles\n\n### 🐛 Issue Tracker\n- **Opened this week:** 19 (all new — project started this week)\n- **Resolved:** 16 (84% resolution rate)\n- **Still open (3):**\n  - ISS-003 (medium): Integration plugins untested with real credentials\n  - ISS-006 (high): AI context drift — passive instructions unreliable, needs structural enforcement\n  - ISS-012 (high): No conversation bridge between external AI tools and DevTrack\n\n### 📈 Velocity Trend\n- This is week 1 (inception), so no week-over-week comparison available\n- Session velocity is remarkably consistent: 10-15 items/session, 13-43 points/session\n- Session 1 was the highest (15 items, 43 pts) — initial build sprint\n- Sessions 2-5 normalized to 6-12 items — sustainable pace\n- Point efficiency increasing: later sessions ship more L-sized items (higher complexity work)\n- **Burn rate:** ~7.1 points/hour — very high for a solo developer + AI pair\n\n### 🏥 System Health\n- **Overall:** 76% — all 11 systems healthy, none degraded or critical\n- **Strongest:** Data Layer (95%), Server (90%), Brain (85%)\n- **Weakest:** CLI (55% — never fully tested), Integrations (60% — ISS-003 open), Cursor Rule (70% — ISS-006 partially addressed)\n- **No degradation trends** — all systems improved or held steady this week\n- **Risk:** CLI at 55% could become a problem when dogfooding on other projects\n\n### 🎯 Focus Areas for Next Week\nBased on roadmap priorities and open issues:\n\n1. **Test AI chat in browser end-to-end** — the chat agent is built but not battle-tested with real conversations. This is the #1 Now item and blocks dogfooding.\n2. **Build AI watcher (P1, Next)** — structural fix for ISS-006 (AI context drift). The most impactful architectural piece remaining.\n3. **Session lifecycle automation (P1, Next)** — auto-detect session starts, AI-driven closure prompting. Depends on user-profiles (now complete).\n4. **Session-end self-audit (P1, Next)** — DevTrack audits its own data freshness. Depends on ai-chat-agent.\n5. **Dogfood on Pillar** — the forcing function. Multi-project infra is ready. Run `dev-track init` on Pillar and use it daily.\n6. **Address ISS-012 (conversation bridge)** — the architectural gap that makes everything else work. Without this, external AI conversations remain invisible.\n\n### 💡 Key Insight\nThis project went from zero to 54 shipped items in 22.5 hours across 2 days. The velocity is unsustainable at this pace (inception energy), but the foundation is solid. The critical path is now: chat works → dogfood on real project → identify what's actually missing vs. what's nice-to-have. The 3 open issues (ISS-003, ISS-006, ISS-012) are all architectural gaps, not bugs — they require design decisions, not quick fixes.",
+      "priority": "medium",
+      "related_items": [
+        "ai-chat-agent",
+        "ISS-003",
+        "ISS-006",
+        "ISS-012",
+        "ai-watcher",
+        "session-lifecycle",
+        "session-self-audit"
+      ],
+      "created": "2026-02-08T04:17:16.711Z",
+      "updated": "2026-02-08T04:17:16.711Z"
+    },
+    {
+      "id": "BN-016",
+      "type": "observation",
+      "content": "NIGHTLY AUDIT SUMMARY (Feb 8, 2026)\n\nHEALTH: 74% (↓2 from 76%). 11 systems assessed. 2 degraded: CLI (50%), Integrations (45%).\n\nKEY FINDINGS:\n1. AI chat agent — in_progress 2 days, never browser-tested. This is the critical path blocker.\n2. Helicone integration FAILING — credential sync may be broken. Blocks AI cost tracking.\n3. Codebase scan data 24+ hours stale — triggered fresh scan.\n4. Entity Model v2 successfully shipped — 14 entities, migration complete.\n5. Automation engine + scheduler + headless runner built but untested.\n6. Context recovery was stale — referenced v2 as future work (it's done). Refreshed.\n\nISSUES (3 open):\n- ISS-003 (medium): Integration plugins untested. Helicone failing.\n- ISS-006 (high): AI context drift. Partial mitigations. Automation engine is the structural fix.\n- ISS-012 (high): No conversation bridge. Large effort, not started.\n\nIDEAS ACTIONED:\n- IDEA-004 (open source) → DISMISSED (contradicts BN-013 paid product decision)\n- IDEA-017 (scanner-driven understanding) → PROMOTED to ai-watcher\n- IDEA-024 (session lifecycle) → PROMOTED to session-lifecycle\n- IDEA-025 (self-audit) → PROMOTED to session-self-audit\n- IDEA-026 (user profiles) → PROMOTED to user-profiles (shipped)\n- IDEA-027 (conversation bridge) → elevated to critical/exploring\n- IDEA-032 (AI init wizard) → VALIDATED at critical priority\n- IDEA-037 (AI-unique views) → elevated to critical/exploring\n\nVELOCITY: 5 tracked sessions, 54 items, 161 points, avg 10.8/session. Sessions 6-7 velocity not logged.\n\nNEXT PRIORITY: Test AI chat in browser → Fix Helicone → Fresh codebase scan → Dogfood on Pillar.",
+      "priority": "high",
+      "related_items": [
+        "ai-chat-agent",
+        "ISS-003",
+        "ISS-006",
+        "ISS-012"
+      ],
+      "created": "2026-02-08T04:19:06.361Z",
+      "updated": "2026-02-08T04:19:06.361Z"
+    },
+    {
+      "id": "BN-017",
+      "type": "observation",
+      "content": "Codebase growth since last scan (Feb 7 → Feb 8): 59→96 files (+63%), 10K→19K lines (+91%), 16→22 API routes (+38%), 22→28 components (+27%), 6→8 external services, 11 modules detected. The project nearly doubled in size in one day. This rate is unsustainable for manual tracking — validates the need for automated change tracking (ai-watcher, session-self-audit).",
+      "priority": "medium",
+      "related_items": [
+        "ai-watcher",
+        "session-self-audit"
+      ],
+      "created": "2026-02-08T04:19:17.745Z",
+      "updated": "2026-02-08T04:19:17.745Z"
+    },
+    {
+      "id": "BN-018",
+      "type": "observation",
+      "content": "## Weekly Progress Report — Week of Feb 3–9, 2026\n\n### 📊 Velocity Summary\n- **Sessions:** 5 completed (Feb 7–8) — project inception week\n- **Total hours logged:** 22.5h (avg 4.5h/session)\n- **Items shipped:** 54 total (avg 10.8/session) — **161 story points** (avg 32.2/session)\n- **Throughput by size:** S:9, M:24, L:20, XL:1\n- **Burn rate:** ~7.1 points/hour — extremely high for solo dev + AI pair\n- **Note:** Sessions 6–7 (entity model v2, docs/automation) are referenced in system descriptions but missing from the velocity log — actual output is likely higher than 54 items. This is a data integrity gap.\n\n### 🚀 What Shipped This Week (44 changelog entries)\n\n**Features (5 major):**\n- AI chat agent: ~40 tools across 16 domains, multi-provider routing (OpenAI/Anthropic/Google, 58 models), SSE streaming, headless runner\n- Entity Model v2: 14 entity types, complete data migration, 7 new route files, full store rewrite\n- Multi-project architecture: CLI init/start/projects, central registry at ~/.dev-track/, in-app hot-swap switcher\n- Docs system + automation engine + scheduler + project init endpoint (CL-044)\n- AI-observed user profiling: IQ-scale scoring (127), cognitive + technical radar charts, deep cross-project assessment, session observation pipeline\n\n**Enhancements (9):**\n- UI overhaul phase 1: Lucide icons, Cursor-minimal design, dashboard v2 with health ring\n- Settings redesign: 3-tab layout (Profile, AI Config, Integrations)\n- Kanban drag-and-drop with @dnd-kit (ISS-004)\n- Architecture graph: plain-English descriptions for non-developers (ISS-007)\n- Notification tray with toast system + WebSocket integration\n- AI-to-AI operational guidance + session observation pipeline\n- Honest assessment overhaul — no more softening\n- Dashboard overhaul v2 + profile actionable targets\n- API key management consolidated in Integrations tab\n\n**Fixes (16 issues resolved of 19 total):**\n- 1 critical: ISS-001 (UI rendering — Tailwind/PostCSS config)\n- 5 high: ISS-002 (TS build), ISS-005 (vanishing items), ISS-008 (chat dupes), ISS-016 (missing tools)\n- 7 medium: ISS-007, ISS-009, ISS-010, ISS-011, ISS-013, ISS-014, ISS-015, ISS-017, ISS-018, ISS-019\n- 1 low: ISS-004 (kanban DnD)\n- **Resolution rate: 84%** (16/19)\n\n**Process/Infra:**\n- Established \"create issue before fix\" discipline\n- Modular AI tool registry replacing monolithic 718-line switch statement\n- Multi-project distribution with isolated data directories\n- 5 built-in automations seeded (session-audit, change-tracker, nightly-audit, weekly-report, docs-refresh)\n\n### 🐛 Issues — Open vs Resolved\n- **Opened:** 19 (all new — project started this week)\n- **Resolved:** 16\n- **Still open (3):**\n  - **ISS-003 (medium):** Integration plugins untested — Helicone configured but FAILING, 6 plugins unconfigured. Blocks AI cost tracking for dogfooding.\n  - **ISS-006 (high):** AI context drift — passive instructions unreliable. Partial mitigations applied (frontmatter, checklist). Automation engine built but untested. Needs structural enforcement.\n  - **ISS-012 (high):** No conversation bridge between external AI tools and DevTrack. Deepest structural issue — external conversations invisible. Large effort.\n- **No critical issues open.**\n\n### 📈 Velocity Trend\n- **Week 1 (inception)** — no prior week for comparison\n- Session-over-session trend: 15 → 6 → 11 → 10 → 12 items shipped\n- Session 1 was the highest (inception sprint, 15 items, 43 pts)\n- Sessions 2–5 normalized to 6–12 items — more sustainable\n- **Complexity is increasing:** later sessions ship more L-sized items (deeper architectural work) vs early sessions' M-heavy mix\n- Points per session: 43 → 13 → 32 → 34 → 39 — **upward trend after session 2 dip** (session 2 was only 1.5h)\n- Points per hour is consistent: ~5.7–8.7 pts/hr across all sessions\n\n### 🏥 System Health\n| System | Health | Status | Trend |\n|--------|--------|--------|-------|\n| Data Layer | 92% | ✅ Healthy | Strongest — v2 entity model solid |\n| Server | 88% | ✅ Healthy | Stable — automation engine untested |\n| AI Brain | 80% | ✅ Healthy | Stable — some stale notes |\n| Codebase Visualizer | 78% | ✅ Healthy | Stable — scan data stale after v2 refactor |\n| Session Tracking | 78% | ✅ Healthy | Gap: sessions 6–7 missing from velocity log |\n| Codebase Scanner | 75% | ✅ Healthy | Needs fresh scan post-v2 |\n| Web UI | 72% | ✅ Healthy | Improved — 3 crash bugs fixed |\n| AI Intelligence | 70% | ✅ Healthy | Risk: chat not battle-tested |\n| Cursor Rule | 65% | ⚠️ Degraded | Context recovery stale, ISS-006 open |\n| CLI | 50% | ⚠️ Degraded | Never fully tested against live server |\n| Integrations | 45% | ⚠️ Degraded | 1/8 plugins passing, Helicone failing |\n\n**Degraded systems (3):** CLI, Integrations, Cursor Rule — all known, none worsening.\n**No systems moved to critical this week.**\n\n### 🎯 Recommended Focus Areas for Next Week\nBased on roadmap priorities (Now + P1 Next items) and open issues:\n\n1. **Battle-test AI chat in browser** — #1 Now item, blocks everything downstream. Ship or identify what's broken.\n2. **Dogfood on Pillar** — multi-project infra is ready. Use dev-track daily on a real project. This is the forcing function for finding real gaps.\n3. **AI watcher / background monitoring (P1, Next)** — structural fix for ISS-006. The automation engine is built; wire it to real file-change events.\n4. **Session lifecycle automation (P1, Next)** — auto-detect sessions, AI-driven closure. User-profiles dependency is now complete.\n5. **Fix velocity data gap** — sessions 6–7 are missing from the velocity log. Backfill or accept the gap.\n6. **Fix Helicone integration (ISS-003)** — blocks AI cost tracking, needed for responsible dogfooding.\n\n### 💡 Key Observations\n- **Inception velocity is unsustainable** — 54 items in 22.5h is sprint energy, not marathon pace. Expect 50–70% of this throughput going forward.\n- **The 3 open issues are all architectural, not bugs** — they require design decisions and significant effort, not quick patches.\n- **Data integrity gap emerging** — sessions 6–7 shipped major work (entity model v2, docs system, automation engine) but aren't in the velocity log. The tracking system isn't tracking itself perfectly yet — ironic but expected at this stage.\n- **Chat-first architecture is validated conceptually** but not empirically. Next week's #1 goal is proving it works in practice.\n- **Project went from zero to 11 systems, 44 changelog entries, 19 issues, and 37+ ideas in 2 days.** The foundation is remarkably solid for a 2-day-old project.",
+      "priority": "medium",
+      "related_items": [
+        "ai-chat-agent",
+        "ISS-003",
+        "ISS-006",
+        "ISS-012",
+        "ai-watcher",
+        "session-lifecycle",
+        "session-self-audit"
+      ],
+      "created": "2026-02-08T04:19:18.503Z",
+      "updated": "2026-02-08T04:19:18.503Z"
+    },
+    {
+      "id": "BN-019",
+      "type": "observation",
+      "content": "## Weekly Progress Report — Week 1: Feb 3–9, 2026 (Updated)\n\n### 📊 Velocity Summary\n- **Sessions logged:** 5 completed (Feb 7–8) — project inception week\n- **Total hours logged:** 22.5h (avg 4.5h/session)\n- **Items shipped (tracked):** 54 items, 161 story points (avg 10.8 items/session, 32.2 pts/session)\n- **Estimated actual output:** ~65–70 items including untracked sessions 6–7 (entity model v2 refactor, docs/automation engine)\n- **Burn rate:** ~7.1 pts/hour — exceptionally high for solo dev + AI pair\n- **Changelog entries:** 46 total (CL-024 through CL-046)\n\n### 🚀 What Shipped (categorized from 46 changelog entries)\n\n**Features (3 major):**\n- Entity Model v2 — 14 entity types, complete data migration, 7 new route files, store rewrite (CL-043)\n- Docs system + headless AI runner + automation engine + scheduler + project init (CL-044)\n- Modular AI tool registry — 40 tools across 16 domains replacing monolithic 718-line switch (CL-039)\n\n**Refactors (1):**\n- Entity Model v2 core refactor touching 30+ files across shared types, server, and UI (CL-043)\n\n**Enhancements (9):**\n- Multi-project distribution architecture with CLI + in-app hot-swap (CL-033, CL-036)\n- AI-observed user profiling with IQ-scale scoring, radar charts, deep assessment (CL-026)\n- Dashboard overhaul v2 with health ring, pipeline, changelog display (CL-030)\n- Kanban drag-and-drop with @dnd-kit (CL-031)\n- AI provider API key management consolidated in Settings (CL-032, CL-035)\n- Notification tray with toast system (CL-024)\n- Session observation pipeline + AI-to-AI operational guidance (CL-027)\n- Honest assessment overhaul (CL-029)\n- Helicone org ID + credential sync (CL-038)\n\n**Fixes (3 batched):**\n- UI crash fixes: Changelog, Ideas, Docs views (CL-040 — ISS-017/018/019)\n- Issue tracking discipline established (CL-025)\n- Radar chart label clipping + observation log UI (CL-028)\n\n**Automation (2):**\n- Nightly system audit — health reassessment, idea triage, stale data cleanup (CL-045)\n- Previous weekly progress report (CL-046)\n\n### 🐛 Issue Tracker\n- **Total issues created this week:** 20 (ISS-001 through ISS-020)\n- **Resolved:** 16 (80% resolution rate)\n- **Open:** 4\n  - **ISS-003 (medium):** Integration plugins untested — Helicone FAILING, 6 plugins unconfigured. Blocks AI cost tracking.\n  - **ISS-006 (high):** AI context drift — passive instructions unreliable. Automation engine built as structural fix but untested.\n  - **ISS-012 (high):** No conversation bridge — external AI conversations invisible to DevTrack. Large effort, not started.\n  - **ISS-020 (medium):** Velocity log missing sessions 6–7 data — reported velocity understated. Data integrity gap.\n- **No critical issues open.**\n- **Change since last report:** ISS-020 opened (velocity data gap identified by nightly audit). Issue count went from 3→4 open.\n\n### 📈 Velocity Analysis\n- **Week 1 (inception)** — no prior week for comparison\n- **Session trend:** 15 → 6 → 11 → 10 → 12 items/session\n- **Complexity increasing:** Later sessions ship more L-sized items (architectural work) vs early M-heavy mix\n- **Points per hour consistent:** 5.7–8.7 pts/hr across all sessions\n- **Points per session (excl. session 2):** 43 → 32 → 34 → 39 — stable with slight upward trend\n- **Session 2 outlier:** Only 1.5h, 6 items — first boot/validation session, not comparable\n- **Velocity is NOT comparable week-over-week yet.** This is inception energy. Expect 50–70% of this throughput going forward as the project moves from greenfield to iteration.\n\n### 🏥 System Health (11 systems)\n\n| System | Score | Status | Notes |\n|--------|-------|--------|-------|\n| Data Layer | 92% | ✅ Healthy | Strongest — v2 entity model solid |\n| Server | 88% | ✅ Healthy | Automation engine untested in production |\n| AI Brain | 80% | ✅ Healthy | Some stale notes (BN-009/014 reference pre-v2) |\n| Codebase Visualizer | 78% | ✅ Healthy | Scan data may be stale post-v2 |\n| Session Tracking | 78% | ✅ Healthy | ISS-020: sessions 6–7 missing from velocity |\n| Codebase Scanner | 75% | ✅ Healthy | Needs fresh scan post-v2 refactor |\n| Web UI | 72% | ✅ Healthy | 3 crash bugs fixed, chat untested in browser |\n| AI Intelligence | 70% | ✅ Healthy | Chat not battle-tested — primary risk |\n| Cursor Rule | 65% | ⚠️ Degraded | ISS-006 open, context recovery stale |\n| CLI | 50% | ⚠️ Degraded | Never tested against live server |\n| Integrations | 45% | ⚠️ Degraded | 1/8 plugins passing, Helicone failing |\n\n**Overall health:** 80% (project state) / 74% (weighted system average)\n**Degraded systems:** 3 (CLI, Integrations, Cursor Rule) — all known, none worsening\n**Critical systems:** 0\n\n### ⚠️ Risks & Warnings\n1. **AI chat agent never browser-tested** — in_progress 2 days, foundation built but zero real-world validation. This is the #1 risk and blocks dogfooding.\n2. **Velocity data incomplete** — sessions 6–7 untracked. ISS-020 open. Reported metrics understate actual output.\n3. **Automation engine theoretical** — 5 automations seeded, engine built, but never executed with real AI. Depends on working chat agent + API keys.\n4. **Inception velocity unsustainable** — 54 items in 22.5h is sprint pace. Will normalize.\n5. **3 degraded systems** — CLI and Integrations need attention before dogfooding on other projects.\n\n### 🎯 Focus Areas for Next Week (Priority Order)\n\n1. **Battle-test AI chat in browser** — #1 Now item. Open browser, send real messages, fix what breaks. This unblocks everything.\n2. **Dogfood on Pillar** — multi-project infra is ready. Use dev-track daily on a real 139K-line project. The forcing function.\n3. **AI watcher / background monitoring** — structural fix for ISS-006. Automation engine is built; wire to real events and test.\n4. **Fix velocity data gap (ISS-020)** — backfill sessions 6–7 or accept the gap and ensure all future sessions are tracked.\n5. **Fix Helicone integration (ISS-003)** — needed for AI cost tracking during dogfooding.\n6. **Session lifecycle automation** — auto-detect sessions, AI-driven closure. User-profiles dependency now complete.\n7. **CLI validation** — test against live server before dogfooding on other projects.\n\n### 💡 Key Insight\nThis project went from zero to 11 systems, 46 changelog entries, 20 issues, 37+ ideas, and ~40 AI tools in 2 days (22.5 tracked hours). The foundation is remarkably solid. But the critical gap is **validation** — the AI chat (the core product) has never been tested in a browser, the automation engine has never run a real automation, and the CLI has never talked to a live server. Next week must shift from building to proving.",
+      "priority": "medium",
+      "related_items": [
+        "ai-chat-agent",
+        "ai-watcher",
+        "ISS-003",
+        "ISS-006",
+        "ISS-012",
+        "ISS-020",
+        "session-lifecycle"
+      ],
+      "created": "2026-02-08T04:21:28.156Z",
+      "updated": "2026-02-08T04:21:28.156Z"
+    },
+    {
+      "id": "BN-020",
+      "type": "observation",
+      "content": "## Weekly Progress Report — Week 2: Feb 10–16, 2026\n\n### ⚠️ ZERO ACTIVITY WEEK\nNo sessions, no commits, no new changelog entries since Feb 8. The project has been dormant for 7+ days.\n\n---\n\n### 📊 Velocity Summary\n- **Sessions this week:** 0\n- **Total hours this week:** 0h\n- **Items shipped this week:** 0\n- **Story points this week:** 0\n- **Changelog entries this week:** 0\n\n**Cumulative (all-time):** 5 sessions, 22.5h, 54 tracked items, 161 points, 47 changelog entries\n\n### 📉 Velocity Trend: STALLED\n- **Week 1:** 54 items, 161 pts, 22.5h (inception sprint)\n- **Week 2:** 0 items, 0 pts, 0h\n- **Change:** -100%\n\nThis is not unexpected. Week 1 was an intense inception sprint (2 days, 5 sessions). A cooldown period is normal. However, if Week 3 also shows zero activity, the project risks losing momentum entirely. The critical concern is that **none of the Week 1 recommendations were executed** — the AI chat agent remains untested, dogfooding hasn't started, and all 4 open issues are untouched.\n\n### 🐛 Issue Tracker\n- **Opened this week:** 0\n- **Resolved this week:** 0\n- **Still open (4) — unchanged from last week:**\n  - **ISS-003 (medium):** Integration plugins untested — Helicone FAILING. Now 9+ days old.\n  - **ISS-006 (high):** AI context drift — structural enforcement built but untested. Now 9+ days old.\n  - **ISS-012 (high):** No conversation bridge — external AI conversations invisible. Now 8+ days old.\n  - **ISS-020 (medium):** Velocity log missing sessions 6–7 data. Now 8+ days old.\n- **No critical issues open. No change from last week.**\n- **Aging concern:** All 4 open issues are now 8–9 days old with no progress. ISS-006 and ISS-012 (both high severity) are architectural and require dedicated session time.\n\n### 🏥 System Health\n| System | Score | Status | Trend |\n|--------|-------|--------|-------|\n| Data Layer | 90% | ✅ Healthy | → Stable |\n| Server | 87% | ✅ Healthy | → Stable |\n| AI Brain | 78% | ✅ Healthy | → Stable |\n| Codebase Visualizer | 75% | ✅ Healthy | → Stable |\n| Codebase Scanner | 73% | ✅ Healthy | → Stable |\n| Session Tracking | 72% | ✅ Healthy | → Stable |\n| Web UI | 70% | ✅ Healthy | → Stable (chat untested) |\n| AI Intelligence | 68% | ✅ Healthy | ↘ Risk increasing (chat still untested after 8 days) |\n| Cursor Rule | 60% | ⚠️ Degraded | → Stable (stale) |\n| CLI | 48% | ⚠️ Degraded | → Stable (never tested) |\n| Integrations | 42% | ⚠️ Degraded | → Stable (Helicone still failing) |\n\n**Overall health: 80%** (unchanged — no activity means no degradation, but also no improvement)\n**Degraded systems: 3** (CLI, Integrations, Cursor Rule) — same as last week\n**Key risk:** AI Intelligence at 68% is the most concerning \"healthy\" system. The chat agent has been in_progress for 8+ days without browser validation. Each day without testing increases the risk of discovering fundamental issues late.\n\n### 🚀 What Shipped This Week\nNothing. Zero changelog entries between Feb 9–16.\n\n### 📈 Velocity Analysis\n- **Week-over-week:** -100% (54 → 0 items)\n- **Why:** No developer sessions occurred. This appears to be a natural pause after an intense inception sprint, not an abandonment signal. The project went from zero to a full working prototype in 22.5 hours — a cooldown is physiologically normal.\n- **Concern level:** Moderate. One week off after a sprint is fine. Two consecutive zero-activity weeks would be a warning sign.\n\n### 🎯 Focus Areas for Next Week (UNCHANGED — carried forward)\nAll recommendations from Week 1 remain unaddressed:\n\n1. **🔴 Battle-test AI chat in browser** — Now 8+ days without validation. This is the #1 blocker and has been for 2 weeks. Every day without testing compounds risk.\n2. **🟡 Dogfood on Pillar** — The forcing function for finding real gaps. Multi-project infra is ready but unused.\n3. **🟡 AI watcher / background monitoring** — Automation engine built but never executed. Wire to real events.\n4. **🟡 Fix velocity data gap (ISS-020)** — Sessions 6–7 still missing. Quick backfill task.\n5. **🟡 Fix Helicone integration (ISS-003)** — 9 days old, blocks AI cost tracking.\n6. **⚪ Session lifecycle automation** — Depends on chat agent working.\n7. **⚪ CLI validation** — Test against live server before dogfooding.\n\n### 💡 Key Observations\n1. **The project is in a dangerous \"built but unvalidated\" state.** A massive amount of infrastructure was built in Week 1 (40 AI tools, automation engine, multi-project architecture, entity model v2) but none of it has been proven in real use. The longer this validation gap persists, the higher the risk of discovering that fundamental assumptions are wrong.\n\n2. **Two Now-horizon items are stalled:** Both `ai-chat-agent` and `ai-watcher` have been in_progress since Feb 7 with no activity for 8+ days. These should either be actively worked on or their status should be updated to reflect reality.\n\n3. **Automation system is running but hollow:** This weekly report automation is executing (proving the scheduler + headless runner work), but the more impactful automations (change-tracker, session-audit) haven't been triggered because there's been no developer activity to trigger them.\n\n4. **The inception-to-iteration gap is real.** The hardest moment for any project is the transition from \"exciting build sprint\" to \"disciplined daily use.\" Dev-track is at exactly this inflection point.",
+      "priority": "medium",
+      "related_items": [
+        "ai-chat-agent",
+        "ai-watcher",
+        "ISS-003",
+        "ISS-006",
+        "ISS-012",
+        "ISS-020"
+      ],
+      "created": "2026-02-08T04:23:17.498Z",
+      "updated": "2026-02-08T04:23:17.498Z"
     }
   ],
-  "next_id": 15
+  "next_id": 21
 }

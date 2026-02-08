@@ -941,6 +941,87 @@
       "commit_hashes": [],
       "breaking": false,
       "tags": []
+    },
+    {
+      "id": "CL-044",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Docs system, headless AI runner, automation engine, scheduler, project init",
+      "description": "Full Doc entity wired end to end (store CRUD, route CRUD, 5 AI tools). Headless AI agent runner for programmatic task execution (premium model routing, 20-iteration tool loop). Automation engine with trigger evaluation, condition checking, AI-driven execution. 60s interval scheduler for daily/weekly crons. 5 built-in automations (session audit, change tracker, nightly audit, weekly report, docs refresh). Trigger hooks in watcher/session/roadmap/issues. Project init: POST /api/v1/init scans codebase + git + README and runs AI agent to populate all entities. 4 new premium task types in model router.",
+      "type": "feature",
+      "scope": "core",
+      "roadmap_item": "docs-system-headless-ai-runner-automation-engine-project-init",
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [
+        "server/ai/runner.ts",
+        "server/automation/engine.ts",
+        "server/automation/scheduler.ts",
+        "server/routes/init.ts",
+        "server/routes/docs.ts",
+        "server/routes/automations.ts",
+        "server/routes/issues.ts",
+        "server/routes/roadmap.ts",
+        "server/routes/session.ts",
+        "server/ai/tools/docs.ts",
+        "server/ai/router.ts",
+        "server/watcher.ts",
+        "server/store.ts",
+        "server/index.ts",
+        "data/automations/automations.json"
+      ],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
+    },
+    {
+      "id": "CL-045",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Nightly system audit — health reassessment, idea triage, stale data cleanup",
+      "description": "Automated nightly audit: reassessed all 11 system health scores (2 degraded: CLI 50%, Integrations 45%). Updated 3 open issues with current assessment notes. Promoted 5 ideas to backlog, dismissed 1 (open source contradicts paid product decision), validated 2, elevated 2 to critical/exploring. Refreshed stale context recovery. Triggered fresh codebase scan (59→96 files, 10K→19K lines). Updated project state summary. Overall health: 76%→74%.",
+      "type": "chore",
+      "scope": "system",
+      "files_changed": [],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-046",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Weekly progress report automation — Week 1 (Feb 3–9, 2026)",
+      "description": "Automated weekly progress report generated. Key findings: 54 items shipped across 5 logged sessions (22.5h), 161 story points, 84% issue resolution rate (16/19). 3 open issues (ISS-003, ISS-006, ISS-012) — all architectural. 3 degraded systems (CLI, Integrations, Cursor Rule). Data integrity gap identified: sessions 6–7 missing from velocity log. Recommended focus for next week: battle-test AI chat, dogfood on Pillar, build AI watcher.",
+      "type": "chore",
+      "scope": "automation",
+      "files_changed": [],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-047",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Weekly progress report automation — Week 1 (Feb 3–9, 2026) [Updated]",
+      "description": "Updated weekly progress report (BN-019). Key changes from previous report: ISS-020 identified (velocity data gap, sessions 6–7 missing), open issues now 4 (was 3). Comprehensive analysis: 54 tracked items shipped / ~65-70 estimated actual, 161 story points, 22.5h across 5 sessions, 80% issue resolution rate (16/20). 3 degraded systems (CLI, Integrations, Cursor Rule). #1 focus for next week: battle-test AI chat in browser — blocks everything downstream. Automation triggered by scheduled docs-refresh.",
+      "type": "chore",
+      "scope": "automation",
+      "files_changed": [],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-048",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Weekly progress report automation — Week 2 (Feb 10–16, 2026)",
+      "description": "Automated weekly progress report (BN-020). Key finding: ZERO ACTIVITY WEEK — no sessions, no commits, no changelog entries since Feb 8. Velocity dropped from 54 items/161pts (Week 1) to 0/0 (Week 2). All 4 open issues unchanged and aging (8-9 days old). 3 degraded systems unchanged. All Week 1 focus recommendations carried forward unaddressed. #1 priority remains: battle-test AI chat in browser. Project is in a \"built but unvalidated\" state — significant infrastructure exists but nothing has been proven in real use.",
+      "type": "chore",
+      "scope": "automation",
+      "files_changed": [],
+      "backlog_item": null,
+      "breaking": false
     }
   ]
 }

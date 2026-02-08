@@ -1,23 +1,23 @@
 {
-  "scanned_at": "2026-02-07T20:21:53.495Z",
+  "scanned_at": "2026-02-08T04:19:06.358Z",
   "project_root": "C:\\Users\\realk\\Projects\\dev-track",
   "stats": {
-    "total_files": 59,
-    "total_lines": 10003,
-    "total_functions": 19,
-    "total_components": 22,
-    "total_api_routes": 16,
-    "total_pages": 12,
-    "total_external_services": 6,
+    "total_files": 96,
+    "total_lines": 19107,
+    "total_functions": 49,
+    "total_components": 28,
+    "total_api_routes": 22,
+    "total_pages": 13,
+    "total_external_services": 8,
     "file_types": {
-      "other": 10,
+      "other": 36,
+      "schema": 3,
       "utility": 9,
-      "schema": 2,
-      "api_route": 16,
+      "api_route": 22,
       "config": 3,
       "hook": 1,
-      "component": 6,
-      "page": 12
+      "component": 9,
+      "page": 13
     }
   },
   "files": [
@@ -25,10 +25,1366 @@
       "path": "cli/index.ts",
       "name": "index.ts",
       "extension": ".ts",
-      "lines": 293,
-      "size": 11288,
+      "lines": 649,
+      "size": 25327,
       "type": "other",
       "exports": [],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "os",
+          "names": [
+            "os"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "child_process",
+          "names": [
+            "execSync",
+            "spawn"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 171
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "scripts/audit-fix.ts",
+      "name": "audit-fix.ts",
+      "extension": ".ts",
+      "lines": 231,
+      "size": 12186,
+      "type": "other",
+      "exports": [],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 111
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 128
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 128
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "scripts/migrate-v2.ts",
+      "name": "migrate-v2.ts",
+      "extension": ".ts",
+      "lines": 352,
+      "size": 12410,
+      "type": "other",
+      "exports": [],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/chat.ts",
+      "name": "chat.ts",
+      "extension": ".ts",
+      "lines": 404,
+      "size": 13988,
+      "type": "other",
+      "exports": [
+        {
+          "name": "listConversations",
+          "kind": "function",
+          "line": 66,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "loadConversation",
+          "kind": "function",
+          "line": 81,
+          "isDefault": false,
+          "params": "(id: string)"
+        },
+        {
+          "name": "saveConversation",
+          "kind": "function",
+          "line": 89,
+          "isDefault": false,
+          "params": "(convo: Conversation)"
+        },
+        {
+          "name": "deleteConversation",
+          "kind": "function",
+          "line": 95,
+          "isDefault": false,
+          "params": "(id: string)"
+        },
+        {
+          "name": "Conversation",
+          "kind": "type",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "ChatMessage",
+          "kind": "type",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "ChatStreamEvent",
+          "kind": "type",
+          "line": 41,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./service.js",
+          "names": [
+            "getAIService",
+            "type AIMessage",
+            "type AIToolCall",
+            "type StreamEvent"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./tools/index.js",
+          "names": [
+            "TOOL_DEFINITIONS",
+            "TOOL_LABELS",
+            "executeTool"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getDataDir"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/router.ts",
+      "name": "router.ts",
+      "extension": ".ts",
+      "lines": 265,
+      "size": 11553,
+      "type": "other",
+      "exports": [
+        {
+          "name": "TaskType",
+          "kind": "type",
+          "line": 16,
+          "isDefault": false
+        },
+        {
+          "name": "ModelTier",
+          "kind": "type",
+          "line": 31,
+          "isDefault": false
+        },
+        {
+          "name": "ModelInfo",
+          "kind": "type",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "ModelRouter",
+          "kind": "class",
+          "line": 132,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "openai",
+          "names": [
+            "OpenAI"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "@anthropic-ai/sdk",
+          "names": [
+            "Anthropic"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/runner.ts",
+      "name": "runner.ts",
+      "extension": ".ts",
+      "lines": 121,
+      "size": 3458,
+      "type": "other",
+      "exports": [
+        {
+          "name": "runAgent",
+          "kind": "function",
+          "line": 31,
+          "isDefault": false,
+          "params": "(\r\n  systemPrompt: string,\r\n  userMessage: string,\r\n  options: AgentOptions = {},\r\n)"
+        },
+        {
+          "name": "AgentOptions",
+          "kind": "type",
+          "line": 12,
+          "isDefault": false
+        },
+        {
+          "name": "AgentResult",
+          "kind": "type",
+          "line": 23,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "./service.js",
+          "names": [
+            "getAIService"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./tools/index.js",
+          "names": [
+            "TOOL_DEFINITIONS",
+            "executeTool"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/service.ts",
+      "name": "service.ts",
+      "extension": ".ts",
+      "lines": 626,
+      "size": 21468,
+      "type": "other",
+      "exports": [
+        {
+          "name": "getAIService",
+          "kind": "function",
+          "line": 618,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "resetAIService",
+          "kind": "function",
+          "line": 623,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "AIMessage",
+          "kind": "type",
+          "line": 22,
+          "isDefault": false
+        },
+        {
+          "name": "AIToolCall",
+          "kind": "type",
+          "line": 29,
+          "isDefault": false
+        },
+        {
+          "name": "AIToolDefinition",
+          "kind": "type",
+          "line": 38,
+          "isDefault": false
+        },
+        {
+          "name": "AICompletionOptions",
+          "kind": "type",
+          "line": 47,
+          "isDefault": false
+        },
+        {
+          "name": "AICompletionResult",
+          "kind": "type",
+          "line": 56,
+          "isDefault": false
+        },
+        {
+          "name": "StreamEvent",
+          "kind": "type",
+          "line": 69,
+          "isDefault": false
+        },
+        {
+          "name": "AIService",
+          "kind": "class",
+          "line": 140,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "openai",
+          "names": [
+            "OpenAI"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "@anthropic-ai/sdk",
+          "names": [
+            "Anthropic"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "@google/generative-ai",
+          "names": [
+            "GoogleGenerativeAI"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getDataDir",
+            "getCredentialsPath"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./router.js",
+          "names": [
+            "ModelRouter",
+            "type TaskType"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "openai",
+          "detail": "openai.chat",
+          "line": 312
+        },
+        {
+          "service": "openai",
+          "detail": "openai.chat",
+          "line": 348
+        },
+        {
+          "service": "anthropic",
+          "detail": "anthropic.messages",
+          "line": 432
+        },
+        {
+          "service": "anthropic",
+          "detail": "anthropic.messages",
+          "line": 491
+        },
+        {
+          "service": "openai",
+          "detail": "new OpenAI(",
+          "line": 210
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 5
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 86
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 87
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 103
+        },
+        {
+          "service": "helicone",
+          "detail": "HELICONE",
+          "line": 103
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 104
+        },
+        {
+          "service": "helicone",
+          "detail": "HELICONE",
+          "line": 104
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 196
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 196
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 196
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 198
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 198
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 203
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 204
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 206
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 206
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 207
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 207
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 207
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 217
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 218
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 220
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 220
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 221
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 221
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 221
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/actions.ts",
+      "name": "actions.ts",
+      "extension": ".ts",
+      "lines": 85,
+      "size": 3833,
+      "type": "other",
+      "exports": [
+        {
+          "name": "actionTools",
+          "kind": "constant",
+          "line": 5,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/backlog.ts",
+      "name": "backlog.ts",
+      "extension": ".ts",
+      "lines": 127,
+      "size": 5352,
+      "type": "other",
+      "exports": [
+        {
+          "name": "backlogTools",
+          "kind": "constant",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/brain.ts",
+      "name": "brain.ts",
+      "extension": ".ts",
+      "lines": 115,
+      "size": 5017,
+      "type": "other",
+      "exports": [
+        {
+          "name": "brainTools",
+          "kind": "constant",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../../project-config.js",
+          "names": [
+            "getDataDir"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/changelog.ts",
+      "name": "changelog.ts",
+      "extension": ".ts",
+      "lines": 57,
+      "size": 2453,
+      "type": "other",
+      "exports": [
+        {
+          "name": "changelogTools",
+          "kind": "constant",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/codebase.ts",
+      "name": "codebase.ts",
+      "extension": ".ts",
+      "lines": 106,
+      "size": 4441,
+      "type": "other",
+      "exports": [
+        {
+          "name": "codebaseTools",
+          "kind": "constant",
+          "line": 12,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../../project-config.js",
+          "names": [
+            "getDataDir",
+            "getProjectRoot"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/config.ts",
+      "name": "config.ts",
+      "extension": ".ts",
+      "lines": 57,
+      "size": 2236,
+      "type": "other",
+      "exports": [
+        {
+          "name": "configTools",
+          "kind": "constant",
+          "line": 5,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../../project-config.js",
+          "names": [
+            "getDataDir",
+            "getProjectRoot",
+            "getProjectName",
+            "getProjectConfig",
+            "loadRegistry"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/docs.ts",
+      "name": "docs.ts",
+      "extension": ".ts",
+      "lines": 159,
+      "size": 7922,
+      "type": "other",
+      "exports": [
+        {
+          "name": "docTools",
+          "kind": "constant",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/files.ts",
+      "name": "files.ts",
+      "extension": ".ts",
+      "lines": 100,
+      "size": 4723,
+      "type": "other",
+      "exports": [
+        {
+          "name": "fileTools",
+          "kind": "constant",
+          "line": 6,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../../project-config.js",
+          "names": [
+            "getProjectRoot"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/git.ts",
+      "name": "git.ts",
+      "extension": ".ts",
+      "lines": 100,
+      "size": 4073,
+      "type": "other",
+      "exports": [
+        {
+          "name": "gitTools",
+          "kind": "constant",
+          "line": 9,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "child_process",
+          "names": [
+            "execSync"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../../project-config.js",
+          "names": [
+            "getProjectRoot"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/ideas.ts",
+      "name": "ideas.ts",
+      "extension": ".ts",
+      "lines": 91,
+      "size": 4202,
+      "type": "other",
+      "exports": [
+        {
+          "name": "ideaTools",
+          "kind": "constant",
+          "line": 10,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../../project-config.js",
+          "names": [
+            "getDataDir"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/index.ts",
+      "name": "index.ts",
+      "extension": ".ts",
+      "lines": 97,
+      "size": 3125,
+      "type": "other",
+      "exports": [
+        {
+          "name": "executeTool",
+          "kind": "function",
+          "line": 78,
+          "isDefault": false,
+          "params": "(name: string, args: Record<string, any>)"
+        },
+        {
+          "name": "getToolStats",
+          "kind": "function",
+          "line": 91,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "TOOL_DEFINITIONS",
+          "kind": "constant",
+          "line": 72,
+          "isDefault": false
+        },
+        {
+          "name": "TOOL_LABELS",
+          "kind": "constant",
+          "line": 75,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "./backlog.js",
+          "names": [
+            "backlogTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./issues.js",
+          "names": [
+            "issueTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./changelog.js",
+          "names": [
+            "changelogTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./ideas.js",
+          "names": [
+            "ideaTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./state.js",
+          "names": [
+            "stateTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./brain.js",
+          "names": [
+            "brainTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./session.js",
+          "names": [
+            "sessionTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./actions.js",
+          "names": [
+            "actionTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./codebase.js",
+          "names": [
+            "codebaseTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./git.js",
+          "names": [
+            "gitTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./files.js",
+          "names": [
+            "fileTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./docs.js",
+          "names": [
+            "docTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./metrics.js",
+          "names": [
+            "metricsTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./config.js",
+          "names": [
+            "configTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./profiles.js",
+          "names": [
+            "profileTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./integrations.js",
+          "names": [
+            "integrationTools"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "EXECUTE"
+      ]
+    },
+    {
+      "path": "server/ai/tools/integrations.ts",
+      "name": "integrations.ts",
+      "extension": ".ts",
+      "lines": 49,
+      "size": 1917,
+      "type": "other",
+      "exports": [
+        {
+          "name": "integrationTools",
+          "kind": "constant",
+          "line": 3,
+          "isDefault": false
+        }
+      ],
+      "imports": [],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 32
+        }
+      ],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/issues.ts",
+      "name": "issues.ts",
+      "extension": ".ts",
+      "lines": 104,
+      "size": 4752,
+      "type": "other",
+      "exports": [
+        {
+          "name": "issueTools",
+          "kind": "constant",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/metrics.ts",
+      "name": "metrics.ts",
+      "extension": ".ts",
+      "lines": 46,
+      "size": 1881,
+      "type": "other",
+      "exports": [
+        {
+          "name": "metricsTools",
+          "kind": "constant",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/profiles.ts",
+      "name": "profiles.ts",
+      "extension": ".ts",
+      "lines": 94,
+      "size": 4322,
+      "type": "other",
+      "exports": [
+        {
+          "name": "profileTools",
+          "kind": "constant",
+          "line": 8,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "../../project-config.js",
+          "names": [
+            "getDataDir"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/session.ts",
+      "name": "session.ts",
+      "extension": ".ts",
+      "lines": 97,
+      "size": 3747,
+      "type": "other",
+      "exports": [
+        {
+          "name": "sessionTools",
+          "kind": "constant",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/state.ts",
+      "name": "state.ts",
+      "extension": ".ts",
+      "lines": 70,
+      "size": 3044,
+      "type": "other",
+      "exports": [
+        {
+          "name": "stateTools",
+          "kind": "constant",
+          "line": 4,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/ai/tools/types.ts",
+      "name": "types.ts",
+      "extension": ".ts",
+      "lines": 19,
+      "size": 420,
+      "type": "schema",
+      "exports": [
+        {
+          "name": "Tool",
+          "kind": "type",
+          "line": 7,
+          "isDefault": false
+        },
+        {
+          "name": "ToolModule",
+          "kind": "type",
+          "line": 13,
+          "isDefault": false
+        }
+      ],
       "imports": [],
       "externalCalls": [],
       "dbOperations": []
@@ -174,6 +1530,109 @@
       ]
     },
     {
+      "path": "server/automation/engine.ts",
+      "name": "engine.ts",
+      "extension": ".ts",
+      "lines": 188,
+      "size": 6873,
+      "type": "other",
+      "exports": [
+        {
+          "name": "getAutomationEngine",
+          "kind": "function",
+          "line": 184,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "TriggerType",
+          "kind": "type",
+          "line": 13,
+          "isDefault": false
+        },
+        {
+          "name": "TriggerContext",
+          "kind": "type",
+          "line": 15,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ai/runner.js",
+          "names": [
+            "runAgent"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "server/automation/scheduler.ts",
+      "name": "scheduler.ts",
+      "extension": ".ts",
+      "lines": 83,
+      "size": 2689,
+      "type": "other",
+      "exports": [
+        {
+          "name": "startScheduler",
+          "kind": "function",
+          "line": 15,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "stopScheduler",
+          "kind": "function",
+          "line": 27,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./engine.js",
+          "names": [
+            "getAutomationEngine"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
       "path": "server/context-sync.ts",
       "name": "context-sync.ts",
       "extension": ".ts",
@@ -229,8 +1688,8 @@
       "path": "server/index.ts",
       "name": "index.ts",
       "extension": ".ts",
-      "lines": 160,
-      "size": 5979,
+      "lines": 306,
+      "size": 10171,
       "type": "other",
       "exports": [],
       "imports": [
@@ -259,14 +1718,6 @@
           "isExternal": true
         },
         {
-          "source": "http",
-          "names": [
-            "createServer"
-          ],
-          "isDefault": false,
-          "isExternal": true
-        },
-        {
           "source": "fs",
           "names": [
             "fs"
@@ -283,9 +1734,35 @@
           "isExternal": true
         },
         {
+          "source": "os",
+          "names": [
+            "os"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "./project-config.js",
+          "names": [
+            "setDataDir",
+            "setProjectRoot",
+            "setProjectConfig",
+            "getDataDir",
+            "getProjectRoot",
+            "getProjectName",
+            "getProjectConfig",
+            "loadRegistry",
+            "registerProject",
+            "findAvailablePort"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
           "source": "./store.js",
           "names": [
-            "getStore"
+            "getStore",
+            "reloadStore"
           ],
           "isDefault": false,
           "isExternal": false
@@ -307,6 +1784,22 @@
           "isExternal": false
         },
         {
+          "source": "./automation/scheduler.js",
+          "names": [
+            "startScheduler"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./automation/engine.js",
+          "names": [
+            "getAutomationEngine"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
           "source": "./routes/state.js",
           "names": [
             "stateRoutes"
@@ -323,9 +1816,41 @@
           "isExternal": false
         },
         {
-          "source": "./routes/backlog.js",
+          "source": "./routes/roadmap.js",
           "names": [
-            "backlogRoutes"
+            "roadmapRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/epics.js",
+          "names": [
+            "epicsRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/milestones.js",
+          "names": [
+            "milestonesRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/releases.js",
+          "names": [
+            "releasesRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/systems.js",
+          "names": [
+            "systemsRoutes"
           ],
           "isDefault": true,
           "isExternal": false
@@ -339,14 +1864,6 @@
           "isExternal": false
         },
         {
-          "source": "./routes/actions.js",
-          "names": [
-            "actionsRoutes"
-          ],
-          "isDefault": true,
-          "isExternal": false
-        },
-        {
           "source": "./routes/changelog.js",
           "names": [
             "changelogRoutes"
@@ -355,9 +1872,17 @@
           "isExternal": false
         },
         {
-          "source": "./routes/runs.js",
+          "source": "./routes/labels.js",
           "names": [
-            "runsRoutes"
+            "labelsRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/automations.js",
+          "names": [
+            "automationsRoutes"
           ],
           "isDefault": true,
           "isExternal": false
@@ -430,6 +1955,22 @@
           "source": "./routes/git.js",
           "names": [
             "gitRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/ai.js",
+          "names": [
+            "aiRoutes"
+          ],
+          "isDefault": true,
+          "isExternal": false
+        },
+        {
+          "source": "./routes/init.js",
+          "names": [
+            "initRoutes"
           ],
           "isDefault": true,
           "isExternal": false
@@ -506,63 +2047,63 @@
       "path": "server/integrations/github.ts",
       "name": "github.ts",
       "extension": ".ts",
-      "lines": 308,
-      "size": 10195,
+      "lines": 309,
+      "size": 10257,
       "type": "utility",
       "exports": [
         {
           "name": "getGitStatus",
           "kind": "function",
-          "line": 51,
+          "line": 52,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "getGitLog",
           "kind": "function",
-          "line": 93,
+          "line": 94,
           "isDefault": false,
           "params": "(limit = 20)"
         },
         {
           "name": "getGitBranches",
           "kind": "function",
-          "line": 107,
+          "line": 108,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "getGitDiffStats",
           "kind": "function",
-          "line": 118,
+          "line": 119,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "getGhPullRequests",
           "kind": "function",
-          "line": 140,
+          "line": 141,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "getGhCIStatus",
           "kind": "function",
-          "line": 147,
+          "line": 148,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "getGhIssues",
           "kind": "function",
-          "line": 154,
+          "line": 155,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "githubPlugin",
           "kind": "constant",
-          "line": 163,
+          "line": 164,
           "isDefault": false
         }
       ],
@@ -574,13 +2115,21 @@
           ],
           "isDefault": false,
           "isExternal": true
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getProjectRoot"
+          ],
+          "isDefault": false,
+          "isExternal": false
         }
       ],
       "externalCalls": [
         {
           "service": "github",
           "detail": "https://api.github.com/repos/${status?.owner}/${status?.repo}",
-          "line": 235
+          "line": 236
         }
       ],
       "dbOperations": []
@@ -589,8 +2138,8 @@
       "path": "server/integrations/helicone.ts",
       "name": "helicone.ts",
       "extension": ".ts",
-      "lines": 133,
-      "size": 4404,
+      "lines": 141,
+      "size": 4671,
       "type": "utility",
       "exports": [
         {
@@ -605,17 +2154,17 @@
         {
           "service": "helicone",
           "detail": "https://api.helicone.ai/v1/request/query",
-          "line": 36
+          "line": 44
         },
         {
           "service": "helicone",
           "detail": "https://api.helicone.ai/v1/request/query",
-          "line": 60
+          "line": 68
         },
         {
           "service": "helicone",
           "detail": "https://api.helicone.ai/v1/request/query",
-          "line": 100
+          "line": 108
         },
         {
           "service": "helicone",
@@ -650,62 +2199,62 @@
         {
           "service": "helicone",
           "detail": "Helicone",
-          "line": 21
+          "line": 29
         },
         {
           "service": "helicone",
           "detail": "Helicone",
-          "line": 23
+          "line": 31
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 23
+          "line": 31
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 36
+          "line": 44
         },
         {
           "service": "helicone",
           "detail": "Helicone",
-          "line": 47
+          "line": 55
         },
         {
           "service": "helicone",
           "detail": "Helicone",
-          "line": 49
+          "line": 57
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 60
+          "line": 68
         },
         {
           "service": "helicone",
           "detail": "Helicone",
-          "line": 72
+          "line": 80
         },
         {
           "service": "helicone",
           "detail": "Helicone",
-          "line": 94
+          "line": 102
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 100
+          "line": 108
         },
         {
           "service": "helicone",
           "detail": "Helicone",
-          "line": 125
+          "line": 133
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 129
+          "line": 137
         }
       ],
       "dbOperations": []
@@ -714,21 +2263,21 @@
       "path": "server/integrations/manager.ts",
       "name": "manager.ts",
       "extension": ".ts",
-      "lines": 220,
-      "size": 7048,
+      "lines": 231,
+      "size": 7551,
       "type": "utility",
       "exports": [
         {
           "name": "getIntegrationManager",
           "kind": "function",
-          "line": 216,
+          "line": 227,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "IntegrationManager",
           "kind": "class",
-          "line": 63,
+          "line": 64,
           "isDefault": false
         }
       ],
@@ -748,6 +2297,16 @@
           ],
           "isDefault": true,
           "isExternal": true
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getDataDir",
+            "getCredentialsPath",
+            "getProjectRoot"
+          ],
+          "isDefault": false,
+          "isExternal": false
         },
         {
           "source": "./github.js",
@@ -818,27 +2377,57 @@
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 8
+          "line": 9
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 8
+          "line": 9
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 20
+          "line": 21
         },
         {
           "service": "helicone",
           "detail": "helicone",
-          "line": 20
+          "line": 21
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 105
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 106
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 106
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 107
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 110
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 111
         },
         {
           "service": "sentry",
           "detail": "sentry.",
-          "line": 7
+          "line": 8
         }
       ],
       "dbOperations": []
@@ -1052,56 +2641,198 @@
       "dbOperations": []
     },
     {
-      "path": "server/routes/actions.ts",
-      "name": "actions.ts",
+      "path": "server/project-config.ts",
+      "name": "project-config.ts",
       "extension": ".ts",
-      "lines": 163,
-      "size": 5930,
-      "type": "api_route",
-      "exports": [],
+      "lines": 344,
+      "size": 10311,
+      "type": "other",
+      "exports": [
+        {
+          "name": "getDevTrackHome",
+          "kind": "function",
+          "line": 50,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "setDataDir",
+          "kind": "function",
+          "line": 63,
+          "isDefault": false,
+          "params": "(dir: string)"
+        },
+        {
+          "name": "setProjectRoot",
+          "kind": "function",
+          "line": 70,
+          "isDefault": false,
+          "params": "(dir: string)"
+        },
+        {
+          "name": "setProjectConfig",
+          "kind": "function",
+          "line": 77,
+          "isDefault": false,
+          "params": "(config: ProjectConfig)"
+        },
+        {
+          "name": "getDataDir",
+          "kind": "function",
+          "line": 86,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getProjectRoot",
+          "kind": "function",
+          "line": 119,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getCredentialsPath",
+          "kind": "function",
+          "line": 129,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getProjectConfig",
+          "kind": "function",
+          "line": 136,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "getProjectName",
+          "kind": "function",
+          "line": 145,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "ensureDevTrackHome",
+          "kind": "function",
+          "line": 163,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "loadRegistry",
+          "kind": "function",
+          "line": 172,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "saveRegistry",
+          "kind": "function",
+          "line": 181,
+          "isDefault": false,
+          "params": "(registry: ProjectRegistry)"
+        },
+        {
+          "name": "registerProject",
+          "kind": "function",
+          "line": 186,
+          "isDefault": false,
+          "params": "(entry: ProjectRegistryEntry)"
+        },
+        {
+          "name": "loadGlobalSettings",
+          "kind": "function",
+          "line": 197,
+          "isDefault": false,
+          "params": "()"
+        },
+        {
+          "name": "saveGlobalSettings",
+          "kind": "function",
+          "line": 206,
+          "isDefault": false,
+          "params": "(settings: GlobalSettings)"
+        },
+        {
+          "name": "scaffoldDataDir",
+          "kind": "function",
+          "line": 214,
+          "isDefault": false,
+          "params": "(dataDir: string, projectName: string)"
+        },
+        {
+          "name": "findAvailablePort",
+          "kind": "function",
+          "line": 319,
+          "isDefault": false,
+          "params": "(preferred?: number)"
+        },
+        {
+          "name": "ProjectConfig",
+          "kind": "type",
+          "line": 17,
+          "isDefault": false
+        },
+        {
+          "name": "ProjectRegistryEntry",
+          "kind": "type",
+          "line": 25,
+          "isDefault": false
+        },
+        {
+          "name": "ProjectRegistry",
+          "kind": "type",
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "GlobalSettings",
+          "kind": "type",
+          "line": 39,
+          "isDefault": false
+        }
+      ],
       "imports": [
         {
-          "source": "hono",
+          "source": "fs",
           "names": [
-            "Hono"
+            "fs"
           ],
-          "isDefault": false,
+          "isDefault": true,
           "isExternal": true
         },
         {
-          "source": "../store.js",
+          "source": "path",
           "names": [
-            "getStore"
+            "path"
           ],
-          "isDefault": false,
-          "isExternal": false
+          "isDefault": true,
+          "isExternal": true
         },
         {
-          "source": "../ws.js",
+          "source": "os",
           "names": [
-            "broadcast"
+            "os"
           ],
-          "isDefault": false,
-          "isExternal": false
-        },
-        {
-          "source": "../script-runner.js",
-          "names": [
-            "runScript"
-          ],
-          "isDefault": false,
-          "isExternal": false
+          "isDefault": true,
+          "isExternal": true
         }
       ],
-      "externalCalls": [],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 298
+        }
+      ],
       "dbOperations": []
     },
     {
       "path": "server/routes/activity.ts",
       "name": "activity.ts",
       "extension": ".ts",
-      "lines": 96,
-      "size": 3220,
+      "lines": 33,
+      "size": 1005,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1126,11 +2857,188 @@
       "dbOperations": []
     },
     {
-      "path": "server/routes/backlog.ts",
-      "name": "backlog.ts",
+      "path": "server/routes/ai.ts",
+      "name": "ai.ts",
       "extension": ".ts",
-      "lines": 196,
-      "size": 7299,
+      "lines": 330,
+      "size": 11732,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "hono/streaming",
+          "names": [
+            "streamSSE"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../ai/service.js",
+          "names": [
+            "getAIService"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ai/chat.js",
+          "names": [
+            "runChat",
+            "listConversations",
+            "loadConversation",
+            "deleteConversation",
+            "type ChatStreamEvent"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getDataDir",
+            "getCredentialsPath"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "fs",
+          "names": [
+            "fs"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "path",
+          "names": [
+            "path"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "https://api.helicone.ai/v1/request/query",
+          "line": 234
+        },
+        {
+          "service": "openai",
+          "detail": "new OpenAI(",
+          "line": 202
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 137
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 137
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 137
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 138
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 138
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 138
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 173
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 173
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 177
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 177
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 231
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 232
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 232
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 233
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 234
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 237
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 243
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 245
+        }
+      ],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "server/routes/automations.ts",
+      "name": "automations.ts",
+      "extension": ".ts",
+      "lines": 134,
+      "size": 5173,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1154,6 +3062,14 @@
           "source": "../ws.js",
           "names": [
             "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../automation/engine.js",
+          "names": [
+            "getAutomationEngine"
           ],
           "isDefault": false,
           "isExternal": false
@@ -1168,8 +3084,8 @@
       "path": "server/routes/brain.ts",
       "name": "brain.ts",
       "extension": ".ts",
-      "lines": 167,
-      "size": 6233,
+      "lines": 168,
+      "size": 6262,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1204,6 +3120,14 @@
           ],
           "isDefault": false,
           "isExternal": false
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getDataDir"
+          ],
+          "isDefault": false,
+          "isExternal": false
         }
       ],
       "externalCalls": [],
@@ -1213,8 +3137,8 @@
       "path": "server/routes/changelog.ts",
       "name": "changelog.ts",
       "extension": ".ts",
-      "lines": 56,
-      "size": 1831,
+      "lines": 70,
+      "size": 2432,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1250,8 +3174,8 @@
       "path": "server/routes/codebase.ts",
       "name": "codebase.ts",
       "extension": ".ts",
-      "lines": 417,
-      "size": 14333,
+      "lines": 418,
+      "size": 14381,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1285,6 +3209,15 @@
             "scanCodebase",
             "generateEdgeLabel",
             "type CodebaseAnalysis"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getDataDir",
+            "getProjectRoot"
           ],
           "isDefault": false,
           "isExternal": false
@@ -1334,8 +3267,8 @@
       "path": "server/routes/docs.ts",
       "name": "docs.ts",
       "extension": ".ts",
-      "lines": 37,
-      "size": 1195,
+      "lines": 180,
+      "size": 6636,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1354,10 +3287,59 @@
           ],
           "isDefault": false,
           "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
         }
       ],
       "externalCalls": [],
-      "dbOperations": []
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "server/routes/epics.ts",
+      "name": "epics.ts",
+      "extension": ".ts",
+      "lines": 129,
+      "size": 4314,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
     },
     {
       "path": "server/routes/git.ts",
@@ -1398,8 +3380,8 @@
       "path": "server/routes/ideas.ts",
       "name": "ideas.ts",
       "extension": ".ts",
-      "lines": 113,
-      "size": 4426,
+      "lines": 125,
+      "size": 4432,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1412,20 +3394,12 @@
           "isExternal": true
         },
         {
-          "source": "fs",
+          "source": "../store.js",
           "names": [
-            "fs"
+            "getStore"
           ],
-          "isDefault": true,
-          "isExternal": true
-        },
-        {
-          "source": "path",
-          "names": [
-            "path"
-          ],
-          "isDefault": true,
-          "isExternal": true
+          "isDefault": false,
+          "isExternal": false
         },
         {
           "source": "../ws.js",
@@ -1434,6 +3408,67 @@
           ],
           "isDefault": false,
           "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/init.ts",
+      "name": "init.ts",
+      "extension": ".ts",
+      "lines": 200,
+      "size": 7473,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../project-config.js",
+          "names": [
+            "getProjectRoot"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ai/runner.js",
+          "names": [
+            "runAgent"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../analyzer/scanner.js",
+          "names": [
+            "scanCodebase"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "child_process",
+          "names": [
+            "execSync"
+          ],
+          "isDefault": false,
+          "isExternal": true
         }
       ],
       "externalCalls": [],
@@ -1472,8 +3507,53 @@
       "path": "server/routes/issues.ts",
       "name": "issues.ts",
       "extension": ".ts",
-      "lines": 165,
-      "size": 5937,
+      "lines": 181,
+      "size": 6531,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../automation/engine.js",
+          "names": [
+            "getAutomationEngine"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/labels.ts",
+      "name": "labels.ts",
+      "extension": ".ts",
+      "lines": 82,
+      "size": 2788,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1503,7 +3583,9 @@
         }
       ],
       "externalCalls": [],
-      "dbOperations": []
+      "dbOperations": [
+        "DELETE"
+      ]
     },
     {
       "path": "server/routes/metrics.ts",
@@ -1535,40 +3617,11 @@
       "dbOperations": []
     },
     {
-      "path": "server/routes/runs.ts",
-      "name": "runs.ts",
+      "path": "server/routes/milestones.ts",
+      "name": "milestones.ts",
       "extension": ".ts",
-      "lines": 28,
-      "size": 783,
-      "type": "api_route",
-      "exports": [],
-      "imports": [
-        {
-          "source": "hono",
-          "names": [
-            "Hono"
-          ],
-          "isDefault": false,
-          "isExternal": true
-        },
-        {
-          "source": "../store.js",
-          "names": [
-            "getStore"
-          ],
-          "isDefault": false,
-          "isExternal": false
-        }
-      ],
-      "externalCalls": [],
-      "dbOperations": []
-    },
-    {
-      "path": "server/routes/session.ts",
-      "name": "session.ts",
-      "extension": ".ts",
-      "lines": 120,
-      "size": 4013,
+      "lines": 129,
+      "size": 4589,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1592,6 +3645,137 @@
           "source": "../ws.js",
           "names": [
             "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "server/routes/releases.ts",
+      "name": "releases.ts",
+      "extension": ".ts",
+      "lines": 128,
+      "size": 4684,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "server/routes/roadmap.ts",
+      "name": "roadmap.ts",
+      "extension": ".ts",
+      "lines": 287,
+      "size": 11371,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../automation/engine.js",
+          "names": [
+            "getAutomationEngine"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
+      "path": "server/routes/session.ts",
+      "name": "session.ts",
+      "extension": ".ts",
+      "lines": 164,
+      "size": 6166,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../automation/engine.js",
+          "names": [
+            "getAutomationEngine"
           ],
           "isDefault": false,
           "isExternal": false
@@ -1604,8 +3788,8 @@
       "path": "server/routes/state.ts",
       "name": "state.ts",
       "extension": ".ts",
-      "lines": 55,
-      "size": 1836,
+      "lines": 49,
+      "size": 1570,
       "type": "api_route",
       "exports": [],
       "imports": [
@@ -1638,24 +3822,63 @@
       "dbOperations": []
     },
     {
+      "path": "server/routes/systems.ts",
+      "name": "systems.ts",
+      "extension": ".ts",
+      "lines": 143,
+      "size": 5150,
+      "type": "api_route",
+      "exports": [],
+      "imports": [
+        {
+          "source": "hono",
+          "names": [
+            "Hono"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../store.js",
+          "names": [
+            "getStore"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "../ws.js",
+          "names": [
+            "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": [
+        "DELETE"
+      ]
+    },
+    {
       "path": "server/script-runner.ts",
       "name": "script-runner.ts",
       "extension": ".ts",
-      "lines": 80,
-      "size": 1869,
+      "lines": 81,
+      "size": 1885,
       "type": "other",
       "exports": [
         {
           "name": "runScript",
           "kind": "function",
-          "line": 12,
+          "line": 13,
           "isDefault": false,
           "params": "(\r\n  command: string,\r\n  options: {\r\n    cwd?: string;\r\n    timeout?: number;\r\n    onOutput?: (chunk: string)"
         },
         {
           "name": "ScriptResult",
           "kind": "type",
-          "line": 5,
+          "line": 6,
           "isDefault": false
         }
       ],
@@ -1677,6 +3900,14 @@
           "isExternal": true
         },
         {
+          "source": "./project-config.js",
+          "names": [
+            "getProjectRoot"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
           "source": "./ws.js",
           "names": [
             "broadcast"
@@ -1692,28 +3923,28 @@
       "path": "server/store.ts",
       "name": "store.ts",
       "extension": ".ts",
-      "lines": 332,
-      "size": 11060,
+      "lines": 480,
+      "size": 16644,
       "type": "other",
       "exports": [
         {
           "name": "getStore",
           "kind": "function",
-          "line": 323,
+          "line": 471,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "reloadStore",
           "kind": "function",
-          "line": 328,
+          "line": 476,
           "isDefault": false,
           "params": "()"
         },
         {
           "name": "Store",
           "kind": "class",
-          "line": 70,
+          "line": 75,
           "isDefault": false
         }
       ],
@@ -1733,6 +3964,14 @@
           ],
           "isDefault": true,
           "isExternal": true
+        },
+        {
+          "source": "./project-config.js",
+          "names": [
+            "getDataDir"
+          ],
+          "isDefault": false,
+          "isExternal": false
         }
       ],
       "externalCalls": [],
@@ -1742,14 +3981,14 @@
       "path": "server/watcher.ts",
       "name": "watcher.ts",
       "extension": ".ts",
-      "lines": 72,
-      "size": 2348,
+      "lines": 91,
+      "size": 3328,
       "type": "other",
       "exports": [
         {
           "name": "startWatcher",
           "kind": "function",
-          "line": 9,
+          "line": 11,
           "isDefault": false,
           "params": "()"
         }
@@ -1783,6 +4022,22 @@
           "source": "./ws.js",
           "names": [
             "broadcast"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./project-config.js",
+          "names": [
+            "getDataDir"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./automation/engine.js",
+          "names": [
+            "getAutomationEngine"
           ],
           "isDefault": false,
           "isExternal": false
@@ -1834,350 +4089,476 @@
       "path": "shared/types.ts",
       "name": "types.ts",
       "extension": ".ts",
-      "lines": 430,
-      "size": 11453,
+      "lines": 680,
+      "size": 16672,
       "type": "schema",
       "exports": [
         {
-          "name": "Horizon",
-          "kind": "type",
-          "line": 3,
-          "isDefault": false
-        },
-        {
-          "name": "Size",
-          "kind": "type",
-          "line": 4,
-          "isDefault": false
-        },
-        {
-          "name": "ItemStatus",
-          "kind": "type",
-          "line": 5,
-          "isDefault": false
-        },
-        {
-          "name": "IssueSeverity",
-          "kind": "type",
-          "line": 6,
-          "isDefault": false
-        },
-        {
-          "name": "IssueStatus",
-          "kind": "type",
-          "line": 7,
-          "isDefault": false
-        },
-        {
-          "name": "ActionHealth",
+          "name": "Priority",
           "kind": "type",
           "line": 8,
           "isDefault": false
         },
         {
-          "name": "SystemStatus",
+          "name": "Size",
           "kind": "type",
           "line": 9,
           "isDefault": false
         },
         {
-          "name": "SessionStatus",
+          "name": "Horizon",
           "kind": "type",
           "line": 10,
           "isDefault": false
         },
         {
-          "name": "RunResult",
+          "name": "ItemType",
           "kind": "type",
           "line": 11,
           "isDefault": false
         },
         {
-          "name": "RunTrigger",
+          "name": "ItemStatus",
           "kind": "type",
           "line": 12,
           "isDefault": false
         },
         {
-          "name": "Verbosity",
+          "name": "EpicStatus",
           "kind": "type",
           "line": 14,
           "isDefault": false
         },
         {
-          "name": "DiagnosticVerbosity",
+          "name": "MilestoneStatus",
           "kind": "type",
           "line": 15,
           "isDefault": false
         },
         {
-          "name": "AIContextLevel",
+          "name": "ReleaseStatus",
           "kind": "type",
           "line": 16,
           "isDefault": false
         },
         {
-          "name": "DevTrackConfig",
+          "name": "IssueStatus",
+          "kind": "type",
+          "line": 18,
+          "isDefault": false
+        },
+        {
+          "name": "IssueSeverity",
+          "kind": "type",
+          "line": 19,
+          "isDefault": false
+        },
+        {
+          "name": "IssueType",
           "kind": "type",
           "line": 20,
           "isDefault": false
         },
         {
-          "name": "Developer",
+          "name": "ChangeType",
           "kind": "type",
-          "line": 46,
+          "line": 22,
           "isDefault": false
         },
         {
-          "name": "ProjectState",
+          "name": "SystemStatus",
           "kind": "type",
-          "line": 54,
+          "line": 23,
           "isDefault": false
         },
         {
-          "name": "SystemRating",
+          "name": "SessionStatus",
           "kind": "type",
-          "line": 66,
+          "line": 24,
           "isDefault": false
         },
         {
-          "name": "RemainingItem",
+          "name": "DocType",
           "kind": "type",
-          "line": 74,
+          "line": 26,
           "isDefault": false
         },
         {
-          "name": "SessionPlan",
+          "name": "DocStatus",
           "kind": "type",
-          "line": 82,
-          "isDefault": false
-        },
-        {
-          "name": "SessionItem",
-          "kind": "type",
-          "line": 95,
-          "isDefault": false
-        },
-        {
-          "name": "SessionLog",
-          "kind": "type",
-          "line": 101,
-          "isDefault": false
-        },
-        {
-          "name": "SessionEntry",
-          "kind": "type",
-          "line": 105,
-          "isDefault": false
-        },
-        {
-          "name": "ShippedItem",
-          "kind": "type",
-          "line": 120,
-          "isDefault": false
-        },
-        {
-          "name": "BacklogItem",
-          "kind": "type",
-          "line": 128,
-          "isDefault": false
-        },
-        {
-          "name": "BacklogData",
-          "kind": "type",
-          "line": 145,
-          "isDefault": false
-        },
-        {
-          "name": "ChangelogEntry",
-          "kind": "type",
-          "line": 151,
-          "isDefault": false
-        },
-        {
-          "name": "ChangelogData",
-          "kind": "type",
-          "line": 164,
-          "isDefault": false
-        },
-        {
-          "name": "ChangelogSummary",
-          "kind": "type",
-          "line": 168,
-          "isDefault": false
-        },
-        {
-          "name": "ChangelogSummaries",
-          "kind": "type",
-          "line": 179,
-          "isDefault": false
-        },
-        {
-          "name": "ActionScript",
-          "kind": "type",
-          "line": 185,
-          "isDefault": false
-        },
-        {
-          "name": "ExpectedOutcome",
-          "kind": "type",
-          "line": 192,
-          "isDefault": false
-        },
-        {
-          "name": "Action",
-          "kind": "type",
-          "line": 197,
-          "isDefault": false
-        },
-        {
-          "name": "ActionsRegistry",
-          "kind": "type",
-          "line": 211,
-          "isDefault": false
-        },
-        {
-          "name": "Issue",
-          "kind": "type",
-          "line": 217,
-          "isDefault": false
-        },
-        {
-          "name": "IssuesData",
-          "kind": "type",
-          "line": 235,
-          "isDefault": false
-        },
-        {
-          "name": "RunOutcome",
-          "kind": "type",
-          "line": 242,
-          "isDefault": false
-        },
-        {
-          "name": "DiagnosticRun",
-          "kind": "type",
-          "line": 248,
-          "isDefault": false
-        },
-        {
-          "name": "SessionMetric",
-          "kind": "type",
-          "line": 264,
-          "isDefault": false
-        },
-        {
-          "name": "MetricsTotals",
-          "kind": "type",
-          "line": 276,
-          "isDefault": false
-        },
-        {
-          "name": "VelocityData",
-          "kind": "type",
-          "line": 286,
-          "isDefault": false
-        },
-        {
-          "name": "QuickStatus",
-          "kind": "type",
-          "line": 294,
-          "isDefault": false
-        },
-        {
-          "name": "BrainNoteType",
-          "kind": "type",
-          "line": 305,
-          "isDefault": false
-        },
-        {
-          "name": "BrainNotePriority",
-          "kind": "type",
-          "line": 306,
-          "isDefault": false
-        },
-        {
-          "name": "BrainNote",
-          "kind": "type",
-          "line": 308,
-          "isDefault": false
-        },
-        {
-          "name": "BrainNotesData",
-          "kind": "type",
-          "line": 323,
-          "isDefault": false
-        },
-        {
-          "name": "UserPreference",
-          "kind": "type",
-          "line": 328,
-          "isDefault": false
-        },
-        {
-          "name": "LearnedPattern",
-          "kind": "type",
-          "line": 336,
-          "isDefault": false
-        },
-        {
-          "name": "BrainPreferences",
-          "kind": "type",
-          "line": 344,
-          "isDefault": false
-        },
-        {
-          "name": "ContextRecovery",
-          "kind": "type",
-          "line": 349,
+          "line": 27,
           "isDefault": false
         },
         {
           "name": "IdeaStatus",
           "kind": "type",
-          "line": 359,
+          "line": 29,
           "isDefault": false
         },
         {
           "name": "IdeaCategory",
           "kind": "type",
-          "line": 360,
+          "line": 30,
           "isDefault": false
         },
         {
-          "name": "Idea",
+          "name": "AutomationTrigger",
           "kind": "type",
-          "line": 362,
+          "line": 32,
           "isDefault": false
         },
         {
-          "name": "IdeasData",
+          "name": "Verbosity",
           "kind": "type",
-          "line": 379,
+          "line": 35,
+          "isDefault": false
+        },
+        {
+          "name": "DiagnosticVerbosity",
+          "kind": "type",
+          "line": 36,
+          "isDefault": false
+        },
+        {
+          "name": "AIContextLevel",
+          "kind": "type",
+          "line": 37,
           "isDefault": false
         },
         {
           "name": "ActivityType",
           "kind": "type",
-          "line": 386,
+          "line": 40,
           "isDefault": false
         },
         {
-          "name": "ActivityItem",
+          "name": "DevTrackConfig",
           "kind": "type",
-          "line": 396,
+          "line": 53,
           "isDefault": false
         },
         {
-          "name": "APIResponse",
+          "name": "Developer",
+          "kind": "type",
+          "line": 78,
+          "isDefault": false
+        },
+        {
+          "name": "Idea",
+          "kind": "type",
+          "line": 86,
+          "isDefault": false
+        },
+        {
+          "name": "IdeasData",
+          "kind": "type",
+          "line": 105,
+          "isDefault": false
+        },
+        {
+          "name": "RoadmapItem",
+          "kind": "type",
+          "line": 112,
+          "isDefault": false
+        },
+        {
+          "name": "BacklogItem",
+          "kind": "type",
+          "line": 149,
+          "isDefault": false
+        },
+        {
+          "name": "RoadmapData",
+          "kind": "type",
+          "line": 151,
+          "isDefault": false
+        },
+        {
+          "name": "BacklogData",
+          "kind": "type",
+          "line": 156,
+          "isDefault": false
+        },
+        {
+          "name": "Epic",
+          "kind": "type",
+          "line": 160,
+          "isDefault": false
+        },
+        {
+          "name": "EpicsData",
+          "kind": "type",
+          "line": 182,
+          "isDefault": false
+        },
+        {
+          "name": "Milestone",
+          "kind": "type",
+          "line": 188,
+          "isDefault": false
+        },
+        {
+          "name": "MilestonesData",
+          "kind": "type",
+          "line": 210,
+          "isDefault": false
+        },
+        {
+          "name": "Release",
+          "kind": "type",
+          "line": 216,
+          "isDefault": false
+        },
+        {
+          "name": "ReleasesData",
+          "kind": "type",
+          "line": 238,
+          "isDefault": false
+        },
+        {
+          "name": "Issue",
+          "kind": "type",
+          "line": 244,
+          "isDefault": false
+        },
+        {
+          "name": "IssuesData",
+          "kind": "type",
+          "line": 273,
+          "isDefault": false
+        },
+        {
+          "name": "HealthSignal",
+          "kind": "type",
+          "line": 280,
+          "isDefault": false
+        },
+        {
+          "name": "System",
+          "kind": "type",
+          "line": 286,
+          "isDefault": false
+        },
+        {
+          "name": "SystemsData",
+          "kind": "type",
+          "line": 314,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogEntry",
+          "kind": "type",
+          "line": 320,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogData",
+          "kind": "type",
+          "line": 345,
+          "isDefault": false
+        },
+        {
+          "name": "Session",
+          "kind": "type",
+          "line": 351,
+          "isDefault": false
+        },
+        {
+          "name": "SessionsData",
+          "kind": "type",
+          "line": 377,
+          "isDefault": false
+        },
+        {
+          "name": "Doc",
+          "kind": "type",
+          "line": 384,
+          "isDefault": false
+        },
+        {
+          "name": "DocsRegistryData",
           "kind": "type",
           "line": 408,
           "isDefault": false
         },
         {
-          "name": "WSEvent",
+          "name": "ActivityEvent",
           "kind": "type",
           "line": 414,
+          "isDefault": false
+        },
+        {
+          "name": "ActivityFeedData",
+          "kind": "type",
+          "line": 425,
+          "isDefault": false
+        },
+        {
+          "name": "Label",
+          "kind": "type",
+          "line": 432,
+          "isDefault": false
+        },
+        {
+          "name": "LabelsData",
+          "kind": "type",
+          "line": 440,
+          "isDefault": false
+        },
+        {
+          "name": "AutomationCondition",
+          "kind": "type",
+          "line": 446,
+          "isDefault": false
+        },
+        {
+          "name": "AutomationAction",
+          "kind": "type",
+          "line": 452,
+          "isDefault": false
+        },
+        {
+          "name": "Automation",
+          "kind": "type",
+          "line": 457,
+          "isDefault": false
+        },
+        {
+          "name": "AutomationsData",
+          "kind": "type",
+          "line": 474,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNoteType",
+          "kind": "type",
+          "line": 480,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNotePriority",
+          "kind": "type",
+          "line": 481,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNote",
+          "kind": "type",
+          "line": 483,
+          "isDefault": false
+        },
+        {
+          "name": "BrainNotesData",
+          "kind": "type",
+          "line": 498,
+          "isDefault": false
+        },
+        {
+          "name": "UserPreference",
+          "kind": "type",
+          "line": 503,
+          "isDefault": false
+        },
+        {
+          "name": "LearnedPattern",
+          "kind": "type",
+          "line": 511,
+          "isDefault": false
+        },
+        {
+          "name": "BrainPreferences",
+          "kind": "type",
+          "line": 519,
+          "isDefault": false
+        },
+        {
+          "name": "ContextRecovery",
+          "kind": "type",
+          "line": 524,
+          "isDefault": false
+        },
+        {
+          "name": "ProjectState",
+          "kind": "type",
+          "line": 534,
+          "isDefault": false
+        },
+        {
+          "name": "SessionMetric",
+          "kind": "type",
+          "line": 542,
+          "isDefault": false
+        },
+        {
+          "name": "MetricsTotals",
+          "kind": "type",
+          "line": 554,
+          "isDefault": false
+        },
+        {
+          "name": "VelocityData",
+          "kind": "type",
+          "line": 564,
+          "isDefault": false
+        },
+        {
+          "name": "QuickStatus",
+          "kind": "type",
+          "line": 572,
+          "isDefault": false
+        },
+        {
+          "name": "WSEvent",
+          "kind": "type",
+          "line": 585,
+          "isDefault": false
+        },
+        {
+          "name": "APIResponse",
+          "kind": "type",
+          "line": 609,
+          "isDefault": false
+        },
+        {
+          "name": "SystemRating",
+          "kind": "type",
+          "line": 618,
+          "isDefault": false
+        },
+        {
+          "name": "ActionHealth",
+          "kind": "type",
+          "line": 627,
+          "isDefault": false
+        },
+        {
+          "name": "SessionPlan",
+          "kind": "type",
+          "line": 630,
+          "isDefault": false
+        },
+        {
+          "name": "SessionEntry",
+          "kind": "type",
+          "line": 644,
+          "isDefault": false
+        },
+        {
+          "name": "SessionLog",
+          "kind": "type",
+          "line": 660,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogSummary",
+          "kind": "type",
+          "line": 665,
+          "isDefault": false
+        },
+        {
+          "name": "ChangelogSummaries",
+          "kind": "type",
+          "line": 677,
           "isDefault": false
         }
       ],
@@ -2219,8 +4600,8 @@
       "path": "ui/src/api/client.ts",
       "name": "client.ts",
       "extension": ".ts",
-      "lines": 148,
-      "size": 6671,
+      "lines": 222,
+      "size": 10057,
       "type": "other",
       "exports": [
         {
@@ -2232,61 +4613,97 @@
         {
           "name": "session",
           "kind": "constant",
-          "line": 25,
+          "line": 23,
+          "isDefault": false
+        },
+        {
+          "name": "roadmap",
+          "kind": "constant",
+          "line": 34,
           "isDefault": false
         },
         {
           "name": "backlog",
           "kind": "constant",
-          "line": 36,
+          "line": 56,
           "isDefault": false
         },
         {
-          "name": "issues",
+          "name": "epics",
           "kind": "constant",
-          "line": 57,
+          "line": 60,
           "isDefault": false
         },
         {
-          "name": "actions",
+          "name": "milestones",
           "kind": "constant",
           "line": 76,
           "isDefault": false
         },
         {
-          "name": "changelog",
+          "name": "releases",
           "kind": "constant",
-          "line": 89,
+          "line": 91,
           "isDefault": false
         },
         {
-          "name": "runs",
+          "name": "systems",
           "kind": "constant",
-          "line": 103,
+          "line": 106,
           "isDefault": false
         },
         {
-          "name": "metrics",
-          "kind": "constant",
-          "line": 115,
-          "isDefault": false
-        },
-        {
-          "name": "docs",
+          "name": "issues",
           "kind": "constant",
           "line": 122,
           "isDefault": false
         },
         {
+          "name": "changelog",
+          "kind": "constant",
+          "line": 142,
+          "isDefault": false
+        },
+        {
+          "name": "labels",
+          "kind": "constant",
+          "line": 156,
+          "isDefault": false
+        },
+        {
+          "name": "automations",
+          "kind": "constant",
+          "line": 166,
+          "isDefault": false
+        },
+        {
+          "name": "activity",
+          "kind": "constant",
+          "line": 177,
+          "isDefault": false
+        },
+        {
+          "name": "metrics",
+          "kind": "constant",
+          "line": 189,
+          "isDefault": false
+        },
+        {
+          "name": "docs",
+          "kind": "constant",
+          "line": 196,
+          "isDefault": false
+        },
+        {
           "name": "git",
           "kind": "constant",
-          "line": 131,
+          "line": 205,
           "isDefault": false
         },
         {
           "name": "config",
           "kind": "constant",
-          "line": 143,
+          "line": 217,
           "isDefault": false
         }
       ],
@@ -2332,14 +4749,14 @@
       "path": "ui/src/App.tsx",
       "name": "App.tsx",
       "extension": ".tsx",
-      "lines": 55,
-      "size": 2187,
+      "lines": 104,
+      "size": 4231,
       "type": "component",
       "exports": [
         {
           "name": "App",
           "kind": "component",
-          "line": 19,
+          "line": 21,
           "isDefault": true
         }
       ],
@@ -2348,7 +4765,8 @@
           "source": "react",
           "names": [
             "useState",
-            "useCallback"
+            "useCallback",
+            "useRef"
           ],
           "isDefault": false,
           "isExternal": true
@@ -2370,6 +4788,25 @@
           "isExternal": false
         },
         {
+          "source": "./components/ChatSidebar",
+          "names": [
+            "ChatSidebar"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
+          "source": "./components/NotificationTray",
+          "names": [
+            "ToastContainer",
+            "NotificationBell",
+            "wsEventToNotification",
+            "type Notification"
+          ],
+          "isDefault": false,
+          "isExternal": false
+        },
+        {
           "source": "./views/Dashboard",
           "names": [
             "Dashboard"
@@ -2386,9 +4823,9 @@
           "isExternal": false
         },
         {
-          "source": "./views/Actions",
+          "source": "./views/Systems",
           "names": [
-            "Actions"
+            "Systems"
           ],
           "isDefault": false,
           "isExternal": false
@@ -2456,6 +4893,55 @@
           ],
           "isDefault": false,
           "isExternal": false
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/ChatSidebar.tsx",
+      "name": "ChatSidebar.tsx",
+      "extension": ".tsx",
+      "lines": 709,
+      "size": 28127,
+      "type": "component",
+      "exports": [
+        {
+          "name": "ChatSidebar",
+          "kind": "component",
+          "line": 80,
+          "isDefault": false,
+          "params": "({ isOpen, onToggle, width, onWidthChange }: ChatSidebarProps)"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useState",
+            "useRef",
+            "useEffect",
+            "useCallback",
+            "useMemo"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "react-markdown",
+          "names": [
+            "ReactMarkdown"
+          ],
+          "isDefault": true,
+          "isExternal": true
+        },
+        {
+          "source": "remark-gfm",
+          "names": [
+            "remarkGfm"
+          ],
+          "isDefault": true,
+          "isExternal": true
         }
       ],
       "externalCalls": [],
@@ -2592,17 +5078,105 @@
       "dbOperations": []
     },
     {
+      "path": "ui/src/components/NotificationTray.tsx",
+      "name": "NotificationTray.tsx",
+      "extension": ".tsx",
+      "lines": 225,
+      "size": 9443,
+      "type": "component",
+      "exports": [
+        {
+          "name": "ToastContainer",
+          "kind": "component",
+          "line": 65,
+          "isDefault": false,
+          "params": "({ toasts, onDismiss }: { toasts: Notification[]; onDismiss: (id: string)"
+        },
+        {
+          "name": "NotificationBell",
+          "kind": "component",
+          "line": 85,
+          "isDefault": false,
+          "params": "({ notifications, onMarkRead, onClearAll }: NotificationBellProps)"
+        },
+        {
+          "name": "wsEventToNotification",
+          "kind": "function",
+          "line": 171,
+          "isDefault": false,
+          "params": "(event: any)"
+        },
+        {
+          "name": "Notification",
+          "kind": "type",
+          "line": 22,
+          "isDefault": false
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useState",
+            "useEffect",
+            "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "lucide-react",
+          "names": [
+            "Bell",
+            "X",
+            "CircleDot",
+            "ListTodo",
+            "GitCommitHorizontal",
+            "Lightbulb",
+            "MessageSquare",
+            "AlertTriangle",
+            "CheckCircle2",
+            "Sparkles"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/components/RadarChart.tsx",
+      "name": "RadarChart.tsx",
+      "extension": ".tsx",
+      "lines": 133,
+      "size": 3555,
+      "type": "component",
+      "exports": [
+        {
+          "name": "RadarChart",
+          "kind": "component",
+          "line": 13,
+          "isDefault": false,
+          "params": "({ data, size = 280, color = '#3b82f6', className }: RadarChartProps)"
+        }
+      ],
+      "imports": [],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
       "path": "ui/src/components/Sidebar.tsx",
       "name": "Sidebar.tsx",
       "extension": ".tsx",
-      "lines": 100,
-      "size": 4317,
+      "lines": 245,
+      "size": 10323,
       "type": "component",
       "exports": [
         {
           "name": "Sidebar",
           "kind": "component",
-          "line": 26,
+          "line": 49,
           "isDefault": false,
           "params": "({ activeView, onViewChange, connected }: SidebarProps)"
         }
@@ -2612,7 +5186,28 @@
           "source": "react",
           "names": [
             "useEffect",
-            "useState"
+            "useState",
+            "useRef"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "lucide-react",
+          "names": [
+            "LayoutDashboard",
+            "ListTodo",
+            "Zap",
+            "CircleDot",
+            "Lightbulb",
+            "Code2",
+            "Clock",
+            "GitCommitHorizontal",
+            "FileText",
+            "BarChart3",
+            "Settings",
+            "ChevronDown",
+            "FolderOpen"
           ],
           "isDefault": false,
           "isExternal": true
@@ -2625,8 +5220,8 @@
       "path": "ui/src/components/StatusBadge.tsx",
       "name": "StatusBadge.tsx",
       "extension": ".tsx",
-      "lines": 76,
-      "size": 3294,
+      "lines": 91,
+      "size": 4113,
       "type": "component",
       "exports": [
         {
@@ -2634,49 +5229,56 @@
           "kind": "component",
           "line": 3,
           "isDefault": false,
-          "params": "({ health }: { health: ActionHealth })"
+          "params": "({ status }: { status: SystemStatus | string })"
         },
         {
           "name": "SizeBadge",
           "kind": "component",
-          "line": 13,
+          "line": 14,
           "isDefault": false,
           "params": "({ size }: { size: Size })"
         },
         {
           "name": "StatusBadge",
           "kind": "component",
-          "line": 23,
+          "line": 24,
           "isDefault": false,
           "params": "({ status }: { status: ItemStatus | IssueStatus })"
         },
         {
           "name": "SeverityBadge",
           "kind": "component",
-          "line": 37,
+          "line": 39,
           "isDefault": false,
           "params": "({ severity }: { severity: IssueSeverity })"
         },
         {
           "name": "HorizonBadge",
           "kind": "component",
-          "line": 48,
+          "line": 50,
           "isDefault": false,
           "params": "({ horizon }: { horizon: Horizon })"
         },
         {
+          "name": "PriorityBadge",
+          "kind": "component",
+          "line": 61,
+          "isDefault": false,
+          "params": "({ priority }: { priority: string })"
+        },
+        {
           "name": "CategoryTag",
           "kind": "component",
-          "line": 58,
+          "line": 72,
           "isDefault": false,
           "params": "({ category }: { category: string })"
         },
         {
-          "name": "PassRate",
+          "name": "HealthBar",
           "kind": "component",
-          "line": 66,
+          "line": 80,
           "isDefault": false,
-          "params": "({ passed, total }: { passed: number; total: number })"
+          "params": "({ score }: { score: number })"
         }
       ],
       "imports": [],
@@ -2769,14 +5371,14 @@
       "path": "ui/src/views/Backlog.tsx",
       "name": "Backlog.tsx",
       "extension": ".tsx",
-      "lines": 327,
-      "size": 12050,
+      "lines": 429,
+      "size": 15519,
       "type": "page",
       "exports": [
         {
           "name": "Backlog",
           "kind": "component",
-          "line": 6,
+          "line": 17,
           "isDefault": false,
           "params": "()"
         }
@@ -2788,6 +5390,22 @@
             "useEffect",
             "useState",
             "useCallback"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "@dnd-kit/core",
+          "names": [
+            "DndContext",
+            "DragOverlay",
+            "PointerSensor",
+            "useSensor",
+            "useSensors",
+            "useDroppable",
+            "useDraggable",
+            "type DragStartEvent",
+            "type DragEndEvent"
           ],
           "isDefault": false,
           "isExternal": true
@@ -2812,14 +5430,14 @@
       "path": "ui/src/views/Changelog.tsx",
       "name": "Changelog.tsx",
       "extension": ".tsx",
-      "lines": 90,
-      "size": 3587,
+      "lines": 101,
+      "size": 4180,
       "type": "page",
       "exports": [
         {
           "name": "Changelog",
           "kind": "component",
-          "line": 6,
+          "line": 11,
           "isDefault": false,
           "params": "()"
         }
@@ -2851,7 +5469,7 @@
       "name": "Codebase.tsx",
       "extension": ".tsx",
       "lines": 411,
-      "size": 18509,
+      "size": 18504,
       "type": "page",
       "exports": [
         {
@@ -2976,14 +5594,14 @@
       "path": "ui/src/views/Dashboard.tsx",
       "name": "Dashboard.tsx",
       "extension": ".tsx",
-      "lines": 287,
-      "size": 13647,
+      "lines": 343,
+      "size": 17359,
       "type": "page",
       "exports": [
         {
           "name": "Dashboard",
           "kind": "component",
-          "line": 12,
+          "line": 31,
           "isDefault": false,
           "params": "()"
         }
@@ -2999,12 +5617,34 @@
           "isExternal": true
         },
         {
+          "source": "lucide-react",
+          "names": [
+            "Activity",
+            "AlertTriangle",
+            "ArrowRight",
+            "ArrowUpRight",
+            "CheckCircle2",
+            "CircleDot",
+            "Clock",
+            "Code2",
+            "GitCommitHorizontal",
+            "Heart",
+            "Lightbulb",
+            "ListTodo",
+            "Sparkles",
+            "Target",
+            "TrendingUp",
+            "X",
+            "Zap"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
           "source": "../components/StatusBadge",
           "names": [
-            "HealthDot",
             "SizeBadge",
             "StatusBadge",
-            "PassRate",
             "SeverityBadge"
           ],
           "isDefault": false,
@@ -3018,14 +5658,14 @@
       "path": "ui/src/views/Docs.tsx",
       "name": "Docs.tsx",
       "extension": ".tsx",
-      "lines": 262,
-      "size": 12312,
+      "lines": 277,
+      "size": 12880,
       "type": "page",
       "exports": [
         {
           "name": "Docs",
           "kind": "component",
-          "line": 27,
+          "line": 39,
           "isDefault": false,
           "params": "()"
         }
@@ -3067,7 +5707,7 @@
       "name": "Ideas.tsx",
       "extension": ".tsx",
       "lines": 215,
-      "size": 10275,
+      "size": 10297,
       "type": "page",
       "exports": [
         {
@@ -3167,14 +5807,44 @@
       "path": "ui/src/views/Sessions.tsx",
       "name": "Sessions.tsx",
       "extension": ".tsx",
-      "lines": 130,
-      "size": 5959,
+      "lines": 146,
+      "size": 6328,
       "type": "page",
       "exports": [
         {
           "name": "Sessions",
           "kind": "component",
-          "line": 6,
+          "line": 5,
+          "isDefault": false,
+          "params": "()"
+        }
+      ],
+      "imports": [
+        {
+          "source": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        }
+      ],
+      "externalCalls": [],
+      "dbOperations": []
+    },
+    {
+      "path": "ui/src/views/Settings.tsx",
+      "name": "Settings.tsx",
+      "extension": ".tsx",
+      "lines": 1248,
+      "size": 55869,
+      "type": "page",
+      "exports": [
+        {
+          "name": "Settings",
+          "kind": "component",
+          "line": 89,
           "isDefault": false,
           "params": "()"
         }
@@ -3190,29 +5860,76 @@
           "isExternal": true
         },
         {
-          "source": "../components/StatusBadge",
+          "source": "lucide-react",
           "names": [
-            "SizeBadge"
+            "User",
+            "Bot",
+            "Plug",
+            "ChevronRight",
+            "Save",
+            "RefreshCw",
+            "Check",
+            "X",
+            "ExternalLink",
+            "Brain",
+            "Sparkles",
+            "Eye",
+            "Key",
+            "EyeOff"
+          ],
+          "isDefault": false,
+          "isExternal": true
+        },
+        {
+          "source": "../components/RadarChart",
+          "names": [
+            "RadarChart"
           ],
           "isDefault": false,
           "isExternal": false
         }
       ],
-      "externalCalls": [],
+      "externalCalls": [
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 862
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 862
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 863
+        },
+        {
+          "service": "helicone",
+          "detail": "helicone",
+          "line": 863
+        },
+        {
+          "service": "helicone",
+          "detail": "Helicone",
+          "line": 1036
+        }
+      ],
       "dbOperations": []
     },
     {
-      "path": "ui/src/views/Settings.tsx",
-      "name": "Settings.tsx",
+      "path": "ui/src/views/Systems.tsx",
+      "name": "Systems.tsx",
       "extension": ".tsx",
-      "lines": 278,
-      "size": 11741,
+      "lines": 120,
+      "size": 4476,
       "type": "page",
       "exports": [
         {
-          "name": "Settings",
+          "name": "Systems",
           "kind": "component",
-          "line": 30,
+          "line": 31,
           "isDefault": false,
           "params": "()"
         }
@@ -3300,16 +6017,6 @@
   ],
   "api_routes": [
     {
-      "path": "/api/v1/actions",
-      "methods": [
-        "GET"
-      ],
-      "file": "server/routes/actions.ts",
-      "handlers": [
-        "GET"
-      ]
-    },
-    {
       "path": "/api/v1/activity",
       "methods": [
         "GET"
@@ -3320,11 +6027,21 @@
       ]
     },
     {
-      "path": "/api/v1/backlog",
+      "path": "/api/v1/ai",
       "methods": [
         "GET"
       ],
-      "file": "server/routes/backlog.ts",
+      "file": "server/routes/ai.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/automations",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/automations.ts",
       "handlers": [
         "GET"
       ]
@@ -3380,6 +6097,16 @@
       ]
     },
     {
+      "path": "/api/v1/epics",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/epics.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
       "path": "/api/v1/git",
       "methods": [
         "GET"
@@ -3395,6 +6122,16 @@
         "GET"
       ],
       "file": "server/routes/ideas.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/init",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/init.ts",
       "handlers": [
         "GET"
       ]
@@ -3420,6 +6157,16 @@
       ]
     },
     {
+      "path": "/api/v1/labels",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/labels.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
       "path": "/api/v1/metrics",
       "methods": [
         "GET"
@@ -3430,11 +6177,31 @@
       ]
     },
     {
-      "path": "/api/v1/runs",
+      "path": "/api/v1/milestones",
       "methods": [
         "GET"
       ],
-      "file": "server/routes/runs.ts",
+      "file": "server/routes/milestones.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/releases",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/releases.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/roadmap",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/roadmap.ts",
       "handlers": [
         "GET"
       ]
@@ -3455,6 +6222,16 @@
         "GET"
       ],
       "file": "server/routes/state.ts",
+      "handlers": [
+        "GET"
+      ]
+    },
+    {
+      "path": "/api/v1/systems",
+      "methods": [
+        "GET"
+      ],
+      "file": "server/routes/systems.ts",
       "handlers": [
         "GET"
       ]
@@ -3503,10 +6280,8 @@
       "path": "ui/src/views/Dashboard.tsx",
       "file": "ui/src/views/Dashboard.tsx",
       "components": [
-        "HealthDot",
         "SizeBadge",
         "StatusBadge",
-        "PassRate",
         "SeverityBadge"
       ]
     },
@@ -3536,51 +6311,261 @@
     {
       "path": "ui/src/views/Sessions.tsx",
       "file": "ui/src/views/Sessions.tsx",
-      "components": [
-        "SizeBadge"
-      ]
+      "components": []
     },
     {
       "path": "ui/src/views/Settings.tsx",
       "file": "ui/src/views/Settings.tsx",
+      "components": [
+        "RadarChart"
+      ]
+    },
+    {
+      "path": "ui/src/views/Systems.tsx",
+      "file": "ui/src/views/Systems.tsx",
       "components": []
     }
   ],
   "modules": [
     {
-      "name": "Server Routes",
-      "description": "This module handles all the HTTP API endpoints for the application. It contains 16 route files covering: actions, activity, backlog, brain, changelog, codebase, and 10 more. Routes receive HTTP requests, process them, and return JSON responses. It reads and writes data to the persistence layer.",
-      "shortDescription": "Handles API requests for 16 endpoints",
+      "name": "Server Ai",
+      "description": "Contains shared type definitions and data structures used across the project. Defines 16 types and interfaces. This ensures the server, UI, and other modules all agree on the shape of data.",
+      "shortDescription": "Shared type definitions and data structures",
       "files": [
-        "server/routes/actions.ts",
+        "server/ai/chat.ts",
+        "server/ai/router.ts",
+        "server/ai/runner.ts",
+        "server/ai/service.ts",
+        "server/ai/tools/actions.ts",
+        "server/ai/tools/backlog.ts",
+        "server/ai/tools/brain.ts",
+        "server/ai/tools/changelog.ts",
+        "server/ai/tools/codebase.ts",
+        "server/ai/tools/config.ts",
+        "server/ai/tools/docs.ts",
+        "server/ai/tools/files.ts",
+        "server/ai/tools/git.ts",
+        "server/ai/tools/ideas.ts",
+        "server/ai/tools/index.ts",
+        "server/ai/tools/integrations.ts",
+        "server/ai/tools/issues.ts",
+        "server/ai/tools/metrics.ts",
+        "server/ai/tools/profiles.ts",
+        "server/ai/tools/session.ts",
+        "server/ai/tools/state.ts",
+        "server/ai/tools/types.ts"
+      ],
+      "exports": [
+        {
+          "name": "listConversations",
+          "kind": "function",
+          "file": "server/ai/chat.ts"
+        },
+        {
+          "name": "loadConversation",
+          "kind": "function",
+          "file": "server/ai/chat.ts"
+        },
+        {
+          "name": "saveConversation",
+          "kind": "function",
+          "file": "server/ai/chat.ts"
+        },
+        {
+          "name": "deleteConversation",
+          "kind": "function",
+          "file": "server/ai/chat.ts"
+        },
+        {
+          "name": "ModelRouter",
+          "kind": "class",
+          "file": "server/ai/router.ts"
+        },
+        {
+          "name": "runAgent",
+          "kind": "function",
+          "file": "server/ai/runner.ts"
+        },
+        {
+          "name": "getAIService",
+          "kind": "function",
+          "file": "server/ai/service.ts"
+        },
+        {
+          "name": "resetAIService",
+          "kind": "function",
+          "file": "server/ai/service.ts"
+        },
+        {
+          "name": "AIService",
+          "kind": "class",
+          "file": "server/ai/service.ts"
+        },
+        {
+          "name": "actionTools",
+          "kind": "constant",
+          "file": "server/ai/tools/actions.ts"
+        },
+        {
+          "name": "backlogTools",
+          "kind": "constant",
+          "file": "server/ai/tools/backlog.ts"
+        },
+        {
+          "name": "brainTools",
+          "kind": "constant",
+          "file": "server/ai/tools/brain.ts"
+        },
+        {
+          "name": "changelogTools",
+          "kind": "constant",
+          "file": "server/ai/tools/changelog.ts"
+        },
+        {
+          "name": "codebaseTools",
+          "kind": "constant",
+          "file": "server/ai/tools/codebase.ts"
+        },
+        {
+          "name": "configTools",
+          "kind": "constant",
+          "file": "server/ai/tools/config.ts"
+        },
+        {
+          "name": "docTools",
+          "kind": "constant",
+          "file": "server/ai/tools/docs.ts"
+        },
+        {
+          "name": "fileTools",
+          "kind": "constant",
+          "file": "server/ai/tools/files.ts"
+        },
+        {
+          "name": "gitTools",
+          "kind": "constant",
+          "file": "server/ai/tools/git.ts"
+        },
+        {
+          "name": "ideaTools",
+          "kind": "constant",
+          "file": "server/ai/tools/ideas.ts"
+        },
+        {
+          "name": "executeTool",
+          "kind": "function",
+          "file": "server/ai/tools/index.ts"
+        },
+        {
+          "name": "getToolStats",
+          "kind": "function",
+          "file": "server/ai/tools/index.ts"
+        },
+        {
+          "name": "TOOL_DEFINITIONS",
+          "kind": "constant",
+          "file": "server/ai/tools/index.ts"
+        },
+        {
+          "name": "TOOL_LABELS",
+          "kind": "constant",
+          "file": "server/ai/tools/index.ts"
+        },
+        {
+          "name": "integrationTools",
+          "kind": "constant",
+          "file": "server/ai/tools/integrations.ts"
+        },
+        {
+          "name": "issueTools",
+          "kind": "constant",
+          "file": "server/ai/tools/issues.ts"
+        },
+        {
+          "name": "metricsTools",
+          "kind": "constant",
+          "file": "server/ai/tools/metrics.ts"
+        },
+        {
+          "name": "profileTools",
+          "kind": "constant",
+          "file": "server/ai/tools/profiles.ts"
+        },
+        {
+          "name": "sessionTools",
+          "kind": "constant",
+          "file": "server/ai/tools/session.ts"
+        },
+        {
+          "name": "stateTools",
+          "kind": "constant",
+          "file": "server/ai/tools/state.ts"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "openai",
+        "anthropic",
+        "helicone"
+      ],
+      "fileTypeSummary": {
+        "other": 21,
+        "schema": 1
+      },
+      "keyExports": [
+        "listConversations",
+        "loadConversation",
+        "saveConversation",
+        "deleteConversation",
+        "ModelRouter",
+        "runAgent",
+        "getAIService",
+        "resetAIService"
+      ]
+    },
+    {
+      "name": "Server Routes",
+      "description": "This module handles all the HTTP API endpoints for the application. It contains 22 route files covering: activity, ai, automations, brain, changelog, codebase, and 16 more. Routes receive HTTP requests, process them, and return JSON responses. It reads and writes data to the persistence layer.",
+      "shortDescription": "Handles API requests for 22 endpoints",
+      "files": [
         "server/routes/activity.ts",
-        "server/routes/backlog.ts",
+        "server/routes/ai.ts",
+        "server/routes/automations.ts",
         "server/routes/brain.ts",
         "server/routes/changelog.ts",
         "server/routes/codebase.ts",
         "server/routes/config.ts",
         "server/routes/docs.ts",
+        "server/routes/epics.ts",
         "server/routes/git.ts",
         "server/routes/ideas.ts",
+        "server/routes/init.ts",
         "server/routes/integrations.ts",
         "server/routes/issues.ts",
+        "server/routes/labels.ts",
         "server/routes/metrics.ts",
-        "server/routes/runs.ts",
+        "server/routes/milestones.ts",
+        "server/routes/releases.ts",
+        "server/routes/roadmap.ts",
         "server/routes/session.ts",
-        "server/routes/state.ts"
+        "server/routes/state.ts",
+        "server/routes/systems.ts"
       ],
       "exports": [],
       "dependencies": [],
-      "externalServices": [],
+      "externalServices": [
+        "helicone",
+        "openai"
+      ],
       "fileTypeSummary": {
-        "api_route": 16
+        "api_route": 22
       },
       "keyExports": []
     },
     {
       "name": "UI Views",
-      "description": "These are the main pages of the web application - what users see and interact with. Includes 12 screens: Actions, Backlog, Changelog, Codebase, CodebaseGraph, Dashboard, and 6 more. Each page fetches data from the API and renders interactive UI.",
-      "shortDescription": "12 main screens of the web app",
+      "description": "These are the main pages of the web application - what users see and interact with. Includes 13 screens: Actions, Backlog, Changelog, Codebase, CodebaseGraph, Dashboard, and 7 more. Each page fetches data from the API and renders interactive UI.",
+      "shortDescription": "13 main screens of the web app",
       "files": [
         "ui/src/views/Actions.tsx",
         "ui/src/views/Backlog.tsx",
@@ -3593,7 +6578,8 @@
         "ui/src/views/Issues.tsx",
         "ui/src/views/Metrics.tsx",
         "ui/src/views/Sessions.tsx",
-        "ui/src/views/Settings.tsx"
+        "ui/src/views/Settings.tsx",
+        "ui/src/views/Systems.tsx"
       ],
       "exports": [
         {
@@ -3655,12 +6641,19 @@
           "name": "Settings",
           "kind": "component",
           "file": "ui/src/views/Settings.tsx"
+        },
+        {
+          "name": "Systems",
+          "kind": "component",
+          "file": "ui/src/views/Systems.tsx"
         }
       ],
       "dependencies": [],
-      "externalServices": [],
+      "externalServices": [
+        "helicone"
+      ],
       "fileTypeSummary": {
-        "page": 12
+        "page": 13
       },
       "keyExports": [
         "Actions",
@@ -3671,6 +6664,199 @@
         "Dashboard",
         "Docs",
         "Ideas"
+      ]
+    },
+    {
+      "name": "Server",
+      "description": "The core server that runs the application. It starts the HTTP server, mounts API routes, and manages the application lifecycle. Connects to: helicone, deepgram, sentry.",
+      "shortDescription": "Core HTTP server and application entry point",
+      "files": [
+        "server/context-sync.ts",
+        "server/index.ts",
+        "server/project-config.ts",
+        "server/script-runner.ts",
+        "server/store.ts",
+        "server/watcher.ts",
+        "server/ws.ts",
+        "server/analyzer/scanner.ts",
+        "server/automation/engine.ts",
+        "server/automation/scheduler.ts"
+      ],
+      "exports": [
+        {
+          "name": "generateContextFile",
+          "kind": "function",
+          "file": "server/context-sync.ts"
+        },
+        {
+          "name": "syncAllPlatforms",
+          "kind": "function",
+          "file": "server/context-sync.ts"
+        },
+        {
+          "name": "getDevTrackHome",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "setDataDir",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "setProjectRoot",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "setProjectConfig",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "getDataDir",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "getProjectRoot",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "getCredentialsPath",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "getProjectConfig",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "getProjectName",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "ensureDevTrackHome",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "loadRegistry",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "saveRegistry",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "registerProject",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "loadGlobalSettings",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "saveGlobalSettings",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "scaffoldDataDir",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "findAvailablePort",
+          "kind": "function",
+          "file": "server/project-config.ts"
+        },
+        {
+          "name": "runScript",
+          "kind": "function",
+          "file": "server/script-runner.ts"
+        },
+        {
+          "name": "getStore",
+          "kind": "function",
+          "file": "server/store.ts"
+        },
+        {
+          "name": "reloadStore",
+          "kind": "function",
+          "file": "server/store.ts"
+        },
+        {
+          "name": "Store",
+          "kind": "class",
+          "file": "server/store.ts"
+        },
+        {
+          "name": "startWatcher",
+          "kind": "function",
+          "file": "server/watcher.ts"
+        },
+        {
+          "name": "setupWebSocket",
+          "kind": "function",
+          "file": "server/ws.ts"
+        },
+        {
+          "name": "broadcast",
+          "kind": "function",
+          "file": "server/ws.ts"
+        },
+        {
+          "name": "scanCodebase",
+          "kind": "function",
+          "file": "server/analyzer/scanner.ts"
+        },
+        {
+          "name": "generateEdgeLabel",
+          "kind": "function",
+          "file": "server/analyzer/scanner.ts"
+        },
+        {
+          "name": "getAutomationEngine",
+          "kind": "function",
+          "file": "server/automation/engine.ts"
+        },
+        {
+          "name": "startScheduler",
+          "kind": "function",
+          "file": "server/automation/scheduler.ts"
+        },
+        {
+          "name": "stopScheduler",
+          "kind": "function",
+          "file": "server/automation/scheduler.ts"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [
+        "helicone",
+        "deepgram",
+        "sentry"
+      ],
+      "fileTypeSummary": {
+        "other": 10
+      },
+      "keyExports": [
+        "generateContextFile",
+        "syncAllPlatforms",
+        "getDevTrackHome",
+        "setDataDir",
+        "setProjectRoot",
+        "setProjectConfig",
+        "getDataDir",
+        "getProjectRoot"
       ]
     },
     {
@@ -3800,136 +6986,25 @@
       ]
     },
     {
-      "name": "Server",
-      "description": "The core server that runs the application. It starts the HTTP server, mounts API routes, and manages the application lifecycle. Connects to: helicone, deepgram, sentry.",
-      "shortDescription": "Core HTTP server and application entry point",
-      "files": [
-        "server/context-sync.ts",
-        "server/index.ts",
-        "server/script-runner.ts",
-        "server/store.ts",
-        "server/watcher.ts",
-        "server/ws.ts",
-        "server/analyzer/scanner.ts"
-      ],
-      "exports": [
-        {
-          "name": "generateContextFile",
-          "kind": "function",
-          "file": "server/context-sync.ts"
-        },
-        {
-          "name": "syncAllPlatforms",
-          "kind": "function",
-          "file": "server/context-sync.ts"
-        },
-        {
-          "name": "runScript",
-          "kind": "function",
-          "file": "server/script-runner.ts"
-        },
-        {
-          "name": "getStore",
-          "kind": "function",
-          "file": "server/store.ts"
-        },
-        {
-          "name": "reloadStore",
-          "kind": "function",
-          "file": "server/store.ts"
-        },
-        {
-          "name": "Store",
-          "kind": "class",
-          "file": "server/store.ts"
-        },
-        {
-          "name": "startWatcher",
-          "kind": "function",
-          "file": "server/watcher.ts"
-        },
-        {
-          "name": "setupWebSocket",
-          "kind": "function",
-          "file": "server/ws.ts"
-        },
-        {
-          "name": "broadcast",
-          "kind": "function",
-          "file": "server/ws.ts"
-        },
-        {
-          "name": "scanCodebase",
-          "kind": "function",
-          "file": "server/analyzer/scanner.ts"
-        },
-        {
-          "name": "generateEdgeLabel",
-          "kind": "function",
-          "file": "server/analyzer/scanner.ts"
-        }
-      ],
-      "dependencies": [],
-      "externalServices": [
-        "helicone",
-        "deepgram",
-        "sentry"
-      ],
-      "fileTypeSummary": {
-        "other": 7
-      },
-      "keyExports": [
-        "generateContextFile",
-        "syncAllPlatforms",
-        "runScript",
-        "getStore",
-        "reloadStore",
-        "Store",
-        "startWatcher",
-        "setupWebSocket"
-      ]
-    },
-    {
-      "name": "UI",
-      "description": "Configuration files that control how the project is built, tested, and deployed.",
-      "shortDescription": "Project configuration files",
-      "files": [
-        "ui/postcss.config.js",
-        "ui/tailwind.config.js",
-        "ui/vite.config.ts",
-        "ui/src/App.tsx",
-        "ui/src/main.tsx"
-      ],
-      "exports": [
-        {
-          "name": "App",
-          "kind": "component",
-          "file": "ui/src/App.tsx"
-        }
-      ],
-      "dependencies": [],
-      "externalServices": [],
-      "fileTypeSummary": {
-        "config": 3,
-        "component": 1,
-        "other": 1
-      },
-      "keyExports": [
-        "App"
-      ]
-    },
-    {
       "name": "UI Components",
-      "description": "A library of reusable UI components that the pages are built from. Contains 9 components: NodeDetailPanel, Sidebar, HealthDot, SizeBadge, StatusBadge.... These handle individual pieces of the interface like buttons, panels, cards, and visualizations.",
-      "shortDescription": "Reusable UI building blocks (9 components)",
+      "description": "A library of reusable UI components that the pages are built from. Contains 14 components: ChatSidebar, NodeDetailPanel, ToastContainer, NotificationBell, RadarChart.... These handle individual pieces of the interface like buttons, panels, cards, and visualizations.",
+      "shortDescription": "Reusable UI building blocks (14 components)",
       "files": [
+        "ui/src/components/ChatSidebar.tsx",
         "ui/src/components/graph/GraphEdge.tsx",
         "ui/src/components/graph/GraphNode.tsx",
         "ui/src/components/graph/NodeDetailPanel.tsx",
+        "ui/src/components/NotificationTray.tsx",
+        "ui/src/components/RadarChart.tsx",
         "ui/src/components/Sidebar.tsx",
         "ui/src/components/StatusBadge.tsx"
       ],
       "exports": [
+        {
+          "name": "ChatSidebar",
+          "kind": "component",
+          "file": "ui/src/components/ChatSidebar.tsx"
+        },
         {
           "name": "edgeTypes",
           "kind": "constant",
@@ -3944,6 +7019,26 @@
           "name": "NodeDetailPanel",
           "kind": "component",
           "file": "ui/src/components/graph/NodeDetailPanel.tsx"
+        },
+        {
+          "name": "ToastContainer",
+          "kind": "component",
+          "file": "ui/src/components/NotificationTray.tsx"
+        },
+        {
+          "name": "NotificationBell",
+          "kind": "component",
+          "file": "ui/src/components/NotificationTray.tsx"
+        },
+        {
+          "name": "wsEventToNotification",
+          "kind": "function",
+          "file": "ui/src/components/NotificationTray.tsx"
+        },
+        {
+          "name": "RadarChart",
+          "kind": "component",
+          "file": "ui/src/components/RadarChart.tsx"
         },
         {
           "name": "Sidebar",
@@ -3976,12 +7071,17 @@
           "file": "ui/src/components/StatusBadge.tsx"
         },
         {
+          "name": "PriorityBadge",
+          "kind": "component",
+          "file": "ui/src/components/StatusBadge.tsx"
+        },
+        {
           "name": "CategoryTag",
           "kind": "component",
           "file": "ui/src/components/StatusBadge.tsx"
         },
         {
-          "name": "PassRate",
+          "name": "HealthBar",
           "kind": "component",
           "file": "ui/src/components/StatusBadge.tsx"
         }
@@ -3992,22 +7092,51 @@
         "deepgram"
       ],
       "fileTypeSummary": {
-        "component": 5
+        "component": 8
       },
       "keyExports": [
+        "ChatSidebar",
         "NodeDetailPanel",
+        "ToastContainer",
+        "NotificationBell",
+        "wsEventToNotification",
+        "RadarChart",
         "Sidebar",
-        "HealthDot",
-        "SizeBadge",
-        "StatusBadge",
-        "SeverityBadge",
-        "HorizonBadge",
-        "CategoryTag"
+        "HealthDot"
       ]
     },
     {
       "name": "UI",
-      "description": "This module contains 4 files with 277 lines of code. Key exports: App, useWebSocket.",
+      "description": "Configuration files that control how the project is built, tested, and deployed.",
+      "shortDescription": "Project configuration files",
+      "files": [
+        "ui/postcss.config.js",
+        "ui/tailwind.config.js",
+        "ui/vite.config.ts",
+        "ui/src/App.tsx",
+        "ui/src/main.tsx"
+      ],
+      "exports": [
+        {
+          "name": "App",
+          "kind": "component",
+          "file": "ui/src/App.tsx"
+        }
+      ],
+      "dependencies": [],
+      "externalServices": [],
+      "fileTypeSummary": {
+        "config": 3,
+        "component": 1,
+        "other": 1
+      },
+      "keyExports": [
+        "App"
+      ]
+    },
+    {
+      "name": "UI",
+      "description": "This module contains 4 files with 400 lines of code. Key exports: App, useWebSocket.",
       "shortDescription": "4 files, 1 functions",
       "files": [
         "ui/src/App.tsx",
@@ -4032,7 +7161,32 @@
           "file": "ui/src/api/client.ts"
         },
         {
+          "name": "roadmap",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
           "name": "backlog",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "epics",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "milestones",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "releases",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "systems",
           "kind": "constant",
           "file": "ui/src/api/client.ts"
         },
@@ -4042,17 +7196,22 @@
           "file": "ui/src/api/client.ts"
         },
         {
-          "name": "actions",
-          "kind": "constant",
-          "file": "ui/src/api/client.ts"
-        },
-        {
           "name": "changelog",
           "kind": "constant",
           "file": "ui/src/api/client.ts"
         },
         {
-          "name": "runs",
+          "name": "labels",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "automations",
+          "kind": "constant",
+          "file": "ui/src/api/client.ts"
+        },
+        {
+          "name": "activity",
           "kind": "constant",
           "file": "ui/src/api/client.ts"
         },
@@ -4095,6 +7254,24 @@
       ]
     },
     {
+      "name": "Scripts",
+      "description": "This module contains 2 files with 583 lines of code. Uses external services: helicone.",
+      "shortDescription": "2 files, 583 lines",
+      "files": [
+        "scripts/audit-fix.ts",
+        "scripts/migrate-v2.ts"
+      ],
+      "exports": [],
+      "dependencies": [],
+      "externalServices": [
+        "helicone"
+      ],
+      "fileTypeSummary": {
+        "other": 2
+      },
+      "keyExports": []
+    },
+    {
       "name": "CLI",
       "description": "Provides a command-line interface for interacting with the application from the terminal.",
       "shortDescription": "Command-line interface",
@@ -4103,7 +7280,9 @@
       ],
       "exports": [],
       "dependencies": [],
-      "externalServices": [],
+      "externalServices": [
+        "helicone"
+      ],
       "fileTypeSummary": {
         "other": 1
       },
@@ -4111,7 +7290,7 @@
     },
     {
       "name": "Shared",
-      "description": "Contains shared type definitions and data structures used across the project. Defines 57 types and interfaces. This ensures the server, UI, and other modules all agree on the shape of data.",
+      "description": "Contains shared type definitions and data structures used across the project. Defines 78 types and interfaces. This ensures the server, UI, and other modules all agree on the shape of data.",
       "shortDescription": "Shared type definitions and data structures",
       "files": [
         "shared/types.ts"
@@ -4128,12 +7307,19 @@
   "external_services": [
     {
       "name": "helicone",
-      "usage_count": 4,
+      "usage_count": 11,
       "files": [
+        "cli/index.ts",
+        "scripts/audit-fix.ts",
+        "server/ai/service.ts",
+        "server/ai/tools/integrations.ts",
         "server/analyzer/scanner.ts",
         "server/integrations/helicone.ts",
         "server/integrations/manager.ts",
-        "ui/src/components/graph/NodeDetailPanel.tsx"
+        "server/project-config.ts",
+        "server/routes/ai.ts",
+        "ui/src/components/graph/NodeDetailPanel.tsx",
+        "ui/src/views/Settings.tsx"
       ]
     },
     {
@@ -4146,11 +7332,26 @@
       ]
     },
     {
+      "name": "openai",
+      "usage_count": 2,
+      "files": [
+        "server/ai/service.ts",
+        "server/routes/ai.ts"
+      ]
+    },
+    {
       "name": "deepgram",
       "usage_count": 2,
       "files": [
         "server/analyzer/scanner.ts",
         "ui/src/components/graph/NodeDetailPanel.tsx"
+      ]
+    },
+    {
+      "name": "anthropic",
+      "usage_count": 1,
+      "files": [
+        "server/ai/service.ts"
       ]
     },
     {
@@ -4192,6 +7393,23 @@
     },
     {
       "from": "ui/src/App.tsx",
+      "to": "ui/src/components/ChatSidebar.tsx",
+      "imports": [
+        "ChatSidebar"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
+      "to": "ui/src/components/NotificationTray.tsx",
+      "imports": [
+        "ToastContainer",
+        "NotificationBell",
+        "wsEventToNotification",
+        "type Notification"
+      ]
+    },
+    {
+      "from": "ui/src/App.tsx",
       "to": "ui/src/views/Dashboard.tsx",
       "imports": [
         "Dashboard"
@@ -4206,9 +7424,9 @@
     },
     {
       "from": "ui/src/App.tsx",
-      "to": "ui/src/views/Actions.tsx",
+      "to": "ui/src/views/Systems.tsx",
       "imports": [
-        "Actions"
+        "Systems"
       ]
     },
     {
@@ -4330,10 +7548,8 @@
       "from": "ui/src/views/Dashboard.tsx",
       "to": "ui/src/components/StatusBadge.tsx",
       "imports": [
-        "HealthDot",
         "SizeBadge",
         "StatusBadge",
-        "PassRate",
         "SeverityBadge"
       ]
     },
@@ -4346,10 +7562,10 @@
       ]
     },
     {
-      "from": "ui/src/views/Sessions.tsx",
-      "to": "ui/src/components/StatusBadge.tsx",
+      "from": "ui/src/views/Settings.tsx",
+      "to": "ui/src/components/RadarChart.tsx",
       "imports": [
-        "SizeBadge"
+        "RadarChart"
       ]
     }
   ]

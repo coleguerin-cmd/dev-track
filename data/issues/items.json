@@ -70,7 +70,7 @@
       "discovered": "2026-02-07",
       "discovered_by": "user",
       "resolved": null,
-      "notes": "GitHub integration rewritten to use local git/gh CLI — zero config needed. Other plugins (Vercel, Supabase, Sentry, etc.) still need real credentials to test."
+      "notes": "Nightly audit #2 (Feb 9): Still open, no progress since last audit. Helicone still FAILING (last tested Feb 8 01:56 UTC). GitHub still passing (last tested Feb 7). 6 plugins still unconfigured. This issue has been open since Feb 7 with no resolution movement. Helicone failure blocks AI cost tracking which blocks responsible dogfooding. The credential sync fix (ISS-015) was applied but didn't resolve the underlying Helicone test failure. Next step: manually investigate Helicone API response to determine if it's a credential issue, endpoint issue, or configuration issue."
     },
     {
       "id": "ISS-004",
@@ -141,7 +141,7 @@
       "discovered": "2026-02-07",
       "discovered_by": "user",
       "resolved": null,
-      "notes": "Partial fixes applied: added frontmatter with alwaysApply:true, moved mandatory checklist to top of rule file. Real fix requires structural enforcement: either a background AI watcher (IDEA-014) or tool-level validation that detects unlogged changes. The human-in-the-loop is the worst option because they forget too."
+      "notes": "Nightly audit #2 (Feb 9): Still open, 3+ days old. Partial mitigations applied (frontmatter, checklist, create-before-fix discipline). Automation engine + scheduler built (commit ca10e5e) with 5 seeded automations including session-audit and change-tracker — these are the structural enforcement mechanisms. However, NONE have been executed because the headless AI runner hasn't been tested with real API keys. The entire chain is: chat agent works → headless runner works → automations execute → change-tracker catches drift. Step 1 (chat agent) hasn't been validated yet. This issue will remain open until the automation pipeline is proven end-to-end. ISS-012 (conversation bridge) remains the deeper structural fix for cross-platform drift."
     },
     {
       "id": "ISS-007",
@@ -284,7 +284,7 @@
       "discovered": "2026-02-08",
       "discovered_by": "session-5",
       "resolved": null,
-      "notes": "User proposed: extension/CLI that watches AI conversation logs, captures user messages + AI final responses (not intermediate changes), passes to DevTrack AI for lightweight parse. Extracts issues, decisions, ideas. Also detects session start/end. Needs to work across platforms (Cursor, Claude, Gemini, etc). This is the 'bridge' that makes DevTrack truly intelligent. See IDEA-024 for session lifecycle aspect."
+      "notes": "Nightly audit #2 (Feb 9): Still open, no progress. This is the deepest structural issue — external AI conversations (Cursor, Claude, Gemini) are invisible to DevTrack. Server-side infrastructure exists (automation engine, headless runner) but the capture mechanism (extension/CLI) hasn't been started. IDEA-027 (conversation bridge) is at exploring status with critical priority. This is a large effort (L-XL) that should not be started until the AI chat agent is validated and working in browser. Estimated: 2-3 sessions to build a basic version. The conversation bridge is what transforms DevTrack from a manual tracking tool to an intelligent system that sees everything."
     },
     {
       "id": "ISS-013",
@@ -450,7 +450,27 @@
       "discovered_by": "session-6",
       "resolved": "2026-02-08",
       "notes": null
+    },
+    {
+      "id": "ISS-020",
+      "title": "Velocity log missing sessions 6–7 data",
+      "action_id": null,
+      "status": "open",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": null,
+      "symptoms": "Session log shows 5 sessions, but system descriptions reference 7 sessions (sessions 6–7 for entity model v2 refactor and docs/automation engine). Velocity totals only reflect 54 items / 161 points from sessions 1–5. The entity model v2 refactor (CL-043) and docs/automation build (CL-044) are not counted in velocity metrics. This means reported velocity is understated.",
+      "root_cause": "Sessions 6 and 7 were likely not formally started/ended through the session tracking system, so their velocity data was never recorded. The end_session flow may not have been executed, or the sessions were run without using the session lifecycle tools.",
+      "files": [
+        "data/session/log.json",
+        "data/metrics/velocity.json"
+      ],
+      "backlog_item": null,
+      "resolution": null,
+      "resolved": null,
+      "notes": "Nightly audit #2 (Feb 9): Still open. Sessions 6 and 7 are referenced in system descriptions and changelog (CL-043 entity model v2, CL-044 docs/automation) but never formally logged through the session tracking system. Options: (1) Backfill estimated velocity data for sessions 6-7 based on changelog entries and commit messages. (2) Accept the gap and move forward with accurate tracking from session 8+. Recommendation: backfill with estimates — the entity model v2 refactor (CL-043) was approximately XL (8pts) and the docs/automation build (CL-044) was approximately XL (8pts). Combined with smaller items from those sessions, estimate ~16 points and ~8 items across sessions 6-7."
     }
   ],
-  "next_id": 20
+  "next_id": 21
 }

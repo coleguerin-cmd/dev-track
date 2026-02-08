@@ -1,3 +1,393 @@
 {
-  "docs": []
+  "docs": [
+    {
+      "id": "system-overview",
+      "title": "System Architecture Overview",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "server",
+        "web-ui",
+        "ai-intelligence",
+        "cli",
+        "data-layer",
+        "integrations",
+        "codebase-visualizer",
+        "codebase-scanner",
+        "brain",
+        "cursor-rule",
+        "session-tracking"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase",
+        "modules"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "architecture",
+        "overview",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "getting-started",
+      "title": "Getting Started Guide",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "onboarding",
+        "setup",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "data-model-reference",
+      "title": "Data Model & Entity Reference",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "data-layer"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "codebase",
+        "systems"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "data-model",
+        "entities",
+        "reference",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-server",
+      "title": "System: Server (Hono API)",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "server"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase",
+        "modules"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "server",
+        "api",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-web-ui",
+      "title": "System: Web UI (React + Tailwind)",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "web-ui"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase",
+        "modules"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "ui",
+        "react",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-ai-intelligence",
+      "title": "System: AI Intelligence Layer",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "ai-intelligence"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase",
+        "modules"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "ai",
+        "chat",
+        "tools",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-data-layer",
+      "title": "System: Data Layer (JSON + TypeScript)",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "data-layer"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "data",
+        "storage",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-cli",
+      "title": "System: CLI",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "cli"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "cli",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-integrations",
+      "title": "System: Integration Plugins",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "integrations"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase",
+        "modules"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "integrations",
+        "plugins",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-brain",
+      "title": "System: AI Brain",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "brain"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "brain",
+        "ai-memory",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-codebase-tools",
+      "title": "System: Codebase Scanner & Visualizer",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "codebase-scanner",
+        "codebase-visualizer"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "codebase",
+        "visualization",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-session-tracking",
+      "title": "System: Session Tracking & Velocity",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "session-tracking"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "sessions",
+        "velocity",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-cursor-rule",
+      "title": "System: Cursor Rule / AI Context",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "cursor-rule"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "systems"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "cursor",
+        "ai-context",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "api-reference",
+      "title": "API Reference",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "server"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": "2026-02-08",
+      "generation_sources": [
+        "codebase",
+        "modules"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "api",
+        "reference",
+        "endpoints",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
+  ]
 }

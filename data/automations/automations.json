@@ -38,8 +38,8 @@
       "actions": [],
       "ai_driven": true,
       "ai_prompt": "Perform a comprehensive nightly audit of the entire DevTrack system:\n\n1. Reassess ALL system health scores based on open issues, recent activity, and code signals.\n2. Flag roadmap items that haven't moved in 7+ days — add ai_notes explaining the stall.\n3. Check for stale brain notes that should be dismissed.\n4. Update the project state summary.\n5. Regenerate any auto-generated docs whose source data has changed since last_generated.\n6. Check milestone progress and update ai_prediction with velocity-based estimates.\n7. Look for ideas that are validated enough to promote to roadmap.\n8. Generate a brief daily summary brain note with key changes.\n\nThis is a deep audit. Be thorough. Update every entity that needs it.",
-      "last_fired": null,
-      "fire_count": 0,
+      "last_fired": "2026-02-08T04:19:33.921Z",
+      "fire_count": 1,
       "created": "2026-02-08"
     },
     {
@@ -52,8 +52,8 @@
       "actions": [],
       "ai_driven": true,
       "ai_prompt": "Generate a weekly progress report for the project:\n\n1. Read session log — how many sessions this week? Total hours? Items shipped?\n2. Read changelog — what shipped this week? Categorize by type (feature/fix/enhancement).\n3. Read issues — how many opened vs resolved this week? Any critical issues still open?\n4. Read velocity metrics — is the team accelerating or slowing?\n5. Check system health trends — any systems degrading?\n6. Write a brain note (type: observation) with the weekly summary.\n7. If velocity is significantly different from last week, note why.\n8. Suggest focus areas for next week based on roadmap priorities.\n\nWrite the summary as a brain note with priority 'medium' and type 'observation'.",
-      "last_fired": null,
-      "fire_count": 0,
+      "last_fired": "2026-02-08T04:23:36.319Z",
+      "fire_count": 4,
       "created": "2026-02-08"
     },
     {

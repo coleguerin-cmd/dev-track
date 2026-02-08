@@ -51,7 +51,125 @@
       },
       "id": "ACT-0004",
       "timestamp": "2026-02-08T03:46:17.045Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "weekly-report",
+      "title": "Automation fired: Weekly Progress Report",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 66
+      },
+      "id": "ACT-0005",
+      "timestamp": "2026-02-08T04:17:28.645Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "roadmap",
+      "entity_id": "docs-system-headless-ai-runner-automation-engine-project-init",
+      "title": "Created: Docs system + headless AI runner + automation engine + project init",
+      "actor": "user",
+      "metadata": {
+        "horizon": "shipped",
+        "size": "XL",
+        "type": "feature"
+      },
+      "id": "ACT-0006",
+      "timestamp": "2026-02-08T04:17:34.046Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-044",
+      "title": "feature: Docs system, headless AI runner, automation engine, scheduler, project init",
+      "actor": "user",
+      "metadata": {
+        "type": "feature",
+        "scope": "core"
+      },
+      "id": "ACT-0007",
+      "timestamp": "2026-02-08T04:17:46.563Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "nightly-audit",
+      "title": "Automation fired: Nightly System Audit",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 191
+      },
+      "id": "ACT-0008",
+      "timestamp": "2026-02-08T04:19:33.922Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "weekly-report",
+      "title": "Automation fired: Weekly Progress Report",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 79
+      },
+      "id": "ACT-0009",
+      "timestamp": "2026-02-08T04:19:42.121Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "weekly-report",
+      "title": "Automation fired: Weekly Progress Report",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 85
+      },
+      "id": "ACT-0010",
+      "timestamp": "2026-02-08T04:21:47.584Z"
+    },
+    {
+      "type": "idea_captured",
+      "entity_type": "idea",
+      "entity_id": "IDEA-038",
+      "title": "Idea captured: Project init must preserve existing cursor/editor settings",
+      "actor": "user",
+      "metadata": {
+        "category": "process",
+        "source": "conversation session-7"
+      },
+      "id": "ACT-0011",
+      "timestamp": "2026-02-08T04:23:13.914Z"
+    },
+    {
+      "type": "idea_captured",
+      "entity_type": "idea",
+      "entity_id": "IDEA-039",
+      "title": "Idea captured: Cron-based user profile iteration from ongoing conversations",
+      "actor": "user",
+      "metadata": {
+        "category": "feature",
+        "source": "conversation session-7"
+      },
+      "id": "ACT-0012",
+      "timestamp": "2026-02-08T04:23:24.560Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "weekly-report",
+      "title": "Automation fired: Weekly Progress Report",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 74
+      },
+      "id": "ACT-0013",
+      "timestamp": "2026-02-08T04:23:36.320Z"
     }
   ],
-  "next_id": 5
+  "next_id": 14
 }
