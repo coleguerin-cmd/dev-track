@@ -62,16 +62,55 @@
       "issues_found": 3,
       "issues_resolved": 3,
       "notes": "UI overhaul (Lucide, Cursor-minimal), AI-observed user profiling (127 IQ, radar charts, deep assessment), notification tray, Settings rebuild, cross-project audit of 4 codebases. Established create-before-fix discipline."
+    },
+    {
+      "date": "2026-02-08",
+      "session": 6,
+      "developer": "user",
+      "duration_hours": 2.5,
+      "items_shipped": 8,
+      "by_size": { "S": 0, "M": 2, "L": 4, "XL": 2 },
+      "by_category": { "core": 4, "infrastructure": 2, "ui": 1, "migration": 1 },
+      "points": 35,
+      "issues_found": 0,
+      "issues_resolved": 0,
+      "notes": "[BACKFILLED] Entity Model v2 — 14 entity types, data migration, store/routes/tools/UI rewrite. ~9K lines."
+    },
+    {
+      "date": "2026-02-08",
+      "session": 7,
+      "developer": "user",
+      "duration_hours": 3.5,
+      "items_shipped": 15,
+      "by_size": { "S": 2, "M": 5, "L": 6, "XL": 2 },
+      "by_category": { "feature": 6, "core": 4, "infrastructure": 3, "fix": 1, "process": 1 },
+      "points": 55,
+      "issues_found": 2,
+      "issues_resolved": 2,
+      "notes": "[BACKFILLED] Docs system, headless AI runner, automation engine, scheduler, 5 built-in automations, project init, cost controls. ~10K lines. Automations verified live."
+    },
+    {
+      "date": "2026-02-08",
+      "session": 8,
+      "developer": "user",
+      "duration_hours": 3,
+      "items_shipped": 12,
+      "by_size": { "S": 3, "M": 5, "L": 4, "XL": 0 },
+      "by_category": { "bugfix": 5, "ui": 4, "feature": 2, "data": 1 },
+      "points": 42,
+      "issues_found": 4,
+      "issues_resolved": 11,
+      "notes": "Full audit + shipping: docs fix, automation settings UI, backlog expansion, rich tool tray, entity dedup, timestamps, AI write tracking, activity log tab, session backfill. 11 issues resolved in one session."
     }
   ],
   "totals": {
-    "total_sessions": 5,
-    "total_items_shipped": 54,
-    "total_points": 161,
-    "avg_items_per_session": 10.8,
-    "avg_points_per_session": 32.2,
-    "total_issues_found": 10,
-    "total_issues_resolved": 7
+    "total_sessions": 8,
+    "total_items_shipped": 89,
+    "total_points": 293,
+    "avg_items_per_session": 11.1,
+    "avg_points_per_session": 36.6,
+    "total_issues_found": 16,
+    "total_issues_resolved": 20
   },
   "point_values": {
     "S": 1,

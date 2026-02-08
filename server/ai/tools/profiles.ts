@@ -1,9 +1,11 @@
 import fs from 'fs';
 import path from 'path';
 import { getDataDir } from '../../project-config.js';
+import { getStore } from '../../store.js';
 import type { ToolModule } from './types.js';
 
 function getProfilesPath() { return path.join(getDataDir(), 'ai/profiles.json'); }
+function markProfileWrite() { try { getStore().markWrite('ai/profiles.json'); } catch {} }
 
 export const profileTools: ToolModule = {
   domain: 'profiles',
@@ -50,6 +52,7 @@ export const profileTools: ToolModule = {
         if (args.ai_observed) profile.ai_observed = { ...profile.ai_observed, ...args.ai_observed };
         profile.updated = new Date().toISOString().split('T')[0];
 
+        markProfileWrite();
         fs.writeFileSync(profilesPath, JSON.stringify(data, null, 2));
         return { updated: profile };
       },
@@ -85,6 +88,7 @@ export const profileTools: ToolModule = {
         };
         profile.session_observations.observations.push(obs);
 
+        markProfileWrite();
         fs.writeFileSync(profilesPath, JSON.stringify(data, null, 2));
         return { added: obs };
       },

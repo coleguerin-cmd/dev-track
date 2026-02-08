@@ -53,6 +53,24 @@ export const backlogTools: ToolModule = {
       label: 'Creating backlog item',
       execute: async (args) => {
         const store = getStore();
+        // Dedup check — prevent duplicates by ID or similar title
+        const existingById = (store.backlog.items || []).find((i: any) => i.id === args.id);
+        if (existingById) {
+          return { duplicate: true, existing: existingById, message: `Backlog item with ID "${args.id}" already exists. Use update_backlog_item to modify it.` };
+        }
+        const normTitle = args.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+        const existingByTitle = (store.backlog.items || []).find((i: any) => {
+          if (i.status === 'completed' || i.status === 'cancelled') return false;
+          const existNorm = i.title.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim();
+          if (existNorm === normTitle) return true;
+          const words = normTitle.split(' ').filter(Boolean);
+          const existWords = existNorm.split(' ').filter(Boolean);
+          const overlap = words.filter((w: string) => existWords.includes(w)).length;
+          return words.length > 2 && overlap / Math.max(words.length, existWords.length) > 0.7;
+        });
+        if (existingByTitle) {
+          return { duplicate: true, existing: existingByTitle, message: `Similar backlog item already exists: "${existingByTitle.id}" "${existingByTitle.title}". Use update_backlog_item to modify it.` };
+        }
         const today = new Date().toISOString().split('T')[0];
         const item = {
           id: args.id, title: args.title, summary: args.summary,

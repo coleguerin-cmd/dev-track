@@ -59,8 +59,29 @@ interface BehaviorProfile {
 interface AIConfig {
   providers: Record<string, { enabled: boolean }>;
   features: Record<string, { enabled: boolean; model_override: string | null }>;
-  budget: { daily_limit_usd: number; warn_at_usd: number; pause_on_limit: boolean };
+  automations: {
+    enabled: boolean;
+    scheduler_enabled: boolean;
+    triggers_enabled: boolean;
+    default_model_tier: string;
+    max_concurrent: number;
+    cooldown_minutes: number;
+  };
+  budget: { daily_limit_usd: number; warn_at_usd: number; pause_on_limit: boolean; total_spent_usd: number; last_reset: string };
   defaults: { chat_model: string; fast_model: string; reasoning_model: string };
+}
+
+interface AutomationItem {
+  id: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  trigger: string; // plain string: 'scheduled' | 'session_ended' | 'item_completed' | 'issue_created' | 'file_changed' | 'manual'
+  conditions: any[];
+  actions: any[];
+  ai_driven: boolean;
+  last_fired: string | null;
+  fire_count: number;
 }
 
 interface PluginInfo {
@@ -654,6 +675,7 @@ function AISection() {
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [models, setModels] = useState<{ id: string; name: string; provider: string; tier: string }[]>([]);
+  const [automationsList, setAutomationsList] = useState<AutomationItem[]>([]);
 
   useEffect(() => {
     fetch(`${BASE}/ai/config`).then(r => r.json()).then(d => {
@@ -663,7 +685,35 @@ function AISection() {
     fetch(`${BASE}/ai/models`).then(r => r.json()).then(d => {
       if (d.ok) setModels(d.data.models || []);
     }).catch(() => {});
+
+    fetch(`${BASE}/automations`).then(r => r.json()).then(d => {
+      if (d.ok) setAutomationsList(d.data?.automations || d.data || []);
+    }).catch(() => {});
   }, []);
+
+  const toggleAutomation = async (id: string) => {
+    try {
+      const res = await fetch(`${BASE}/automations/${id}/toggle`, { method: 'POST' });
+      const d = await res.json();
+      if (d.ok) {
+        setAutomationsList(prev => prev.map(a => a.id === id ? { ...a, enabled: !a.enabled } : a));
+      }
+    } catch (err) { console.error(err); }
+  };
+
+  const resetBudget = async () => {
+    if (!config) return;
+    const updated = { ...config, budget: { ...config.budget, total_spent_usd: 0, last_reset: new Date().toISOString().split('T')[0] } };
+    setConfig(updated);
+    // Persist immediately — don't make user hit Save
+    try {
+      await fetch(`${BASE}/ai/config`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updated),
+      });
+    } catch (err) { console.error(err); }
+  };
 
   const saveConfig = async () => {
     if (!config) return;
@@ -823,6 +873,181 @@ function AISection() {
           ))}
         </div>
       </div>
+
+      {/* Automations */}
+      {config.automations && (
+        <div className="bg-surface-2 border border-border rounded-lg p-4 space-y-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wider">Automations</h3>
+              <p className="text-[10px] text-text-tertiary mt-1">Control automated AI operations: scheduled audits, change tracking, triggers</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className={`text-[10px] font-medium px-1.5 py-0.5 rounded ${config.automations.enabled ? 'bg-status-pass/20 text-status-pass' : 'bg-status-fail/20 text-status-fail'}`}>
+                {config.automations.enabled ? 'ACTIVE' : 'OFF'}
+              </span>
+            </div>
+          </div>
+
+          {/* Master controls */}
+          <div className="space-y-2">
+            <div className="flex items-center justify-between px-3 py-2.5 bg-surface-3 rounded-md">
+              <div>
+                <span className="text-xs font-medium text-text-primary">Master Kill Switch</span>
+                <p className="text-[10px] text-text-tertiary mt-0.5">Enable/disable all automations globally</p>
+              </div>
+              <ToggleSwitch
+                checked={config.automations.enabled}
+                onChange={v => setConfig({
+                  ...config,
+                  automations: { ...config.automations, enabled: v },
+                })}
+              />
+            </div>
+            <div className="flex items-center justify-between px-3 py-2.5 bg-surface-3 rounded-md">
+              <div>
+                <span className="text-xs font-medium text-text-primary">Scheduler</span>
+                <p className="text-[10px] text-text-tertiary mt-0.5">Run scheduled automations (nightly audit, weekly report)</p>
+              </div>
+              <ToggleSwitch
+                checked={config.automations.scheduler_enabled}
+                onChange={v => setConfig({
+                  ...config,
+                  automations: { ...config.automations, scheduler_enabled: v },
+                })}
+              />
+            </div>
+            <div className="flex items-center justify-between px-3 py-2.5 bg-surface-3 rounded-md">
+              <div>
+                <span className="text-xs font-medium text-text-primary">Event Triggers</span>
+                <p className="text-[10px] text-text-tertiary mt-0.5">Fire automations on events (session end, issue created, item completed)</p>
+              </div>
+              <ToggleSwitch
+                checked={config.automations.triggers_enabled}
+                onChange={v => setConfig({
+                  ...config,
+                  automations: { ...config.automations, triggers_enabled: v },
+                })}
+              />
+            </div>
+          </div>
+
+          {/* Automation settings */}
+          <div className="grid grid-cols-3 gap-3">
+            <div>
+              <label className="text-xs text-text-secondary mb-1 block">Model Tier</label>
+              <select
+                className="input text-xs w-full"
+                value={config.automations.default_model_tier}
+                onChange={e => setConfig({
+                  ...config,
+                  automations: { ...config.automations, default_model_tier: e.target.value },
+                })}
+              >
+                <option value="budget">Budget (Haiku / GPT-4o-mini)</option>
+                <option value="standard">Standard (Sonnet / GPT-4o)</option>
+                <option value="premium">Premium (Opus / GPT-5.2)</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-xs text-text-secondary mb-1 block">Cooldown (min)</label>
+              <input
+                type="number"
+                min="0"
+                className="input text-xs font-mono w-full"
+                value={config.automations.cooldown_minutes}
+                onChange={e => setConfig({
+                  ...config,
+                  automations: { ...config.automations, cooldown_minutes: parseInt(e.target.value) || 0 },
+                })}
+              />
+            </div>
+            <div className="relative">
+              <label className="text-xs text-text-secondary mb-1 block">
+                Max Concurrent
+                <span className="ml-1.5 text-[8px] font-medium bg-accent-yellow/15 text-accent-yellow px-1 py-0.5 rounded">COMING SOON</span>
+              </label>
+              <input
+                type="number"
+                min="1"
+                max="5"
+                className="input text-xs font-mono w-full opacity-40 cursor-not-allowed"
+                value={config.automations.max_concurrent}
+                disabled
+                title="Not yet enforced by the automation engine"
+              />
+            </div>
+          </div>
+
+          {/* Budget status */}
+          <div className="px-3 py-2.5 bg-surface-3 rounded-md">
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-xs font-medium text-text-primary">Budget Status</span>
+              <button
+                onClick={resetBudget}
+                className="text-[10px] text-accent-blue hover:text-accent-blue/80 transition-colors"
+              >
+                Reset Spend
+              </button>
+            </div>
+            <div className="flex items-center gap-4 text-[10px] text-text-tertiary">
+              <span>
+                Spent: <span className={`font-mono font-medium ${(config.budget.total_spent_usd || 0) >= config.budget.daily_limit_usd ? 'text-status-fail' : 'text-text-primary'}`}>
+                  ${(config.budget.total_spent_usd || 0).toFixed(2)}
+                </span>
+                {' / '}${config.budget.daily_limit_usd.toFixed(2)} limit
+              </span>
+              {config.budget.last_reset && (
+                <span>Last reset: {config.budget.last_reset}</span>
+              )}
+            </div>
+            {(config.budget.total_spent_usd || 0) >= config.budget.daily_limit_usd && (
+              <p className="text-[10px] text-status-fail mt-1 font-medium">Budget exceeded — automations paused</p>
+            )}
+          </div>
+
+          {/* Individual automations */}
+          {automationsList.length > 0 && (
+            <div>
+              <h4 className="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-2">Registered Automations</h4>
+              <div className="space-y-1.5">
+                {automationsList.map(auto => (
+                  <div key={auto.id} className="flex items-center justify-between px-3 py-2 bg-surface-3 rounded-md">
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-medium text-text-primary">{auto.name}</span>
+                        <span className={`text-[9px] px-1 py-0.5 rounded font-mono ${
+                          auto.trigger === 'scheduled' ? 'bg-accent-blue/10 text-accent-blue' :
+                          auto.trigger === 'session_ended' ? 'bg-accent-purple/10 text-accent-purple' :
+                          auto.trigger === 'item_completed' ? 'bg-status-pass/10 text-status-pass' :
+                          auto.trigger === 'issue_created' ? 'bg-accent-red/10 text-accent-red' :
+                          auto.trigger === 'file_changed' ? 'bg-accent-yellow/10 text-accent-yellow' :
+                          'bg-surface-4 text-text-tertiary'
+                        }`}>
+                          {(auto.trigger || 'manual').replace(/_/g, ' ')}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-3 mt-0.5 text-[10px] text-text-tertiary">
+                        <span>{auto.description?.slice(0, 60)}{auto.description?.length > 60 ? '...' : ''}</span>
+                        {auto.last_fired && (
+                          <span className="flex-shrink-0">Last: {new Date(auto.last_fired).toLocaleDateString()}</span>
+                        )}
+                        {auto.fire_count > 0 && (
+                          <span className="flex-shrink-0">Runs: {auto.fire_count}</span>
+                        )}
+                      </div>
+                    </div>
+                    <ToggleSwitch
+                      checked={auto.enabled}
+                      onChange={() => toggleAutomation(auto.id)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

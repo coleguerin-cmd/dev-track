@@ -20,18 +20,18 @@ Before moving to the next task, do ALL of these:
 This is not optional. Do it inline, not at session end.
 
 ## Quick Status (auto-updated at session end)
-dev-track | 80% health | Now: AI chat agent (L, in_progress), AI watcher (L, in_progress) | 7 sessions, ~65 items shipped, ~200 points | Open issues: 6 (0 crit, 2 high) | 42 ideas captured
+dev-track | 76% health | Now: AI chat agent (L, in_progress), AI watcher (L, in_progress) | 8 sessions, 89 items shipped, 293 points | Open issues: 5 (0 crit, 2 high) | 54 ideas captured
 
 ## Last Session Briefing (auto-updated at session end)
-Session 7 complete (Feb 8 late night). Massive infrastructure session. Entity Model v2 shipped (14 entity types, data migration, store/routes/tools/UI rewrite). Full Docs system wired (CRUD + AI tools + auto-generation — 14 docs auto-generated). Headless AI runner built. Automation engine + scheduler + trigger hooks + 5 built-in automations. Project init endpoint. Automations verified live: nightly audit ran 49 tool calls in 191s, weekly report ran 12 tool calls in 66s. Total automation cost: $19.28 on premium models. Scheduler race condition fixed. Cost controls added (kill switch, budget enforcement, cooldown). AUTOMATIONS CURRENTLY OFF (kill switch). 4 commits, ~19K lines. Next: automation settings UI (ISS-021), test AI chat in browser, dogfood on Pillar.
+Session 8 complete (Feb 8 afternoon). Audit + shipping session. 12 items shipped, 11 issues resolved (record), 5 ideas captured. Fixed: docs page (legacy API mismatch), automation settings UI (kill switch, scheduler, triggers, budget — ISS-021), backlog card expansion (rich detail — ISS-023), Pillar-style rich tool tray in chat (ISS-027), entity dedup in 3 AI tools (ISS-026), timestamps on entity views (ISS-028), AI tool write tracking (ISS-029), Settings UI audit (ISS-030, ISS-031, ISS-032). Built Activity Log as right sidebar tab — Landmark-style timeline with provenance badges, filters, live polling (ISS-024). Backfilled sessions 6-7 from activity data (ISS-020). Promoted IDEA-054 (session heartbeat + stale detector) to roadmap. Automations ON (standard tier, $10/day, 60min cooldown). Next: test AI chat in browser (#1 blocker — 4 sessions without testing), build session heartbeat, dogfood on Pillar, git commit.
 
 ## Warnings
-- AUTOMATIONS ARE OFF. Kill switch in data/ai/config.json → automations.enabled: false. Flip to true to re-enable.
+- AUTOMATIONS ARE ON. Standard model tier, $10/day budget, 60min cooldown. Kill switch in data/ai/config.json.
 - ISS-006 (high): AI context drift — automation engine is the structural fix but needs testing with automations ON.
 - ISS-012 (high): No bridge between external AI conversations and DevTrack. Not started.
-- ISS-021 (medium): Automation controls not in Settings UI — must edit JSON directly.
 - ISS-022 (medium): Helicone shows $0 for Opus 4.6 — model not in pricing database.
-- ISS-020 (medium): Sessions 6-7 missing from velocity log — data integrity gap.
+- ISS-031 (low): Max Concurrent setting not enforced by automation engine. UI shows "COMING SOON".
+- AI chat agent STILL not browser-tested — 4 sessions in a row. #1 critical path blocker.
 - Server crashes on tsx watch reload when port is held (EADDRINUSE). Kill node processes before restart.
 
 ## User Profile

@@ -1,33 +1,30 @@
 {
-  "last_generated": "2026-02-08T05:00:00Z",
-  "briefing": "Session 7 complete (Feb 8 night). Massive infrastructure session. Shipped: Entity Model v2 (14 entity types, complete data migration, store/routes/tools/UI rewrite), full Docs system (CRUD + AI tools + auto-generation), headless AI agent runner, automation engine with trigger hooks, scheduler (cron), 5 built-in automations, project init endpoint. Automations verified live: nightly audit (49 tool calls, $10.17), weekly report (12 tool calls, $1.97). 14 auto-generated documentation files created by AI. Scheduler race condition found and fixed. Cost controls added: master kill switch, budget enforcement, cooldown, model tier downgrade. ALL AUTOMATIONS CURRENTLY OFF (kill switch flipped). 4 commits, ~19K lines shipped.",
+  "last_generated": "2026-02-08T17:00:25.438Z",
+  "briefing": "Session 8 ended with a comprehensive audit. The project is at 76% health with 89 items shipped across 8 sessions. The #1 critical blocker remains unchanged: the AI chat agent has been in_progress for 9+ days without browser testing. Session 8 shipped 12 items including: automation settings UI (completed), activity log sidebar tab, rich tool tray in chat, entity dedup, backlog card expansion, and multiple UI fixes. 11 issues were resolved. However, the chat agent itself—the core product—has never been tested in a real browser conversation. 27 files are modified and uncommitted to git. Automations are ON (standard tier, $10/day budget). The next session MUST browser-test the AI chat or change its status to reflect reality.",
   "hot_context": [
-    "AUTOMATIONS ARE OFF. Master kill switch in data/ai/config.json → automations.enabled: false. Must flip to true to re-enable.",
-    "Automation cost was $19.28 for one round on premium models. Default tier downgraded to 'standard'. Budget limit: $5/day.",
-    "ISS-021: Automation controls not in Settings UI — users must edit JSON directly. Next session priority.",
-    "ISS-022: Helicone shows $0 for Opus 4.6 requests — model not in their pricing database. 32 requests show n/a provider.",
-    "ISS-020: Sessions 6-7 missing from velocity log. Created by nightly audit AI.",
-    "14 auto-generated docs in data/docs/ — system overviews, API reference, getting started, data model reference.",
-    "3 new ideas captured: IDEA-038 (preserve cursor settings on init), IDEA-040 (infer persona from git), IDEA-039 (cron profile iteration).",
-    "IDEA-041 (automation settings UI) and IDEA-042 (brain note dedup) — captured at session end.",
-    "The AI nightly audit independently: reassessed all system health, triaged 8 ideas, created ISS-020, updated context recovery, ran codebase scan.",
-    "Dev servers: API on 24680, UI on 24681. npm run dev starts both.",
-    "User wants depth and precision over cost out of the gate, then detune."
+    "AI chat agent in_progress 9+ days, never browser-tested — this is the #1 blocker",
+    "27 modified files uncommitted to git (including all session 8 work)",
+    "Automations are ON — standard tier, $10/day budget, 60min cooldown",
+    "Activity log tab built and working in sidebar",
+    "automation-settings-ui completed in session 8",
+    "ISS-020 (velocity gap) resolved via session backfill",
+    "6 issues open: ISS-003 (Helicone), ISS-006 (AI drift), ISS-012 (conversation bridge), ISS-022 (Helicone $0 cost), ISS-031 (max concurrent), ISS-034 (semantic watcher)",
+    "IDEA-049 dismissed as duplicate of IDEA-048",
+    "Brain notes BN-015/018/019/020 are large summaries that bloat context"
   ],
   "warnings": [
-    "Don't turn automations on without checking budget — $19/run on premium is too expensive for daily use.",
-    "Brain note dedup needed — got 3 duplicate weekly reports (BN-015, BN-018, BN-019) from race condition.",
-    "Helicone cost tracking broken for Opus 4.6 and some requests not routing through proxy at all.",
-    "AI chat agent still never tested in browser — remains the #1 blocker for dogfooding.",
-    "Context window was very long this session. Fresh session strongly recommended."
+    "AI chat agent is the critical path — 9+ days in_progress with zero browser validation",
+    "27 uncommitted files — risk of losing session 8 work",
+    "Helicone integration still FAILING (ISS-003) — blocks AI cost tracking",
+    "Large brain notes (BN-015, 018, 019, 020) may bloat context in future sessions",
+    "ai-watcher and ui-design-overhaul both stalled in_progress status — need status updates"
   ],
   "suggestions": [
-    "FIRST: Build automation settings UI (ISS-021) — users need to control the kill switch from the browser.",
-    "SECOND: Test AI chat in browser — open localhost:24681, send real messages, fix what breaks.",
-    "THIRD: Dogfood on Pillar — run dev-track init with the new AI init endpoint.",
-    "Fix brain note dedup before turning automations back on.",
-    "Consider adding a cost dashboard widget to the main Dashboard view.",
-    "Session 6-7 velocity data gap (ISS-020) — either backfill or accept and move on.",
-    "The persona inference from git (IDEA-040) could be a quick win during init — commit messages reveal a lot."
+    "PRIORITY 1: Open browser, test AI chat end-to-end (send message, verify tool calls, check responses)",
+    "PRIORITY 2: Commit all pending changes to git (27 modified files)",
+    "PRIORITY 3: Update ai-chat-agent status based on browser test results",
+    "Consider: dogfood on Pillar if chat works, or pivot to fixing what's broken if it doesn't",
+    "Consider: archive or summarize large brain notes to reduce context bloat",
+    "Consider: investigate Helicone failure (ISS-003) — credential sync was fixed but test still fails"
   ]
 }

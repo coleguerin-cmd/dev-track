@@ -1,7 +1,22 @@
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { FileText, BookOpen, Code, RefreshCw } from 'lucide-react';
 import * as api from '../api/client';
+
+interface DocEntry {
+  id: string;
+  title: string;
+  type: string;
+  systems: string[];
+  auto_generated: boolean;
+  last_generated: string | null;
+  author: string;
+  status: string;
+  tags: string[];
+  created: string;
+  updated: string;
+}
 
 interface TocItem {
   id: string;
@@ -29,47 +44,86 @@ function extractToc(markdown: string): TocItem[] {
     }
   }
 
-  // For long docs (>15 headings), only show h1-h2 to prevent ToC clutter
   if (allItems.length > 15) {
     return allItems.filter(item => item.level <= 2);
   }
   return allItems;
 }
 
+// Group docs by category
+function groupDocs(docs: DocEntry[]): Record<string, DocEntry[]> {
+  const groups: Record<string, DocEntry[]> = {};
+  
+  for (const doc of docs) {
+    let category = 'Other';
+    if (doc.id.startsWith('system-')) category = 'Systems';
+    else if (doc.type === 'auto-generated' && !doc.id.startsWith('system-')) category = 'Guides & Reference';
+    else if (doc.type === 'design') category = 'Design Docs';
+    else if (doc.type === 'decision' || doc.type === 'adr') category = 'Decisions';
+    else if (doc.type === 'wiki') category = 'Wiki';
+    else category = 'Guides & Reference';
+    
+    if (!groups[category]) groups[category] = [];
+    groups[category].push(doc);
+  }
+
+  // Sort groups
+  const order = ['Guides & Reference', 'Systems', 'Design Docs', 'Decisions', 'Wiki', 'Other'];
+  const sorted: Record<string, DocEntry[]> = {};
+  for (const key of order) {
+    if (groups[key]) sorted[key] = groups[key];
+  }
+  return sorted;
+}
+
+const categoryIcons: Record<string, typeof FileText> = {
+  'Guides & Reference': BookOpen,
+  'Systems': Code,
+  'Design Docs': FileText,
+  'Decisions': FileText,
+  'Wiki': FileText,
+  'Other': FileText,
+};
+
 export function Docs() {
-  const [designFiles, setDesignFiles] = useState<string[]>([]);
-  const [decisionFiles, setDecisionFiles] = useState<string[]>([]);
-  const [selectedFile, setSelectedFile] = useState<{ type: 'design' | 'decision'; name: string } | null>(null);
+  const [docs, setDocs] = useState<DocEntry[]>([]);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
   const [content, setContent] = useState('');
   const [activeSection, setActiveSection] = useState('');
+  const [loading, setLoading] = useState(true);
 
+  // Fetch all docs from registry
   useEffect(() => {
-    api.docs.listDesigns().then((d: any) => {
-      const files = d?.files || [];
-      setDesignFiles(files);
-      // Auto-select first file
-      if (files.length > 0 && !selectedFile) {
-        setSelectedFile({ type: 'design', name: files[0] });
+    api.docs.list().then((d: any) => {
+      const docList = d?.docs || [];
+      setDocs(docList);
+      // Auto-select first doc
+      if (docList.length > 0 && !selectedId) {
+        // Prefer 'system-overview' or 'getting-started' as initial doc
+        const preferred = docList.find((doc: DocEntry) => doc.id === 'system-overview')
+          || docList.find((doc: DocEntry) => doc.id === 'getting-started')
+          || docList[0];
+        setSelectedId(preferred.id);
       }
-    }).catch(() => {});
-    api.docs.listDecisions().then((d: any) => setDecisionFiles(d?.files || [])).catch(() => {});
+      setLoading(false);
+    }).catch(() => setLoading(false));
   }, []);
 
+  // Fetch content when selection changes
   useEffect(() => {
-    if (selectedFile) {
-      const fetchDoc = selectedFile.type === 'design'
-        ? api.docs.getDesign(selectedFile.name)
-        : api.docs.getDecision(selectedFile.name);
-      fetchDoc.then((d: any) => {
-        setContent(d?.content || '');
+    if (selectedId) {
+      setContent('');
+      api.docs.get(selectedId).then((d: any) => {
+        setContent(d?.content || '*No content yet. This doc needs to be generated.*');
         setActiveSection('');
-        // Scroll to top when switching docs
         const contentEl = document.getElementById('docs-content');
         if (contentEl) contentEl.scrollTo(0, 0);
-      }).catch(() => setContent('Failed to load'));
+      }).catch(() => setContent('Failed to load document.'));
     }
-  }, [selectedFile]);
+  }, [selectedId]);
 
+  const grouped = useMemo(() => groupDocs(docs), [docs]);
+  const selectedDoc = docs.find(d => d.id === selectedId);
   const toc = useMemo(() => extractToc(content), [content]);
 
   const scrollToSection = useCallback((id: string) => {
@@ -77,80 +131,55 @@ export function Docs() {
     const el = document.getElementById(id);
     const container = document.getElementById('docs-content');
     if (el && container) {
-      // Use container scrolling since the content is in a scrollable div
       const offset = el.offsetTop - container.offsetTop - 20;
       container.scrollTo({ top: offset, behavior: 'smooth' });
     }
   }, []);
 
-  // Friendly file name display
-  const displayName = (name: string) => name.replace('.md', '');
-
-  // Nav item ordering: README first, then SPEC, then PHASES, then alphabetical
-  const sortedDesignFiles = useMemo(() => {
-    const priority: Record<string, number> = { 'README.md': 0, 'SPEC.md': 1, 'PHASES.md': 2 };
-    return [...designFiles].sort((a, b) => {
-      const pa = priority[a] ?? 99;
-      const pb = priority[b] ?? 99;
-      return pa - pb || a.localeCompare(b);
-    });
-  }, [designFiles]);
-
   return (
     <div className="flex h-[calc(100vh-120px)] overflow-hidden -mx-6 -mt-2">
-      {/* Left sidebar — file nav + ToC */}
-      <div className="w-56 flex-shrink-0 border-r border-border overflow-y-auto px-4 py-4">
-        {/* File navigation */}
-        {sortedDesignFiles.length > 0 && (
-          <div className="mb-5">
-            <h3 className="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-2 px-2">Designs</h3>
-            <div className="space-y-0.5">
-              {sortedDesignFiles.map(f => (
-                <button
-                  key={f}
-                  onClick={() => setSelectedFile({ type: 'design', name: f })}
-                  className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors ${
-                    selectedFile?.name === f && selectedFile?.type === 'design'
-                      ? 'bg-surface-3 text-text-primary font-medium'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-2'
-                  }`}
-                >
-                  {displayName(f)}
-                </button>
-              ))}
-            </div>
-          </div>
+      {/* Left sidebar — doc nav + ToC */}
+      <div className="w-60 flex-shrink-0 border-r border-border overflow-y-auto px-3 py-4">
+        {loading && (
+          <p className="text-xs text-text-tertiary px-2">Loading docs...</p>
         )}
 
-        {decisionFiles.length > 0 && (
-          <div className="mb-5">
-            <h3 className="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-2 px-2">Decisions</h3>
-            <div className="space-y-0.5">
-              {decisionFiles.map(f => (
-                <button
-                  key={f}
-                  onClick={() => setSelectedFile({ type: 'decision', name: f })}
-                  className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors ${
-                    selectedFile?.name === f && selectedFile?.type === 'decision'
-                      ? 'bg-surface-3 text-text-primary font-medium'
-                      : 'text-text-secondary hover:text-text-primary hover:bg-surface-2'
-                  }`}
-                >
-                  {displayName(f)}
-                </button>
-              ))}
-            </div>
-          </div>
+        {!loading && docs.length === 0 && (
+          <p className="text-xs text-text-tertiary px-2">No docs yet. Docs are auto-generated when automations run.</p>
         )}
 
-        {designFiles.length === 0 && decisionFiles.length === 0 && (
-          <p className="text-xs text-text-tertiary px-2">No docs yet. Add .md files to data/designs/ or data/decisions/</p>
-        )}
+        {Object.entries(grouped).map(([category, categoryDocs]) => {
+          const Icon = categoryIcons[category] || FileText;
+          return (
+            <div key={category} className="mb-4">
+              <h3 className="flex items-center gap-1.5 text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1.5 px-2">
+                <Icon size={10} />
+                {category}
+              </h3>
+              <div className="space-y-0.5">
+                {categoryDocs.map(doc => (
+                  <button
+                    key={doc.id}
+                    onClick={() => setSelectedId(doc.id)}
+                    className={`w-full text-left px-2 py-1.5 rounded text-xs transition-colors ${
+                      selectedId === doc.id
+                        ? 'bg-surface-3 text-text-primary font-medium'
+                        : 'text-text-secondary hover:text-text-primary hover:bg-surface-2'
+                    }`}
+                    title={doc.title}
+                  >
+                    <span className="block truncate">{doc.title.replace(/^System:\s*/, '')}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          );
+        })}
 
         {/* Table of Contents for selected doc */}
         {toc.length > 0 && (
-          <div className="mt-4 pt-4 border-t border-border">
-            <h3 className="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-2 px-2">On This Page</h3>
+          <div className="mt-3 pt-3 border-t border-border">
+            <h3 className="text-[10px] font-semibold text-text-tertiary uppercase tracking-wider mb-1.5 px-2">On This Page</h3>
             <nav className="space-y-0.5">
               {toc.map(item => (
                 <button
@@ -173,13 +202,30 @@ export function Docs() {
 
       {/* Main content — rendered markdown */}
       <div id="docs-content" className="flex-1 overflow-y-auto">
-        {content ? (
+        {selectedDoc && (
           <div className="max-w-4xl mx-auto px-8 py-6">
+            {/* Doc header */}
+            <div className="mb-6 pb-4 border-b border-border">
+              <h1 className="text-xl font-bold text-text-primary mb-2">{selectedDoc.title}</h1>
+              <div className="flex items-center gap-3 text-[10px] text-text-tertiary">
+                {selectedDoc.auto_generated && (
+                  <span className="flex items-center gap-1 bg-accent-blue/10 text-accent-blue px-1.5 py-0.5 rounded">
+                    <RefreshCw size={9} />
+                    Auto-generated
+                  </span>
+                )}
+                {selectedDoc.systems.length > 0 && (
+                  <span>Systems: {selectedDoc.systems.join(', ')}</span>
+                )}
+                <span>Updated {selectedDoc.updated}</span>
+              </div>
+            </div>
+
+            {/* Rendered content */}
             <article className="docs-article">
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 components={{
-                  // Headings with IDs for ToC navigation
                   h1: ({ children }) => {
                     const text = getTextContent(children);
                     const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
@@ -200,19 +246,15 @@ export function Docs() {
                     const id = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
                     return <h4 id={id} className="text-base font-semibold text-text-primary mt-4 mb-2">{children}</h4>;
                   },
-                  // Paragraphs
                   p: ({ children }) => <p className="text-sm text-text-secondary leading-relaxed mb-4">{children}</p>,
-                  // Links
                   a: ({ href, children }) => (
                     <a href={href} className="text-accent-blue hover:text-accent-blue/80 underline underline-offset-2" target={href?.startsWith('http') ? '_blank' : undefined}>
                       {children}
                     </a>
                   ),
-                  // Lists
                   ul: ({ children }) => <ul className="text-sm text-text-secondary list-disc list-outside ml-5 mb-4 space-y-1">{children}</ul>,
                   ol: ({ children }) => <ol className="text-sm text-text-secondary list-decimal list-outside ml-5 mb-4 space-y-1">{children}</ol>,
                   li: ({ children }) => <li className="leading-relaxed">{children}</li>,
-                  // Code
                   code: ({ className, children }) => {
                     const isBlock = className?.includes('language-');
                     if (isBlock) {
@@ -225,11 +267,9 @@ export function Docs() {
                     return <code className="text-xs font-mono text-accent-blue bg-accent-blue/10 px-1.5 py-0.5 rounded">{children}</code>;
                   },
                   pre: ({ children }) => <pre className="mb-4">{children}</pre>,
-                  // Blockquotes
                   blockquote: ({ children }) => (
                     <blockquote className="border-l-2 border-accent-blue/40 pl-4 my-4 text-sm text-text-tertiary italic">{children}</blockquote>
                   ),
-                  // Tables
                   table: ({ children }) => (
                     <div className="overflow-x-auto mb-4 rounded-lg border border-border">
                       <table className="w-full text-sm">{children}</table>
@@ -238,12 +278,9 @@ export function Docs() {
                   thead: ({ children }) => <thead className="bg-surface-2 border-b border-border">{children}</thead>,
                   th: ({ children }) => <th className="text-left text-xs font-semibold text-text-primary px-3 py-2">{children}</th>,
                   td: ({ children }) => <td className="text-xs text-text-secondary px-3 py-2 border-t border-border/50">{children}</td>,
-                  // Horizontal rule
                   hr: () => <hr className="border-border my-6" />,
-                  // Strong / em
                   strong: ({ children }) => <strong className="font-semibold text-text-primary">{children}</strong>,
                   em: ({ children }) => <em className="italic text-text-secondary">{children}</em>,
-                  // Images
                   img: ({ src, alt }) => (
                     <img src={src} alt={alt || ''} className="rounded-lg border border-border max-w-full my-4" />
                   ),
@@ -251,11 +288,13 @@ export function Docs() {
               />
             </article>
           </div>
-        ) : (
+        )}
+        {!selectedDoc && !loading && (
           <div className="flex items-center justify-center h-full">
             <div className="text-center">
+              <FileText size={32} className="mx-auto mb-3 text-text-tertiary" />
               <p className="text-sm text-text-tertiary">Select a document from the sidebar</p>
-              <p className="text-xs text-text-tertiary mt-1">Design docs and architecture decisions live here</p>
+              <p className="text-xs text-text-tertiary mt-1">Project documentation and architecture guides</p>
             </div>
           </div>
         )}
@@ -264,7 +303,6 @@ export function Docs() {
   );
 }
 
-// Utility to extract text content from React children (for heading IDs)
 function getTextContent(children: React.ReactNode): string {
   if (typeof children === 'string') return children;
   if (typeof children === 'number') return String(children);

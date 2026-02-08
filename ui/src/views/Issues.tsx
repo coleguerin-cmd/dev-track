@@ -125,6 +125,26 @@ export function Issues() {
                   <p className="text-sm text-status-pass">{selected.resolution}</p>
                 </div>
               )}
+              {/* Metadata */}
+              {(selected as any).backlog_item && (
+                <div>
+                  <p className="label mb-1">Related</p>
+                  <span className="text-xs font-mono text-accent-blue">{(selected as any).backlog_item}</span>
+                </div>
+              )}
+              {(selected as any).notes && (
+                <div>
+                  <p className="label mb-1">Notes</p>
+                  <p className="text-xs text-text-secondary whitespace-pre-wrap">{(selected as any).notes}</p>
+                </div>
+              )}
+
+              {/* Timestamps */}
+              <div className="flex items-center gap-3 text-[10px] text-text-tertiary pt-2 border-t border-border/50">
+                <span>Discovered {selected.discovered}</span>
+                {selected.resolved && <span className="text-status-pass">Resolved {selected.resolved}</span>}
+              </div>
+
               {selected.status !== 'resolved' && selected.status !== 'wont_fix' && (
                 <button onClick={() => resolveIssue(selected.id)} className="btn-primary text-sm w-full mt-2">
                   Resolve Issue

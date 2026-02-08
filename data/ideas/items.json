@@ -100,7 +100,7 @@
       "title": "dev-track as an open-source product",
       "description": "Open-source the file format + cursor rule + basic UI. File format becoming a standard is more valuable than the tool itself.",
       "category": "business",
-      "status": "dismissed",
+      "status": "rejected",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [],
       "promoted_to": null,
@@ -559,12 +559,12 @@
       "title": "Rich tool call tray — Pillar-style expandable elements with navigation",
       "description": "The chat tool calls should render as rich, interactive elements. Click a backlog item result to navigate to the Backlog view with that item highlighted. Click an issue to jump to Issues. Show clear icons per tool type, expandable results with formatted data, and persistent chat context while navigating. Pull from Pillar's tray system implementation.",
       "category": "ux",
-      "status": "captured",
+      "status": "promoted",
       "source": "conversation 2026-02-07 (session 4)",
       "related_ideas": [
         "IDEA-005"
       ],
-      "promoted_to": null,
+      "promoted_to": "rich-tool-tray",
       "pros": [
         "Makes tool calls actionable not just informational",
         "Chat becomes a navigation hub",
@@ -1197,17 +1197,17 @@
     {
       "id": "IDEA-041",
       "title": "Settings UI for automation controls (kill switch, model tier, budget, cooldown)",
-      "description": "Add Automations section to Settings AI Configuration tab with: master on/off toggle, scheduler toggle, triggers toggle, model tier selector (premium/standard/budget), cooldown minutes, daily budget limit with current spend display. All reading from and writing to ai/config.json automations block.",
+      "description": "Add Automations section to Settings AI Configuration tab with: master on/off toggle, scheduler toggle, triggers toggle, model tier selector (premium/standard/budget), cooldown minutes, daily budget limit with current spend display. All reading from and writing to ai/config.json automations block. Must also show list of all automations with individual toggle controls, their trigger types, and last fired timestamps.",
       "category": "feature",
-      "status": "captured",
+      "status": "promoted",
       "priority": "P1",
       "source": "conversation session-7",
       "related_ideas": [],
-      "promoted_to": null,
+      "promoted_to": "automation-settings-ui",
       "pros": [],
       "cons": [],
       "open_questions": [],
-      "notes": null,
+      "notes": "Session 8: Promoted to roadmap. This is ISS-021. User can't control any automation settings without editing JSON directly.",
       "tags": [
         "ui",
         "settings",
@@ -1221,15 +1221,15 @@
       "title": "Brain note deduplication - prevent duplicate weekly reports and audit summaries",
       "description": "The automation engine ran the weekly report 3 times due to a race condition, creating BN-015, BN-018, BN-019 as duplicate weekly reports. Need dedup logic: either (a) check if a similar brain note was created in the last N hours before creating a new one, or (b) the automation prompt should list recent brain notes and avoid duplicating.",
       "category": "process",
-      "status": "captured",
+      "status": "promoted",
       "priority": "P2",
       "source": "conversation session-7",
       "related_ideas": [],
-      "promoted_to": null,
+      "promoted_to": "brain-note-dedup",
       "pros": [],
       "cons": [],
       "open_questions": [],
-      "notes": null,
+      "notes": "Session 8: Promoted to roadmap. Blocking condition for re-enabling automations safely.",
       "tags": [
         "automations",
         "brain",
@@ -1240,10 +1240,10 @@
     },
     {
       "id": "IDEA-043",
-      "title": "Entity provenance — modified_by field on all mutations (user vs AI, which model)",
-      "description": "Every entity mutation (create, update, delete) should record who made the change: user, ai-chat, ai-automation, or system. Include the model ID when AI-made (e.g., \"claude-opus-4-6\", \"gpt-5.2\"). This field goes on every entity as last_modified_by and created_by. The automation engine and headless runner pass actor info through to tool execution. The chat service already knows the model — just needs to propagate it. Like Landmark's edit attribution system.",
+      "title": "Entity provenance — three-label attribution system (User, DevTrack AI, External)",
+      "description": "Every entity mutation should record who made the change using three actor labels: (1) User (specific person, e.g. 'Cole') — when the user directly edits in the DevTrack UI or via API, (2) DevTrack AI — when DevTrack's own AI (chat agent, automations, headless runner) makes changes, (3) External — when changes are detected from outside (code changes in background, git commits, file system changes). Default to External if no label is provided. The UI should show this attribution on every entity (badges, edit log). The chat service and automation engine already know when they're making changes — just need to propagate actor info through to tool execution. Include model ID when AI-made (e.g., 'claude-opus-4-6'). This is the foundation for the activity log UI.",
       "category": "feature",
-      "status": "captured",
+      "status": "promoted",
       "priority": "P1",
       "source": "conversation session-7",
       "related_ideas": [],
@@ -1262,7 +1262,7 @@
         "Do we store full edit history or just last_modified_by?",
         "Where does Cursor/external AI fit in the actor taxonomy?"
       ],
-      "notes": null,
+      "notes": "Session 8: Updated from 4-label to 3-label system per user decision. Promoted to roadmap. User: 'If it's a user directly editing it, mark as that user. If DevTrack AI edits it, mark as DevTrack AI. If it's external, mark as external. If no label, it's external.'",
       "tags": [
         "provenance",
         "audit",
@@ -1345,7 +1345,7 @@
       "title": "Headless runner conversation logging — save full AI transcripts from automations",
       "description": "The headless AI runner (server/ai/runner.ts) currently discards the full conversation after execution. Only tool call summaries are logged to the activity feed. Need to save full transcripts (system prompt, user message, all AI responses, all tool calls with full arguments and results) to data/ai/conversations/ just like ChatService does. Critical for: debugging automation behavior, auditing what the AI decided and why, cost attribution per conversation.",
       "category": "feature",
-      "status": "captured",
+      "status": "promoted",
       "priority": "P1",
       "source": "conversation session-7",
       "related_ideas": [],
@@ -1363,7 +1363,7 @@
         "Same conversation format as chat? Or separate?",
         "How long to keep automation transcripts?"
       ],
-      "notes": null,
+      "notes": "Session 8: Promoted to roadmap. Can't debug automations or attribute costs without full transcripts.",
       "tags": [
         "automations",
         "logging",
@@ -1405,7 +1405,473 @@
       ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-048",
+      "title": "AI-powered autonomous chaos testing — self-directed stress testing with virtual environments",
+      "description": "An automated testing system where AI runs DevTrack headlessly in isolated virtual environments and invents its own test scenarios. The AI acts like a user: creates projects, adds backlog items, triggers automations, simulates file changes, tests edge cases, and reports back. Not traditional integration tests with fixed scripts — the AI **devises new situations** based on use cases and tries to break things.\n\n**How it works:**\n1. User sets constraints: max cost, max iterations, max time, number of parallel environments\n2. AI spins up N virtual DevTrack instances (Docker containers or separate data directories)\n3. AI generates test scenarios: \"What if a user creates 500 backlog items at once?\", \"What if automations trigger recursively?\", \"What if the user switches projects mid-conversation?\"\n4. AI executes scenarios via the headless runner and API calls\n5. AI observes: errors logged, performance metrics, data corruption, race conditions\n6. AI reports findings: issues discovered, edge cases hit, performance bottlenecks\n\n**Three modes:**\n- **Observer mode**: AI reports findings but doesn't edit code (safest)\n- **Assisted mode**: AI proposes fixes, user reviews before applying\n- **Autonomous mode**: AI fixes bugs it finds and commits (full self-healing)\n\n**Use cases:**\n- Stress testing before dogfooding on real projects\n- Continuous chaos testing in CI/CD\n- Discovering edge cases humans wouldn't think of\n- Load testing (100 concurrent chat sessions)\n- Race condition detection (parallel automation triggers)\n- Data integrity validation (does the data stay consistent?)\n\n**Infrastructure needed:**\n- Docker or isolated data directories for parallel environments\n- Headless runner already exists — just needs orchestration layer\n- Cost tracking per test run (Helicone sessions)\n- Test result aggregation and reporting\n- Rollback mechanism if autonomous mode breaks things\n\n**This is chaos engineering meets AI agents.** Netflix's Chaos Monkey but the monkey is an AI that invents new ways to break your system.",
+      "category": "architecture",
+      "status": "captured",
+      "priority": "critical",
+      "source": "chat 2026-02-08",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [
+        "Discovers edge cases humans would never think of",
+        "Continuous testing without writing test scripts",
+        "Scales — can run 100 parallel test environments",
+        "Self-improving — AI learns what breaks and tests those areas more",
+        "Autonomous mode enables true self-healing systems",
+        "Perfect for dogfooding validation before real use",
+        "DevTrack testing itself is the ultimate vindaloop"
+      ],
+      "cons": [
+        "AI cost could be high if running continuously",
+        "Autonomous mode is risky — AI could break production",
+        "Need robust isolation so test environments don't affect real data",
+        "AI-generated test scenarios might be nonsensical or redundant",
+        "Requires Docker or complex environment isolation",
+        "Reporting/aggregation of findings is non-trivial"
+      ],
+      "open_questions": [
+        "Docker containers vs separate data directories for isolation?",
+        "How does the AI decide what scenarios to test?",
+        "Should it learn from previous runs (vector DB of known failure modes)?",
+        "How to prevent infinite loops or recursive chaos?",
+        "What's the cost budget for a full test run?",
+        "Can we use cheap models (GPT-4o-mini) for test generation and premium for analysis?",
+        "How to aggregate findings from 100 parallel runs?",
+        "Should this integrate with CI/CD or be on-demand only?",
+        "Autonomous mode: how much can the AI change before requiring human review?"
+      ],
+      "notes": null,
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-049",
+      "title": "AI-powered autonomous chaos testing — self-directed stress testing with virtual environments",
+      "description": "An automated testing system where AI runs DevTrack headlessly in isolated virtual environments and invents its own test scenarios. The AI acts like a user: creates projects, adds backlog items, triggers automations, simulates file changes, tests edge cases, and reports back. Not traditional integration tests with fixed scripts — the AI **devises new situations** based on use cases and tries to break things.\n\n**How it works:**\n1. User sets constraints: max cost, max iterations, max time, number of parallel environments\n2. AI spins up N virtual DevTrack instances (Docker containers or separate data directories)\n3. AI generates test scenarios: \"What if a user creates 500 backlog items at once?\", \"What if automations trigger recursively?\", \"What if the user switches projects mid-conversation?\"\n4. AI executes scenarios via the headless runner and API calls\n5. AI observes: errors logged, performance metrics, data corruption, race conditions\n6. AI reports findings: issues discovered, edge cases hit, performance bottlenecks\n\n**Three modes:**\n- **Observer mode**: AI reports findings but doesn't edit code (safest)\n- **Assisted mode**: AI proposes fixes, user reviews before applying\n- **Autonomous mode**: AI fixes bugs it finds and commits (full self-healing)\n\n**Use cases:**\n- Stress testing before dogfooding on real projects\n- Continuous chaos testing in CI/CD\n- Discovering edge cases humans wouldn't think of\n- Load testing (100 concurrent chat sessions)\n- Race condition detection (parallel automation triggers)\n- Data integrity validation (does the data stay consistent?)\n\n**Infrastructure needed:**\n- Docker or isolated data directories for parallel environments\n- Headless runner already exists — just needs orchestration layer\n- Cost tracking per test run (Helicone sessions)\n- Test result aggregation and reporting\n- Rollback mechanism if autonomous mode breaks things\n\n**This is chaos engineering meets AI agents.** Netflix's Chaos Monkey but the monkey is an AI that invents new ways to break your system.",
+      "category": "architecture",
+      "status": "dismissed",
+      "priority": "critical",
+      "source": "chat 2026-02-08",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [
+        "Discovers edge cases humans would never think of",
+        "Continuous testing without writing test scripts",
+        "Scales — can run 100 parallel test environments",
+        "Self-improving — AI learns what breaks and tests those areas more",
+        "Autonomous mode enables true self-healing systems",
+        "Perfect for dogfooding validation before real use",
+        "DevTrack testing itself is the ultimate vindaloop"
+      ],
+      "cons": [
+        "AI cost could be high if running continuously",
+        "Autonomous mode is risky — AI could break production",
+        "Need robust isolation so test environments don't affect real data",
+        "AI-generated test scenarios might be nonsensical or redundant",
+        "Requires Docker or complex environment isolation",
+        "Reporting/aggregation of findings is non-trivial"
+      ],
+      "open_questions": [
+        "Docker containers vs separate data directories for isolation?",
+        "How does the AI decide what scenarios to test?",
+        "Should it learn from previous runs (vector DB of known failure modes)?",
+        "How to prevent infinite loops or recursive chaos?",
+        "What's the cost budget for a full test run?",
+        "Can we use cheap models (GPT-4o-mini) for test generation and premium for analysis?",
+        "How to aggregate findings from 100 parallel runs?",
+        "Should this integrate with CI/CD or be on-demand only?",
+        "Autonomous mode: how much can the AI change before requiring human review?"
+      ],
+      "notes": "DUPLICATE of IDEA-048. Created by DevTrack AI conversation. Dismissed as duplicate.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-050",
+      "title": "Model delegation pattern — senior models trigger junior models for grunt work",
+      "status": "captured",
+      "category": "architecture",
+      "priority": "critical",
+      "description": "Senior AI models (Opus, GPT-5.2) should be able to delegate grunt work to junior models (Haiku, GPT-4o-mini). Pattern: when a weekly/nightly audit runs on a premium model, it triggers a junior model to first run over all commits, diffs, and changes to create a consolidated summary. The senior model then reads that summary instead of processing raw data itself. Junior model could run over 20+ commits, the entire DB, all recent changes — still cheaper than Opus doing a couple of diff operations. The senior model focuses on judgment and decision-making, not data gathering. Example flow: (1) Opus triggers Haiku to 'summarize all changes since last audit', (2) Haiku runs over commits, changelog, activity feed, outputs structured summary, (3) Opus reads summary + makes decisions about promotions, demotions, health ratings, issues. This is essentially a map-reduce pattern for AI operations.",
+      "pros": [
+        "Massive cost reduction — junior models handle 80% of the work",
+        "Senior models focus on judgment, not data gathering",
+        "Junior model can process entire codebases cheaply",
+        "Natural separation of concerns in AI operations"
+      ],
+      "cons": [
+        "Junior model summaries may miss nuance",
+        "Adds latency (two-step process)",
+        "Need to define the handoff format between models"
+      ],
+      "open_questions": [
+        "What's the handoff format — structured JSON? Natural language summary?",
+        "Should the senior model be able to ask for more detail on specific areas?",
+        "How to handle when junior model makes a mistake in summarization?"
+      ],
+      "notes": "User insight: 'smaller models educating bigger ones quickly so the big models can defer down to the runs the smaller models already did.' GPT-4.0 was recently deprecated. Haiku can run over the whole database and 20 commits for less than Opus doing a couple of diff operations.",
+      "source": "conversation session-8",
+      "related_ideas": [
+        "IDEA-003",
+        "IDEA-051"
+      ],
+      "promoted_to": null,
+      "tags": [
+        "ai",
+        "cost",
+        "architecture"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-051",
+      "title": "AI memory and context caching — per-automation memory, decision cache, semantic dedup",
+      "status": "captured",
+      "category": "architecture",
+      "priority": "critical",
+      "description": "Every automation run currently starts cold — no memory of what it decided before. This causes duplicates (3 identical weekly reports) and re-processing of unchanged data. Three-layer solution: (1) Per-automation memory — each automation gets data/automations/{id}/memory.json. AI writes its own notes at end of each run: what it found, what it changed, what to check next time. Next run loads this as part of system prompt. (2) Decision cache — data/ai/decisions-cache.json. Short-lived cache of recent AI decisions: 'I triaged IDEA-034 as exploring at 2am, don't re-triage for 7 days.' Prevents AI from churning on same items every run. (3) Semantic dedup — before creating brain notes, changelog entries, etc, the automation prompt includes recent entries of that type so AI can check 'did I already write this?' This is cheap to build and eliminates the duplicate/churn problem without needing a vector DB.",
+      "pros": [
+        "Eliminates duplicate brain notes and changelog entries",
+        "AI remembers its previous decisions",
+        "Prevents re-processing unchanged data",
+        "Cheap to build — just JSON files as memory"
+      ],
+      "cons": [
+        "Memory files grow over time (need their own archival)",
+        "AI might over-rely on stale memory",
+        "Decision cache needs TTL management"
+      ],
+      "open_questions": [
+        "How much memory context can we inject without blowing up token costs?",
+        "Should memory be append-only or can the AI rewrite its own notes?",
+        "TTL on decision cache — 7 days? Configurable per decision type?"
+      ],
+      "notes": "User insight: 'we probably need some kind of way to cache memory for the AI... quick context retrieval of what it has decided in the past.' This is the structural fix for automation garbage data. Without this, turning automations on will create duplicates.",
+      "source": "conversation session-8",
+      "related_ideas": [
+        "IDEA-050",
+        "IDEA-042"
+      ],
+      "promoted_to": null,
+      "tags": [
+        "ai",
+        "memory",
+        "architecture",
+        "automations"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-052",
+      "title": "Entity grouping and parenting — ideas with sub-ideas, roadmap hierarchy, epics in UI",
+      "status": "captured",
+      "category": "ux",
+      "priority": "high",
+      "description": "Multiple entity types need parent/child relationships: (1) Ideas need sub-ideas — a big idea like 'AI-unique views' has multiple child ideas under it. (2) Roadmap items need grouping — epics exist in the data model but aren't displayed in the UI anywhere. (3) Design docs, RFDs, ADRs — these doc types exist conceptually but aren't surfaced distinctly. The user can't see the hierarchy that exists in the data. Epics have item_count and completed_count but no UI displays them. Milestones have version numbers but no UI shows version tracking. Other tools (Linear, Notion) typically use one level: Epic→Issues, Project→Tasks.",
+      "pros": [
+        "Epics become visible in the UI",
+        "Ideas can be organized under themes",
+        "Roadmap hierarchy matches how people think about work",
+        "Data model already supports it (epic_id, milestone_id fields exist)"
+      ],
+      "cons": [
+        "Deep hierarchy gets confusing quickly",
+        "Need UI for creating/managing parent-child relationships",
+        "Navigation between levels needs to be intuitive"
+      ],
+      "open_questions": [
+        "One level of grouping (parent→children) or full tree?",
+        "How do other tools handle this? Linear uses Projects→Issues, Notion uses nested pages",
+        "Should ideas have a 'theme' tag or actual parent-child?",
+        "How to display hierarchy in kanban view without clutter?"
+      ],
+      "notes": "User called out: epics not in UI, ideas need wider grouping, roadmap needs parents/subsystems, docs need to show design docs/RFDs/ADRs distinctly. The data model v2 added epic_id and milestone_id to roadmap items but the UI never shows these groupings.",
+      "source": "conversation session-8",
+      "related_ideas": [
+        "IDEA-034"
+      ],
+      "promoted_to": null,
+      "tags": [
+        "ui",
+        "data-model",
+        "hierarchy"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-053",
+      "title": "Smart archival — content-aware, not timeline-based",
+      "status": "captured",
+      "category": "architecture",
+      "priority": "high",
+      "description": "The current archival-system backlog item proposes rolling windows (archive after 30 days). User pushback: timeline-based archival will lose active items. Changelogs and session logs shouldn't be archived by date — they're history. Better approach: (1) Archive by status, not time — resolved issues can be archived, open ones never. Completed roadmap items in 'shipped' can be summarized. (2) Summarize, don't delete — monthly summaries of changelog, session velocity, issues resolved. Raw data moves to archive/ but summaries stay. (3) Never archive: brain notes (unless dismissed), active ideas, open issues, in-progress roadmap items. (4) Consider: what actually needs archival? Maybe just conversations (large), activity feed (grows fast), and codebase analysis snapshots.",
+      "pros": [
+        "Won't accidentally lose active items",
+        "Summaries preserve context without bulk",
+        "Status-based archival is more natural"
+      ],
+      "cons": [
+        "More complex than simple time-based archival",
+        "Need to define 'what's archivable' per entity type",
+        "Summaries lose detail"
+      ],
+      "open_questions": [
+        "What actually gets large enough to need archival?",
+        "Is the problem even real yet or premature optimization?",
+        "Should AI decide what to archive based on context?"
+      ],
+      "notes": "User: 'Timeline automated archival... if things are active we're gonna lose them. You don't want to archive off changelogs and session logs.' Legitimate concern — a time-based rolling window would archive entries still referenced by open issues.",
+      "source": "conversation session-8",
+      "related_ideas": [],
+      "promoted_to": null,
+      "tags": [
+        "data",
+        "archival",
+        "architecture"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-054",
+      "title": "Session heartbeat + stale session detector — structural fix for orphaned sessions",
+      "description": "Sessions 6 & 7 were orphaned because the external AI forgot to call POST /session/end. Behavioral compliance is unreliable. Need a structural mechanism: (1) Session heartbeat — bump last_active timestamp on every activity event (zero-cost, activity system already fires). (2) Stale session automation — scheduled check every 30-60min, finds sessions with status=active but last_active older than configurable threshold (e.g. 2h). Marks session 'stale', fires session_stale trigger. (3) DevTrack AI circle-back — on session_stale trigger, AI reviews session activity, writes retro from available data, closes session gracefully. This is the safety net for when the external AI drifts. (4) Multi-user aware — sessions are per-user and can overlap. Stale detector checks each independently. No assumption that new session = old one ended.",
+      "category": "architecture",
+      "status": "promoted",
+      "priority": "high",
+      "source": "conversation session-8",
+      "pros": [
+        "Structurally prevents orphaned sessions — no behavioral dependency",
+        "Zero-cost heartbeat — piggybacks on existing activity system",
+        "Multi-user safe — parallel sessions work correctly",
+        "AI circle-back means sessions always get proper retros and velocity data",
+        "Configurable threshold — tight for solo dev, loose for teams"
+      ],
+      "cons": [
+        "Stale != done — AI retro from incomplete data may miss context",
+        "Need to distinguish 'thinking break' from 'actually done'",
+        "Adds another automation to the scheduler"
+      ],
+      "open_questions": [
+        "What's the right staleness threshold? 2 hours? Configurable per user?",
+        "Should stale sessions auto-close or just notify and wait for human confirmation?",
+        "Should the heartbeat be implicit (any activity = heartbeat) or explicit (periodic ping)?",
+        "How does this interact with the session_ended trigger for session-end-audit?"
+      ],
+      "tags": [
+        "sessions",
+        "reliability",
+        "automation",
+        "multi-user"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-055",
+      "promoted_to": "tiered-audit-system",
+      "title": "Tiered audit system — file change (pennies), session (dimes), weekly (dollars)",
+      "description": "Current session-end audit costs $2.82 on Sonnet for 25 tool calls over 164s — too expensive for per-session use. On a large codebase (Pillar = 150K lines vs DevTrack = 30K) this balloons to $10+. Need a tiered audit architecture:\n\n(1) FILE CHANGE AUDIT (pennies): On any file change, run a micro-audit. Use cached AI state so it doesn't need to re-read the whole system. Just: what changed? does the cache need updating? does a changelog entry make sense? Should take <5 tool calls, cost <$0.01. Can run continuously, not gated to 60s intervals.\n\n(2) SESSION AUDIT (dimes): On session close, diff commits from session start to session end. Only audit what's relevant to the session — don't re-read the entire system. AI already has cached state from file-change audits. Cost target: $0.10-0.30.\n\n(3) NIGHTLY AUDIT (low dollars): Broader sweep but still scoped. Check for stale data, contradictions, things the external AI forgot. Has benefit of all the cached state from the day's file-change audits. Cost target: $0.50-1.00.\n\n(4) WEEKLY AUDIT (dollars): Full system audit. This is where the $2-3 spend makes sense. Deep review, cross-entity consistency, strategic recommendations. Cost target: $2-5.\n\nKey enabler: AI state cache that gets incrementally updated on every file change, so larger audits don't start cold.",
+      "category": "architecture",
+      "status": "exploring",
+      "priority": "critical",
+      "source": "conversation session-8 (post-close)",
+      "pros": [
+        "Reduces per-session cost from $2.82 to ~$0.10-0.30",
+        "File change audits can run continuously at pennies",
+        "Scales to large codebases — cost tied to change volume, not codebase size",
+        "Cached state means no audit starts cold",
+        "Each tier builds on the work of the tier below it"
+      ],
+      "cons": [
+        "Cache staleness — if cache drifts from reality, all tiers are wrong",
+        "More complex architecture than current 'run everything every time'",
+        "Need to define what's 'relevant to the session' programmatically"
+      ],
+      "open_questions": [
+        "What format is the AI cache? JSON summary? Embedding? Plain text briefing?",
+        "How does the file-change micro-audit know what's worth caching vs noise?",
+        "Can we use git diff as the primary input for session audits instead of reading all files?",
+        "What's the cost floor — can we get file-change audits under $0.005 with Haiku?"
+      ],
+      "tags": ["cost", "architecture", "automation", "scalability"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-056",
+      "promoted_to": "auto-commit-session-close",
+      "title": "Auto-commit on session close — detect uncommitted work, commit to correct branch",
+      "description": "When a session ends, the system should: (1) Check if there are uncommitted changes. (2) If yes, check if auto-commit is enabled in settings. (3) Detect the current branch (main, feature, etc.) and commit there. (4) Use the session's changelog entries and activity to generate a meaningful commit message. (5) Optionally push if configured. This should be a setting in the Settings UI: 'Auto-commit on session close' with options: off, commit only, commit and push. The external AI (Cursor) should also be doing this, but the structural safety net is DevTrack handling it if they don't — same pattern as the session heartbeat.",
+      "category": "feature",
+      "status": "exploring",
+      "priority": "high",
+      "source": "conversation session-8 (post-close)",
+      "pros": [
+        "Prevents the 27-uncommitted-files situation we're in right now",
+        "Structural safety net — doesn't depend on external AI remembering",
+        "Auto-generated commit messages from session data are probably better than manual ones",
+        "Setting gives user control over behavior"
+      ],
+      "cons": [
+        "Auto-committing to main could be dangerous — need branch awareness",
+        "Partial/broken work shouldn't be auto-committed — needs a 'build passes' gate?",
+        "Git operations from the server process could conflict with user's IDE git"
+      ],
+      "open_questions": [
+        "Should it create a branch if the user is on main? Or commit directly?",
+        "How to handle merge conflicts if the user and DevTrack both write?",
+        "Should there be a 'review before commit' step or fully automatic?",
+        "What about .gitignore — data files may not be in git"
+      ],
+      "tags": ["git", "sessions", "automation", "settings"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-057",
+      "title": "Stale data watchdog — track expected updates, auto-fix if external AI forgets",
+      "description": "When DevTrack detects that something should have been updated (e.g., an idea was discussed, a feature was shipped, a session ended), it starts a watchdog timer. If the external AI doesn't update the relevant entities within X minutes, DevTrack's AI does it. Example: user discusses updating IDEA-034 in chat → DevTrack notes 'IDEA-034 should be updated' → waits 10 minutes → checks if IDEA-034 was modified → if not, DevTrack AI updates it based on the conversation context. This prevents stale data without requiring massive periodic audits — it's event-driven staleness detection.",
+      "category": "architecture",
+      "status": "captured",
+      "priority": "medium",
+      "source": "conversation session-8 (post-close)",
+      "pros": [
+        "Prevents stale data without expensive periodic audits",
+        "Event-driven — only fires when something is expected to change",
+        "Structural enforcement of data freshness"
+      ],
+      "cons": [
+        "Needs to understand 'what should have been updated' — requires conversation analysis",
+        "Could create noise if it acts on false positives",
+        "Overlaps with the tiered audit system"
+      ],
+      "open_questions": [
+        "How does it know what 'should' have been updated?",
+        "What's the right timeout before intervention?",
+        "Should it notify the user before auto-fixing or just do it?"
+      ],
+      "tags": ["automation", "data-quality", "architecture"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-058",
+      "title": "Codebase scope controls — exclude node_modules, vendor, third-party from all AI scans",
+      "description": "All AI audits, scanners, and file watchers must respect scope boundaries. Never scan node_modules, vendor directories, .git, build output, or any third-party code. Only scan: (1) User's source code. (2) DevTrack data directory. (3) Config files at project root. This is critical for cost control on large codebases — Pillar at 150K lines would be insanely expensive if the AI is also reading 500K+ lines of dependencies. Should be configurable in settings: include/exclude glob patterns.",
+      "category": "architecture",
+      "status": "captured",
+      "priority": "high",
+      "source": "conversation session-8 (post-close)",
+      "pros": [
+        "Massive cost reduction on real-world projects",
+        "Faster scans — less data to process",
+        "More relevant results — no noise from third-party code"
+      ],
+      "cons": [
+        "Some projects have important vendor code that should be scanned",
+        "Need sensible defaults that work across project types"
+      ],
+      "open_questions": [
+        "Default excludes: node_modules, .git, dist, build, vendor — what else?",
+        "Should we read .gitignore and use that as the exclude base?",
+        "How to handle monorepos with multiple packages?"
+      ],
+      "tags": ["cost", "scalability", "settings"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-059",
+      "title": "Changelog auto-management — DevTrack AI writes changelogs, not external AI",
+      "description": "Stop asking the external AI (Cursor) to write changelog entries. It's unreliable (context drift) and creates friction. Instead: DevTrack AI should auto-generate changelog entries from git diffs, activity events, and session data. The file-change micro-audit (IDEA-055 tier 1) already sees what changed — it should write the changelog entry. The session audit (tier 2) rolls up the session's changes into a session summary. The external AI should focus on code — DevTrack handles all the project management bookkeeping. This is the separation of concerns principle from IDEA-014 applied to changelogs specifically.",
+      "category": "process",
+      "status": "captured",
+      "priority": "medium",
+      "source": "conversation session-8 (post-close)",
+      "pros": [
+        "Removes burden from external AI — less context drift",
+        "Changelogs are always accurate because they're generated from actual changes",
+        "Separation of concerns: coding AI codes, DevTrack AI tracks"
+      ],
+      "cons": [
+        "Auto-generated changelogs may miss intent/context that the coder knows",
+        "Need to balance auto-generation with manual override capability"
+      ],
+      "open_questions": [
+        "Should auto-changelogs be 'draft' status until confirmed?",
+        "How granular — one entry per commit? per feature? per session?",
+        "How does the user annotate/override auto-generated entries?"
+      ],
+      "tags": ["automation", "changelog", "process"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
+    },
+    {
+      "id": "IDEA-060",
+      "promoted_to": "audits-tab",
+      "title": "Audits tab — view automation results, thinking chain, diffs, costs, suggestions",
+      "description": "When an automation runs (session audit, nightly audit, weekly report, etc.), the results are invisible. The activity log shows 'took 164s' but not: what it changed, what it thought, what it decided not to act on, how much it cost, what files it touched. Need an Audits tab (or section within Activity) where each automation run has an expandable result card showing:\n\n(1) SUMMARY — plain English: 'Updated context recovery, found ISS-034, verified 6 open issues, flagged 27 uncommitted files.'\n(2) CHANGES MADE — list of files modified with before/after diffs or descriptions.\n(3) SUGGESTIONS NOT ACTED ON — things the AI noticed but didn't change (e.g., 'ai-watcher has been in_progress for 9 days — consider updating status').\n(4) THINKING CHAIN — condensed reasoning: why it made each decision.\n(5) COST — tokens used, model, estimated cost.\n(6) TOOL CALLS — expandable list of all tools called with args and results.\n\nThis requires the headless runner to return structured results that get persisted, not just logged to console.",
+      "category": "feature",
+      "status": "exploring",
+      "priority": "critical",
+      "source": "conversation session-8 (post-close)",
+      "pros": [
+        "Full transparency into what DevTrack AI is doing autonomously",
+        "Enables trust — user can verify AI decisions",
+        "Cost visibility per automation run",
+        "Suggestions-not-acted-on creates a natural approval workflow"
+      ],
+      "cons": [
+        "Storing full audit results per run could get large",
+        "Thinking chain may be verbose — needs summarization"
+      ],
+      "open_questions": [
+        "Store results in data/automations/{id}/runs/*.json?",
+        "How many runs to keep? Rolling window?",
+        "Should the AI explicitly separate 'changes made' from 'suggestions' in its output?"
+      ],
+      "tags": ["ui", "transparency", "automation", "trust"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-061",
+      "promoted_to": "autonomy-levels",
+      "title": "Autonomy levels — fully autonomous vs suggestion-with-approval mode",
+      "description": "Not all users want DevTrack AI to make changes autonomously. Enterprise users may need approval workflows. Add an autonomy setting with levels:\n\n(1) FULL AUTONOMY — DevTrack AI makes all changes directly. Ideal for solo devs / power users who trust the system.\n(2) SUGGEST & APPROVE — DevTrack AI identifies changes but presents them as 1-click approval cards in the Audits tab. 'I want to promote IDEA-034 to roadmap' → user clicks Approve or Dismiss. Batch approval for multiple suggestions.\n(3) READ-ONLY — DevTrack AI only observes and reports. No changes made. Useful for evaluation / onboarding.\n\nThis is a per-user or per-project setting in Settings. The automation prompt should be aware of the autonomy level so the AI knows whether to execute changes or just recommend them.",
+      "category": "feature",
+      "status": "exploring",
+      "priority": "high",
+      "source": "conversation session-8 (post-close)",
+      "pros": [
+        "Opens DevTrack to enterprise users who need approval workflows",
+        "Builds trust during onboarding — start read-only, graduate to autonomous",
+        "1-click approval is great UX — all the AI intelligence, user stays in control",
+        "Suggestions queue becomes a natural todo list"
+      ],
+      "cons": [
+        "Suggestion mode creates a queue that could pile up if user doesn't act",
+        "Need to handle stale suggestions (approved after context changed)",
+        "More complex prompt engineering — AI needs to know its autonomy level"
+      ],
+      "open_questions": [
+        "Can autonomy vary per entity type? (e.g., autonomous for ideas, approval for roadmap)",
+        "How long do suggestions stay valid before auto-expiring?",
+        "Should there be a 'batch approve all' option for busy users?"
+      ],
+      "tags": ["settings", "enterprise", "autonomy", "trust"],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
     }
   ],
-  "next_id": 48
+  "next_id": 62
 }

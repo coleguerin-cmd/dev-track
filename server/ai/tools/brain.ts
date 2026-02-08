@@ -1,10 +1,15 @@
 import fs from 'fs';
 import path from 'path';
 import { getDataDir } from '../../project-config.js';
+import { getStore } from '../../store.js';
 import type { ToolModule } from './types.js';
 
 function readJSON(file: string) { return JSON.parse(fs.readFileSync(path.join(getDataDir(), file), 'utf-8')); }
-function writeJSON(file: string, data: any) { fs.writeFileSync(path.join(getDataDir(), file), JSON.stringify(data, null, 2)); }
+function writeJSON(file: string, data: any) {
+  // Mark write so the file watcher ignores this change (prevents feedback loops)
+  try { getStore().markWrite(file); } catch {}
+  fs.writeFileSync(path.join(getDataDir(), file), JSON.stringify(data, null, 2));
+}
 
 export const brainTools: ToolModule = {
   domain: 'brain',

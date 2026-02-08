@@ -1,11 +1,31 @@
-import fs from 'fs';
-import path from 'path';
-import { getDataDir } from '../../project-config.js';
+import { getStore } from '../../store.js';
 import type { ToolModule } from './types.js';
 
-function getIdeasPath() { return path.join(getDataDir(), 'ideas/items.json'); }
-function readIdeas() { return JSON.parse(fs.readFileSync(getIdeasPath(), 'utf-8')); }
-function writeIdeas(data: any) { fs.writeFileSync(getIdeasPath(), JSON.stringify(data, null, 2)); }
+function readIdeas() { const store = getStore(); return store.ideas; }
+function writeIdeas(_data: any) { const store = getStore(); store.saveIdeas(); }
+
+function normalizeTitle(t: string) { return t.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim(); }
+
+function findSimilarIdea(ideas: any[], title: string) {
+  const norm = normalizeTitle(title);
+  if (!norm) return null;
+  for (const idea of ideas) {
+    if (idea.status === 'dismissed') continue;
+    const existNorm = normalizeTitle(idea.title);
+    // Exact match
+    if (existNorm === norm) return idea;
+    // Containment (one is a substring of the other)
+    if (existNorm.includes(norm) || norm.includes(existNorm)) {
+      if (Math.min(existNorm.length, norm.length) / Math.max(existNorm.length, norm.length) > 0.5) return idea;
+    }
+    // Word overlap: if 70%+ words match
+    const normWords = norm.split(' ').filter(Boolean);
+    const existWords = existNorm.split(' ').filter(Boolean);
+    const overlap = normWords.filter(w => existWords.includes(w)).length;
+    if (normWords.length > 2 && overlap / Math.max(normWords.length, existWords.length) > 0.7) return idea;
+  }
+  return null;
+}
 
 export const ideaTools: ToolModule = {
   domain: 'ideas',
@@ -44,6 +64,11 @@ export const ideaTools: ToolModule = {
       label: 'Capturing idea',
       execute: async (args) => {
         const data = readIdeas();
+        // Dedup check — prevent duplicates
+        const existing = findSimilarIdea(data.ideas || [], args.title);
+        if (existing) {
+          return { duplicate: true, existing, message: `Similar idea already exists: ${existing.id} "${existing.title}". Use update_idea to modify it instead.` };
+        }
         const today = new Date().toISOString().split('T')[0];
         const idea = {
           id: `IDEA-${String(data.next_id).padStart(3, '0')}`,

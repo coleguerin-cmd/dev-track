@@ -316,7 +316,31 @@
       ],
       "created": "2026-02-08T04:23:17.498Z",
       "updated": "2026-02-08T04:23:17.498Z"
+    },
+    {
+      "id": "BN-021",
+      "type": "observation",
+      "content": "Brain notes BN-015, BN-018, BN-019, BN-020 are large weekly/nightly report summaries that bloat context loading. BN-015 and BN-018 are duplicates (both Week 1 reports). Consider archiving these or extracting key findings into smaller notes. The automation system should avoid creating duplicate large summaries.",
+      "priority": "medium",
+      "related_items": [
+        "IDEA-042",
+        "brain-note-dedup"
+      ],
+      "created": "2026-02-08T16:59:53.599Z",
+      "updated": "2026-02-08T16:59:53.599Z"
+    },
+    {
+      "id": "BN-022",
+      "type": "observation",
+      "content": "Session-end audit automation executed successfully. Found and fixed 6 data inconsistencies: completed items still marked pending, stale system descriptions, duplicate ideas, and outdated project summary. The audit process itself validates that the automation engine + headless runner are working. However, the core finding remains: the AI chat agent (the product's centerpiece) has been in_progress for 9+ days without browser validation. Every other system is built and working — the chat agent is the single blocker preventing dogfooding and real-world validation.",
+      "priority": "high",
+      "related_items": [
+        "ai-chat-agent",
+        "session-self-audit"
+      ],
+      "created": "2026-02-08T17:00:46.085Z",
+      "updated": "2026-02-08T17:00:46.085Z"
     }
   ],
-  "next_id": 21
+  "next_id": 23
 }

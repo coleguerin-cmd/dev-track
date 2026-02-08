@@ -1,32 +1,61 @@
 {
   "providers": {
-    "openai": { "enabled": true },
-    "anthropic": { "enabled": true },
-    "google": { "enabled": true },
-    "helicone": { "enabled": true }
+    "openai": {
+      "enabled": true
+    },
+    "anthropic": {
+      "enabled": true
+    },
+    "google": {
+      "enabled": true
+    },
+    "helicone": {
+      "enabled": true
+    }
   },
   "features": {
-    "planning_chat": { "enabled": true, "model_override": null },
-    "scan_enrichment": { "enabled": true, "model_override": null },
-    "change_monitoring": { "enabled": false, "trigger": "git_commit" },
-    "docs_generation": { "enabled": false, "model_override": null },
-    "dashboard_insights": { "enabled": true, "model_override": null },
-    "context_generation": { "enabled": true, "model_override": null },
-    "codebase_qa": { "enabled": true, "model_override": null }
+    "planning_chat": {
+      "enabled": true,
+      "model_override": null
+    },
+    "scan_enrichment": {
+      "enabled": true,
+      "model_override": null
+    },
+    "change_monitoring": {
+      "enabled": false,
+      "trigger": "git_commit"
+    },
+    "docs_generation": {
+      "enabled": false,
+      "model_override": null
+    },
+    "dashboard_insights": {
+      "enabled": true,
+      "model_override": null
+    },
+    "context_generation": {
+      "enabled": true,
+      "model_override": null
+    },
+    "codebase_qa": {
+      "enabled": true,
+      "model_override": null
+    }
   },
   "automations": {
-    "enabled": false,
-    "scheduler_enabled": false,
-    "triggers_enabled": false,
+    "enabled": true,
+    "scheduler_enabled": true,
+    "triggers_enabled": true,
     "default_model_tier": "standard",
     "max_concurrent": 2,
     "cooldown_minutes": 60
   },
   "budget": {
-    "daily_limit_usd": 5.00,
-    "warn_at_usd": 3.00,
+    "daily_limit_usd": 10,
+    "warn_at_usd": 7,
     "pause_on_limit": true,
-    "total_spent_usd": 19.28,
+    "total_spent_usd": 2.821368,
     "last_reset": "2026-02-08"
   },
   "defaults": {

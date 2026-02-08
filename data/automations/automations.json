@@ -10,8 +10,8 @@
       "actions": [],
       "ai_driven": true,
       "ai_prompt": "A work session just ended. Perform a thorough audit of all DevTrack data:\n\n1. Check all roadmap items — are statuses accurate? Any items that should be completed or moved?\n2. Check issues — are open issues still relevant? Any that should be resolved?\n3. Check systems — do health scores reflect current reality? Update descriptions if architecture changed.\n4. Check ideas — any that should be promoted to roadmap? Any duplicates?\n5. Update the project state summary with current reality.\n6. Write context recovery for the next session (briefing, hot context, warnings, suggestions).\n7. Check if any auto-generated docs need refreshing based on changes.\n8. Look for contradictions between different data sources.\n9. Update milestone/epic progress if items were completed.\n\nBe precise and thorough. Update every stale entity you find.",
-      "last_fired": null,
-      "fire_count": 0,
+      "last_fired": "2026-02-08T17:01:00.299Z",
+      "fire_count": 1,
       "created": "2026-02-08"
     },
     {

@@ -1,6 +1,26 @@
 import { getStore } from '../../store.js';
 import type { ToolModule } from './types.js';
 
+function normalizeText(t: string) { return t.toLowerCase().replace(/[^a-z0-9\s]/g, '').replace(/\s+/g, ' ').trim(); }
+
+function findSimilarIssue(issues: any[], title: string) {
+  const norm = normalizeText(title);
+  if (!norm) return null;
+  for (const issue of issues) {
+    if (issue.status === 'resolved') continue;
+    const existNorm = normalizeText(issue.title);
+    if (existNorm === norm) return issue;
+    if (existNorm.includes(norm) || norm.includes(existNorm)) {
+      if (Math.min(existNorm.length, norm.length) / Math.max(existNorm.length, norm.length) > 0.5) return issue;
+    }
+    const normWords = norm.split(' ').filter(Boolean);
+    const existWords = existNorm.split(' ').filter(Boolean);
+    const overlap = normWords.filter(w => existWords.includes(w)).length;
+    if (normWords.length > 2 && overlap / Math.max(normWords.length, existWords.length) > 0.7) return issue;
+  }
+  return null;
+}
+
 export const issueTools: ToolModule = {
   domain: 'issues',
   tools: [
@@ -38,6 +58,11 @@ export const issueTools: ToolModule = {
       label: 'Creating issue',
       execute: async (args) => {
         const store = getStore();
+        // Dedup check — prevent duplicates
+        const existing = findSimilarIssue(store.issues.issues || [], args.title);
+        if (existing) {
+          return { duplicate: true, existing, message: `Similar issue already exists: ${existing.id} "${existing.title}". Use update_issue to modify it instead.` };
+        }
         const nextId = store.issues.next_id || 1;
         const issue = {
           id: `ISS-${String(nextId).padStart(3, '0')}`, title: args.title,

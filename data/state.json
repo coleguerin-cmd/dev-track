@@ -1,5 +1,5 @@
 {
   "last_updated": "2026-02-08",
-  "overall_health": 72,
-  "summary": "Nightly audit #2 (Feb 9). Project at 72% health (↓2 from 74%). 11 systems assessed: 8 healthy, 3 degraded (CLI 48%, Integrations 42%, Cursor Rule 60%). CRITICAL PATH BLOCKER: AI chat agent has been in_progress for 3+ days without browser testing — this single item blocks the entire downstream pipeline (headless runner → automations → dogfooding). 4 open issues (ISS-003 medium, ISS-006 high, ISS-012 high, ISS-020 medium). No new commits since Feb 7 22:16 UTC. 15 data files modified but uncommitted. 37+ ideas tracked, 5 previously promoted, 2 at critical/exploring. Velocity: 54 items / 161 points across 5 tracked sessions (sessions 6-7 data gap persists). Next session MUST: (1) test AI chat in browser, (2) investigate Helicone failure, (3) commit pending data changes."
+  "overall_health": 76,
+  "summary": "Session 8 complete. Project at 76% health (stable). 89 items shipped / 293 points across 8 sessions. 6 issues open (ISS-003, ISS-006, ISS-012, ISS-022, ISS-031, ISS-034). Activity log live in sidebar. Automations ON (standard tier, $10/day budget). CRITICAL PATH BLOCKER: AI chat agent in_progress 9+ days without browser testing — blocks all dogfooding. Next: browser test AI chat, validate headless runner, dogfood on Pillar, commit pending changes to git (27 modified files)."
 }

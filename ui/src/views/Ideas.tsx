@@ -150,6 +150,36 @@ export function Ideas() {
                 </div>
               )}
 
+              {/* Tags */}
+              {(selected as any).tags?.length > 0 && (
+                <div className="flex flex-wrap gap-1">
+                  {(selected as any).tags.map((t: string) => (
+                    <span key={t} className="text-[9px] bg-surface-3 text-text-tertiary px-1.5 py-0.5 rounded">{t}</span>
+                  ))}
+                </div>
+              )}
+
+              {/* Priority */}
+              {(selected as any).priority && (
+                <div>
+                  <p className="label mb-1">Priority</p>
+                  <span className={`text-xs font-semibold ${
+                    (selected as any).priority === 'critical' ? 'text-red-400' :
+                    (selected as any).priority === 'high' ? 'text-orange-400' :
+                    (selected as any).priority === 'medium' ? 'text-yellow-400' :
+                    'text-blue-300'
+                  }`}>{(selected as any).priority}</span>
+                </div>
+              )}
+
+              {/* Timestamps */}
+              <div className="flex items-center gap-3 text-[10px] text-text-tertiary pt-2 border-t border-border/50">
+                <span>Created {selected.created}</span>
+                {(selected as any).updated && (selected as any).updated !== selected.created && (
+                  <span>Modified {(selected as any).updated}</span>
+                )}
+              </div>
+
               {selected.status !== 'promoted' && (
                 <button onClick={() => updateIdea(selected.id, { status: 'promoted' })}
                   className="btn-primary w-full text-sm">

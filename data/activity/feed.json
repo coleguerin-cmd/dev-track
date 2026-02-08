@@ -221,7 +221,203 @@
       },
       "id": "ACT-0017",
       "timestamp": "2026-02-08T04:41:33.258Z"
+    },
+    {
+      "type": "session_started",
+      "entity_type": "session",
+      "entity_id": "8",
+      "title": "Session 8 started — audit, UI fixes, activity log, data capture",
+      "actor": "user",
+      "metadata": {
+        "objective": "Audit, backlog card expansion, rich tool tray, activity log, dedup, timestamps"
+      },
+      "id": "ACT-0018",
+      "timestamp": "2026-02-08T15:00:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-025",
+      "title": "Resolved: Docs page blank — rewired to registry API",
+      "actor": "external",
+      "metadata": {
+        "severity": "high",
+        "changelog": "CL-050"
+      },
+      "id": "ACT-0019",
+      "timestamp": "2026-02-08T15:30:00.000Z"
+    },
+    {
+      "type": "item_completed",
+      "entity_type": "roadmap",
+      "entity_id": "automation-settings-ui",
+      "title": "Shipped: Automation settings UI — full controls in Settings page",
+      "actor": "external",
+      "metadata": {
+        "changelog": "CL-051"
+      },
+      "id": "ACT-0020",
+      "timestamp": "2026-02-08T15:45:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-023",
+      "title": "Resolved: Backlog card expansion — rich detail view with metadata grid",
+      "actor": "external",
+      "metadata": {
+        "severity": "high",
+        "changelog": "CL-053"
+      },
+      "id": "ACT-0021",
+      "timestamp": "2026-02-08T16:00:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-027",
+      "title": "Resolved: Rich tool tray — Pillar-style entity cards in AI chat",
+      "actor": "external",
+      "metadata": {
+        "severity": "medium",
+        "changelog": "CL-054"
+      },
+      "id": "ACT-0022",
+      "timestamp": "2026-02-08T16:15:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-026",
+      "title": "Resolved: Entity dedup — title similarity check on create",
+      "actor": "external",
+      "metadata": {
+        "severity": "medium",
+        "changelog": "CL-055"
+      },
+      "id": "ACT-0023",
+      "timestamp": "2026-02-08T16:30:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-028",
+      "title": "Resolved: Timestamps added to Backlog, Issues, and Ideas UI",
+      "actor": "external",
+      "metadata": {
+        "severity": "medium",
+        "changelog": "CL-056"
+      },
+      "id": "ACT-0024",
+      "timestamp": "2026-02-08T16:45:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-029",
+      "title": "Resolved: AI tool writes now tracked by store — prevents watcher loops",
+      "actor": "external",
+      "metadata": {
+        "severity": "high",
+        "changelog": "CL-057"
+      },
+      "id": "ACT-0025",
+      "timestamp": "2026-02-08T17:00:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-030",
+      "title": "Resolved: Settings UI trigger badges fixed — show actual trigger types",
+      "actor": "external",
+      "metadata": {
+        "severity": "medium",
+        "changelog": "CL-058"
+      },
+      "id": "ACT-0026",
+      "timestamp": "2026-02-08T17:15:00.000Z"
+    },
+    {
+      "type": "item_created",
+      "entity_type": "changelog",
+      "entity_id": "CL-059",
+      "title": "Shipped: Activity Log sidebar tab — Landmark-style timeline with provenance",
+      "actor": "external",
+      "metadata": {
+        "type": "feature",
+        "scope": "ui"
+      },
+      "id": "ACT-0027",
+      "timestamp": "2026-02-08T17:30:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-020",
+      "title": "Resolved: Sessions 6 & 7 backfilled — velocity data gap closed",
+      "actor": "external",
+      "metadata": {
+        "severity": "medium",
+        "changelog": "CL-060"
+      },
+      "id": "ACT-0028",
+      "timestamp": "2026-02-08T17:30:00.000Z"
+    },
+    {
+      "type": "issue_resolved",
+      "entity_type": "issue",
+      "entity_id": "ISS-024",
+      "title": "Resolved: Activity log built — edit/change tracking now visible in UI",
+      "actor": "external",
+      "metadata": {
+        "severity": "high",
+        "changelog": "CL-059"
+      },
+      "id": "ACT-0029",
+      "timestamp": "2026-02-08T17:35:00.000Z"
+    },
+    {
+      "type": "idea_captured",
+      "entity_type": "idea",
+      "entity_id": "IDEA-054",
+      "title": "Idea captured + promoted: Session heartbeat + stale session detector",
+      "actor": "external",
+      "metadata": {
+        "category": "architecture",
+        "priority": "high",
+        "promoted_to": "session-heartbeat-stale-detector"
+      },
+      "id": "ACT-0030",
+      "timestamp": "2026-02-08T17:45:00.000Z"
+    },
+    {
+      "type": "session_ended",
+      "entity_type": "session",
+      "entity_id": "8",
+      "title": "Session 8 ended — 12 shipped, 11 issues resolved, 5 ideas captured",
+      "actor": "external",
+      "metadata": {
+        "duration_hours": 3,
+        "items_shipped": 12,
+        "points": 42,
+        "issues_resolved": 11
+      },
+      "id": "ACT-0031",
+      "timestamp": "2026-02-08T18:00:00.000Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "session-end-audit",
+      "title": "Automation fired: Session End Audit",
+      "actor": "system",
+      "metadata": {
+        "trigger": "session_ended",
+        "duration_seconds": 164
+      },
+      "id": "ACT-0032",
+      "timestamp": "2026-02-08T17:01:00.300Z"
     }
   ],
-  "next_id": 18
+  "next_id": 33
 }

@@ -1022,6 +1022,211 @@
       "files_changed": [],
       "backlog_item": null,
       "breaking": false
+    },
+    {
+      "id": "CL-049",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Session 8 audit — 3 issues, 4 ideas, 6 roadmap promotions, data capture from conversation",
+      "description": "Full conversation audit. Created ISS-023 (roadmap expand broken), ISS-024 (no activity log in UI), ISS-025 (docs page blank). 4 new ideas: IDEA-050 (model delegation), IDEA-051 (AI memory cache), IDEA-052 (entity grouping), IDEA-053 (smart archival). Promoted 4 ideas to roadmap: automation-settings-ui (now), entity-provenance, activity-log-ui, brain-note-dedup, headless-runner-logging, ai-memory-cache. Updated archival-system to content-aware approach. Updated IDEA-043 to 3-label provenance system.",
+      "type": "chore",
+      "scope": "data",
+      "files_changed": [
+        "data/issues/items.json",
+        "data/ideas/items.json",
+        "data/roadmap/items.json",
+        "data/backlog/items.json"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-050",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Docs page fixed — wired to registry API, shows all 14 auto-generated docs",
+      "description": "Rewrote Docs.tsx to use the new registry API (GET /api/v1/docs) instead of legacy /docs/designs and /docs/decisions endpoints. Added docs.list(), docs.get(), docs.create(), docs.update(), docs.remove(), docs.regenerate() to API client. Docs now grouped by category (Guides & Reference, Systems, Design Docs). Auto-selects system-overview on load. Shows auto-generated badge, system tags, last updated date. Resolves ISS-025.",
+      "type": "fix",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Docs.tsx",
+        "ui/src/api/client.ts"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-051",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Automation settings UI — full controls in Settings page",
+      "description": "Added complete Automations section to Settings AI Configuration tab: master kill switch with active/off badge, scheduler toggle, event triggers toggle, model tier selector (budget/standard/premium), cooldown config, max concurrent setting. Budget status with current spend display and reset button. Lists all 5 registered automations with individual toggles, trigger types, descriptions, last fired dates, run counts. Added aiConfig API client. Resolves ISS-021.",
+      "type": "feature",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Settings.tsx",
+        "ui/src/api/client.ts"
+      ],
+      "backlog_item": "automation-settings-ui",
+      "breaking": false
+    },
+    {
+      "id": "CL-052",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Automations re-enabled — budget reset, all switches flipped on",
+      "description": "Re-enabled automations: master switch ON, scheduler ON, triggers ON. Model tier set to standard (Sonnet-level). Budget reset to $0 spent, daily limit raised to $10 with $7 warning. Cooldown remains 60 minutes between automation runs.",
+      "type": "chore",
+      "scope": "config",
+      "files_changed": [
+        "data/ai/config.json"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-053",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Backlog cards now fully expandable with rich detail — ISS-023 resolved",
+      "description": "Complete rewrite of BacklogCard expanded section. Clicking any card now shows: full summary, metadata grid (type, epic, milestone, spawned_from, assignee, estimated sessions), related issues, dependencies, design doc link, tags, acceptance criteria list, AI notes with purple highlight, and created/modified/started/completed timestamps. Added expand/collapse chevron indicator and cursor pointer for discoverability.",
+      "type": "fix",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Backlog.tsx"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-054",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Rich tool call tray in AI chat — Pillar-style entity cards — ISS-027 resolved",
+      "description": "Replaced raw JSON tool call display with rich interactive cards in ChatSidebar. Create operations (ideas, issues, backlog) show formatted entity cards with ID, severity/priority badges, title, and description. List operations show item counts with expandable rows. Update/resolve operations show entity changes. Duplicate prevention shows yellow warning cards. Tool results now persist with messages (toolResults field on ChatMessage). Streaming shows animated status pills. Icons and colors per tool type.",
+      "type": "feature",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/components/ChatSidebar.tsx"
+      ],
+      "backlog_item": "rich-tool-tray",
+      "breaking": false
+    },
+    {
+      "id": "CL-055",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Entity dedup in AI create tools — ISS-026 resolved",
+      "description": "Added deduplication checks to all three AI entity create tools: capture_idea, create_issue, create_backlog_item. Uses title normalization (lowercase, strip punctuation), word overlap (70% threshold), and containment matching. When a duplicate is detected, returns the existing entity with a clear message to use the update tool instead. Prevents the duplicate IDEA creation problem observed in session 8.",
+      "type": "fix",
+      "scope": "server",
+      "files_changed": [
+        "server/ai/tools/ideas.ts",
+        "server/ai/tools/issues.ts",
+        "server/ai/tools/backlog.ts"
+      ],
+      "backlog_item": "brain-note-dedup",
+      "breaking": false
+    },
+    {
+      "id": "CL-056",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Timestamps visible on all entity cards — ISS-028 resolved",
+      "description": "Added created/modified timestamps to: Backlog expanded cards (created, modified, started, completed dates), Issues detail panel (discovered + resolved dates, plus notes and related backlog item), Ideas detail panel (created + modified dates, plus priority badge and tags). Across all entity views, users can now see when items were created and last touched.",
+      "type": "enhancement",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Backlog.tsx",
+        "ui/src/views/Issues.tsx",
+        "ui/src/views/Ideas.tsx"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-057",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "AI tool write tracking fix — prevent automation feedback loops (ISS-029)",
+      "description": "Refactored ideas.ts to use the store instead of direct fs.writeFileSync. Added store.markWrite() calls to brain.ts and profiles.ts. All AI tool writes now go through the store's write-tracking system so the file watcher correctly ignores them as internal writes, preventing potential infinite feedback loops when automations are active.",
+      "type": "fix",
+      "scope": "server",
+      "files_changed": [
+        "server/ai/tools/ideas.ts",
+        "server/ai/tools/brain.ts",
+        "server/ai/tools/profiles.ts"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-058",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Settings UI audit — trigger badges, Reset Spend, Max Concurrent (ISS-030, ISS-031, ISS-032)",
+      "description": "Fixed automation trigger badges showing 'manual' for everything — now displays actual trigger type (scheduled, session ended, item completed) with proper color coding. Fixed Reset Spend button to actually persist via API call. Marked Max Concurrent as 'coming soon' since the engine doesn't enforce it.",
+      "type": "fix",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/views/Settings.tsx"
+      ],
+      "backlog_item": "automation-settings-ui",
+      "breaking": false
+    },
+    {
+      "id": "CL-059",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Activity Log sidebar tab — Landmark-style timeline with provenance tracking (ISS-024)",
+      "description": "Built Activity Log as a new tab in the right sidebar alongside Chat. Landmark-inspired timeline design: date grouping (Today/Yesterday/date), colored timeline dots per event type (created=green, issue=red, idea=yellow, automation=purple), actor provenance badges (You/DevTrack/Automation/External), entity type + ID chips, expandable metadata (trigger type, duration, severity, horizon). Filterable by actor (All/User/DevTrack/System) and entity type. Polls every 15s for live updates. Skeleton loading states. Resolves ISS-024.",
+      "type": "feature",
+      "scope": "ui",
+      "files_changed": [
+        "ui/src/components/ChatSidebar.tsx"
+      ],
+      "backlog_item": "activity-log-ui",
+      "breaking": false
+    },
+    {
+      "id": "CL-060",
+      "date": "2026-02-08",
+      "session": 8,
+      "title": "Backfilled sessions 6 and 7 — resolves velocity data gap (ISS-020)",
+      "description": "Reconstructed sessions 6 (Entity Model v2, 2.5h, 8 items, 35pts) and 7 (Infrastructure, 3.5h, 15 items, 55pts) from activity feed ACT-0001–ACT-0017, changelog CL-043/CL-044, and cursor rule briefing. Updated velocity totals: 77 items / 251 points across 7 sessions. Root cause: sessions were not formally ended through the API. Resolves ISS-020.",
+      "type": "fix",
+      "scope": "data",
+      "files_changed": [
+        "data/session/log.json",
+        "data/metrics/velocity.json",
+        "data/issues/items.json"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-061",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Session-end audit — automation-settings-ui marked completed, ui-design-overhaul moved to next/pending",
+      "description": "Audit found automation-settings-ui was completed in session 8 (CL-051, ISS-021) but status was still pending. Updated to completed. UI design overhaul phase 2 has not started and is lower priority — moved from now/in_progress to next/pending to reflect reality.",
+      "type": "chore",
+      "scope": "roadmap",
+      "files_changed": [],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-062",
+      "date": "2026-02-08",
+      "session": null,
+      "title": "Session-end comprehensive audit — 6 corrections, 1 duplicate dismissed, system health updated",
+      "description": "Performed deep audit of all DevTrack data following session 8. Corrections made: (1) automation-settings-ui marked completed (was pending despite being shipped in CL-051), (2) ui-design-overhaul moved to next/pending (phase 2 not started), (3) IDEA-049 dismissed as duplicate of IDEA-048, (4) AI Intelligence health score 68%→65% (chat agent 9+ days untested), (5) Session Tracking health 72%→80% (ISS-020 resolved), (6) Cursor Rule health 60%→62% (context refreshed). Project state summary updated. Context recovery written for next session. 6 open issues confirmed as still relevant. 27 modified files uncommitted to git. #1 blocker unchanged: AI chat agent never browser-tested.",
+      "type": "chore",
+      "scope": "audit",
+      "files_changed": [],
+      "backlog_item": null,
+      "breaking": false
     }
   ]
 }

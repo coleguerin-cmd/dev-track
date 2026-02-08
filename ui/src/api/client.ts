@@ -194,6 +194,21 @@ export const metrics = {
 // ─── Docs ───────────────────────────────────────────────────────────────────
 
 export const docs = {
+  // Registry-based (v2)
+  list: (params?: { type?: string; status?: string; system?: string }) => {
+    const qs = new URLSearchParams();
+    if (params?.type) qs.set('type', params.type);
+    if (params?.status) qs.set('status', params.status);
+    if (params?.system) qs.set('system', params.system);
+    return request<any>(`/docs?${qs}`);
+  },
+  get: (id: string) => request<any>(`/docs/${id}`),
+  create: (data: any) => request<any>('/docs', { method: 'POST', body: JSON.stringify(data) }),
+  update: (id: string, data: any) =>
+    request<any>(`/docs/${id}`, { method: 'PATCH', body: JSON.stringify(data) }),
+  remove: (id: string) => request<any>(`/docs/${id}`, { method: 'DELETE' }),
+  regenerate: (id: string) => request<any>(`/docs/${id}/regenerate`, { method: 'POST' }),
+  // Legacy (backward compat)
   listDesigns: () => request<any>('/docs/designs'),
   getDesign: (filename: string) => request<any>(`/docs/designs/${filename}`),
   listDecisions: () => request<any>('/docs/decisions'),
@@ -218,4 +233,11 @@ export const config = {
   get: () => request<any>('/config'),
   update: (data: any) => request<any>('/config', { method: 'PATCH', body: JSON.stringify(data) }),
   quickStatus: () => request<any>('/config/quick-status'),
+};
+
+// ─── AI Config ─────────────────────────────────────────────────────────────
+
+export const aiConfig = {
+  get: () => request<any>('/ai/config'),
+  update: (data: any) => request<any>('/ai/config', { method: 'PATCH', body: JSON.stringify(data) }),
 };
