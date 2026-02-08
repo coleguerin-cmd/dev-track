@@ -1157,8 +1157,7 @@
       ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
-    }
-    ,
+    },
     {
       "id": "IDEA-040",
       "title": "Infer developer persona from codebase and git history on init",
@@ -1167,16 +1166,78 @@
       "status": "captured",
       "priority": "P1",
       "source": "conversation session-7",
-      "related_ideas": ["IDEA-038", "IDEA-041"],
+      "related_ideas": [
+        "IDEA-038",
+        "IDEA-041"
+      ],
       "promoted_to": null,
-      "pros": ["Immediate personalization from day 1", "No manual profile setup needed", "Code style analysis is objective data"],
-      "cons": ["Quality depends on git history depth", "Multi-contributor repos need disambiguation", "Privacy considerations if analyzing personal patterns"],
-      "open_questions": ["How deep to analyze (last 50 commits? all time?)", "How to handle repos with multiple contributors?"],
+      "pros": [
+        "Immediate personalization from day 1",
+        "No manual profile setup needed",
+        "Code style analysis is objective data"
+      ],
+      "cons": [
+        "Quality depends on git history depth",
+        "Multi-contributor repos need disambiguation",
+        "Privacy considerations if analyzing personal patterns"
+      ],
+      "open_questions": [
+        "How deep to analyze (last 50 commits? all time?)",
+        "How to handle repos with multiple contributors?"
+      ],
       "notes": null,
-      "tags": ["init", "profiles", "persona"],
+      "tags": [
+        "init",
+        "profiles",
+        "persona"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-041",
+      "title": "Settings UI for automation controls (kill switch, model tier, budget, cooldown)",
+      "description": "Add Automations section to Settings AI Configuration tab with: master on/off toggle, scheduler toggle, triggers toggle, model tier selector (premium/standard/budget), cooldown minutes, daily budget limit with current spend display. All reading from and writing to ai/config.json automations block.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "P1",
+      "source": "conversation session-7",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [],
+      "cons": [],
+      "open_questions": [],
+      "notes": null,
+      "tags": [
+        "ui",
+        "settings",
+        "automations"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-042",
+      "title": "Brain note deduplication - prevent duplicate weekly reports and audit summaries",
+      "description": "The automation engine ran the weekly report 3 times due to a race condition, creating BN-015, BN-018, BN-019 as duplicate weekly reports. Need dedup logic: either (a) check if a similar brain note was created in the last N hours before creating a new one, or (b) the automation prompt should list recent brain notes and avoid duplicating.",
+      "category": "process",
+      "status": "captured",
+      "priority": "P2",
+      "source": "conversation session-7",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": [],
+      "cons": [],
+      "open_questions": [],
+      "notes": null,
+      "tags": [
+        "automations",
+        "brain",
+        "dedup"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     }
   ],
-  "next_id": 41
+  "next_id": 43
 }

@@ -169,7 +169,59 @@
       },
       "id": "ACT-0013",
       "timestamp": "2026-02-08T04:23:36.320Z"
+    },
+    {
+      "type": "issue_opened",
+      "entity_type": "issue",
+      "entity_id": "ISS-021",
+      "title": "Issue opened: Automation controls not surfaced in Settings UI",
+      "actor": "session-7",
+      "metadata": {
+        "severity": "medium",
+        "type": "ux"
+      },
+      "id": "ACT-0014",
+      "timestamp": "2026-02-08T04:41:13.900Z"
+    },
+    {
+      "type": "issue_opened",
+      "entity_type": "issue",
+      "entity_id": "ISS-022",
+      "title": "Issue opened: Helicone shows $0 cost for Claude Opus 4.6 requests",
+      "actor": "session-7",
+      "metadata": {
+        "severity": "medium",
+        "type": "bug"
+      },
+      "id": "ACT-0015",
+      "timestamp": "2026-02-08T04:41:17.752Z"
+    },
+    {
+      "type": "idea_captured",
+      "entity_type": "idea",
+      "entity_id": "IDEA-041",
+      "title": "Idea captured: Settings UI for automation controls (kill switch, model tier, budget, cooldown)",
+      "actor": "user",
+      "metadata": {
+        "category": "feature",
+        "source": "conversation session-7"
+      },
+      "id": "ACT-0016",
+      "timestamp": "2026-02-08T04:41:28.779Z"
+    },
+    {
+      "type": "idea_captured",
+      "entity_type": "idea",
+      "entity_id": "IDEA-042",
+      "title": "Idea captured: Brain note deduplication - prevent duplicate weekly reports and audit summaries",
+      "actor": "user",
+      "metadata": {
+        "category": "process",
+        "source": "conversation session-7"
+      },
+      "id": "ACT-0017",
+      "timestamp": "2026-02-08T04:41:33.258Z"
     }
   ],
-  "next_id": 14
+  "next_id": 18
 }

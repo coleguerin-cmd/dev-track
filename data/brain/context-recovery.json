@@ -1,32 +1,33 @@
 {
-  "last_generated": "2026-02-08T04:18:52.247Z",
-  "briefing": "Nightly audit completed Feb 8. Project at 74% health (down from 76%). Key findings: (1) AI chat agent is the #1 priority — in_progress since Feb 7, foundation built but NEVER tested in browser with real conversations. This blocks everything downstream. (2) Entity Model v2 shipped successfully — 14 entities, migration complete, routes/tools/UI updated. (3) Automation engine, scheduler, and headless AI runner built (commit ca10e5e) but untested. (4) 3 open issues: ISS-003 (integrations untested, Helicone FAILING), ISS-006 (AI context drift — partial mitigations, structural fix via automation engine pending), ISS-012 (conversation bridge — large effort, not started). (5) CLI downgraded to degraded (50%) — never tested against live server, npm link crashes Cursor. (6) Integrations downgraded to degraded (45%) — Helicone test failing. (7) Codebase scan data stale since Feb 7 — needs fresh scan post-v2 refactor. (8) 5 ideas promoted to backlog, 1 dismissed (open source), 2 validated (init wizard, product audit). (9) Session velocity: avg 10.8 items/session, 32.2 points/session across 5 tracked sessions.",
+  "last_generated": "2026-02-08T05:00:00Z",
+  "briefing": "Session 7 complete (Feb 8 night). Massive infrastructure session. Shipped: Entity Model v2 (14 entity types, complete data migration, store/routes/tools/UI rewrite), full Docs system (CRUD + AI tools + auto-generation), headless AI agent runner, automation engine with trigger hooks, scheduler (cron), 5 built-in automations, project init endpoint. Automations verified live: nightly audit (49 tool calls, $10.17), weekly report (12 tool calls, $1.97). 14 auto-generated documentation files created by AI. Scheduler race condition found and fixed. Cost controls added: master kill switch, budget enforcement, cooldown, model tier downgrade. ALL AUTOMATIONS CURRENTLY OFF (kill switch flipped). 4 commits, ~19K lines shipped.",
   "hot_context": [
-    "AI chat agent (ai-chat-agent) is in_progress in Now horizon — test in browser is the SINGLE most important next step",
-    "Helicone integration is FAILING (test_result=fail as of Feb 8 01:56 UTC) — investigate credential sync",
-    "Automation engine + scheduler + headless runner built but untested — 5 seeded automations (session-audit, change-tracker, nightly-audit, weekly-report, docs-refresh)",
-    "Codebase scan stale since Feb 7 20:21 UTC — needs fresh scan after entity model v2 + tool registry refactor",
-    "CLI is degraded (50%) — never tested against live server, npm link workaround needed",
-    "Context recovery was stale — referenced entity model v2 as future work but it's now shipped",
-    "IDEA-004 (open source) dismissed — contradicted BN-013 (paid product decision)",
-    "IDEA-027 (conversation bridge) elevated to critical/exploring — solves ISS-006 + ISS-012 structurally",
-    "Session tracking may be missing sessions 6-7 velocity data — only 5 sessions in velocity log",
-    "ISS-006 path to resolution: (1) chat agent working → (2) headless runner tested → (3) change-tracker automation validated"
+    "AUTOMATIONS ARE OFF. Master kill switch in data/ai/config.json → automations.enabled: false. Must flip to true to re-enable.",
+    "Automation cost was $19.28 for one round on premium models. Default tier downgraded to 'standard'. Budget limit: $5/day.",
+    "ISS-021: Automation controls not in Settings UI — users must edit JSON directly. Next session priority.",
+    "ISS-022: Helicone shows $0 for Opus 4.6 requests — model not in their pricing database. 32 requests show n/a provider.",
+    "ISS-020: Sessions 6-7 missing from velocity log. Created by nightly audit AI.",
+    "14 auto-generated docs in data/docs/ — system overviews, API reference, getting started, data model reference.",
+    "3 new ideas captured: IDEA-038 (preserve cursor settings on init), IDEA-040 (infer persona from git), IDEA-039 (cron profile iteration).",
+    "IDEA-041 (automation settings UI) and IDEA-042 (brain note dedup) — captured at session end.",
+    "The AI nightly audit independently: reassessed all system health, triaged 8 ideas, created ISS-020, updated context recovery, ran codebase scan.",
+    "Dev servers: API on 24680, UI on 24681. npm run dev starts both.",
+    "User wants depth and precision over cost out of the gate, then detune."
   ],
   "warnings": [
-    "AI chat agent has been in_progress for 2 days without browser testing — risk of accumulated bugs",
-    "Helicone integration failing — blocks AI cost tracking for dogfooding",
-    "Codebase scan data is 24+ hours stale — architecture graph may show outdated information",
-    "Velocity data incomplete — sessions 6-7 not in velocity log, totals may undercount",
-    "CLI never tested against live server — could have fundamental issues",
-    "5 seeded automations exist but none have been executed — automation engine is theoretical until tested"
+    "Don't turn automations on without checking budget — $19/run on premium is too expensive for daily use.",
+    "Brain note dedup needed — got 3 duplicate weekly reports (BN-015, BN-018, BN-019) from race condition.",
+    "Helicone cost tracking broken for Opus 4.6 and some requests not routing through proxy at all.",
+    "AI chat agent still never tested in browser — remains the #1 blocker for dogfooding.",
+    "Context window was very long this session. Fresh session strongly recommended."
   ],
   "suggestions": [
-    "FIRST: Open browser, test AI chat with real conversation. Fix any issues. This unblocks everything.",
-    "SECOND: Investigate Helicone test failure — check credentials sync and API endpoint",
-    "Run fresh codebase scan to update stale architecture data",
-    "Log sessions 6-7 velocity data to keep metrics accurate",
-    "Test one automation (e.g., session-audit) via headless runner to validate the engine",
-    "Start dogfooding on Pillar — the forcing function for product validation"
+    "FIRST: Build automation settings UI (ISS-021) — users need to control the kill switch from the browser.",
+    "SECOND: Test AI chat in browser — open localhost:24681, send real messages, fix what breaks.",
+    "THIRD: Dogfood on Pillar — run dev-track init with the new AI init endpoint.",
+    "Fix brain note dedup before turning automations back on.",
+    "Consider adding a cost dashboard widget to the main Dashboard view.",
+    "Session 6-7 velocity data gap (ISS-020) — either backfill or accept and move on.",
+    "The persona inference from git (IDEA-040) could be a quick win during init — commit messages reveal a lot."
   ]
 }

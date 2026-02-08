@@ -470,7 +470,54 @@
       "resolution": null,
       "resolved": null,
       "notes": "Nightly audit #2 (Feb 9): Still open. Sessions 6 and 7 are referenced in system descriptions and changelog (CL-043 entity model v2, CL-044 docs/automation) but never formally logged through the session tracking system. Options: (1) Backfill estimated velocity data for sessions 6-7 based on changelog entries and commit messages. (2) Accept the gap and move forward with accurate tracking from session 8+. Recommendation: backfill with estimates — the entity model v2 refactor (CL-043) was approximately XL (8pts) and the docs/automation build (CL-044) was approximately XL (8pts). Combined with smaller items from those sessions, estimate ~16 points and ~8 items across sessions 6-7."
+    },
+    {
+      "id": "ISS-021",
+      "title": "Automation controls not surfaced in Settings UI",
+      "status": "open",
+      "severity": "medium",
+      "type": "ux",
+      "symptoms": "The automations config (enabled, scheduler, triggers, model tier, cooldown, cost tracking) was added to ai/config.json but has no UI in Settings. Users must edit JSON directly to control automations.",
+      "root_cause": null,
+      "resolution": null,
+      "files": [
+        "ui/src/views/Settings.tsx",
+        "data/ai/config.json"
+      ],
+      "roadmap_item": null,
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "assignee": null,
+      "tags": [],
+      "discovered": "2026-02-08",
+      "discovered_by": "session-7",
+      "resolved": null,
+      "notes": null
+    },
+    {
+      "id": "ISS-022",
+      "title": "Helicone shows $0 cost for Claude Opus 4.6 requests",
+      "status": "open",
+      "severity": "medium",
+      "type": "bug",
+      "symptoms": "Helicone dashboard shows 49 Claude Opus 4.6 requests at $0.00 cost. Landmark project (using Sonnet) shows costs correctly. Opus 4.6 likely missing from Helicone pricing database. Also 32 requests show n/a provider.",
+      "root_cause": null,
+      "resolution": null,
+      "files": [
+        "server/ai/service.ts"
+      ],
+      "roadmap_item": null,
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "assignee": null,
+      "tags": [],
+      "discovered": "2026-02-08",
+      "discovered_by": "session-7",
+      "resolved": null,
+      "notes": null
     }
   ],
-  "next_id": 21
+  "next_id": 23
 }

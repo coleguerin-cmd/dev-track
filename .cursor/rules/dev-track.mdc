@@ -14,22 +14,24 @@ This happens BEFORE the code change, not after. If you fix something and then cr
 ## AFTER EVERY CODE CHANGE — mandatory checklist
 Before moving to the next task, do ALL of these:
 1. Write a changelog entry to `data/changelog/entries.json`
-2. If a backlog item was completed, update its status in `data/backlog/items.json`
+2. If a roadmap item was completed, update its status in `data/roadmap/items.json`
 3. If an issue was fixed, update its status to resolved in `data/issues/items.json`
 4. If the dev server needs restarting (server-side changes), restart it yourself
 This is not optional. Do it inline, not at session end.
 
 ## Quick Status (auto-updated at session end)
-dev-track | 65% health | Now: AI chat agent (L, in_progress) | 5 sessions, 54 items shipped, 161 points | Open issues: 4 (0 crit, 1 high) | 30 ideas captured
+dev-track | 80% health | Now: AI chat agent (L, in_progress), AI watcher (L, in_progress) | 7 sessions, ~65 items shipped, ~200 points | Open issues: 6 (0 crit, 2 high) | 42 ideas captured
 
 ## Last Session Briefing (auto-updated at session end)
-Session 5 complete (Feb 8 evening). UI overhaul + user profiling session. 12 items shipped, 5.5h. Fixed chat bugs (resize, model picker, persistence). Full Cursor-minimal redesign with Lucide icons. Dashboard rebuilt with health ring, collapsible AI briefing, pipeline view. Settings page with Profile (AI-observed IQ 127, radar charts, deep assessment, AI-to-AI guidance, session observations, actionable targets, comparative framing, AI dependency), AI Config, Integrations. Notification tray with toasts + bell panel. Cross-project audit of all 4 codebases. Issue tracking discipline established (create before fix). GPT-5.2 independently confirmed intelligence range. Next: test chat in browser, dogfood on Pillar, build conversation bridge (ISS-012).
+Session 7 complete (Feb 8 late night). Massive infrastructure session. Entity Model v2 shipped (14 entity types, data migration, store/routes/tools/UI rewrite). Full Docs system wired (CRUD + AI tools + auto-generation — 14 docs auto-generated). Headless AI runner built. Automation engine + scheduler + trigger hooks + 5 built-in automations. Project init endpoint. Automations verified live: nightly audit ran 49 tool calls in 191s, weekly report ran 12 tool calls in 66s. Total automation cost: $19.28 on premium models. Scheduler race condition fixed. Cost controls added (kill switch, budget enforcement, cooldown). AUTOMATIONS CURRENTLY OFF (kill switch). 4 commits, ~19K lines. Next: automation settings UI (ISS-021), test AI chat in browser, dogfood on Pillar.
 
 ## Warnings
-- ISS-006 (high): AI context drift — structural enforcement needed. First layer (create-before-fix discipline) implemented. Second layer (session-end audit) still needed.
-- ISS-012 (high): No bridge between external AI conversations (Cursor/Claude) and DevTrack. Key architectural gap.
-- ISS-003 (medium): Integration plugins untested with real credentials.
-- ISS-004 (low): Kanban DnD not wired up.
+- AUTOMATIONS ARE OFF. Kill switch in data/ai/config.json → automations.enabled: false. Flip to true to re-enable.
+- ISS-006 (high): AI context drift — automation engine is the structural fix but needs testing with automations ON.
+- ISS-012 (high): No bridge between external AI conversations and DevTrack. Not started.
+- ISS-021 (medium): Automation controls not in Settings UI — must edit JSON directly.
+- ISS-022 (medium): Helicone shows $0 for Opus 4.6 — model not in pricing database.
+- ISS-020 (medium): Sessions 6-7 missing from velocity log — data integrity gap.
 - Server crashes on tsx watch reload when port is held (EADDRINUSE). Kill node processes before restart.
 
 ## User Profile
