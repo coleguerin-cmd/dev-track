@@ -271,6 +271,17 @@ export async function* runChat(
   const model = modelOverride || convo.model || undefined;
   const task: TaskType = 'chat';
 
+  // Get user name for Helicone tracking
+  let userName = 'user';
+  try {
+    const localDir = getLocalDataDir();
+    const profilesPath = path.join(localDir, 'profiles.json');
+    if (fs.existsSync(profilesPath)) {
+      const profileData = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
+      userName = profileData.profiles?.[0]?.name || profileData.profiles?.[0]?.id || 'user';
+    }
+  } catch { /* ignore */ }
+
   yield { type: 'status', content: 'thinking' };
 
   // Agent loop — call AI, execute tools, repeat
@@ -288,9 +299,10 @@ export async function* runChat(
         tools: TOOL_DEFINITIONS,
         max_tokens: 4096,
         heliconeProperties: {
+          User: userName || 'user',
           Source: 'chat',
           ConversationId: conversationId,
-          User: 'user',
+          Trigger: 'interactive',
         },
       });
 

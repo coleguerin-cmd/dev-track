@@ -15,6 +15,7 @@ import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs';
 import path from 'path';
 import { getDataDir, getCredentialsPath } from '../project-config.js';
+import { getStore } from '../store.js';
 import { ModelRouter, type TaskType } from './router.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -319,18 +320,33 @@ export class AIService {
 
   // ─── Helicone Headers ──────────────────────────────────────────────────────
 
-  /** Build Helicone custom property headers from options */
+  /** Build Helicone headers from options — both User-Id and custom properties */
   private buildHeliconeHeaders(options: AICompletionOptions): Record<string, string> {
     const headers: Record<string, string> = {};
+    
     if (options.heliconeProperties) {
+      // Set the User-Id field (shows in Helicone's User column)
+      if (options.heliconeProperties.User) {
+        headers['Helicone-User-Id'] = options.heliconeProperties.User;
+      }
+      
+      // Set custom properties (show in Helicone's Properties column)
       for (const [key, value] of Object.entries(options.heliconeProperties)) {
         headers[`Helicone-Property-${key}`] = value;
       }
     }
-    // Always send session ID if available
+    
+    // Always send task type as a property
     if (options.task) {
       headers['Helicone-Property-Task'] = options.task;
     }
+    
+    // Always send project name
+    try {
+      const store = getStore();
+      headers['Helicone-Property-Project'] = store.config?.project || 'unknown';
+    } catch { /* ignore if store not available */ }
+    
     return headers;
   }
 

@@ -87,7 +87,15 @@ Open issues:\n${openIssues}
 
 Now items:\n${nowItems}
 
-Be thorough. This is the first full documentation pass. Read source files to understand implementations. Don't just describe from metadata — actually look at the code.`;
+Be thorough. This is the first full documentation pass. Read source files to understand implementations. Don't just describe from metadata — actually look at the code.
+
+IMPORTANT: If the docs registry is empty or has few entries, you need to CREATE the doc structure first using create_doc before writing content. A good doc structure for any project includes:
+- system-overview (architecture overview)
+- getting-started (onboarding guide)
+- data-model-reference (entity/data documentation)
+- api-reference (API endpoint documentation)
+- One system-* doc for each tracked system
+Create these with create_doc if they don't exist, then update their content with update_doc.`;
 
   const updatePrompt = `You are the DevTrack Documentation Updater. Your job is to incrementally update existing documentation to reflect recent changes.
 
@@ -141,6 +149,13 @@ Focus on accuracy over comprehensiveness. Update what's wrong, don't rewrite wha
         task: mode === 'initialize' ? 'deep_audit' : 'incremental_update',
         maxIterations: mode === 'initialize' ? 30 : 15,
         recorder,
+        heliconeProperties: {
+          User: 'devtrack-docs-generator',
+          Source: 'docs-generation',
+          Mode: mode,
+          Trigger: 'manual',
+          AutomationName: `docs-${mode}`,
+        },
       });
 
       console.log(`[docs-generate] ${mode} completed: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);

@@ -1,6 +1,6 @@
 # API Reference
 
-> **Auto-generated** | Last refreshed: 2026-02-09 | Sources: codebase, modules
+> DevTrack exposes a REST API via Hono on port **24680**. All endpoints are prefixed with `/api/v1/`. The API supports JSON request/response bodies, SSE streaming for AI chat, and WebSocket for real-time updates.
 
 ---
 
@@ -10,157 +10,565 @@
 http://localhost:24680/api/v1
 ```
 
-All endpoints return JSON. WebSocket available at `ws://localhost:24680/ws`.
+## Authentication
+
+Currently no authentication is required (local-only tool). Future versions will add auth for multi-user and cloud deployment.
+
+## Common Patterns
+
+- **List endpoints** return `{ items: [...], total: number }` or `{ entity_name: [...], total: number }`
+- **Create endpoints** accept JSON body, return the created entity
+- **Update endpoints** use `PATCH` with partial JSON body (deep-merged)
+- **Delete endpoints** return `{ deleted: true }`
+- **Errors** return `{ error: "message" }` with appropriate HTTP status
 
 ---
 
-## Roadmap / Backlog
+## Roadmap Items
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/backlog` | List all roadmap items (filter: `?horizon=now&status=pending`) |
-| POST | `/backlog` | Create a new roadmap item |
-| PUT | `/backlog/:id` | Update a roadmap item |
-| DELETE | `/backlog/:id` | Delete a roadmap item |
-| POST | `/backlog/:id/move` | Move item to different horizon |
-| POST | `/backlog/:id/complete` | Mark item as completed |
-| POST | `/backlog/:id/reopen` | Reopen a completed item |
+### List Roadmap Items
+```
+GET /roadmap
+```
+Query params: `horizon`, `status`, `epic_id`, `category`
+
+**Response:**
+```json
+{
+  "items": [
+    {
+      "id": "ai-chat-agent",
+      "title": "AI chat agent with full tool access",
+      "horizon": "shipped",
+      "priority": "P1",
+      "status": "completed",
+      "epic_id": "ai-intelligence-engine",
+      ...
+    }
+  ],
+  "total": 46
+}
+```
+
+### Create Roadmap Item
+```
+POST /roadmap
+```
+```json
+{
+  "id": "my-feature",
+  "title": "My new feature",
+  "summary": "Description of the feature",
+  "horizon": "next",
+  "size": "M",
+  "priority": "P1",
+  "type": "feature",
+  "epic_id": "my-epic"
+}
+```
+
+### Update Roadmap Item
+```
+PATCH /roadmap/:id
+```
+Accepts any subset of RoadmapItem fields. Deep-merged with existing data.
+
+### Delete Roadmap Item
+```
+DELETE /roadmap/:id
+```
+
+### Move Item (Change Horizon)
+```
+POST /roadmap/:id/move
+```
+```json
+{ "horizon": "now" }
+```
+
+### Complete Item
+```
+POST /roadmap/:id/complete
+```
+
+### Reopen Item
+```
+POST /roadmap/:id/reopen
+```
+
+---
+
+## Epics
+
+### List Epics
+```
+GET /epics
+```
+Query params: `status`, `milestone_id`
+
+Returns epics with computed progress (item_count, completed_count, progress_pct) and child items.
+
+### Create Epic
+```
+POST /epics
+```
+```json
+{
+  "id": "my-epic",
+  "title": "My Epic",
+  "description": "Strategic initiative",
+  "priority": "P1",
+  "color": "#8b5cf6"
+}
+```
+
+### Update Epic
+```
+PATCH /epics/:id
+```
+
+### Delete Epic
+```
+DELETE /epics/:id
+```
+Does NOT delete child roadmap items — they become ungrouped.
+
+---
+
+## Milestones
+
+### List Milestones
+```
+GET /milestones
+```
+Query params: `status`
+
+### Create / Update / Delete
+```
+POST /milestones
+PATCH /milestones/:id
+DELETE /milestones/:id
+```
+
+---
+
+## Releases
+
+### List Releases
+```
+GET /releases
+```
+Query params: `status` (`draft` | `published`)
+
+### Create Release
+```
+POST /releases
+```
+
+### Update Release
+```
+PATCH /releases/:id
+```
+
+### Publish Release
+```
+POST /releases/:id/publish
+```
+Marks as published with current date.
+
+---
 
 ## Issues
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/issues` | List all issues (filter: `?status=open&severity=high`) |
-| POST | `/issues` | Create a new issue |
-| PUT | `/issues/:id` | Update an issue |
-| POST | `/issues/:id/resolve` | Resolve an issue with resolution text |
-| POST | `/issues/:id/reopen` | Reopen a resolved issue |
+### List Issues
+```
+GET /issues
+```
+Query params: `status`, `severity`
+
+### Create Issue
+```
+POST /issues
+```
+```json
+{
+  "title": "Login page crashes on mobile",
+  "severity": "high",
+  "symptoms": "TypeError when tapping submit button on iOS Safari",
+  "root_cause": "Touch event handler not bound correctly",
+  "files": ["ui/src/views/Login.tsx"]
+}
+```
+
+### Update Issue
+```
+PATCH /issues/:id
+```
+
+### Resolve Issue
+```
+POST /issues/:id/resolve
+```
+```json
+{
+  "resolution": "Fixed touch event binding with useCallback"
+}
+```
+
+---
 
 ## Ideas
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/ideas` | List all ideas (filter: `?status=captured&category=feature`) |
-| POST | `/ideas` | Capture a new idea |
-| PUT | `/ideas/:id` | Update an idea |
-| POST | `/ideas/:id/promote` | Promote idea to roadmap item |
+### List Ideas
+```
+GET /ideas
+```
+Query params: `status`, `category`
 
-## Changelog
+### Create Idea
+```
+POST /ideas
+```
+```json
+{
+  "title": "Voice input for chat",
+  "description": "Integrate Deepgram for voice-to-text in the chat sidebar",
+  "category": "feature",
+  "priority": "medium",
+  "pros": ["Faster for brain dumps"],
+  "cons": ["Transcription quality varies"],
+  "open_questions": ["Which provider?"]
+}
+```
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/changelog` | List changelog entries (filter: `?limit=20`) |
-| POST | `/changelog` | Add a new changelog entry |
+### Update Idea
+```
+PATCH /ideas/:id
+```
 
-## Sessions
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/session` | Get current session + recent history |
-| POST | `/session/start` | Start a new session |
-| POST | `/session/end` | End current session with retro |
-
-## Project State
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/state` | Get full project state (health, systems) |
-| GET | `/state/quick` | Get one-line status summary |
-| PUT | `/state` | Update project state |
-
-## Brain / AI Memory
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/brain/notes` | Get brain notes (filter: `?type=warning`) |
-| POST | `/brain/notes` | Add a brain note |
-| GET | `/brain/context-recovery` | Get session handoff data |
-| PUT | `/brain/context-recovery` | Write context recovery |
-| GET | `/brain/preferences` | Get user preferences |
-| PUT | `/brain/preferences` | Update preferences |
-
-## AI / Chat
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/ai/chat` | Send chat message (SSE streaming response) |
-| GET | `/ai/profile` | Get user profile |
-| PUT | `/ai/profile` | Update user profile |
-| POST | `/ai/profile/observations` | Add session observation |
-| PUT | `/ai/credentials` | Save AI provider credentials |
-| POST | `/ai/providers/:id/test` | Test AI provider connection |
-
-## Codebase
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/codebase/stats` | Get codebase statistics |
-| GET | `/codebase/modules` | Get module definitions |
-| GET | `/codebase/search?q=...` | Search files, functions, routes |
-| GET | `/codebase/file?path=...` | Get file details (exports, imports) |
-| POST | `/codebase/scan` | Trigger fresh codebase scan |
-
-## Git
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/git/status` | Current branch, modified files |
-| GET | `/git/diff` | Unstaged changes (`?staged=true` for staged) |
-| GET | `/git/log` | Commit history (`?count=20&since=2026-01-01`) |
-| GET | `/git/branches` | All branches |
-
-## Docs
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/docs` | List all documents |
-| GET | `/docs/:id` | Get document content |
-| POST | `/docs` | Create a document |
-| PUT | `/docs/:id` | Update a document |
-| DELETE | `/docs/:id` | Delete a document |
-
-## Integrations
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/integrations` | Get all integration statuses |
-| POST | `/integrations/:id/test` | Test integration connection |
-| PUT | `/integrations/:id/credentials` | Save integration credentials |
+---
 
 ## Systems
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/systems` | List all systems |
-| POST | `/systems` | Create a system |
-| PUT | `/systems/:id` | Update a system |
+### List Systems
+```
+GET /systems
+```
+Query params: `status`
 
-## Projects
+### Create / Update System
+```
+POST /systems
+PATCH /systems/:id
+```
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/project` | Current project info |
-| GET | `/projects` | All registered projects |
-| POST | `/projects/switch` | Hot-swap to different project |
+---
 
-## Config
+## Changelog
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/config` | Get project configuration |
-| PUT | `/config` | Update project configuration |
+### List Changelog
+```
+GET /changelog
+```
+Query params: `limit` (default 20)
 
-## Metrics
+### Add Entry
+```
+POST /changelog
+```
+```json
+{
+  "title": "Fixed login crash on mobile",
+  "description": "Detailed description of what was done",
+  "type": "fix",
+  "scope": "ui",
+  "files_changed": ["ui/src/views/Login.tsx"],
+  "backlog_item": "fix-mobile-login"
+}
+```
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/metrics/velocity` | Velocity data per session |
+---
+
+## Sessions
+
+### Get Session Info
+```
+GET /session
+```
+Returns current session and recent history.
+
+### Start Session
+```
+POST /session/start
+```
+```json
+{
+  "objective": "Fix mobile login issues",
+  "appetite": "2h"
+}
+```
+
+### End Session
+```
+POST /session/end
+```
+```json
+{
+  "items_shipped": 3,
+  "retro": "Fixed 3 mobile bugs, discovered 1 new issue",
+  "next_suggestion": "Address the new performance issue"
+}
+```
+
+---
+
+## AI Chat
+
+### Send Message (SSE Stream)
+```
+POST /ai/chat
+```
+```json
+{
+  "message": "What are the open issues?",
+  "conversationId": "conv-123"
+}
+```
+
+**SSE Events:**
+```
+event: text_delta
+data: {"content": "Here are the "}
+
+event: tool_call_start
+data: {"tool_call": {"id": "tc_1", "function": {"name": "list_issues"}}}
+
+event: tool_call_result
+data: {"tool_call_id": "tc_1", "result": "{\"issues\": [...]}"}
+
+event: message_complete
+data: {"content": "full response text", "tool_calls": [...]}
+
+event: done
+data: {"model": "claude-sonnet-4-20250514", "usage": {...}}
+```
+
+### Get AI Config
+```
+GET /ai/config
+```
+
+### Update AI Config
+```
+PUT /ai/config
+```
+Deep-merged with existing config.
+
+### List Models
+```
+GET /ai/models
+```
+Returns all discovered models across providers.
+
+### List Conversations
+```
+GET /ai/conversations
+```
+
+---
+
+## Automations
+
+### List Automations
+```
+GET /automations
+```
+
+### Fire Automation
+```
+POST /automations/:id/fire
+```
+```json
+{ "force": true }
+```
+The `force` flag bypasses cooldown for manual execution.
+
+---
+
+## Audits
+
+### List Audit Runs
+```
+GET /audits
+```
+Query params: `status`, `trigger_type`, `automation_id`, `since`, `limit`
+
+### Get Audit Run Detail
+```
+GET /audits/:id
+```
+Returns full audit run with thinking chain, tool calls, changes, and suggestions.
+
+### Get Audit Stats
+```
+GET /audits/stats
+```
+Aggregate statistics: runs today/week, costs, changes breakdown.
+
+---
+
+## Docs
+
+### List Docs
+```
+GET /docs
+```
+Returns registry with metadata for all docs.
+
+### Get Doc Content
+```
+GET /docs/:id
+```
+Returns full markdown content.
+
+### Create / Update / Delete Doc
+```
+POST /docs
+PATCH /docs/:id
+DELETE /docs/:id
+```
+
+### Generate Docs (AI)
+```
+POST /docs/generate
+```
+```json
+{ "mode": "initialize" }
+```
+Modes: `initialize` (full scan) or `update` (incremental).
+
+### Get Design Docs
+```
+GET /docs/designs
+GET /docs/designs/:filename
+```
+
+---
+
+## Activity Feed
+
+### List Activity
+```
+GET /activity
+```
+Query params: `type`, `entity_type`, `entity_id`, `since`, `limit`
+
+---
+
+## Codebase
+
+### Get Scan Results
+```
+GET /codebase/stats
+GET /codebase/modules
+GET /codebase/files
+```
+
+### Trigger Scan
+```
+POST /codebase/scan
+```
+
+### Search Codebase
+```
+GET /codebase/search?q=query
+```
+
+### Get File Details
+```
+GET /codebase/files/:path
+```
+
+---
+
+## Git
+
+### Get Status
+```
+GET /git/status
+```
+
+### Get Diff
+```
+GET /git/diff
+```
+Query params: `file`, `staged`
+
+### Get Log
+```
+GET /git/log
+```
+Query params: `count`, `since`, `path`, `format`
+
+### Get Branches
+```
+GET /git/branches
+```
+
+---
 
 ## WebSocket
 
-Connect to `ws://localhost:24680/ws` for real-time updates.
+Connect to `ws://localhost:24680/ws` for real-time events.
 
-**Events pushed:**
-- `file_changed` — A data file was modified (includes file path and entity type)
+**Event Format:**
+```json
+{
+  "type": "file_changed",
+  "file": "data/issues/items.json",
+  "timestamp": "2026-02-08T14:30:00Z"
+}
+```
 
-The UI uses these events to refresh views and trigger toast notifications.
+Event types: `file_changed`, `scan_complete`, `automation_complete`, `docs_generated`
+
+---
+
+## Project Management
+
+### Get Project Config
+```
+GET /config
+```
+
+### Update Config
+```
+PUT /config
+```
+
+### List Projects
+```
+GET /projects
+```
+
+### Switch Project
+```
+POST /projects/switch
+```
+```json
+{ "project": "my-other-project" }
+```
+
+### Initialize Project
+```
+POST /init
+```
+Triggers AI-powered project analysis and data population.
+
+---
+
+## Related Documentation
+
+- [System Overview](system-overview) — Architecture context
+- [Data Model Reference](data-model-reference) — Entity type definitions
+- [System: Server](system-server) — Server implementation details

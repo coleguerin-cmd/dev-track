@@ -231,10 +231,15 @@ class AutomationEngine {
         maxIterations: 15,
         recorder,
         heliconeProperties: {
+          User: 'devtrack-automation',
           Source: 'automation',
           AutomationId: automation.id,
           AutomationName: automation.name,
           Trigger: context.trigger,
+          TriggerType: automation.trigger,
+          AIDriven: String(automation.ai_driven),
+          ModelTier: modelTier,
+          Forced: String(context.data?.force || false),
         },
       });
 
