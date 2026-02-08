@@ -531,6 +531,49 @@
       "created": "2026-02-08",
       "updated": "2026-02-08"
     }
+    ,
+    {
+      "id": "IDEA-035",
+      "title": "Opinionated git/commit settings page — AI behavior controls for version control",
+      "status": "captured",
+      "category": "feature",
+      "priority": "high",
+      "description": "Settings page section for git behavior. Conventional commit format (feat/fix/chore/etc), commit frequency preferences, push-on-session-end toggle, changelog generation from commits, how AI should handle branching. Settings inject into cursor rules so the coding AI follows them. Sliders/toggles for: auto-commit frequency, commit message verbosity, branch strategy, push policy, changelog linkage.",
+      "pros": ["Opinionated defaults that teach good git practices", "AI follows user preferences consistently", "Conventional commits enable auto-changelog from git"],
+      "cons": ["Many git workflows to support", "Settings can conflict with team policies"],
+      "open_questions": ["How to inject settings into cursor rules dynamically?", "Default to conventional commits or let user choose format?"],
+      "notes": "User wants this to opinionate the coding AI's git behavior via cursor rule injection. Good product feature — teaches users proper git etiquette while they use the tool.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-036",
+      "title": "Version management + release notes bundling",
+      "status": "captured",
+      "category": "feature",
+      "priority": "medium",
+      "description": "Track project versions (semver), bundle changelog entries into release notes per version, manage version bumps (major/minor/patch). AI can auto-suggest version bumps based on changelog types (feat = minor, fix = patch, breaking = major). Release notes page showing version history with bundled changes.",
+      "pros": ["Professional release management", "AI auto-suggests version bumps", "Release notes auto-generated from changelog"],
+      "cons": ["Adds complexity for solo devs", "Version management is opinionated"],
+      "open_questions": ["When to auto-bump vs manual?", "How does this interact with npm/package.json versions?"],
+      "notes": "User called out need for version management and release notes on major releases.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-037",
+      "title": "AI-unique views — displays that only exist because AI can generate them",
+      "status": "captured",
+      "category": "feature",
+      "priority": "critical",
+      "description": "Purpose-built views that are impossible without AI: real-time system health inference (not manual ratings), predictive velocity ('payment system ships in ~4 sessions'), knowledge graph across all entities, vector search ('what did we decide about auth?'), risk heat maps, dependency impact analysis ('if we change this, what breaks?'), auto-generated architecture narratives, technical debt scoring, team capability matching. These are the views that make DevTrack impossible to replicate with human-only tools. Consider: vector DB (Pinecone/Weaviate), Neo4j for knowledge graph, GraphQL for cross-entity queries.",
+      "pros": ["Killer differentiator", "Impossible without AI", "Makes DevTrack irreplaceable"],
+      "cons": ["Expensive to build and run", "Quality depends on model capability", "Infrastructure heavy (vector DB, graph DB)"],
+      "open_questions": ["Which AI-unique views are most valuable first?", "Vector DB vs simple search?", "Neo4j vs simpler graph representation?"],
+      "notes": "User's key insight: existing tools assume the human IS the loop. DevTrack should build views that only exist because AI is managing the data. This is the moat.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
   ],
-  "next_id": 35
+  "next_id": 38
 }

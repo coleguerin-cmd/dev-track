@@ -1,32 +1,33 @@
 {
-  "last_generated": "2026-02-08T22:00:00Z",
-  "briefing": "Session 5 complete (Feb 8, evening). UI overhaul + user profiling session. Fixed all chat bugs (resize, model picker, persistence). Full Cursor-minimal redesign: Lucide icons everywhere, rebuilt sidebar with grouped sections, dashboard with health ring + collapsible AI briefing + pipeline view. Settings page rebuilt with 3 tabs: Profile (AI-observed intelligence scoring with radar charts), AI Configuration (models, budget, features), Integrations. Built AI-observed user profiling: IQ 127 (revised down from 131 after catching own validation bias), cognitive + technical radar charts, deep assessment with honest strengths/weaknesses, AI-to-AI operational guidance, session observation pipeline, actionable development targets, comparative framing vs engineers/founders/AI users, AI dependency metrics. Notification tray with toasts + bell panel. Cross-project audit of all 4 codebases (Pillar 919 files, Landmark 323, Seat-at-Table ~200, dev-track ~100). GPT-5.2 independently confirmed intelligence range at ~132±4. 7 new ideas captured. Cursor rule updated with tracking discipline.",
+  "last_generated": "2026-02-08T03:30:00Z",
+  "briefing": "Session 6 complete (Feb 8, late night). Massive infrastructure session. Shipped: multi-project architecture (init/start/projects CLI, central registry at ~/.dev-track/, project switcher with hot-swap), modular AI tool registry (40 tools across 16 domains replacing monolithic tools.ts), Kanban DnD, AI provider keys in Integrations, Helicone org_id sync, 3 UI bug fixes (Changelog crash, Ideas click, Docs ToC scroll). Pillar initialized with isolated data. Deep product discussion: defined complete entity model v2 spec (14 entities) for enterprise-grade project management. ENTITY-MODEL-V2.md written as the blueprint. 47 files changed, committed. Next session: implement entity model v2 refactor top to bottom.",
   "hot_context": [
-    "Dev servers: API on port 24680, UI on port 24681. Both running.",
-    "Intelligence score: 127 (revised from 131). GPT-5.2 gave ~132±4 independently. Both Superior range.",
-    "AI-to-AI guidance is the real product of the profile — blunt operational instructions for handling this user",
-    "Session observation pipeline built into cursor rule step 5 — every session wrap should write an observation",
-    "ISS-012 (high): No conversation bridge between Cursor/Claude and DevTrack — this is the key architectural gap",
-    "ISS-006 (high): AI context drift — first layer (create-before-fix discipline) done, second layer (session-end audit) still needed",
-    "ISS-003 (medium): Integration plugins still untested with real credentials",
-    "ISS-004 (low): Kanban DnD still not wired up",
-    "30 ideas captured total (IDEA-001 through IDEA-030). Key new ones: IDEA-027 (conversation bridge), IDEA-029 (observation pipeline), IDEA-030 (portable profiles)",
-    "User is racing to MVP on multiple projects — speed-over-thoroughness is deliberate strategy, not a blind spot",
-    "User wants to dogfood on Pillar next — that's the forcing function for v0.1 validation",
-    "Dashboard rebuilt twice this session — current version has health ring, collapsible briefing, pipeline view, changelog"
+    "ENTITY-MODEL-V2.md in data/designs/ — the COMPLETE blueprint for next session's refactor. Read this FIRST.",
+    "Dev servers: API on 24680, UI on 24681. npm run dev starts both.",
+    "Pillar initialized at ~/.dev-track/projects/pillar/data/. Landmark not yet initialized.",
+    "Tool registry at server/ai/tools/ — 16 modules, ~40 tools. Add new tools by creating files in this directory.",
+    "project-config.ts is the centralized config module — all server files use it instead of process.cwd().",
+    "ISS-006 (AI context drift) still open — structural enforcement still needed.",
+    "7 ideas captured this session (IDEA-031 through IDEA-037). Key: IDEA-035 (opinionated git settings), IDEA-037 (AI-unique views).",
+    "User wants: enterprise-grade PM tool that replaces Jira+Linear+Notion+GitHub, fully AI-managed.",
+    "User explicitly said: 'have more, not less' — build every feature, AI manages complexity, user sees clean views.",
+    "User wants AI to suggest milestones/releases, not manage them manually.",
+    "User wants periodic full AI audit — on session end, on changelog, or push-button."
   ],
   "warnings": [
-    "Chat agent still not battle-tested in the browser. API works, streaming works, but no full user-flow validation.",
-    "ISS-012 is existential: without a bridge between Cursor conversations and DevTrack, the tracking system will always be incomplete.",
-    "The user profile system is cool but risks becoming meta-work. The forcing function is always: does this help build Pillar faster?",
+    "The entity model v2 refactor touches EVERY layer: types, store, routes, tools, UI. Plan the execution order carefully.",
+    "Migration path must preserve all existing data. backlog→roadmap, state.json→systems, actions→deprecated.",
+    "Context window was very long this session — user was throwing a lot. Fresh session for the refactor is critical.",
+    "npm link crashes Cursor — use 'npx tsx path/to/cli' for dogfooding commands.",
     "Server crashes on tsx watch reload when port is held (EADDRINUSE). Kill node processes before restart.",
-    "AI validation bias is real — even after building warnings against it, the initial score was inflated. Always self-audit."
+    "Changelog entries use files_changed not files_touched — UI now handles both but types need updating in v2."
   ],
   "suggestions": [
-    "FIRST: Test the AI chat in browser. Send real messages, verify tool calls work, check streaming renders. This is the soul of the product and it's still untested.",
-    "THEN: Start dogfooding on Pillar. Run dev-track alongside Pillar development for one real session. See what's missing.",
-    "BUILD: The conversation bridge extension (ISS-012/IDEA-027). This is the structural fix for AI context drift. Captures user messages + AI responses from any platform, passes to DevTrack for lightweight parsing.",
-    "WRITE: 5 tests on Pillar's curated experience paths. Not for coverage — for the MVP paths that paying users will touch.",
-    "CONSIDER: The portable profile concept (IDEA-030) has product potential beyond dev-track. Could be a standalone feature or product."
+    "FIRST: Read ENTITY-MODEL-V2.md. It has every entity, every field, every relationship, every enum, and the migration path.",
+    "Execution order: (1) shared/types.ts — new type definitions, (2) data migration script, (3) store.ts refactor, (4) API routes, (5) AI tools update, (6) UI views.",
+    "Start with types + data migration. Get the foundation right before touching any UI.",
+    "After refactor: initialize on Pillar and Landmark to validate the model with real projects.",
+    "The init wizard (IDEA-032) should come AFTER the entity model is solid — it needs stable entities to populate.",
+    "Consider: the entity model discussion captured in this session should become an ADR (Architecture Decision Record)."
   ]
 }
