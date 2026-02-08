@@ -1,0 +1,82 @@
+/**
+ * Automation Scheduler (Cron)
+ * 
+ * Checks every minute for due scheduled automations.
+ * Fires daily/weekly automations based on last_fired timestamps.
+ */
+
+import { getStore } from '../store.js';
+import { getAutomationEngine } from './engine.js';
+
+const CHECK_INTERVAL = 60_000; // 1 minute
+
+let _timer: ReturnType<typeof setInterval> | null = null;
+
+export function startScheduler(): void {
+  if (_timer) clearInterval(_timer);
+
+  _timer = setInterval(() => {
+    checkScheduledAutomations().catch(err => {
+      console.error('[scheduler] Error checking automations:', err.message);
+    });
+  }, CHECK_INTERVAL);
+
+  console.log('[scheduler] Started (checking every 60s)');
+}
+
+export function stopScheduler(): void {
+  if (_timer) {
+    clearInterval(_timer);
+    _timer = null;
+  }
+}
+
+async function checkScheduledAutomations(): Promise<void> {
+  const store = getStore();
+  const engine = getAutomationEngine();
+  const now = new Date();
+
+  const scheduled = store.automations.automations.filter(
+    a => a.enabled && a.trigger === 'scheduled'
+  );
+
+  for (const automation of scheduled) {
+    const schedule = getScheduleType(automation);
+    if (!schedule) continue;
+
+    const lastFired = automation.last_fired ? new Date(automation.last_fired) : null;
+
+    if (shouldFire(schedule, now, lastFired)) {
+      console.log(`[scheduler] Firing scheduled automation: ${automation.name} (${schedule})`);
+      await engine.fire({
+        trigger: 'scheduled',
+        data: { schedule_type: schedule, automation_id: automation.id },
+        timestamp: now.toISOString(),
+      });
+    }
+  }
+}
+
+function getScheduleType(automation: any): string | null {
+  // Check automation actions or conditions for schedule info
+  // Convention: ai_prompt or description contains "daily" or "weekly"
+  const text = `${automation.description} ${automation.ai_prompt || ''} ${automation.name}`.toLowerCase();
+  if (text.includes('weekly')) return 'weekly';
+  if (text.includes('daily') || text.includes('nightly')) return 'daily';
+  if (text.includes('hourly')) return 'hourly';
+  return 'daily'; // default for scheduled triggers
+}
+
+function shouldFire(schedule: string, now: Date, lastFired: Date | null): boolean {
+  if (!lastFired) return true; // Never fired — fire immediately
+
+  const elapsed = now.getTime() - lastFired.getTime();
+  const hours = elapsed / (1000 * 60 * 60);
+
+  switch (schedule) {
+    case 'hourly': return hours >= 1;
+    case 'daily': return hours >= 22; // ~22h buffer to avoid drift
+    case 'weekly': return hours >= 166; // ~7 days with buffer
+    default: return hours >= 22;
+  }
+}

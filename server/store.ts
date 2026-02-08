@@ -267,6 +267,25 @@ export class Store {
     writeJSON('docs/registry.json', this.docsRegistry);
   }
 
+  // ─── Doc Content Helpers ──────────────────────────────────────────────
+
+  getDocContent(id: string): string {
+    return readMarkdown(`docs/${id}.md`);
+  }
+
+  writeDocContent(id: string, content: string): void {
+    const fullPath = path.join(getDataDir(), `docs/${id}.md`);
+    const dir = path.dirname(fullPath);
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    this.markWrite(`docs/${id}.md`);
+    fs.writeFileSync(fullPath, content, 'utf-8');
+  }
+
+  deleteDocContent(id: string): void {
+    const fullPath = path.join(getDataDir(), `docs/${id}.md`);
+    if (fs.existsSync(fullPath)) fs.unlinkSync(fullPath);
+  }
+
   saveVelocity(): void {
     this.markWrite('metrics/velocity.json');
     writeJSON('metrics/velocity.json', this.velocity);

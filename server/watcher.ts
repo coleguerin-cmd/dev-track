@@ -3,6 +3,7 @@ import path from 'path';
 import { getStore } from './store.js';
 import { broadcast } from './ws.js';
 import { getDataDir } from './project-config.js';
+import { getAutomationEngine } from './automation/engine.js';
 import type { WSEvent } from '../shared/types.js';
 
 let _watcher: chokidar.FSWatcher | null = null;
@@ -44,6 +45,9 @@ export function startWatcher(): void {
         timestamp: new Date().toISOString(),
       };
       broadcast(event);
+
+      // Fire automation trigger (non-blocking)
+      getAutomationEngine().fire({ trigger: 'file_changed', data: { file: relative, event_type: eventType } }).catch(() => {});
     }
   });
 

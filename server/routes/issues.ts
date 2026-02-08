@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { getStore } from '../store.js';
 import { broadcast } from '../ws.js';
+import { getAutomationEngine } from '../automation/engine.js';
 import type { Issue, IssueStatus, IssueSeverity, IssueType } from '../../shared/types.js';
 
 const app = new Hono();
@@ -85,6 +86,10 @@ app.post('/', async (c) => {
   });
 
   broadcast({ type: 'issue_created', data: issue, timestamp: new Date().toISOString() });
+
+  // Fire automation trigger (non-blocking)
+  getAutomationEngine().fire({ trigger: 'issue_created', data: issue }).catch(() => {});
+
   return c.json({ ok: true, data: issue }, 201);
 });
 

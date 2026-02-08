@@ -19,6 +19,8 @@ import {
 import { getStore, reloadStore } from './store.js';
 import { setupWebSocket } from './ws.js';
 import { startWatcher } from './watcher.js';
+import { startScheduler } from './automation/scheduler.js';
+import { getAutomationEngine } from './automation/engine.js';
 
 // Route imports — v2 entities
 import stateRoutes from './routes/state.js';
@@ -42,6 +44,7 @@ import activityRoutes from './routes/activity.js';
 import codebaseRoutes from './routes/codebase.js';
 import gitRoutes from './routes/git.js';
 import aiRoutes from './routes/ai.js';
+import initRoutes from './routes/init.js';
 
 // ─── Parse CLI flags ────────────────────────────────────────────────────────
 
@@ -114,6 +117,7 @@ app.route('/api/v1/activity', activityRoutes);
 app.route('/api/v1/codebase', codebaseRoutes);
 app.route('/api/v1/git', gitRoutes);
 app.route('/api/v1/ai', aiRoutes);
+app.route('/api/v1/init', initRoutes);
 
 // Backward compat: /api/v1/backlog → /api/v1/roadmap
 app.route('/api/v1/backlog', roadmapRoutes);
@@ -293,5 +297,9 @@ const server = serve({
 
 setupWebSocket(server as unknown as import('http').Server);
 startWatcher();
+
+// Start automation engine + scheduler
+getAutomationEngine(); // Initialize singleton
+startScheduler();
 
 console.log('  Ready.\n');

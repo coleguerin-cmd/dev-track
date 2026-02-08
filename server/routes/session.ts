@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { getStore } from '../store.js';
 import { broadcast } from '../ws.js';
+import { getAutomationEngine } from '../automation/engine.js';
 import type { Session } from '../../shared/types.js';
 
 const app = new Hono();
@@ -135,6 +136,10 @@ app.post('/end', async (c) => {
   });
 
   broadcast({ type: 'session_updated', data: { ended: completedSession }, timestamp: now });
+
+  // Fire automation trigger (non-blocking)
+  getAutomationEngine().fire({ trigger: 'session_ended', data: completedSession }).catch(() => {});
+
   return c.json({ ok: true, data: completedSession });
 });
 

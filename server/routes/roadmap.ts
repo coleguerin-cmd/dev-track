@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { getStore } from '../store.js';
 import { broadcast } from '../ws.js';
+import { getAutomationEngine } from '../automation/engine.js';
 import type { RoadmapItem, Horizon } from '../../shared/types.js';
 
 const app = new Hono();
@@ -194,6 +195,9 @@ app.post('/:id/complete', async (c) => {
     actor: 'user',
     metadata: { size: item.size, type: item.type },
   });
+
+  // Fire automation trigger (non-blocking)
+  getAutomationEngine().fire({ trigger: 'item_completed', data: item }).catch(() => {});
 
   broadcast({ type: 'roadmap_updated', data: item, timestamp: new Date().toISOString() });
   return c.json({ ok: true, data: item });

@@ -1,6 +1,7 @@
 import { Hono } from 'hono';
 import { getStore } from '../store.js';
 import { broadcast } from '../ws.js';
+import { getAutomationEngine } from '../automation/engine.js';
 import type { Automation } from '../../shared/types.js';
 
 const app = new Hono();
@@ -103,6 +104,30 @@ app.delete('/:id', (c) => {
 
   broadcast({ type: 'automation_updated', data: { removed: removed.id }, timestamp: new Date().toISOString() });
   return c.json({ ok: true, data: removed });
+});
+
+// POST /api/v1/automations/trigger — manually fire a trigger
+app.post('/trigger', async (c) => {
+  const body = await c.req.json();
+  const trigger = body.trigger || 'manual';
+  const data = body.data || {};
+
+  const engine = getAutomationEngine();
+  await engine.fire({ trigger, data, timestamp: new Date().toISOString() });
+
+  return c.json({ ok: true, data: { triggered: trigger } });
+});
+
+// POST /api/v1/automations/:id/fire — manually fire a specific automation
+app.post('/:id/fire', async (c) => {
+  const store = getStore();
+  const automation = store.automations.automations.find(a => a.id === c.req.param('id'));
+  if (!automation) return c.json({ ok: false, error: 'Automation not found' }, 404);
+
+  const engine = getAutomationEngine();
+  await engine.fire({ trigger: automation.trigger as any, data: { manual: true, automation_id: automation.id } });
+
+  return c.json({ ok: true, data: { fired: automation.id } });
 });
 
 export default app;

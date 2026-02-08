@@ -22,7 +22,11 @@ export type TaskType =
   | 'docs_generation'
   | 'quick_classification'
   | 'context_generation'
-  | 'dashboard_insights';
+  | 'dashboard_insights'
+  | 'project_init'
+  | 'deep_audit'
+  | 'incremental_update'
+  | 'doc_generation';
 
 export type ModelTier = 'premium' | 'standard' | 'budget';
 
@@ -116,6 +120,11 @@ const TASK_ROUTES: Record<TaskType, TaskRoute> = {
   quick_classification: { tiers: ['budget', 'standard'],   providers: ['google', 'anthropic', 'openai'] },
   context_generation:   { tiers: ['budget', 'standard'],   providers: ['anthropic', 'google', 'openai'] },
   dashboard_insights:   { tiers: ['budget', 'standard'],   providers: ['anthropic', 'google', 'openai'] },
+  // Premium-first tasks for automation + init (depth over cost)
+  project_init:         { tiers: ['premium', 'standard'],  providers: ['anthropic', 'openai', 'google'] },
+  deep_audit:           { tiers: ['premium', 'standard'],  providers: ['anthropic', 'openai', 'google'] },
+  doc_generation:       { tiers: ['premium', 'standard'],  providers: ['anthropic', 'openai', 'google'] },
+  incremental_update:   { tiers: ['standard', 'budget'],   providers: ['anthropic', 'openai', 'google'] },
 };
 
 // ─── Router ──────────────────────────────────────────────────────────────────

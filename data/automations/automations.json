@@ -1,3 +1,74 @@
 {
-  "automations": []
+  "automations": [
+    {
+      "id": "session-end-audit",
+      "name": "Session End Audit",
+      "description": "When a session ends, run a deep audit of all DevTrack data for freshness and accuracy.",
+      "enabled": true,
+      "trigger": "session_ended",
+      "conditions": [],
+      "actions": [],
+      "ai_driven": true,
+      "ai_prompt": "A work session just ended. Perform a thorough audit of all DevTrack data:\n\n1. Check all roadmap items — are statuses accurate? Any items that should be completed or moved?\n2. Check issues — are open issues still relevant? Any that should be resolved?\n3. Check systems — do health scores reflect current reality? Update descriptions if architecture changed.\n4. Check ideas — any that should be promoted to roadmap? Any duplicates?\n5. Update the project state summary with current reality.\n6. Write context recovery for the next session (briefing, hot context, warnings, suggestions).\n7. Check if any auto-generated docs need refreshing based on changes.\n8. Look for contradictions between different data sources.\n9. Update milestone/epic progress if items were completed.\n\nBe precise and thorough. Update every stale entity you find.",
+      "last_fired": null,
+      "fire_count": 0,
+      "created": "2026-02-08"
+    },
+    {
+      "id": "change-tracker",
+      "name": "Change Tracker",
+      "description": "When a roadmap item is completed or issue is created, check for related entity updates needed.",
+      "enabled": true,
+      "trigger": "item_completed",
+      "conditions": [],
+      "actions": [],
+      "ai_driven": true,
+      "ai_prompt": "A change just occurred in DevTrack. Review the change and check:\n\n1. Does this completion affect any epics or milestones? Update progress.\n2. Are there related issues that should be updated or resolved?\n3. Should a changelog entry be created for this work?\n4. Are there duplicate or overlapping items in the roadmap that should be merged?\n5. If a new idea or issue came in, check existing items for semantic overlap. Keep the more complete version, merge context from the other.\n\nOnly make changes that are clearly warranted. Don't over-edit.",
+      "last_fired": null,
+      "fire_count": 0,
+      "created": "2026-02-08"
+    },
+    {
+      "id": "nightly-audit",
+      "name": "Nightly System Audit",
+      "description": "Daily overnight audit of the entire system — health, staleness, docs freshness.",
+      "enabled": true,
+      "trigger": "scheduled",
+      "conditions": [],
+      "actions": [],
+      "ai_driven": true,
+      "ai_prompt": "Perform a comprehensive nightly audit of the entire DevTrack system:\n\n1. Reassess ALL system health scores based on open issues, recent activity, and code signals.\n2. Flag roadmap items that haven't moved in 7+ days — add ai_notes explaining the stall.\n3. Check for stale brain notes that should be dismissed.\n4. Update the project state summary.\n5. Regenerate any auto-generated docs whose source data has changed since last_generated.\n6. Check milestone progress and update ai_prediction with velocity-based estimates.\n7. Look for ideas that are validated enough to promote to roadmap.\n8. Generate a brief daily summary brain note with key changes.\n\nThis is a deep audit. Be thorough. Update every entity that needs it.",
+      "last_fired": null,
+      "fire_count": 0,
+      "created": "2026-02-08"
+    },
+    {
+      "id": "weekly-report",
+      "name": "Weekly Progress Report",
+      "description": "Weekly summary of project velocity, health trends, and accomplishments.",
+      "enabled": true,
+      "trigger": "scheduled",
+      "conditions": [],
+      "actions": [],
+      "ai_driven": true,
+      "ai_prompt": "Generate a weekly progress report for the project:\n\n1. Read session log — how many sessions this week? Total hours? Items shipped?\n2. Read changelog — what shipped this week? Categorize by type (feature/fix/enhancement).\n3. Read issues — how many opened vs resolved this week? Any critical issues still open?\n4. Read velocity metrics — is the team accelerating or slowing?\n5. Check system health trends — any systems degrading?\n6. Write a brain note (type: observation) with the weekly summary.\n7. If velocity is significantly different from last week, note why.\n8. Suggest focus areas for next week based on roadmap priorities.\n\nWrite the summary as a brain note with priority 'medium' and type 'observation'.",
+      "last_fired": null,
+      "fire_count": 0,
+      "created": "2026-02-08"
+    },
+    {
+      "id": "docs-refresh",
+      "name": "Documentation Refresh",
+      "description": "Keep auto-generated documentation up to date when source data changes.",
+      "enabled": true,
+      "trigger": "scheduled",
+      "conditions": [],
+      "actions": [],
+      "ai_driven": true,
+      "ai_prompt": "Review and refresh all auto-generated documentation:\n\n1. List all docs with auto_generated: true.\n2. For each, check if source data has changed since last_generated.\n3. If stale, regenerate with current data — systems, roadmap, architecture, etc.\n4. Check if new systems or major features were added that need new docs.\n5. Create missing docs: if a system exists with no doc, create one.\n6. Verify onboarding guide accuracy — do setup instructions still work?\n7. Never modify docs where auto_generated is false (human-authored).\n\nDocs should be comprehensive, well-structured markdown with clear sections.",
+      "last_fired": null,
+      "fire_count": 0,
+      "created": "2026-02-08"
+    }
+  ]
 }
