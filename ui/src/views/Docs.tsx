@@ -5,8 +5,6 @@ import { FileText, BookOpen, Code, RefreshCw, Sparkles, FolderOpen, Loader2, Clo
 import { MermaidDiagram } from '../components/MermaidDiagram';
 import * as api from '../api/client';
 
-const BASE = '/api/v1';
-
 interface DocEntry {
   id: string;
   title: string;
@@ -153,7 +151,7 @@ export function Docs() {
   const handleDocsAction = async (action: 'initialize' | 'update') => {
     setDocsAction(action === 'initialize' ? 'initializing' : 'updating');
     try {
-      await fetch(`${BASE}/docs/generate`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ mode: action }) });
+      await api.docs.generate(action);
     } catch { setDocsAction('idle'); }
   };
 

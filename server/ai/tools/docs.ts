@@ -75,6 +75,9 @@ export const docTools: ToolModule = {
           auto_generated: { type: 'boolean', description: 'Whether this doc is AI-generated and should be refreshed automatically' },
           generation_sources: { type: 'array', items: { type: 'string' }, description: 'What data sources feed this doc (e.g., "systems", "roadmap", "codebase")' },
           tags: { type: 'array', items: { type: 'string' }, description: 'Tags' },
+          parent_id: { type: 'string', description: 'Parent doc ID for sub-pages (null for top-level)' },
+          sort_order: { type: 'number', description: 'Display order within parent (default: 0)' },
+          layer: { type: 'string', enum: ['architecture', 'operational', 'implementation', 'design'], description: 'Documentation layer this doc belongs to' },
         }, required: ['title', 'type', 'content'] },
       }},
       label: 'Creating document',
@@ -89,10 +92,17 @@ export const docTools: ToolModule = {
 
         const doc = {
           id, title: args.title, type: args.type, content: '',
+          parent_id: args.parent_id || null,
+          sort_order: args.sort_order ?? 0,
+          layer: args.layer || null,
           systems: args.systems || [], roadmap_items: args.roadmap_items || [], epics: args.epics || [],
           auto_generated: args.auto_generated || false,
           last_generated: args.auto_generated ? now : null,
           generation_sources: args.generation_sources || [],
+          generation_context: undefined,
+          last_edited_by: 'ai' as const,
+          last_edited_at: now,
+          edit_history: [{ timestamp: new Date().toISOString(), actor: 'ai', actor_detail: 'create_doc tool', summary: 'Document created' }],
           author: 'ai', status: 'published' as const,
           tags: args.tags || [], created: now, updated: now,
         };

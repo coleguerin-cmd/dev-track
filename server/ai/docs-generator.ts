@@ -266,8 +266,11 @@ Output ONLY the JSON. No markdown fences, no explanation.`;
   // Parse the doc plan from the agent's response
   let pages: DocPlanPage[] = [];
   try {
-    // Try to extract JSON from the response (might be wrapped in markdown or text)
-    const jsonMatch = result.content.match(/\{[\s\S]*"pages"[\s\S]*\}/);
+    // Try to extract JSON — handle markdown code fences, raw JSON, or text-wrapped JSON
+    let jsonStr = result.content;
+    const codeFenceMatch = result.content.match(/```(?:json)?\s*(\{[\s\S]*?\})\s*```/);
+    if (codeFenceMatch) jsonStr = codeFenceMatch[1];
+    const jsonMatch = jsonStr.match(/\{[\s\S]*"pages"[\s\S]*\}/);
     if (jsonMatch) {
       const parsed = JSON.parse(jsonMatch[0]);
       pages = (parsed.pages || []).map((p: any, i: number) => ({
