@@ -223,10 +223,17 @@ Output ONLY valid JSON matching this schema — no markdown, no explanation, jus
       "description": "What this page should cover in 1-2 sentences",
       "source_files": ["path/to/relevant/file.ts"],
       "parent_id": null,
-      "sort_order": 0
+      "sort_order": 0,
+      "complexity": "low|medium|high|deep"
     }
   ]
-}`;
+}
+
+Complexity guide:
+- "low": simple overview, 1-2 source files, config page (5 iterations)
+- "medium": standard system doc, 3-5 source files (8 iterations)
+- "high": complex system with business logic, 5-10 source files (15 iterations)
+- "deep": critical implementation doc with formulas/calculations spanning many files (20+ iterations)`;
 
   const userMessage = `${mode === 'initialize' ? 'Plan a complete documentation suite from scratch.' : 'Evaluate the existing docs and plan what needs to be added, updated, or restructured.'}
 
@@ -282,6 +289,7 @@ Output ONLY the JSON. No markdown fences, no explanation.`;
         parent_id: p.parent_id || undefined,
         sort_order: p.sort_order ?? i,
         exists: !!store.docsRegistry.docs.find(d => d.id === p.id),
+        complexity: p.complexity || (p.layer === 'implementation' ? 'high' : 'medium'),
       }));
     }
   } catch (e: any) {
@@ -289,21 +297,22 @@ Output ONLY the JSON. No markdown fences, no explanation.`;
     // Fallback: generate plan from existing docs + systems
     const systems = store.systems?.systems || [];
     pages = [
-      { id: 'system-overview', title: 'System Architecture Overview', layer: 'architecture' as DocLayer, description: 'High-level architecture', source_files: [], sort_order: 0, exists: true },
-      { id: 'getting-started', title: 'Getting Started Guide', layer: 'operational' as DocLayer, description: 'Setup and first run', source_files: [], sort_order: 1, exists: true },
-      { id: 'api-reference', title: 'API Reference', layer: 'operational' as DocLayer, description: 'All API endpoints', source_files: [], sort_order: 2, exists: true },
-      { id: 'data-model-reference', title: 'Data Model Reference', layer: 'implementation' as DocLayer, description: 'All entity types and fields', source_files: [], sort_order: 3, exists: true },
+      { id: 'system-overview', title: 'System Architecture Overview', layer: 'architecture' as DocLayer, description: 'High-level architecture', source_files: [], sort_order: 0, exists: true, complexity: 'high' as const },
+      { id: 'getting-started', title: 'Getting Started Guide', layer: 'operational' as DocLayer, description: 'Setup and first run', source_files: [], sort_order: 1, exists: true, complexity: 'medium' as const },
+      { id: 'api-reference', title: 'API Reference', layer: 'operational' as DocLayer, description: 'All API endpoints', source_files: [], sort_order: 2, exists: true, complexity: 'high' as const },
+      { id: 'data-model-reference', title: 'Data Model Reference', layer: 'implementation' as DocLayer, description: 'All entity types and fields', source_files: [], sort_order: 3, exists: true, complexity: 'deep' as const },
       ...systems.map((s: any, i: number) => ({
         id: `system-${s.id}`, title: `System: ${s.name}`, layer: 'architecture' as DocLayer,
         description: `Architecture and implementation of ${s.name}`, source_files: [],
         sort_order: 10 + i, exists: !!store.docsRegistry.docs.find(d => d.id === `system-${s.id}`),
+        complexity: 'medium' as const,
       })),
     ];
   }
 
-  // Estimate cost
-  const costPerPage: Record<string, number> = { architecture: 0.60, operational: 0.50, implementation: 0.80, design: 0.30 };
-  const estimatedCost = pages.reduce((sum, p) => sum + (costPerPage[p.layer] || 0.50), 0);
+  // Estimate cost based on complexity (drives iteration count which drives token usage)
+  const costPerComplexity: Record<string, number> = { low: 0.25, medium: 0.50, high: 0.90, deep: 1.50 };
+  const estimatedCost = pages.reduce((sum, p) => sum + (costPerComplexity[p.complexity] || 0.50), 0);
   const estimatedMinutes = Math.ceil(pages.length * 2.5); // ~2.5 min per doc on Sonnet
 
   const plan: DocPlan = {
@@ -407,7 +416,9 @@ ${diffContext}
 
 The content parameter MUST be the complete markdown document as a string.`;
 
-  const maxIters = page.layer === 'implementation' ? 12 : 8;
+  // Iteration budget driven by AI-estimated complexity from the doc plan
+  const complexityBudget: Record<string, number> = { low: 5, medium: 8, high: 15, deep: 22 };
+  const maxIters = complexityBudget[page.complexity] || 8;
 
   const recorder = new AuditRecorder(`docs-${page.id}`, `Doc: ${page.title}`, 'manual', 'manual', { doc_id: page.id, layer: page.layer });
 

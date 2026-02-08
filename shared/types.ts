@@ -442,6 +442,7 @@ export interface DocPlanPage {
   parent_id?: string;
   sort_order: number;
   exists: boolean;            // Whether this doc already exists in registry
+  complexity: 'low' | 'medium' | 'high' | 'deep';  // AI-estimated — drives iteration budget
 }
 
 export interface DocPlan {
