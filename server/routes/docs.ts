@@ -242,12 +242,18 @@ async function runUpdateMode() {
   const stateCache = formatStateCacheForPrompt();
   const docs = store.docsRegistry.docs.filter(d => d.auto_generated);
 
-  // Filter to stale docs only (not updated today, or never generated)
+  // Filter to stale docs: not recently completed, AND either never generated, dated before today, or content too thin
   const today = new Date().toISOString().split('T')[0];
   const staleDocs = docs.filter(d => {
     if (wasRecentlyCompleted(d.id)) return false; // Skip recently done (resumability)
     if (!d.last_generated) return true; // Never generated
-    return d.last_generated < today; // Generated before today
+    if (d.last_generated < today) return true; // Generated before today
+    // Check if content is too thin (< 5KB = probably minimal auto-generation, not rich content)
+    try {
+      const content = store.getDocContent(d.id);
+      if (content.length < 5000) return true; // Thin content — needs update
+    } catch { return true; }
+    return false;
   });
 
   if (staleDocs.length === 0) {

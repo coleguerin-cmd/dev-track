@@ -1,0 +1,16 @@
+{
+  "generated_at": "2026-02-08T22:14:22.512Z",
+  "project_name": "dev-track",
+  "overall_health": 80,
+  "project_summary": "dev-track is at 80% health. 11 tracked systems, 22 items shipped, 6 open issues. Currently working on: Epic/hierarchy visibility — tree view for parent-child entity relationships. Active session: Session 10: \"Docs system end-to-end (init/update automation, tab redesign), automation manual run, rate limiting fix, multi-user prep, Helicone enrichment, full initialization pass\" (started 2026-02-09T01:00:00Z).",
+  "systems_summary": "- Server (Hono API): undefined/100 (Hono, TypeScript, Node.js)\n- Web UI (React + Tailwind): undefined/100 (React, Vite, Tailwind, TypeScript)\n- AI Intelligence Layer: undefined/100 (OpenAI, Anthropic, Google AI, TypeScript)\n- CLI: undefined/100 (TypeScript, Node.js)\n- Data Layer (JSON + TypeScript): undefined/100 (TypeScript, JSON)\n- Integration Plugins: undefined/100 (TypeScript)\n- Codebase Architecture Visualizer: undefined/100 (React, react-flow, dagre)\n- Codebase Scanner: undefined/100 (TypeScript)\n- AI Brain System: undefined/100 (TypeScript, JSON)\n- Cursor Rule / AI Context: undefined/100 (no stack)\n- Session Tracking & Velocity: undefined/100 (no stack)",
+  "roadmap_now": "- [epic-hierarchy-ui] Epic/hierarchy visibility — tree view for parent-child entity relationships (L, in_progress, P0)",
+  "roadmap_next_count": 13,
+  "roadmap_later_count": 9,
+  "open_issues": "- [ISS-003] Integration plugins untested with real API keys (low)\n- [ISS-006] AI context drift — coding AI doesn't reliably follow dev-track rules (high)\n- [ISS-012] No way to pass Cursor/Claude conversation context back to DevTrack (high)\n- [ISS-031] Max Concurrent setting not enforced by automation engine (low)\n- [ISS-034] File watcher only fires generic file_changed — no semantic triggers from data edits (critical)\n- [ISS-043] Anthropic prompt caching not working — 0 cache reads on repeated 130K token system prompts (high)",
+  "recent_changelog": "- [CL-079] Docs tab restructured — wiki + design docs, Initialize/Update buttons, route fix (session 10)\n- [CL-080] Docs AI generation pipeline — Initialize and Update modes with audit recording (session 10)\n- [CL-081] AI rate limiting — retry with exponential backoff + preemptive token rate tracking (session 10)\n- [CL-082] Multi-user prep — personal data separation, gitignore setup, profile migration (session 10)\n- [CL-083] Helicone enrichment — custom properties on all AI requests (user, session, automation) (session 10)\n- [CL-084] Doc generation model routing fix + tool description improvements (session 10)\n- [CL-085] AI State Cache — compressed project summary for efficient agent context (session 10)\n- [CL-086] Hybrid docs generation: monolithic Opus 4.5 init + per-doc Sonnet updates + progress tracking (session 10)",
+  "velocity_summary": "9 sessions, 111 items shipped, 362 points. Avg: 12.3 items/session, 40.2 pts/session.",
+  "docs_status": "14 docs in registry. Last updated: 2026-02-08. Auto-generated: 14.",
+  "active_session": "Session 10: \"Docs system end-to-end (init/update automation, tab redesign), automation manual run, rate limiting fix, multi-user prep, Helicone enrichment, full initialization pass\" (started 2026-02-09T01:00:00Z)",
+  "token_estimate": 679
+}

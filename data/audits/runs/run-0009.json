@@ -1,0 +1,309 @@
+{
+  "id": "run-0009",
+  "automation_id": "docs-update-system-brain",
+  "automation_name": "Doc Update: System: AI Brain",
+  "trigger": {
+    "type": "manual",
+    "source": "manual",
+    "context": {
+      "doc_id": "system-brain"
+    }
+  },
+  "started_at": "2026-02-08T22:18:53.239Z",
+  "ended_at": "2026-02-08T22:19:12.009Z",
+  "duration_seconds": 19,
+  "status": "completed",
+  "model": "claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
+  "iterations": 5,
+  "tokens": {
+    "input": 86030,
+    "output": 773,
+    "total": 86803
+  },
+  "cost_usd": 0.269685,
+  "steps": [
+    {
+      "index": 0,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:18:55.811Z",
+      "content": "I'll help you update the \"System: AI Brain\" document. Let me start by reading the current content and relevant source files.",
+      "tokens": {
+        "input": 11294,
+        "output": 123
+      },
+      "cost_usd": 0.035727
+    },
+    {
+      "index": 1,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:18:55.811Z",
+      "tool_name": "get_doc",
+      "tool_args": {
+        "id": "system-brain"
+      }
+    },
+    {
+      "index": 2,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:18:55.811Z",
+      "tool_name": "get_doc",
+      "tool_result": "{\n  \"id\": \"system-brain\",\n  \"title\": \"System: AI Brain\",\n  \"type\": \"auto-generated\",\n  \"content\": \"# System: AI Brain\\n\\n> **Auto-generated** | Last refreshed: 2026-02-09 | Health: 85/100 ✅ Healthy\\n\\n---\\n\\n## Overview\\n\\nThe AI Brain is DevTrack's memory system — it stores observations, decisions, warnings, suggestions, user preferences, context recovery data, and user profiles. This data is loaded at the start of every AI chat conversation, giving the AI persistent memory across sessions and platforms.\\n\\n## Key Stats\\n\\n| Metric | Value |\\n|--------|-------|\\n| Health Score | 85/100 |\\n| Brain Notes | 14 (6 active, 4 dismissed) |\\n| Preferences | 4 learned preferences + 4 behavior patterns |\\n| Tech Stack | TypeScript, JSON |\\n| Dependencies | data-layer |\\n\\n## Components\\n\\n### Brain Notes (`brain/notes.json`)\\n\\nTyped observations that persist across sessions:\\n\\n| Type | Purpose | Example |\\n|------|---------|---------|\\n| **observation** | What the AI noticed | \\\"All 11 views rendered on first test\\\" |\\n| **decision** | Architectural/business choices | \\\"NOT open source — building paid product\\\" |\\n| **warning** | Active risks or concerns | \\\"Passive AI instructions are unreliable\\\" |\\n| **suggestion** | Recommendations | \\\"Tool needs a real name before launch\\\" |\\n| **preference** | User behavior patterns | \\\"User prefers 'go big or fuck off' over MVP\\\" |\\n| **reminder** | Time-sensitive items | — |\\n\\nNotes can be dismissed, superseded, or have expiry dates. The Dashboard shows only active (non-dismissed) notes.\\n\\n### User Preferences (`brain/preferences.json`)\\n\\nLearned behavioral preferences:\\n- **auto_restart_servers** — Restart dev servers without asking\\n- **bias_toward_action** — Act first, report what you did\\n- **aesthetic_priority** — Clean, beautiful UI with Lucide icons\\n- **cross_platform_instructions** — Persist instructions across AI platforms\\n\\nPlus learned patterns:\\n- User thinks in voice-note style (stream-of-consciousness)\\n- User rapidly ideates (5-10 ideas per message)\\n- User wants honest pushback, not agreement\\n- User wants to understand DevTrack's own workflow\\n\\n### Context Recovery (`brain/context-recovery.json`)\\n\\nSession handoff data for the next AI session:\\n- **briefing** — Summary paragraph of what happened\\n- **hot_context** — Key items to load immediately\\n- **warnings** — Active risks to be aware of\\n- **suggestions** — What to do next\\n\\n### User Profiles (`ai/profiles.json`)\\n\\nRich AI-observed user profiles:\\n- **Intelligence score** — IQ-scale (127), AI-assessed\\n- **Cognitive profile** — 8 dimensions (systems thinking, product intuition, etc.)\\n- **Technical skills** — 8 dimensions (coding, architecture, design, etc.)\\n- **Behavior patterns** — Session length, context habits, communication pace\\n- **AI-to-AI guidance** — Operational instructions for any AI working with this user\\n- **Session observations** — Per-session behavioral observations from different AI platforms\\n- **Deep assessment** — Strengths, weaknesses, work style, calibration notes\\n\\n## How It's Used\\n\\n1. **Session start:** ChatService loads context recovery + user profile into system prompt\\n2. **During session:** AI reads/writes brain notes as observations surface\\n3. **Session end:** AI writes context recovery briefing + session observation\\n4. **Dashboard:** Shows active brain notes, context recovery summary\\n5. **Settings → Profile:** Displays AI-observed scores, radar charts, assessment\\n\\n## Design Decisions\\n\\n- Brain notes are append-only with dismissal (never deleted, just marked dismissed)\\n- User profile scores are AI-set, read-only (user can't inflate their own ratings)\\n- Context recovery is regenerated at every session end\\n- Preferences learned from explicit user statements (with confidence scores)\\n\",\n  \"systems\": [\n    \"brain\"\n  ],\n  \"roadmap_items\": [],\n  \"epics\": [],\n  \"auto_generated\": true,\n  \"last_generated\": \"2026-02-08\",\n  \"generation_sources\": [\n    \"systems\",\n    \"codebase\"\n  ],\n  \"author\": \"ai\",\n  \"status\": \"published\",\n  \"tags\": [\n    \"system\",\n    \"brain\",\n    \"ai-memory\",\n    \"auto-generated\"\n  ],\n  \"created\": \"2026-02-08\",\n  \"updated\": \"2026-02-08\"\n}",
+      "tool_result_preview": "{\n  \"id\": \"system-brain\",\n  \"title\": \"System: AI Brain\",\n  \"type\": \"auto-generated\",\n  \"content\": \"# System: AI Brain\\n\\n> **Auto-generated** | Last refreshed: 2026-02-09 | Health: 85/100 ✅ Healthy\\n\\"
+    },
+    {
+      "index": 3,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:18:55.811Z",
+      "tool_name": "list_directory",
+      "tool_args": {
+        "dir_path": "server/brain"
+      }
+    },
+    {
+      "index": 4,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:18:55.811Z",
+      "tool_name": "list_directory",
+      "tool_result": "{\n  \"error\": \"Directory not found: server/brain\"\n}",
+      "tool_result_preview": "{\n  \"error\": \"Directory not found: server/brain\"\n}"
+    },
+    {
+      "index": 5,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:18:58.153Z",
+      "tokens": {
+        "input": 12681,
+        "output": 93
+      },
+      "cost_usd": 0.039438
+    },
+    {
+      "index": 6,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:18:58.153Z",
+      "tool_name": "search_codebase",
+      "tool_args": {
+        "query": "brain"
+      }
+    },
+    {
+      "index": 7,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:18:58.155Z",
+      "tool_name": "search_codebase",
+      "tool_result": "{\n  \"results\": [\n    {\n      \"type\": \"file\",\n      \"name\": \"brain.ts\",\n      \"path\": \"server/ai/tools/brain.ts\"\n    },\n    {\n      \"type\": \"constant\",\n      \"name\": \"brainTools\",\n      \"file\": \"server/ai/tools/brain.ts\"\n    },\n    {\n      \"type\": \"file\",\n      \"name\": \"brain.ts\",\n      \"path\": \"server/routes/brain.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNoteType\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNotePriority\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNote\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNotesData\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainPreferences\",\n      \"file\": \"shared/types.ts\"\n    }\n  ],\n  \"total\": 8\n}",
+      "tool_result_preview": "{\n  \"results\": [\n    {\n      \"type\": \"file\",\n      \"name\": \"brain.ts\",\n      \"path\": \"server/ai/tools/brain.ts\"\n    },\n    {\n      \"type\": \"constant\",\n      \"name\": \"brainTools\",\n      \"file\": \"server"
+    },
+    {
+      "index": 8,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:18:58.155Z",
+      "tool_name": "list_directory",
+      "tool_args": {
+        "dir_path": "server"
+      }
+    },
+    {
+      "index": 9,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:18:58.156Z",
+      "tool_name": "list_directory",
+      "tool_result": "{\n  \"entries\": [\n    {\n      \"name\": \"ai\",\n      \"type\": \"dir\",\n      \"path\": \"server/ai\"\n    },\n    {\n      \"name\": \"analyzer\",\n      \"type\": \"dir\",\n      \"path\": \"server/analyzer\"\n    },\n    {\n      \"name\": \"automation\",\n      \"type\": \"dir\",\n      \"path\": \"server/automation\"\n    },\n    {\n      \"name\": \"context-sync.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/context-sync.ts\",\n      \"size\": 4870\n    },\n    {\n      \"name\": \"index.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/index.ts\",\n      \"size\": 11007\n    },\n    {\n      \"name\": \"integrations\",\n      \"type\": \"dir\",\n      \"path\": \"server/integrations\"\n    },\n    {\n      \"name\": \"project-config.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/project-config.ts\",\n      \"size\": 11251\n    },\n    {\n      \"name\": \"routes\",\n      \"type\": \"dir\",\n      \"path\": \"server/routes\"\n    },\n    {\n      \"name\": \"script-runner.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/script-runner.ts\",\n      \"size\": 1885\n    },\n    {\n      \"name\": \"store.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/store.ts\",\n      \"size\": 25966\n    },\n    {\n      \"name\": \"watcher.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/watcher.ts\",\n      \"size\": 3328\n    },\n    {\n      \"name\": \"ws.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ws.ts\",\n      \"size\": 1219\n    }\n  ],\n  \"total\": 12,\n  \"truncated\": false\n}",
+      "tool_result_preview": "{\n  \"entries\": [\n    {\n      \"name\": \"ai\",\n      \"type\": \"dir\",\n      \"path\": \"server/ai\"\n    },\n    {\n      \"name\": \"analyzer\",\n      \"type\": \"dir\",\n      \"path\": \"server/analyzer\"\n    },\n    {\n     "
+    },
+    {
+      "index": 10,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:19:00.951Z",
+      "tokens": {
+        "input": 13676,
+        "output": 174
+      },
+      "cost_usd": 0.043638
+    },
+    {
+      "index": 11,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:00.951Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/ai/tools/brain.ts"
+      }
+    },
+    {
+      "index": 12,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:00.952Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getDataDir } from '../../project-config.js';\\r\\nimport { getStore } from '../../store.js';\\r\\nimport type { ToolModule } from './types.js';\\r\\n\\r\\nfunction readJSON(file: string) { return JSON.parse(fs.readFileSync(path.join(getDataDir(), file), 'utf-8')); }\\r\\nfunction writeJSON(file: string, data: any) {\\r\\n  // Mark write so the file watcher ignores this change (prevents feedback loops)\\r\\n  try { getStore().markWrite(file); } catch {}\\r\\n  fs.writeFileSync(path.join(getDataDir(), file), JSON.stringify(data, null, 2));\\r\\n}\\r\\n\\r\\nexport const brainTools: ToolModule = {\\r\\n  domain: 'brain',\\r\\n  tools: [\\r\\n    {\\r\\n      definition: { type: 'function', function: {\\r\\n        name: 'get_brain_notes',\\r\\n        description: 'Get AI brain notes (observations, suggestions, warnings, decisions)',\\r\\n        parameters: { type: 'object', properties: {\\r\\n          type: { type: 'string', enum: ['observation', 'suggestion', 'warning', 'decision', 'preference', 'reminder'] },\\r\\n        }},\\r\\n      }},\\r\\n      label: 'Reading brain notes',\\r\\n      execute: async (args) => {\\r\\n        const data = readJSON('brain/notes.json');\\r\\n        let notes = data.notes || [];\\r\\n        if (args.type) notes = notes.filter((n: any) => n.type === args.type);\\r\\n        return { notes, total: notes.length };\\r\\n      },\\r\\n    },\\r\\n    {\\r\\n      definition: { type: 'function', function: {\\r\\n        name: 'add_brain_note',\\r\\n        description: 'Add a brain note — an observation, suggestion, warning, or decision',\\r\\n        parameters: { type: 'object', properties: {\\r\\n          type: { type: 'string', enum: ['observation', 'suggestion', 'warning', 'decision', 'preference', 'reminder'] },\\r\\n          content: { type: 'string', description: 'The note content' },\\r\\n          priority: { type: 'string', enum: ['low', 'medium', 'high', 'critical'] },\\r\\n          related_items: { type: 'array', items: { type: 'string' }, description: 'Related issue/backlog IDs' },\\r\\n        }, required: ['type', 'content'] },\\r\\n      }},\\r\\n      label: 'Adding brain note',\\r\\n      execute: async (args) => {\\r\\n        const data = readJSON('brain/notes.json');\\r\\n        const nextId = data.next_id || (data.notes.length + 1);\\r\\n        const note = {\\r\\n          id: `BN-${String(nextId).padStart(3, '0')}`, type: args.type,\\r\\n          content: args.content, priority: args.priority || 'medium',\\r\\n          related_items: args.related_items || [],\\r\\n          created: new Date().toISOString(), updated: new Date().toISOString(),\\r\\n        };\\r\\n        data.notes.push(note);\\r\\n        data.next_id = nextId + 1;\\r\\n        writeJSON('brain/notes.json', data);\\r\\n        return { created: note };\\r\\n      },\\r\\n    },\\r\\n    {\\r\\n      definition: { type: 'function', function: {\\r\\n        name: 'get_context_recovery',\\r\\n        description: 'Read the context recovery briefing (session handoff data)',\\r\\n        parameters: { type: 'object', properties: {} },\\r\\n      }},\\r\\n      label: 'Reading context recovery',\\r\\n      execute: async () => readJSON('brain/context-recovery.json'),\\r\\n    },\\r\\n    {\\r\\n      definition: { type: 'function', function: {\\r\\n        name: 'write_context_recovery',\\r\\n        description: 'Write context recovery briefing for the next session',\\r\\n        parameters: { type: 'object', properties: {\\r\\n          briefing: { type: 'string', description: 'Session summary paragraph' },\\r\\n          hot_context: { type: 'array', items: { type: 'string' }, description: 'Key context items' },\\r\\n          warnings: { type: 'array', items: { type: 'string' }, description: 'Active warnings' },\\r\\n          suggestions: { type: 'array', items: { type: 'string' }, description: 'Suggestions for next session' },\\r\\n        }, required: ['briefing'] },\\r\\n      }},\\r\\n      label: 'Writing context recovery',\\r\\n      execute: async (args) => {\\r\\n        const data = {\\r\\n          last_generated: new Date().toISOString(),\\r\\n          briefing: args.briefing,\\r\\n          hot_context: args.hot_context || [],\\r\\n          warnings: args.warnings || [],\\r\\n          suggestions: args.suggestions || [],\\r\\n        };\\r\\n        writeJSON('brain/context-recovery.json', data);\\r\\n        return { written: true };\\r\\n      },\\r\\n    },\\r\\n    {\\r\\n      definition: { type: 'function', function: {\\r\\n        name: 'get_preferences',\\r\\n        description: 'Read stored user/AI preferences',\\r\\n        parameters: { type: 'object', properties: {} },\\r\\n      }},\\r\\n      label: 'Reading preferences',\\r\\n      execute: async () => readJSON('brain/preferences.json'),\\r\\n    },\\r\\n    {\\r\\n      definition: { type: 'function', function: {\\r\\n        name: 'update_preferences',\\r\\n        description: 'Update user/AI preferences (merge with existing)',\\r\\n        parameters: { type: 'object', properties: {\\r\\n          preferences: { type: '...[truncated]",
+      "tool_result_preview": "{\n  \"content\": \"import fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getDataDir } from '../../project-config.js';\\r\\nimport { getStore } from '../../store.js';\\r\\nimport type { ToolModule } fr"
+    },
+    {
+      "index": 13,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:00.952Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/routes/brain.ts"
+      }
+    },
+    {
+      "index": 14,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:00.952Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import { Hono } from 'hono';\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { broadcast } from '../ws.js';\\r\\nimport { getDataDir } from '../project-config.js';\\r\\nimport type { BrainNote, BrainNotesData, BrainPreferences, ContextRecovery, BrainNoteType, BrainNotePriority } from '../../shared/types.js';\\r\\n\\r\\nconst DATA_DIR = getDataDir();\\r\\n\\r\\nfunction readJSON<T>(file: string, fallback: T): T {\\r\\n  const p = path.join(DATA_DIR, file);\\r\\n  try { return fs.existsSync(p) ? JSON.parse(fs.readFileSync(p, 'utf-8')) : fallback; } catch { return fallback; }\\r\\n}\\r\\nfunction writeJSON(file: string, data: unknown) {\\r\\n  const p = path.join(DATA_DIR, file);\\r\\n  const dir = path.dirname(p);\\r\\n  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });\\r\\n  fs.writeFileSync(p, JSON.stringify(data, null, 2) + '\\\\n');\\r\\n}\\r\\n\\r\\nconst app = new Hono();\\r\\n\\r\\n// ─── Notes ──────────────────────────────────────────────────────────────────\\r\\n\\r\\n// GET /api/v1/brain/notes — active notes (not dismissed, not expired)\\r\\napp.get('/notes', (c) => {\\r\\n  const data = readJSON<BrainNotesData>('brain/notes.json', { notes: [], next_id: 1 });\\r\\n  const now = new Date().toISOString();\\r\\n  const active = data.notes.filter(n =>\\r\\n    !n.dismissed && (!n.expires || n.expires > now)\\r\\n  );\\r\\n  const typeFilter = c.req.query('type') as BrainNoteType | undefined;\\r\\n  const filtered = typeFilter ? active.filter(n => n.type === typeFilter) : active;\\r\\n  return c.json({ ok: true, data: { notes: filtered, total_active: active.length } });\\r\\n});\\r\\n\\r\\n// GET /api/v1/brain/notes/all — everything including dismissed\\r\\napp.get('/notes/all', (c) => {\\r\\n  const data = readJSON<BrainNotesData>('brain/notes.json', { notes: [], next_id: 1 });\\r\\n  return c.json({ ok: true, data });\\r\\n});\\r\\n\\r\\n// POST /api/v1/brain/notes — AI or user creates a note\\r\\napp.post('/notes', async (c) => {\\r\\n  const data = readJSON<BrainNotesData>('brain/notes.json', { notes: [], next_id: 1 });\\r\\n  const body = await c.req.json();\\r\\n\\r\\n  const note: BrainNote = {\\r\\n    id: `BN-${String(data.next_id).padStart(3, '0')}`,\\r\\n    type: body.type || 'observation',\\r\\n    priority: body.priority || 'medium',\\r\\n    title: body.title,\\r\\n    content: body.content || '',\\r\\n    context: body.context || '',\\r\\n    actionable: body.actionable ?? false,\\r\\n    action_taken: false,\\r\\n    related_items: body.related_items || [],\\r\\n    created: new Date().toISOString(),\\r\\n    expires: body.expires || null,\\r\\n    dismissed: false,\\r\\n  };\\r\\n\\r\\n  data.notes.push(note);\\r\\n  data.next_id++;\\r\\n  writeJSON('brain/notes.json', data);\\r\\n\\r\\n  broadcast({ type: 'file_changed', data: { type: 'brain_note', note }, timestamp: new Date().toISOString() });\\r\\n  return c.json({ ok: true, data: note }, 201);\\r\\n});\\r\\n\\r\\n// PATCH /api/v1/brain/notes/:id\\r\\napp.patch('/notes/:id', async (c) => {\\r\\n  const data = readJSON<BrainNotesData>('brain/notes.json', { notes: [], next_id: 1 });\\r\\n  const note = data.notes.find(n => n.id === c.req.param('id'));\\r\\n  if (!note) return c.json({ ok: false, error: 'Note not found' }, 404);\\r\\n\\r\\n  const body = await c.req.json();\\r\\n  if (body.dismissed !== undefined) note.dismissed = body.dismissed;\\r\\n  if (body.action_taken !== undefined) note.action_taken = body.action_taken;\\r\\n  if (body.content !== undefined) note.content = body.content;\\r\\n  if (body.priority !== undefined) note.priority = body.priority;\\r\\n\\r\\n  writeJSON('brain/notes.json', data);\\r\\n  return c.json({ ok: true, data: note });\\r\\n});\\r\\n\\r\\n// POST /api/v1/brain/notes/:id/dismiss\\r\\napp.post('/notes/:id/dismiss', async (c) => {\\r\\n  const data = readJSON<BrainNotesData>('brain/notes.json', { notes: [], next_id: 1 });\\r\\n  const note = data.notes.find(n => n.id === c.req.param('id'));\\r\\n  if (!note) return c.json({ ok: false, error: 'Note not found' }, 404);\\r\\n  note.dismissed = true;\\r\\n  writeJSON('brain/notes.json', data);\\r\\n  return c.json({ ok: true });\\r\\n});\\r\\n\\r\\n// ─── Preferences ────────────────────────────────────────────────────────────\\r\\n\\r\\napp.get('/preferences', (c) => {\\r\\n  const data = readJSON<BrainPreferences>('brain/preferences.json', { preferences: [], learned_patterns: [] });\\r\\n  return c.json({ ok: true, data });\\r\\n});\\r\\n\\r\\napp.post('/preferences', async (c) => {\\r\\n  const data = readJSON<BrainPreferences>('brain/preferences.json', { preferences: [], learned_patterns: [] });\\r\\n  const body = await c.req.json();\\r\\n\\r\\n  if (body.preference) {\\r\\n    const existing = data.preferences.find(p => p.key === body.preference.key);\\r\\n    if (existing) {\\r\\n      existing.value = body.preference.value;\\r\\n      existing.confidence = body.preference.confidence ?? existing.confidence;\\r\\n      existing.updated = new Date().toISOString();\\r\\n    } else {\\r\\n      data.preferences.push({\\r\\n        key: body.preference.key,\\r\\n        value: body.preference.value,\\r\\n        learned_from: bo...[truncated]",
+      "tool_result_preview": "{\n  \"content\": \"import { Hono } from 'hono';\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { broadcast } from '../ws.js';\\r\\nimport { getDataDir } from '../project-config.js';\\r\\nimpor"
+    },
+    {
+      "index": 15,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:00.952Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/store.ts",
+        "max_lines": 300
+      }
+    },
+    {
+      "index": 16,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:00.953Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getDataDir } from './project-config.js';\\r\\nimport type {\\r\\n  DevTrackConfig,\\r\\n  ProjectState,\\r\\n  RoadmapData,\\r\\n  RoadmapItem,\\r\\n  EpicsData,\\r\\n  MilestonesData,\\r\\n  ReleasesData,\\r\\n  SystemsData,\\r\\n  IssuesData,\\r\\n  ChangelogData,\\r\\n  SessionsData,\\r\\n  Session,\\r\\n  IdeasData,\\r\\n  ActivityFeedData,\\r\\n  ActivityEvent,\\r\\n  LabelsData,\\r\\n  AutomationsData,\\r\\n  DocsRegistryData,\\r\\n  VelocityData,\\r\\n  QuickStatus,\\r\\n  BrainNotesData,\\r\\n  BrainPreferences,\\r\\n  ContextRecovery,\\r\\n} from '../shared/types.js';\\r\\n\\r\\n// ─── File Helpers ───────────────────────────────────────────────────────────\\r\\n\\r\\nfunction readJSON<T>(filePath: string, fallback: T): T {\\r\\n  const fullPath = path.join(getDataDir(), filePath);\\r\\n  try {\\r\\n    if (!fs.existsSync(fullPath)) return fallback;\\r\\n    const raw = fs.readFileSync(fullPath, 'utf-8');\\r\\n    return JSON.parse(raw) as T;\\r\\n  } catch {\\r\\n    console.warn(`[store] Failed to read ${filePath}, using fallback`);\\r\\n    return fallback;\\r\\n  }\\r\\n}\\r\\n\\r\\nfunction writeJSON<T>(filePath: string, data: T): void {\\r\\n  const fullPath = path.join(getDataDir(), filePath);\\r\\n  const dir = path.dirname(fullPath);\\r\\n  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });\\r\\n  fs.writeFileSync(fullPath, JSON.stringify(data, null, 2) + '\\\\n', 'utf-8');\\r\\n}\\r\\n\\r\\nfunction readMarkdown(filePath: string): string {\\r\\n  const fullPath = path.join(getDataDir(), filePath);\\r\\n  try {\\r\\n    if (!fs.existsSync(fullPath)) return '';\\r\\n    return fs.readFileSync(fullPath, 'utf-8');\\r\\n  } catch {\\r\\n    return '';\\r\\n  }\\r\\n}\\r\\n\\r\\nfunction listFiles(dirPath: string, ext: string): string[] {\\r\\n  const fullPath = path.join(getDataDir(), dirPath);\\r\\n  try {\\r\\n    if (!fs.existsSync(fullPath)) return [];\\r\\n    return fs.readdirSync(fullPath)\\r\\n      .filter(f => f.endsWith(ext) && !f.startsWith('_'))\\r\\n      .sort();\\r\\n  } catch {\\r\\n    return [];\\r\\n  }\\r\\n}\\r\\n\\r\\n// ─── Store Class ────────────────────────────────────────────────────────────\\r\\n\\r\\nexport class Store {\\r\\n  // Core config\\r\\n  config: DevTrackConfig;\\r\\n  state: ProjectState;\\r\\n\\r\\n  // v2 Entities\\r\\n  roadmap: RoadmapData;\\r\\n  epics: EpicsData;\\r\\n  milestones: MilestonesData;\\r\\n  releases: ReleasesData;\\r\\n  systems: SystemsData;\\r\\n  issues: IssuesData;\\r\\n  changelog: ChangelogData;\\r\\n  sessions: SessionsData;\\r\\n  sessionCurrent: Session | null;\\r\\n  ideas: IdeasData;\\r\\n  activity: ActivityFeedData;\\r\\n  labels: LabelsData;\\r\\n  automations: AutomationsData;\\r\\n  docsRegistry: DocsRegistryData;\\r\\n  velocity: VelocityData;\\r\\n\\r\\n  // Backward compat aliases\\r\\n  get backlog(): RoadmapData { return this.roadmap; }\\r\\n\\r\\n  // Track write timestamps for debouncing watcher\\r\\n  private _lastWriteTime: Record<string, number> = {};\\r\\n\\r\\n  constructor() {\\r\\n    this.config = readJSON<DevTrackConfig>('config.json', {\\r\\n      project: 'unknown',\\r\\n      description: '',\\r\\n      created: new Date().toISOString().split('T')[0],\\r\\n      version: '0.2',\\r\\n      settings: {\\r\\n        max_now_items: 3,\\r\\n        max_session_history: 20,\\r\\n        auto_archive_resolved_issues_after_days: 7,\\r\\n        changelog_window_days: 14,\\r\\n        completed_items_window_days: 14,\\r\\n        summary_period: 'monthly',\\r\\n        verbosity: {\\r\\n          changelog_entries: 'detailed',\\r\\n          session_retros: 'summary',\\r\\n          issue_commentary: 'detailed',\\r\\n          design_docs: 'detailed',\\r\\n          diagnostic_output: 'summary',\\r\\n          roadmap_descriptions: 'detailed',\\r\\n          ai_context_loading: 'efficient',\\r\\n        },\\r\\n        developers: [],\\r\\n      },\\r\\n    });\\r\\n\\r\\n    this.state = readJSON<ProjectState>('state.json', {\\r\\n      last_updated: new Date().toISOString().split('T')[0],\\r\\n      overall_health: 0,\\r\\n      summary: '',\\r\\n    });\\r\\n\\r\\n    // v2 entities — read from new paths, fallback to old paths for backward compat\\r\\n    this.roadmap = readJSON<RoadmapData>('roadmap/items.json', null as any)\\r\\n      || readJSON<RoadmapData>('backlog/items.json', { items: [] });\\r\\n\\r\\n    this.epics = readJSON<EpicsData>('roadmap/epics.json', { epics: [] });\\r\\n    this.milestones = readJSON<MilestonesData>('roadmap/milestones.json', { milestones: [] });\\r\\n    this.releases = readJSON<ReleasesData>('releases/releases.json', { releases: [] });\\r\\n    this.systems = readJSON<SystemsData>('systems/systems.json', { systems: [] });\\r\\n    this.issues = readJSON<IssuesData>('issues/items.json', { issues: [], next_id: 1 });\\r\\n    this.changelog = readJSON<ChangelogData>('changelog/entries.json', { entries: [] });\\r\\n\\r\\n    // Sessions — v2 format\\r\\n    const sessionsData = readJSON<SessionsData>('session/log.json', { sessions: [], next_id: 1 });\\r\\n    this.sessions = sessionsData;\\r\\n    this.sessionCurrent = readJSON<Session | null>('session/current.json', nul...[truncated]",
+      "tool_result_preview": "{\n  \"content\": \"import fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getDataDir } from './project-config.js';\\r\\nimport type {\\r\\n  DevTrackConfig,\\r\\n  ProjectState,\\r\\n  RoadmapData,\\r\\n  Ro"
+    },
+    {
+      "index": 17,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:19:04.894Z",
+      "tokens": {
+        "input": 22391,
+        "output": 202
+      },
+      "cost_usd": 0.070203
+    },
+    {
+      "index": 18,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:04.894Z",
+      "tool_name": "list_directory",
+      "tool_args": {
+        "dir_path": "server/ai"
+      }
+    },
+    {
+      "index": 19,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:04.896Z",
+      "tool_name": "list_directory",
+      "tool_result": "{\n  \"entries\": [\n    {\n      \"name\": \"chat.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/chat.ts\",\n      \"size\": 18525\n    },\n    {\n      \"name\": \"router.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/router.ts\",\n      \"size\": 12278\n    },\n    {\n      \"name\": \"runner.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/runner.ts\",\n      \"size\": 4364\n    },\n    {\n      \"name\": \"service.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/service.ts\",\n      \"size\": 28832\n    },\n    {\n      \"name\": \"state-cache.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/state-cache.ts\",\n      \"size\": 7650\n    },\n    {\n      \"name\": \"tools\",\n      \"type\": \"dir\",\n      \"path\": \"server/ai/tools\"\n    }\n  ],\n  \"total\": 6,\n  \"truncated\": false\n}",
+      "tool_result_preview": "{\n  \"entries\": [\n    {\n      \"name\": \"chat.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/chat.ts\",\n      \"size\": 18525\n    },\n    {\n      \"name\": \"router.ts\",\n      \"type\": \"file\",\n      \"path\":"
+    },
+    {
+      "index": 20,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:04.896Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/ai/chat.ts",
+        "max_lines": 150
+      }
+    },
+    {
+      "index": 21,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:04.896Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"/**\\r\\n * ChatService — Multi-turn agent loop with tool calling and streaming.\\r\\n * \\r\\n * Manages conversation threads, injects context (project state, user profile,\\r\\n * codebase summary), runs the agent loop (call AI → execute tools → repeat),\\r\\n * and persists conversations to disk.\\r\\n * \\r\\n * Following Pillar's runtime.ts pattern: parallel tool execution, max iterations,\\r\\n * full transcript tracking.\\r\\n */\\r\\n\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getAIService, type AIMessage, type AIToolCall, type StreamEvent } from './service.js';\\r\\nimport { TOOL_DEFINITIONS, TOOL_LABELS, executeTool } from './tools/index.js';\\r\\nimport { getStore } from '../store.js';\\r\\nimport { getDataDir, getLocalDataDir } from '../project-config.js';\\r\\nimport type { TaskType } from './router.js';\\r\\n\\r\\n// ─── Types ──────────────────────────────────────────────────────────────────\\r\\n\\r\\nexport interface Conversation {\\r\\n  id: string;\\r\\n  title: string;\\r\\n  messages: ChatMessage[];\\r\\n  model: string | null;      // Override model for this conversation\\r\\n  created: string;\\r\\n  updated: string;\\r\\n}\\r\\n\\r\\nexport interface ChatMessage {\\r\\n  id: string;\\r\\n  role: 'user' | 'assistant' | 'system' | 'tool';\\r\\n  content: string;\\r\\n  tool_calls?: AIToolCall[];\\r\\n  tool_call_id?: string;\\r\\n  tool_name?: string;\\r\\n  timestamp: string;\\r\\n}\\r\\n\\r\\nexport interface ChatStreamEvent {\\r\\n  type: 'status' | 'text_delta' | 'tool_call_start' | 'tool_call_progress' | 'tool_call_result' | 'message_complete' | 'error' | 'done';\\r\\n  content?: string;\\r\\n  tool_call?: {\\r\\n    id: string;\\r\\n    name: string;\\r\\n    friendly_name?: string;\\r\\n    arguments?: string;\\r\\n    result?: string;\\r\\n    status?: 'running' | 'complete' | 'error';\\r\\n  };\\r\\n  message?: ChatMessage;\\r\\n  usage?: { input_tokens: number; output_tokens: number; total_tokens: number };\\r\\n  model?: string;\\r\\n  error?: string;\\r\\n}\\r\\n\\r\\n// ─── Conversation Storage ────────────────────────────────────────────────────\\r\\n\\r\\nconst CONVO_DIR = path.join(getDataDir(), 'ai/conversations');\\r\\n\\r\\nfunction ensureConvoDir() {\\r\\n  if (!fs.existsSync(CONVO_DIR)) fs.mkdirSync(CONVO_DIR, { recursive: true });\\r\\n}\\r\\n\\r\\nexport function listConversations(): { id: string; title: string; updated: string }[] {\\r\\n  ensureConvoDir();\\r\\n  const files = fs.readdirSync(CONVO_DIR).filter(f => f.endsWith('.json'));\\r\\n  const convos: { id: string; title: string; updated: string }[] = [];\\r\\n\\r\\n  for (const file of files) {\\r\\n    try {\\r\\n      const data = JSON.parse(fs.readFileSync(path.join(CONVO_DIR, file), 'utf-8'));\\r\\n      convos.push({ id: data.id, title: data.title, updated: data.updated });\\r\\n    } catch {}\\r\\n  }\\r\\n\\r\\n  return convos.sort((a, b) => b.updated.localeCompare(a.updated));\\r\\n}\\r\\n\\r\\nexport function loadConversation(id: string): Conversation | null {\\r\\n  try {\\r\\n    const filePath = path.join(CONVO_DIR, `${id}.json`);\\r\\n    if (!fs.existsSync(filePath)) return null;\\r\\n    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));\\r\\n  } catch { return null; }\\r\\n}\\r\\n\\r\\nexport function saveConversation(convo: Conversation): void {\\r\\n  ensureConvoDir();\\r\\n  convo.updated = new Date().toISOString();\\r\\n  fs.writeFileSync(path.join(CONVO_DIR, `${convo.id}.json`), JSON.stringify(convo, null, 2));\\r\\n}\\r\\n\\r\\nexport function deleteConversation(id: string): boolean {\\r\\n  try {\\r\\n    const filePath = path.join(CONVO_DIR, `${id}.json`);\\r\\n    if (fs.existsSync(filePath)) { fs.unlinkSync(filePath); return true; }\\r\\n  } catch {}\\r\\n  return false;\\r\\n}\\r\\n\\r\\nfunction createConversation(title?: string): Conversation {\\r\\n  const id = `chat-${Date.now()}-${Math.random().toString(36).substring(2, 8)}`;\\r\\n  return {\\r\\n    id,\\r\\n    title: title || 'New conversation',\\r\\n    messages: [],\\r\\n    model: null,\\r\\n    created: new Date().toISOString(),\\r\\n    updated: new Date().toISOString(),\\r\\n  };\\r\\n}\\r\\n\\r\\n// ─── System Prompt ───────────────────────────────────────────────────────────\\r\\n\\r\\nfunction buildSystemPrompt(): string {\\r\\n  const store = getStore();\\r\\n  const status = store.getQuickStatusLine();\\r\\n\\r\\n  // Load user profile\\r\\n  let profileBlock = '';\\r\\n  try {\\r\\n    const profilesPath = path.join(getLocalDataDir(), 'profiles.json');\\r\\n    if (fs.existsSync(profilesPath)) {\\r\\n      const profiles = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));\\r\\n      const user = profiles.profiles?.[0];\\r\\n      if (user) {\\r\\n        profileBlock = `\\\\n## User Profile\\\\nName: ${user.name} | Role: ${user.role} | Technical level: ${user.technical_level}/10\\\\n${user.ai_instructions}\\\\n`;\\r\\n      }\\r\\n    }\\r\\n  } catch {}\\r\\n\\r\\n  // Load recent brain notes\\r\\n  let notesBlock = '';\\r\\n  try {\\r\\n    const notesPath = path.join(getDataDir(), 'brain/notes.json');\\r\\n    if (fs.existsSync(notesPath)) {\\r\\n      const data = JSON.parse(fs.readFileSync(notesPath, 'utf-8'));\\r\\n      const recent =...[truncated]",
+      "tool_result_preview": "{\n  \"content\": \"/**\\r\\n * ChatService — Multi-turn agent loop with tool calling and streaming.\\r\\n * \\r\\n * Manages conversation threads, injects context (project state, user profile,\\r\\n * codebase s"
+    },
+    {
+      "index": 22,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:04.896Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "shared/types.ts",
+        "max_lines": 100,
+        "offset": 300
+      }
+    },
+    {
+      "index": 23,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:04.897Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"  dependencies: string[];\\r\\n  dependents: string[];\\r\\n\\r\\n  // Metrics\\r\\n  open_issues: number;\\r\\n  recent_commits: number;\\r\\n  test_coverage: number | null;\\r\\n\\r\\n  tags: string[];\\r\\n  created: string;\\r\\n  updated: string;\\r\\n}\\r\\n\\r\\nexport interface SystemsData {\\r\\n  systems: System[];\\r\\n}\\r\\n\\r\\n// ─── 8. Changelog ───────────────────────────────────────────────────────────\\r\\n\\r\\nexport interface ChangelogEntry {\\r\\n  id: string;              // CL-001\\r\\n  date: string;\\r\\n  session: number | null;\\r\\n  title: string;\\r\\n  description: string;\\r\\n  type: ChangeType;\\r\\n  scope: string;\\r\\n\\r\\n  // Relationships\\r\\n  roadmap_item: string | null;\\r\\n  epic_id: string | null;\\r\\n  issues_resolved: string[];\\r\\n  release_id: string | null;\\r\\n\\r\\n  // Files\\r\\n  files_changed: string[];\\r\\n\\r\\n  // Git\\r\\n  commit_hashes: string[];\\r\\n\\r\\n  breaking: boolean;\\r\\n  tags: string[];\\r\\n}\\r\\n\\r\\nexport interface ChangelogData {\\r\\n  entries: ChangelogEntry[];\\r\\n}\\r\\n\\r\\n// ─── 9. Sessions ────────────────────────────────────────────────────────────\\r\\n\\r\\nexport interface Session {\\r\\n  id: number;\\r\\n  date: string;\\r\\n  developer: string;\\r\\n  objective: string;\\r\\n  appetite: string;\\r\\n  status: SessionStatus;\\r\\n\\r\\n  started_at: string;\\r\\n  ended_at: string | null;\\r\\n  duration_hours: number;\\r\\n\\r\\n  // What happened\\r\\n  items_shipped: number;\\r\\n  points: number;\\r\\n  roadmap_items_completed: string[];\\r\\n  issues_resolved: string[];\\r\\n  ideas_captured: string[];\\r\\n  changelog_ids: string[];\\r\\n\\r\\n  retro: string | null;\\r\\n  next_suggestion: string | null;\\r\\n\\r\\n  ai_observation: string | null;\\r\\n}\\r\\n\\r\\nexport interface SessionsData {\\r\\n  sessions: Session[];\\r\\n  next_id: number;\\r\\n}\\r\\n\\r\\n// ─── 10. Docs ───────────────────────────────────────────────────────────────\\r\\n\\r\\nexport interface Doc {\\r\\n  id: string;\\r\\n  title: string;\\r\\n  type: DocType;\\r\\n  content: string;\\r\\n\\r\\n  // Relationships\\r\\n  systems: string[];\\r\\n  roadmap_items: string[];\\r\\n  epics: string[];\\r\\n\\r\\n  // Auto-generation\\r\\n  auto_generated: boolean;\\r\\n  last_generated: string | null;\\r\\n  generation_sources: string[];\\r\\n\\r\\n  // Metadata\\r\",\n  \"total_lines\": 778,\n  \"showing\": {\n    \"from\": 300,\n    \"to\": 400\n  },\n  \"truncated\": true\n}",
+      "tool_result_preview": "{\n  \"content\": \"  dependencies: string[];\\r\\n  dependents: string[];\\r\\n\\r\\n  // Metrics\\r\\n  open_issues: number;\\r\\n  recent_commits: number;\\r\\n  test_coverage: number | null;\\r\\n\\r\\n  tags: string"
+    },
+    {
+      "index": 24,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:19:12.006Z",
+      "tokens": {
+        "input": 25988,
+        "output": 181
+      },
+      "cost_usd": 0.080679
+    },
+    {
+      "index": 25,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:12.006Z",
+      "tool_name": "search_codebase",
+      "tool_args": {
+        "query": "BrainNote"
+      }
+    },
+    {
+      "index": 26,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:12.008Z",
+      "tool_name": "search_codebase",
+      "tool_result": "{\n  \"results\": [\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNoteType\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNotePriority\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNote\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNotesData\",\n      \"file\": \"shared/types.ts\"\n    }\n  ],\n  \"total\": 4\n}",
+      "tool_result_preview": "{\n  \"results\": [\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNoteType\",\n      \"file\": \"shared/types.ts\"\n    },\n    {\n      \"type\": \"type\",\n      \"name\": \"BrainNotePriority\",\n      \"file\": \"shared/"
+    },
+    {
+      "index": 27,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:12.008Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "shared/types.ts",
+        "max_lines": 100,
+        "offset": 600
+      }
+    },
+    {
+      "index": 28,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:12.009Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"    | 'file_changed'\\r\\n    | 'settings_changed';\\r\\n  data: unknown;\\r\\n  timestamp: string;\\r\\n}\\r\\n\\r\\n// ─── API Types ──────────────────────────────────────────────────────────────\\r\\n\\r\\nexport interface APIResponse<T = unknown> {\\r\\n  ok: boolean;\\r\\n  data?: T;\\r\\n  error?: string;\\r\\n}\\r\\n\\r\\n// ─── Deprecated (kept for migration compatibility) ──────────────────────────\\r\\n\\r\\n/** @deprecated v1 system rating — use System instead */\\r\\nexport interface SystemRating {\\r\\n  id: string;\\r\\n  name: string;\\r\\n  status: string;\\r\\n  rating: number;\\r\\n  notes: string;\\r\\n}\\r\\n\\r\\n/** @deprecated v1 actions — removed in v2 */\\r\\nexport type ActionHealth = 'green' | 'yellow' | 'red' | 'unknown';\\r\\n\\r\\n/** @deprecated v1 session plan — use Session instead */\\r\\nexport interface SessionPlan {\\r\\n  date: string;\\r\\n  started_at: string;\\r\\n  ended_at: string | null;\\r\\n  status: string;\\r\\n  developer: string;\\r\\n  objective: string;\\r\\n  appetite: string;\\r\\n  items: { backlog_id: string; title: string; status: string }[];\\r\\n  wont_do: string[];\\r\\n  notes: string;\\r\\n}\\r\\n\\r\\n/** @deprecated v1 session entry — use Session instead */\\r\\nexport interface SessionEntry {\\r\\n  date: string;\\r\\n  developer: string;\\r\\n  started_at: string;\\r\\n  ended_at: string;\\r\\n  duration_hours: number;\\r\\n  objective: string;\\r\\n  items_planned: number;\\r\\n  items_shipped: number;\\r\\n  shipped: { title: string; size: Size; category: string }[];\\r\\n  discovered: string[];\\r\\n  next_session_suggestion: string;\\r\\n  handoff_message?: string;\\r\\n}\\r\\n\\r\\n// ─── 15. Audit Runs ─────────────────────────────────────────────────────────\\r\\n\\r\\nexport type AuditTriggerType = 'scheduled' | 'event' | 'manual' | 'requested';\\r\\nexport type AuditRunStatus = 'running' | 'completed' | 'failed' | 'cancelled';\\r\\nexport type AuditStepType = 'thinking' | 'tool_call' | 'tool_result';\\r\\nexport type AuditSuggestionStatus = 'pending' | 'approved' | 'dismissed';\\r\\n\\r\\nexport interface AuditStep {\\r\\n  index: number;\\r\\n  type: AuditStepType;\\r\\n  timestamp: string;\\r\\n  // For thinking steps\\r\\n  content?: string;\\r\\n  // For tool_call / tool_result steps\\r\\n  tool_name?: string;\\r\\n  tool_args?: Record<string, any>;\\r\\n  tool_result?: string;\\r\\n  tool_result_preview?: string;\\r\\n  // Per-step cost tracking\\r\\n  tokens?: { input: number; output: number };\\r\\n  cost_usd?: number;\\r\\n}\\r\\n\\r\\nexport interface AuditChange {\\r\\n  entity_type: string;\\r\\n  entity_id: string;\\r\\n  action: 'created' | 'updated' | 'deleted' | 'resolved';\\r\\n  description: string;\\r\\n  tool_name: string;\\r\\n  field?: string;\\r\\n  before?: any;\\r\\n  after?: any;\\r\\n}\\r\\n\\r\\nexport interface AuditSuggestion {\\r\\n  id: string;\\r\\n  description: string;\\r\\n  reasoning: string;\\r\\n  priority: 'low' | 'medium' | 'high';\\r\\n  status: AuditSuggestionStatus;\\r\\n  entity_type?: string;\\r\\n  entity_id?: string;\\r\",\n  \"total_lines\": 778,\n  \"showing\": {\n    \"from\": 600,\n    \"to\": 700\n  },\n  \"truncated\": true\n}",
+      "tool_result_preview": "{\n  \"content\": \"    | 'file_changed'\\r\\n    | 'settings_changed';\\r\\n  data: unknown;\\r\\n  timestamp: string;\\r\\n}\\r\\n\\r\\n// ─── API Types ─────────────────────────────────────────────────────────────"
+    },
+    {
+      "index": 29,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:19:12.009Z",
+      "tool_name": "list_directory",
+      "tool_args": {
+        "dir_path": ".dev-track/brain"
+      }
+    },
+    {
+      "index": 30,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:19:12.009Z",
+      "tool_name": "list_directory",
+      "tool_result": "{\n  \"error\": \"Directory not found: .dev-track/brain\"\n}",
+      "tool_result_preview": "{\n  \"error\": \"Directory not found: .dev-track/brain\"\n}"
+    }
+  ],
+  "summary": "{\n  \"error\": \"Directory not found: .dev-track/brain\"\n}",
+  "changes_made": [],
+  "suggestions": [],
+  "errors": []
+}

@@ -1,0 +1,62 @@
+{
+  "running": false,
+  "mode": "update",
+  "started_at": "2026-02-08T22:16:03.309Z",
+  "docs_total": 10,
+  "docs_completed": 10,
+  "current_doc": null,
+  "completed_docs": [
+    {
+      "id": "system-server",
+      "completed_at": "2026-02-08T22:17:44.649Z",
+      "cost": 0
+    },
+    {
+      "id": "system-web-ui",
+      "completed_at": "2026-02-08T22:17:57.980Z",
+      "cost": 0
+    },
+    {
+      "id": "system-ai-intelligence",
+      "completed_at": "2026-02-08T22:18:12.885Z",
+      "cost": 0
+    },
+    {
+      "id": "system-data-layer",
+      "completed_at": "2026-02-08T22:18:27.081Z",
+      "cost": 0
+    },
+    {
+      "id": "system-cli",
+      "completed_at": "2026-02-08T22:18:38.760Z",
+      "cost": 0
+    },
+    {
+      "id": "system-integrations",
+      "completed_at": "2026-02-08T22:18:53.237Z",
+      "cost": 0
+    },
+    {
+      "id": "system-brain",
+      "completed_at": "2026-02-08T22:19:12.012Z",
+      "cost": 0
+    },
+    {
+      "id": "system-codebase-tools",
+      "completed_at": "2026-02-08T22:19:23.595Z",
+      "cost": 0
+    },
+    {
+      "id": "system-session-tracking",
+      "completed_at": "2026-02-08T22:19:38.023Z",
+      "cost": 0
+    },
+    {
+      "id": "system-cursor-rule",
+      "completed_at": "2026-02-08T22:19:53.026Z",
+      "cost": 0
+    }
+  ],
+  "errors": [],
+  "total_cost": 2.776293
+}

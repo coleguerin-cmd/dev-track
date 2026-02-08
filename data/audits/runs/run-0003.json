@@ -1,0 +1,295 @@
+{
+  "id": "run-0003",
+  "automation_id": "docs-update-system-server",
+  "automation_name": "Doc Update: System: Server (Hono API)",
+  "trigger": {
+    "type": "manual",
+    "source": "manual",
+    "context": {
+      "doc_id": "system-server"
+    }
+  },
+  "started_at": "2026-02-08T22:16:03.313Z",
+  "ended_at": "2026-02-08T22:17:44.645Z",
+  "duration_seconds": 101,
+  "status": "completed",
+  "model": "claude-sonnet-4-5-20250929",
+  "provider": "anthropic",
+  "iterations": 5,
+  "tokens": {
+    "input": 115973,
+    "output": 4819,
+    "total": 120792
+  },
+  "cost_usd": 0.420204,
+  "steps": [
+    {
+      "index": 0,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:16:06.808Z",
+      "content": "I'll help you update the \"System: Server (Hono API)\" document. Let me start by reading the current content and examining the relevant source files.",
+      "tokens": {
+        "input": 11298,
+        "output": 144
+      },
+      "cost_usd": 0.036054
+    },
+    {
+      "index": 1,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:06.808Z",
+      "tool_name": "get_doc",
+      "tool_args": {
+        "id": "system-server"
+      }
+    },
+    {
+      "index": 2,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:06.809Z",
+      "tool_name": "get_doc",
+      "tool_result": "{\n  \"id\": \"system-server\",\n  \"title\": \"System: Server (Hono API)\",\n  \"type\": \"auto-generated\",\n  \"content\": \"# System: Server (Hono API)\\n\\n> **Auto-generated** | Last refreshed: 2026-02-09 | Health: 90/100 ✅ Healthy\\n\\n---\\n\\n## Overview\\n\\nThe Server is the central hub of DevTrack. Built on **Hono** (ultra-lightweight HTTP framework), it serves the REST API, manages WebSocket connections for live updates, hosts the AI intelligence layer, runs the file watcher, and coordinates all data operations.\\n\\n## Key Stats\\n\\n| Metric | Value |\\n|--------|-------|\\n| Health Score | 90/100 |\\n| Status | Healthy |\\n| Route Files | 16 (v2: + roadmap, epics, milestones, releases, systems, labels, automations) |\\n| Tech Stack | Hono, TypeScript, Node.js |\\n| Port | 24680 |\\n| Dependencies | data-layer |\\n| Dependents | web-ui, cli |\\n\\n## Core Files\\n\\n| File | Purpose |\\n|------|---------|\\n| `server/index.ts` | Entry point — mounts routes, starts server, WebSocket setup |\\n| `server/store.ts` | In-memory data store — reads JSON files, provides typed access |\\n| `server/watcher.ts` | chokidar file watcher — syncs file changes to store, broadcasts via WebSocket |\\n| `server/ws.ts` | WebSocket handler — broadcasts file_changed events to connected clients |\\n| `server/project-config.ts` | Centralized project config — all server files use this instead of hardcoded paths |\\n| `server/script-runner.ts` | Diagnostic script execution with stdout/stderr capture |\\n| `server/context-sync.ts` | Generates AI context files for different platforms (Cursor, Claude, etc.) |\\n\\n## API Routes (16 files)\\n\\n| Route File | Endpoints | Description |\\n|------------|-----------|-------------|\\n| `routes/backlog.ts` | CRUD + move/complete/reopen | Roadmap item management |\\n| `routes/issues.ts` | CRUD + resolve/reopen | Issue tracking |\\n| `routes/ideas.ts` | CRUD + promote | Idea capture and promotion |\\n| `routes/changelog.ts` | List + create | Changelog entries |\\n| `routes/session.ts` | Start/end/list | Session lifecycle |\\n| `routes/state.ts` | Get/update project state | Overall health and system statuses |\\n| `routes/brain.ts` | Notes, preferences, context recovery | AI memory system |\\n| `routes/codebase.ts` | Scan, stats, modules, search, file details | Codebase analysis |\\n| `routes/git.ts` | Status, diff, log, branches | Git integration |\\n| `routes/docs.ts` | CRUD for wiki documents | Documentation management |\\n| `routes/integrations.ts` | Status, test, credentials | Integration plugin management |\\n| `routes/config.ts` | Get/update project config | Project settings |\\n| `routes/metrics.ts` | Velocity, session stats | Metrics and analytics |\\n| `routes/actions.ts` | CRUD for tracked actions | Action/feature health |\\n| `routes/activity.ts` | Activity feed | Unified event timeline |\\n| `routes/runs.ts` | Diagnostic run results | Script execution results |\\n\\n## Multi-Project Architecture\\n\\nThe server supports multiple projects via centralized configuration:\\n\\n- **Project registry:** `~/.dev-track/registry.json`\\n- **Per-project data:** `~/.dev-track/projects/<id>/data/`\\n- **Hot-swap:** `POST /api/v1/projects/switch` repoints data directory, reloads store, restarts file watcher — no server restart needed\\n- **Config module:** `server/project-config.ts` provides `getDataDir()`, `getProjectRoot()`, etc.\\n\\n## Design Decisions\\n\\n1. **Hono over Express** — Lighter, faster, modern TypeScript-first framework\\n2. **In-memory store with file sync** — Fast reads, atomic writes, file watcher keeps in sync\\n3. **Single port** — API + static frontend served from one port (no CORS issues)\\n4. **WebSocket for live updates** — Dashboard updates in real-time when AI changes files\\n5. **No database** — JSON files are the source of truth (git-friendly, AI-readable)\\n\\n## Known Issues\\n\\n- Server may crash on `tsx watch` reload with EADDRINUSE (port held by stale process)\\n- No authentication — local-only tool, trusts all connections\\n\",\n  \"systems\": [\n    \"server\"\n  ],\n  \"roadmap_items\": [],\n  \"epics\": [],\n  \"auto_generated\": true,\n  \"last_generated\": \"2026-02-08\",\n  \"generation_sources\": [\n    \"systems\",\n    \"codebase\",\n    \"modules\"\n  ],\n  \"author\": \"ai\",\n  \"status\": \"published\",\n  \"tags\": [\n    \"system\",\n    \"server\",\n    \"api\",\n    \"auto-generated\"\n  ],\n  \"created\": \"2026-02-08\",\n  \"updated\": \"2026-02-08\"\n}",
+      "tool_result_preview": "{\n  \"id\": \"system-server\",\n  \"title\": \"System: Server (Hono API)\",\n  \"type\": \"auto-generated\",\n  \"content\": \"# System: Server (Hono API)\\n\\n> **Auto-generated** | Last refreshed: 2026-02-09 | Health: "
+    },
+    {
+      "index": 3,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:06.809Z",
+      "tool_name": "list_directory",
+      "tool_args": {
+        "dir_path": "server",
+        "recursive": true
+      }
+    },
+    {
+      "index": 4,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:06.818Z",
+      "tool_name": "list_directory",
+      "tool_result": "{\n  \"entries\": [\n    {\n      \"name\": \"ai\",\n      \"type\": \"dir\",\n      \"path\": \"server/ai\"\n    },\n    {\n      \"name\": \"chat.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/chat.ts\",\n      \"size\": 18525\n    },\n    {\n      \"name\": \"router.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/router.ts\",\n      \"size\": 12278\n    },\n    {\n      \"name\": \"runner.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/runner.ts\",\n      \"size\": 4364\n    },\n    {\n      \"name\": \"service.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/service.ts\",\n      \"size\": 28832\n    },\n    {\n      \"name\": \"state-cache.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/state-cache.ts\",\n      \"size\": 7650\n    },\n    {\n      \"name\": \"tools\",\n      \"type\": \"dir\",\n      \"path\": \"server/ai/tools\"\n    },\n    {\n      \"name\": \"actions.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/actions.ts\",\n      \"size\": 3833\n    },\n    {\n      \"name\": \"activity.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/activity.ts\",\n      \"size\": 1794\n    },\n    {\n      \"name\": \"audits.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/audits.ts\",\n      \"size\": 3024\n    },\n    {\n      \"name\": \"backlog.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/backlog.ts\",\n      \"size\": 10605\n    },\n    {\n      \"name\": \"brain.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/brain.ts\",\n      \"size\": 5198\n    },\n    {\n      \"name\": \"changelog.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/changelog.ts\",\n      \"size\": 2453\n    },\n    {\n      \"name\": \"codebase.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/codebase.ts\",\n      \"size\": 4441\n    },\n    {\n      \"name\": \"config.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/config.ts\",\n      \"size\": 2236\n    },\n    {\n      \"name\": \"docs.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/docs.ts\",\n      \"size\": 8535\n    },\n    {\n      \"name\": \"epics.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/epics.ts\",\n      \"size\": 6652\n    },\n    {\n      \"name\": \"files.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/files.ts\",\n      \"size\": 4725\n    },\n    {\n      \"name\": \"git.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/git.ts\",\n      \"size\": 4073\n    },\n    {\n      \"name\": \"ideas.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/ideas.ts\",\n      \"size\": 5921\n    },\n    {\n      \"name\": \"index.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/index.ts\",\n      \"size\": 3812\n    },\n    {\n      \"name\": \"integrations.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/integrations.ts\",\n      \"size\": 1917\n    },\n    {\n      \"name\": \"issues.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/issues.ts\",\n      \"size\": 6824\n    },\n    {\n      \"name\": \"metrics.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/metrics.ts\",\n      \"size\": 1881\n    },\n    {\n      \"name\": \"milestones.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/milestones.ts\",\n      \"size\": 6392\n    },\n    {\n      \"name\": \"profiles.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/profiles.ts\",\n      \"size\": 4993\n    },\n    {\n      \"name\": \"releases.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/releases.ts\",\n      \"size\": 5122\n    },\n    {\n      \"name\": \"session.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/session.ts\",\n      \"size\": 3747\n    },\n    {\n      \"name\": \"state.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/state.ts\",\n      \"size\": 3046\n    },\n    {\n      \"name\": \"types.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/tools/types.ts\",\n      \"size\": 422\n    },\n    {\n      \"name\": \"analyzer\",\n      \"type\": \"dir\",\n      \"path\": \"server/analyzer\"\n    },\n    {\n      \"name\": \"scanner.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/analyzer/scanner.ts\",\n      \"size\": 35200\n    },\n    {\n      \"name\": \"automation\",\n      \"type\": \"dir\",\n      \"path\": \"server/automation\"\n    },\n    {\n      \"name\": \"engine.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/automation/engine.ts\",\n      \"size\": 11712\n    },\n    {\n      \"name\": \"recorder.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/automation/recorder.ts\",\n      \"size\": 9043\n    },\n    {\n      \"name\": \"scheduler.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/automation/scheduler.ts\",\n      \"size\": 3138\n    },\n    {\n      \"name\": \"context-sync.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/context-sync.ts\",\n      \"size\": 4870\n    },\n    {\n      \"name\": \"index.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/index.ts\",\n      \"size\": 11007\n    },\n    {\n      \"name\": \"integrations\",\n      \"type\": \"dir\",\n      \"path\": \"server/integrations\"\n    },\n    {\n      \"name\": \"aws-ec2.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/integrations/aws-ec2.ts\",\n      \"size\": 4629\n    },\n    {\n      \"name\": \"cloudflare.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/integrations/cloudflare.ts\",\n      \"size\": 6210\n    },\n    {\n      \"name\": \"git...[truncated]",
+      "tool_result_preview": "{\n  \"entries\": [\n    {\n      \"name\": \"ai\",\n      \"type\": \"dir\",\n      \"path\": \"server/ai\"\n    },\n    {\n      \"name\": \"chat.ts\",\n      \"type\": \"file\",\n      \"path\": \"server/ai/chat.ts\",\n      \"size\": 1"
+    },
+    {
+      "index": 5,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:16:10.457Z",
+      "content": "Now let me examine key server files to understand the architecture better:",
+      "tokens": {
+        "input": 16510,
+        "output": 210
+      },
+      "cost_usd": 0.05268
+    },
+    {
+      "index": 6,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:10.457Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/index.ts"
+      }
+    },
+    {
+      "index": 7,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:10.458Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import { Hono } from 'hono';\\r\\nimport { cors } from 'hono/cors';\\r\\nimport { serve } from '@hono/node-server';\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport os from 'os';\\r\\nimport {\\r\\n  setDataDir,\\r\\n  setProjectRoot,\\r\\n  setProjectConfig,\\r\\n  getDataDir,\\r\\n  getProjectRoot,\\r\\n  getProjectName,\\r\\n  getProjectConfig,\\r\\n  loadRegistry,\\r\\n  registerProject,\\r\\n  findAvailablePort,\\r\\n} from './project-config.js';\\r\\nimport { getStore, reloadStore } from './store.js';\\r\\nimport { setupWebSocket } from './ws.js';\\r\\nimport { startWatcher } from './watcher.js';\\r\\nimport { startScheduler } from './automation/scheduler.js';\\r\\nimport { getAutomationEngine } from './automation/engine.js';\\r\\n\\r\\n// Route imports — v2 entities\\r\\nimport stateRoutes from './routes/state.js';\\r\\nimport sessionRoutes from './routes/session.js';\\r\\nimport roadmapRoutes from './routes/roadmap.js';\\r\\nimport epicsRoutes from './routes/epics.js';\\r\\nimport milestonesRoutes from './routes/milestones.js';\\r\\nimport releasesRoutes from './routes/releases.js';\\r\\nimport systemsRoutes from './routes/systems.js';\\r\\nimport issuesRoutes from './routes/issues.js';\\r\\nimport changelogRoutes from './routes/changelog.js';\\r\\nimport labelsRoutes from './routes/labels.js';\\r\\nimport automationsRoutes from './routes/automations.js';\\r\\nimport metricsRoutes from './routes/metrics.js';\\r\\nimport docsRoutes from './routes/docs.js';\\r\\nimport configRoutes from './routes/config.js';\\r\\nimport integrationsRoutes from './routes/integrations.js';\\r\\nimport brainRoutes from './routes/brain.js';\\r\\nimport ideasRoutes from './routes/ideas.js';\\r\\nimport activityRoutes from './routes/activity.js';\\r\\nimport codebaseRoutes from './routes/codebase.js';\\r\\nimport gitRoutes from './routes/git.js';\\r\\nimport aiRoutes from './routes/ai.js';\\r\\nimport initRoutes from './routes/init.js';\\r\\nimport auditsRoutes from './routes/audits.js';\\r\\n\\r\\n// ─── Parse CLI flags ────────────────────────────────────────────────────────\\r\\n\\r\\nfunction parseArgs(): { dataDir?: string; port?: number; projectRoot?: string } {\\r\\n  const args = process.argv.slice(2);\\r\\n  const result: { dataDir?: string; port?: number; projectRoot?: string } = {};\\r\\n\\r\\n  for (let i = 0; i < args.length; i++) {\\r\\n    if (args[i] === '--data-dir' && args[i + 1]) {\\r\\n      result.dataDir = args[++i];\\r\\n    } else if (args[i] === '--port' && args[i + 1]) {\\r\\n      result.port = parseInt(args[++i]);\\r\\n    } else if (args[i] === '--project-root' && args[i + 1]) {\\r\\n      result.projectRoot = args[++i];\\r\\n    }\\r\\n  }\\r\\n\\r\\n  return result;\\r\\n}\\r\\n\\r\\nconst cliArgs = parseArgs();\\r\\n\\r\\n// Apply CLI flags (highest priority)\\r\\nif (cliArgs.dataDir) setDataDir(cliArgs.dataDir);\\r\\nif (cliArgs.projectRoot) setProjectRoot(cliArgs.projectRoot);\\r\\n\\r\\n// Resolve port: CLI flag > env var > project config > default\\r\\nconst PORT = cliArgs.port\\r\\n  || parseInt(process.env.DEV_TRACK_PORT || '0')\\r\\n  || getProjectConfig()?.port\\r\\n  || 24680;\\r\\n\\r\\nconst app = new Hono();\\r\\n\\r\\n// ─── Middleware ──────────────────────────────────────────────────────────────\\r\\n\\r\\napp.use('*', cors({\\r\\n  origin: (origin) => {\\r\\n    if (!origin) return `http://localhost:${PORT}`;\\r\\n    if (origin.includes('localhost') || origin.includes('127.0.0.1')) return origin;\\r\\n    return `http://localhost:${PORT}`;\\r\\n  },\\r\\n  allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],\\r\\n  allowHeaders: ['Content-Type'],\\r\\n}));\\r\\n\\r\\n// ─── API Routes (v2) ────────────────────────────────────────────────────────\\r\\n\\r\\n// Core entities\\r\\napp.route('/api/v1/roadmap', roadmapRoutes);\\r\\napp.route('/api/v1/epics', epicsRoutes);\\r\\napp.route('/api/v1/milestones', milestonesRoutes);\\r\\napp.route('/api/v1/releases', releasesRoutes);\\r\\napp.route('/api/v1/systems', systemsRoutes);\\r\\napp.route('/api/v1/issues', issuesRoutes);\\r\\napp.route('/api/v1/changelog', changelogRoutes);\\r\\napp.route('/api/v1/session', sessionRoutes);\\r\\napp.route('/api/v1/ideas', ideasRoutes);\\r\\napp.route('/api/v1/labels', labelsRoutes);\\r\\napp.route('/api/v1/automations', automationsRoutes);\\r\\n\\r\\n// Supporting\\r\\napp.route('/api/v1/state', stateRoutes);\\r\\napp.route('/api/v1/metrics', metricsRoutes);\\r\\napp.route('/api/v1/docs', docsRoutes);\\r\\napp.route('/api/v1/config', configRoutes);\\r\\napp.route('/api/v1/integrations', integrationsRoutes);\\r\\napp.route('/api/v1/brain', brainRoutes);\\r\\napp.route('/api/v1/activity', activityRoutes);\\r\\napp.route('/api/v1/codebase', codebaseRoutes);\\r\\napp.route('/api/v1/git', gitRoutes);\\r\\napp.route('/api/v1/ai', aiRoutes);\\r\\napp.route('/api/v1/init', initRoutes);\\r\\napp.route('/api/v1/audits', auditsRoutes);\\r\\n\\r\\n// Backward compat: /api/v1/backlog → /api/v1/roadmap\\r\\napp.route('/api/v1/backlog', roadmapRoutes);\\r\\n\\r\\n// Quick status shortcut\\r\\napp.get('/api/v1/quick-status', (c) => {\\r\\n  const store = getStore();\\r\\n  return c.json({\\r\\n    ok: true,\\r\\n    data: {\\r...[truncated]",
+      "tool_result_preview": "{\n  \"content\": \"import { Hono } from 'hono';\\r\\nimport { cors } from 'hono/cors';\\r\\nimport { serve } from '@hono/node-server';\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport os from 'o"
+    },
+    {
+      "index": 8,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:10.458Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/store.ts"
+      }
+    },
+    {
+      "index": 9,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:10.459Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getDataDir } from './project-config.js';\\r\\nimport type {\\r\\n  DevTrackConfig,\\r\\n  ProjectState,\\r\\n  RoadmapData,\\r\\n  RoadmapItem,\\r\\n  EpicsData,\\r\\n  MilestonesData,\\r\\n  ReleasesData,\\r\\n  SystemsData,\\r\\n  IssuesData,\\r\\n  ChangelogData,\\r\\n  SessionsData,\\r\\n  Session,\\r\\n  IdeasData,\\r\\n  ActivityFeedData,\\r\\n  ActivityEvent,\\r\\n  LabelsData,\\r\\n  AutomationsData,\\r\\n  DocsRegistryData,\\r\\n  VelocityData,\\r\\n  QuickStatus,\\r\\n  BrainNotesData,\\r\\n  BrainPreferences,\\r\\n  ContextRecovery,\\r\\n} from '../shared/types.js';\\r\\n\\r\\n// ─── File Helpers ───────────────────────────────────────────────────────────\\r\\n\\r\\nfunction readJSON<T>(filePath: string, fallback: T): T {\\r\\n  const fullPath = path.join(getDataDir(), filePath);\\r\\n  try {\\r\\n    if (!fs.existsSync(fullPath)) return fallback;\\r\\n    const raw = fs.readFileSync(fullPath, 'utf-8');\\r\\n    return JSON.parse(raw) as T;\\r\\n  } catch {\\r\\n    console.warn(`[store] Failed to read ${filePath}, using fallback`);\\r\\n    return fallback;\\r\\n  }\\r\\n}\\r\\n\\r\\nfunction writeJSON<T>(filePath: string, data: T): void {\\r\\n  const fullPath = path.join(getDataDir(), filePath);\\r\\n  const dir = path.dirname(fullPath);\\r\\n  if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });\\r\\n  fs.writeFileSync(fullPath, JSON.stringify(data, null, 2) + '\\\\n', 'utf-8');\\r\\n}\\r\\n\\r\\nfunction readMarkdown(filePath: string): string {\\r\\n  const fullPath = path.join(getDataDir(), filePath);\\r\\n  try {\\r\\n    if (!fs.existsSync(fullPath)) return '';\\r\\n    return fs.readFileSync(fullPath, 'utf-8');\\r\\n  } catch {\\r\\n    return '';\\r\\n  }\\r\\n}\\r\\n\\r\\nfunction listFiles(dirPath: string, ext: string): string[] {\\r\\n  const fullPath = path.join(getDataDir(), dirPath);\\r\\n  try {\\r\\n    if (!fs.existsSync(fullPath)) return [];\\r\\n    return fs.readdirSync(fullPath)\\r\\n      .filter(f => f.endsWith(ext) && !f.startsWith('_'))\\r\\n      .sort();\\r\\n  } catch {\\r\\n    return [];\\r\\n  }\\r\\n}\\r\\n\\r\\n// ─── Store Class ────────────────────────────────────────────────────────────\\r\\n\\r\\nexport class Store {\\r\\n  // Core config\\r\\n  config: DevTrackConfig;\\r\\n  state: ProjectState;\\r\\n\\r\\n  // v2 Entities\\r\\n  roadmap: RoadmapData;\\r\\n  epics: EpicsData;\\r\\n  milestones: MilestonesData;\\r\\n  releases: ReleasesData;\\r\\n  systems: SystemsData;\\r\\n  issues: IssuesData;\\r\\n  changelog: ChangelogData;\\r\\n  sessions: SessionsData;\\r\\n  sessionCurrent: Session | null;\\r\\n  ideas: IdeasData;\\r\\n  activity: ActivityFeedData;\\r\\n  labels: LabelsData;\\r\\n  automations: AutomationsData;\\r\\n  docsRegistry: DocsRegistryData;\\r\\n  velocity: VelocityData;\\r\\n\\r\\n  // Backward compat aliases\\r\\n  get backlog(): RoadmapData { return this.roadmap; }\\r\\n\\r\\n  // Track write timestamps for debouncing watcher\\r\\n  private _lastWriteTime: Record<string, number> = {};\\r\\n\\r\\n  constructor() {\\r\\n    this.config = readJSON<DevTrackConfig>('config.json', {\\r\\n      project: 'unknown',\\r\\n      description: '',\\r\\n      created: new Date().toISOString().split('T')[0],\\r\\n      version: '0.2',\\r\\n      settings: {\\r\\n        max_now_items: 3,\\r\\n        max_session_history: 20,\\r\\n        auto_archive_resolved_issues_after_days: 7,\\r\\n        changelog_window_days: 14,\\r\\n        completed_items_window_days: 14,\\r\\n        summary_period: 'monthly',\\r\\n        verbosity: {\\r\\n          changelog_entries: 'detailed',\\r\\n          session_retros: 'summary',\\r\\n          issue_commentary: 'detailed',\\r\\n          design_docs: 'detailed',\\r\\n          diagnostic_output: 'summary',\\r\\n          roadmap_descriptions: 'detailed',\\r\\n          ai_context_loading: 'efficient',\\r\\n        },\\r\\n        developers: [],\\r\\n      },\\r\\n    });\\r\\n\\r\\n    this.state = readJSON<ProjectState>('state.json', {\\r\\n      last_updated: new Date().toISOString().split('T')[0],\\r\\n      overall_health: 0,\\r\\n      summary: '',\\r\\n    });\\r\\n\\r\\n    // v2 entities — read from new paths, fallback to old paths for backward compat\\r\\n    this.roadmap = readJSON<RoadmapData>('roadmap/items.json', null as any)\\r\\n      || readJSON<RoadmapData>('backlog/items.json', { items: [] });\\r\\n\\r\\n    this.epics = readJSON<EpicsData>('roadmap/epics.json', { epics: [] });\\r\\n    this.milestones = readJSON<MilestonesData>('roadmap/milestones.json', { milestones: [] });\\r\\n    this.releases = readJSON<ReleasesData>('releases/releases.json', { releases: [] });\\r\\n    this.systems = readJSON<SystemsData>('systems/systems.json', { systems: [] });\\r\\n    this.issues = readJSON<IssuesData>('issues/items.json', { issues: [], next_id: 1 });\\r\\n    this.changelog = readJSON<ChangelogData>('changelog/entries.json', { entries: [] });\\r\\n\\r\\n    // Sessions — v2 format\\r\\n    const sessionsData = readJSON<SessionsData>('session/log.json', { sessions: [], next_id: 1 });\\r\\n    this.sessions = sessionsData;\\r\\n    this.sessionCurrent = readJSON<Session | null>('session/current.json', nul...[truncated]",
+      "tool_result_preview": "{\n  \"content\": \"import fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getDataDir } from './project-config.js';\\r\\nimport type {\\r\\n  DevTrackConfig,\\r\\n  ProjectState,\\r\\n  RoadmapData,\\r\\n  Ro"
+    },
+    {
+      "index": 10,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:10.459Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/watcher.ts"
+      }
+    },
+    {
+      "index": 11,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:10.459Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import chokidar from 'chokidar';\\r\\nimport path from 'path';\\r\\nimport { getStore } from './store.js';\\r\\nimport { broadcast } from './ws.js';\\r\\nimport { getDataDir } from './project-config.js';\\r\\nimport { getAutomationEngine } from './automation/engine.js';\\r\\nimport type { WSEvent } from '../shared/types.js';\\r\\n\\r\\nlet _watcher: chokidar.FSWatcher | null = null;\\r\\n\\r\\nexport function startWatcher(): void {\\r\\n  // Close existing watcher if restarting (e.g., project switch)\\r\\n  if (_watcher) {\\r\\n    _watcher.close().catch(() => {});\\r\\n    _watcher = null;\\r\\n  }\\r\\n\\r\\n  const DATA_DIR = getDataDir();\\r\\n  _watcher = chokidar.watch(DATA_DIR, {\\r\\n    ignoreInitial: true,\\r\\n    persistent: true,\\r\\n    depth: 3,\\r\\n    awaitWriteFinish: {\\r\\n      stabilityThreshold: 300,\\r\\n      pollInterval: 100,\\r\\n    },\\r\\n  });\\r\\n\\r\\n  _watcher.on('change', (filePath: string) => {\\r\\n    const relative = path.relative(DATA_DIR, filePath).replace(/\\\\\\\\/g, '/');\\r\\n    const store = getStore();\\r\\n\\r\\n    // Skip if this was our own write (debounce echo)\\r\\n    if (store.isRecentWrite(relative)) return;\\r\\n\\r\\n    console.log(`[watcher] File changed: ${relative}`);\\r\\n    store.reloadFile(relative);\\r\\n\\r\\n    // Determine event type from file path\\r\\n    const eventType = getEventType(relative);\\r\\n    if (eventType) {\\r\\n      const event: WSEvent = {\\r\\n        type: eventType,\\r\\n        data: { file: relative },\\r\\n        timestamp: new Date().toISOString(),\\r\\n      };\\r\\n      broadcast(event);\\r\\n\\r\\n      // Fire automation trigger (non-blocking)\\r\\n      getAutomationEngine().fire({ trigger: 'file_changed', data: { file: relative, event_type: eventType } }).catch(() => {});\\r\\n    }\\r\\n  });\\r\\n\\r\\n  _watcher.on('add', (filePath: string) => {\\r\\n    const relative = path.relative(DATA_DIR, filePath).replace(/\\\\\\\\/g, '/');\\r\\n    const store = getStore();\\r\\n    if (store.isRecentWrite(relative)) return;\\r\\n\\r\\n    console.log(`[watcher] File added: ${relative}`);\\r\\n    store.reloadFile(relative);\\r\\n\\r\\n    const event: WSEvent = {\\r\\n      type: 'file_changed',\\r\\n      data: { file: relative, action: 'added' },\\r\\n      timestamp: new Date().toISOString(),\\r\\n    };\\r\\n    broadcast(event);\\r\\n  });\\r\\n\\r\\n  console.log(`[watcher] Watching ${DATA_DIR}`);\\r\\n}\\r\\n\\r\\nfunction getEventType(relativePath: string): WSEvent['type'] | null {\\r\\n  if (relativePath === 'state.json') return 'system_updated';\\r\\n  if (relativePath.startsWith('roadmap/items')) return 'roadmap_updated';\\r\\n  if (relativePath.startsWith('backlog/')) return 'roadmap_updated';\\r\\n  if (relativePath.startsWith('roadmap/epics')) return 'epic_updated';\\r\\n  if (relativePath.startsWith('roadmap/milestones')) return 'milestone_updated';\\r\\n  if (relativePath.startsWith('releases/')) return 'release_updated';\\r\\n  if (relativePath.startsWith('systems/')) return 'system_updated';\\r\\n  if (relativePath.startsWith('session/')) return 'session_updated';\\r\\n  if (relativePath.startsWith('issues/')) return 'issue_updated';\\r\\n  if (relativePath.startsWith('changelog/')) return 'changelog_updated';\\r\\n  if (relativePath.startsWith('ideas/')) return 'idea_updated';\\r\\n  if (relativePath.startsWith('labels/')) return 'label_updated';\\r\\n  if (relativePath.startsWith('automations/')) return 'automation_updated';\\r\\n  if (relativePath.startsWith('activity/')) return 'activity_event';\\r\\n  if (relativePath === 'config.json') return 'settings_changed';\\r\\n  return 'file_changed';\\r\\n}\\r\\n\",\n  \"total_lines\": 91,\n  \"showing\": {\n    \"from\": 0,\n    \"to\": 91\n  },\n  \"truncated\": false\n}",
+      "tool_result_preview": "{\n  \"content\": \"import chokidar from 'chokidar';\\r\\nimport path from 'path';\\r\\nimport { getStore } from './store.js';\\r\\nimport { broadcast } from './ws.js';\\r\\nimport { getDataDir } from './project-"
+    },
+    {
+      "index": 12,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:10.459Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/project-config.ts"
+      }
+    },
+    {
+      "index": 13,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:10.459Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"/**\\r\\n * Centralized project configuration — resolves data directory, project info, and paths.\\r\\n * \\r\\n * Priority for data directory:\\r\\n *   1. Explicit setDataDir() call (from CLI start command)\\r\\n *   2. DEV_TRACK_DATA_DIR environment variable\\r\\n *   3. .dev-track/config.json in current working directory (project-local)\\r\\n *   4. ./data/ relative to cwd (legacy default for dev-track-on-dev-track)\\r\\n */\\r\\n\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport os from 'os';\\r\\n\\r\\n// ─── Types ──────────────────────────────────────────────────────────────────\\r\\n\\r\\nexport interface ProjectConfig {\\r\\n  projectId: string;\\r\\n  name: string;\\r\\n  dataDir: string;\\r\\n  projectPath: string;\\r\\n  port?: number;\\r\\n}\\r\\n\\r\\nexport interface ProjectRegistryEntry {\\r\\n  id: string;\\r\\n  name: string;\\r\\n  path: string;\\r\\n  dataDir: string;\\r\\n  port?: number;\\r\\n  lastAccessed: string;\\r\\n  created: string;\\r\\n}\\r\\n\\r\\nexport interface ProjectRegistry {\\r\\n  projects: ProjectRegistryEntry[];\\r\\n}\\r\\n\\r\\nexport interface GlobalSettings {\\r\\n  defaultPort: number;\\r\\n  portRange: [number, number];\\r\\n}\\r\\n\\r\\n// ─── Paths ──────────────────────────────────────────────────────────────────\\r\\n\\r\\nconst DEVTRACK_HOME = path.join(os.homedir(), '.dev-track');\\r\\nconst REGISTRY_PATH = path.join(DEVTRACK_HOME, 'projects.json');\\r\\nconst GLOBAL_SETTINGS_PATH = path.join(DEVTRACK_HOME, 'settings.json');\\r\\n\\r\\nexport function getDevTrackHome(): string {\\r\\n  return DEVTRACK_HOME;\\r\\n}\\r\\n\\r\\n// ─── State ──────────────────────────────────────────────────────────────────\\r\\n\\r\\nlet _dataDir: string | null = null;\\r\\nlet _projectRoot: string | null = null;\\r\\nlet _projectConfig: ProjectConfig | null = null;\\r\\n\\r\\n/**\\r\\n * Explicitly set the data directory. Used by CLI and server startup.\\r\\n */\\r\\nexport function setDataDir(dir: string): void {\\r\\n  _dataDir = path.resolve(dir);\\r\\n}\\r\\n\\r\\n/**\\r\\n * Explicitly set the project root directory.\\r\\n */\\r\\nexport function setProjectRoot(dir: string): void {\\r\\n  _projectRoot = path.resolve(dir);\\r\\n}\\r\\n\\r\\n/**\\r\\n * Set the full project config (from CLI init/start).\\r\\n */\\r\\nexport function setProjectConfig(config: ProjectConfig): void {\\r\\n  _projectConfig = config;\\r\\n  _dataDir = path.resolve(config.dataDir);\\r\\n  _projectRoot = path.resolve(config.projectPath);\\r\\n}\\r\\n\\r\\n/**\\r\\n * Get the data directory — the resolved path where all JSON tracking data lives.\\r\\n */\\r\\nexport function getDataDir(): string {\\r\\n  if (_dataDir) return _dataDir;\\r\\n\\r\\n  // Check environment variable\\r\\n  if (process.env.DEV_TRACK_DATA_DIR) {\\r\\n    _dataDir = path.resolve(process.env.DEV_TRACK_DATA_DIR);\\r\\n    return _dataDir;\\r\\n  }\\r\\n\\r\\n  // Check for .dev-track/config.json in cwd\\r\\n  const localConfigPath = path.join(process.cwd(), '.dev-track', 'config.json');\\r\\n  if (fs.existsSync(localConfigPath)) {\\r\\n    try {\\r\\n      const config = JSON.parse(fs.readFileSync(localConfigPath, 'utf-8'));\\r\\n      if (config.dataDir) {\\r\\n        // Resolve ~ to home directory\\r\\n        const resolved = config.dataDir.replace(/^~/, os.homedir());\\r\\n        _dataDir = path.resolve(resolved);\\r\\n        _projectRoot = process.cwd();\\r\\n        _projectConfig = config;\\r\\n        return _dataDir;\\r\\n      }\\r\\n    } catch {}\\r\\n  }\\r\\n\\r\\n  // Legacy default: ./data/ relative to cwd (dev-track developing itself)\\r\\n  _dataDir = path.resolve(process.cwd(), 'data');\\r\\n  return _dataDir;\\r\\n}\\r\\n\\r\\n/**\\r\\n * Get the project root — where .dev-track/ and .credentials.json live.\\r\\n */\\r\\nexport function getProjectRoot(): string {\\r\\n  if (_projectRoot) return _projectRoot;\\r\\n  // Default to cwd\\r\\n  _projectRoot = process.cwd();\\r\\n  return _projectRoot;\\r\\n}\\r\\n\\r\\n/**\\r\\n * Get the local (personal, gitignored) data directory.\\r\\n * Used for user profiles, preferences, and other user-specific data.\\r\\n * Created automatically if it doesn't exist.\\r\\n */\\r\\nexport function getLocalDataDir(): string {\\r\\n  const localDir = path.join(getDataDir(), 'local');\\r\\n  if (!fs.existsSync(localDir)) {\\r\\n    fs.mkdirSync(localDir, { recursive: true });\\r\\n  }\\r\\n  return localDir;\\r\\n}\\r\\n\\r\\n/**\\r\\n * Get the credentials file path.\\r\\n */\\r\\nexport function getCredentialsPath(): string {\\r\\n  return path.join(getProjectRoot(), '.credentials.json');\\r\\n}\\r\\n\\r\\n/**\\r\\n * Get the current project config, if loaded.\\r\\n */\\r\\nexport function getProjectConfig(): ProjectConfig | null {\\r\\n  // Ensure getDataDir() has been called to try loading config\\r\\n  getDataDir();\\r\\n  return _projectConfig;\\r\\n}\\r\\n\\r\\n/**\\r\\n * Get the project name (from config, or fallback to directory name).\\r\\n */\\r\\nexport function getProjectName(): string {\\r\\n  const config = getProjectConfig();\\r\\n  if (config?.name) return config.name;\\r\\n  \\r\\n  // Try reading from data/config.json\\r\\n  try {\\r\\n    const configPath = path.join(getDataDir(), 'config.json');\\r\\n    if (fs.existsSync(configPath)) {...[truncated]",
+      "tool_result_preview": "{\n  \"content\": \"/**\\r\\n * Centralized project configuration — resolves data directory, project info, and paths.\\r\\n * \\r\\n * Priority for data directory:\\r\\n *   1. Explicit setDataDir() call (from CL"
+    },
+    {
+      "index": 14,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:16:14.506Z",
+      "content": "Now let me examine the AI service layer and automation engine:",
+      "tokens": {
+        "input": 26185,
+        "output": 204
+      },
+      "cost_usd": 0.081615
+    },
+    {
+      "index": 15,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:14.506Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/ai/service.ts",
+        "max_lines": 100
+      }
+    },
+    {
+      "index": 16,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:14.507Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"/**\\r\\n * AIService — Unified interface across OpenAI, Anthropic, and Google AI providers.\\r\\n * \\r\\n * Handles:\\r\\n * - Multi-provider support with automatic Helicone proxy routing\\r\\n * - Streaming and non-streaming completions\\r\\n * - Tool calling in OpenAI function-calling format\\r\\n * - Usage tracking and cost estimation\\r\\n * - Graceful degradation when provider keys are missing\\r\\n */\\r\\n\\r\\nimport OpenAI from 'openai';\\r\\nimport Anthropic from '@anthropic-ai/sdk';\\r\\nimport { GoogleGenerativeAI } from '@google/generative-ai';\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getDataDir, getCredentialsPath } from '../project-config.js';\\r\\nimport { getStore } from '../store.js';\\r\\nimport { ModelRouter, type TaskType } from './router.js';\\r\\n\\r\\n// ─── Types ──────────────────────────────────────────────────────────────────\\r\\n\\r\\nexport interface AIMessage {\\r\\n  role: 'system' | 'user' | 'assistant' | 'tool';\\r\\n  content: string;\\r\\n  tool_call_id?: string;\\r\\n  tool_calls?: AIToolCall[];\\r\\n}\\r\\n\\r\\nexport interface AIToolCall {\\r\\n  id: string;\\r\\n  type: 'function';\\r\\n  function: {\\r\\n    name: string;\\r\\n    arguments: string;\\r\\n  };\\r\\n}\\r\\n\\r\\nexport interface AIToolDefinition {\\r\\n  type: 'function';\\r\\n  function: {\\r\\n    name: string;\\r\\n    description: string;\\r\\n    parameters: Record<string, any>;\\r\\n  };\\r\\n}\\r\\n\\r\\nexport interface AICompletionOptions {\\r\\n  task?: TaskType;\\r\\n  model?: string;           // Override model for this call\\r\\n  temperature?: number;\\r\\n  max_tokens?: number;\\r\\n  tools?: AIToolDefinition[];\\r\\n  stream?: boolean;\\r\\n  /** Custom properties sent to Helicone for tracking (user, session, automation, etc.) */\\r\\n  heliconeProperties?: Record<string, string>;\\r\\n}\\r\\n\\r\\nexport interface AICompletionResult {\\r\\n  content: string;\\r\\n  tool_calls?: AIToolCall[];\\r\\n  model: string;\\r\\n  provider: string;\\r\\n  usage: {\\r\\n    input_tokens: number;\\r\\n    output_tokens: number;\\r\\n    total_tokens: number;\\r\\n  };\\r\\n  estimated_cost_usd: number;\\r\\n}\\r\\n\\r\\nexport interface StreamEvent {\\r\\n  type: 'text_delta' | 'tool_call_start' | 'tool_call_delta' | 'tool_call_end' | 'done' | 'error';\\r\\n  content?: string;\\r\\n  tool_call?: Partial<AIToolCall>;\\r\\n  tool_call_index?: number;\\r\\n  model?: string;\\r\\n  provider?: string;\\r\\n  usage?: { input_tokens: number; output_tokens: number; total_tokens: number };\\r\\n  error?: string;\\r\\n}\\r\\n\\r\\n// ─── Credentials ─────────────────────────────────────────────────────────────\\r\\n\\r\\ninterface AICredentials {\\r\\n  openai?: string;\\r\\n  anthropic?: string;\\r\\n  google?: string;\\r\\n  helicone?: string;\\r\\n  helicone_org_id?: string;\\r\\n}\\r\\n\\r\\nfunction loadCredentials(): AICredentials {\\r\\n  try {\\r\\n    const credPath = getCredentialsPath();\\r\\n    if (fs.existsSync(credPath)) {\\r\\n      const data = JSON.parse(fs.readFileSync(credPath, 'utf-8'));\\r\\n      return data.ai || {};\\r\\n    }\\r\\n  } catch {}\\r\",\n  \"total_lines\": 776,\n  \"showing\": {\n    \"from\": 0,\n    \"to\": 100\n  },\n  \"truncated\": true\n}",
+      "tool_result_preview": "{\n  \"content\": \"/**\\r\\n * AIService — Unified interface across OpenAI, Anthropic, and Google AI providers.\\r\\n * \\r\\n * Handles:\\r\\n * - Multi-provider support with automatic Helicone proxy routing\\r\\"
+    },
+    {
+      "index": 17,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:14.507Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/automation/engine.ts",
+        "max_lines": 100
+      }
+    },
+    {
+      "index": 18,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:14.507Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"/**\\r\\n * Automation Engine\\r\\n * \\r\\n * Evaluates triggers, checks conditions, executes actions.\\r\\n * Supports both rigid condition-based and AI-driven automations.\\r\\n */\\r\\n\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\nimport { getStore } from '../store.js';\\r\\nimport { getDataDir } from '../project-config.js';\\r\\nimport { broadcast } from '../ws.js';\\r\\nimport { runAgent } from '../ai/runner.js';\\r\\nimport { AuditRecorder } from './recorder.js';\\r\\nimport { formatStateCacheForPrompt, invalidateStateCache } from '../ai/state-cache.js';\\r\\nimport type { Automation, AutomationCondition, AuditTriggerType } from '../../shared/types.js';\\r\\n\\r\\nexport type TriggerType = 'issue_created' | 'item_completed' | 'session_ended' | 'health_changed' | 'scheduled' | 'file_changed' | 'manual';\\r\\n\\r\\nexport interface TriggerContext {\\r\\n  trigger: TriggerType;\\r\\n  data?: any;\\r\\n  timestamp?: string;\\r\\n}\\r\\n\\r\\nclass AutomationEngine {\\r\\n  private _running = new Map<string, boolean>();\\r\\n\\r\\n  /**\\r\\n   * Force-run a specific automation by ID, bypassing cooldown and trigger matching.\\r\\n   * Used by manual \\\"Run Now\\\" button in Settings UI.\\r\\n   */\\r\\n  async forceRun(automationId: string): Promise<void> {\\r\\n    const store = getStore();\\r\\n    const automation = store.automations.automations.find(a => a.id === automationId);\\r\\n    if (!automation) throw new Error(`Automation \\\"${automationId}\\\" not found`);\\r\\n\\r\\n    // Skip if already running (prevent overlap)\\r\\n    if (this._running.get(automation.id)) {\\r\\n      throw new Error(`Automation \\\"${automationId}\\\" is already running`);\\r\\n    }\\r\\n\\r\\n    console.log(`[automation] Force-running: ${automation.name} (bypassing cooldown)`);\\r\\n\\r\\n    // Mark last_fired immediately\\r\\n    automation.last_fired = new Date().toISOString();\\r\\n    store.saveAutomations();\\r\\n\\r\\n    // Execute directly — no cooldown check, no trigger matching\\r\\n    await this.executeAutomation(automation, { trigger: 'manual', data: { force: true } });\\r\\n  }\\r\\n\\r\\n  /**\\r\\n   * Fire a trigger — finds matching automations and executes them.\\r\\n   * Runs async (non-blocking). Logs results to activity feed.\\r\\n   * Respects the master kill switch in ai/config.json.\\r\\n   */\\r\\n  async fire(context: TriggerContext): Promise<void> {\\r\\n    const store = getStore();\\r\\n\\r\\n    // Master kill switch — check ai/config.json automations.enabled\\r\\n    const aiConfig = this.getAIConfig();\\r\\n    if (!aiConfig?.automations?.enabled) return;\\r\\n\\r\\n    // Check if triggers are enabled (separate from scheduler)\\r\\n    if (context.trigger !== 'scheduled' && !aiConfig?.automations?.triggers_enabled) return;\\r\\n    if (context.trigger === 'scheduled' && !aiConfig?.automations?.scheduler_enabled) return;\\r\\n\\r\\n    // Budget check — stop if daily limit exceeded\\r\\n    if (aiConfig?.budget?.pause_on_limit && aiConfig?.budget?.total_spent_usd >= aiConfig?.budget?.daily_limit_usd) {\\r\\n      console.log(`[automation] Budget limit reached ($${aiConfig.budget.total_spent_usd}/$${aiConfig.budget.daily_limit_usd}). Skipping.`);\\r\\n      return;\\r\\n    }\\r\\n\\r\\n    const automations = store.automations.automations.filter(a =>\\r\\n      a.enabled && a.trigger === context.trigger\\r\\n    );\\r\\n\\r\\n    if (automations.length === 0) return;\\r\\n\\r\\n    console.log(`[automation] Trigger: ${context.trigger} — ${automations.length} automation(s) matched`);\\r\\n\\r\\n    for (const automation of automations) {\\r\\n      // Skip if already running (prevent overlap)\\r\\n      if (this._running.get(automation.id)) {\\r\\n        console.log(`[automation] Skipping ${automation.id} — already running`);\\r\\n        continue;\\r\\n      }\\r\\n\\r\\n      // Cooldown check — don't re-fire within cooldown window\\r\\n      const cooldownMin = aiConfig?.automations?.cooldown_minutes ?? 60;\\r\\n      if (automation.last_fired) {\\r\\n        const elapsed = (Date.now() - new Date(automation.last_fired).getTime()) / 60000;\\r\\n        if (elapsed < cooldownMin) {\\r\\n          console.log(`[automation] Skipping ${automation.id} — cooldown (${Math.round(elapsed)}/${cooldownMin} min)`);\\r\\n          continue;\\r\\n        }\\r\\n      }\\r\\n\\r\\n      // Mark last_fired immediately to prevent re-firing during execution\\r\",\n  \"total_lines\": 314,\n  \"showing\": {\n    \"from\": 0,\n    \"to\": 100\n  },\n  \"truncated\": true\n}",
+      "tool_result_preview": "{\n  \"content\": \"/**\\r\\n * Automation Engine\\r\\n * \\r\\n * Evaluates triggers, checks conditions, executes actions.\\r\\n * Supports both rigid condition-based and AI-driven automations.\\r\\n */\\r\\n\\r\\nimp"
+    },
+    {
+      "index": 19,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:14.507Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/ws.ts"
+      }
+    },
+    {
+      "index": 20,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:14.508Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import { WebSocketServer, WebSocket } from 'ws';\\r\\nimport type { Server } from 'http';\\r\\nimport type { WSEvent } from '../shared/types.js';\\r\\n\\r\\nlet wss: WebSocketServer | null = null;\\r\\nconst clients = new Set<WebSocket>();\\r\\n\\r\\nexport function setupWebSocket(server: Server): void {\\r\\n  wss = new WebSocketServer({ server, path: '/ws' });\\r\\n\\r\\n  wss.on('connection', (ws: WebSocket) => {\\r\\n    clients.add(ws);\\r\\n    console.log(`[ws] Client connected (${clients.size} total)`);\\r\\n\\r\\n    ws.on('close', () => {\\r\\n      clients.delete(ws);\\r\\n      console.log(`[ws] Client disconnected (${clients.size} total)`);\\r\\n    });\\r\\n\\r\\n    ws.on('error', (err) => {\\r\\n      console.error('[ws] Client error:', err.message);\\r\\n      clients.delete(ws);\\r\\n    });\\r\\n\\r\\n    // Send welcome message\\r\\n    ws.send(JSON.stringify({\\r\\n      type: 'file_changed',\\r\\n      data: { message: 'Connected to dev-track' },\\r\\n      timestamp: new Date().toISOString(),\\r\\n    }));\\r\\n  });\\r\\n\\r\\n  console.log('[ws] WebSocket server ready at /ws');\\r\\n}\\r\\n\\r\\nexport function broadcast(event: WSEvent): void {\\r\\n  const message = JSON.stringify(event);\\r\\n  for (const client of clients) {\\r\\n    if (client.readyState === WebSocket.OPEN) {\\r\\n      client.send(message);\\r\\n    }\\r\\n  }\\r\\n}\\r\\n\",\n  \"total_lines\": 44,\n  \"showing\": {\n    \"from\": 0,\n    \"to\": 44\n  },\n  \"truncated\": false\n}",
+      "tool_result_preview": "{\n  \"content\": \"import { WebSocketServer, WebSocket } from 'ws';\\r\\nimport type { Server } from 'http';\\r\\nimport type { WSEvent } from '../shared/types.js';\\r\\n\\r\\nlet wss: WebSocketServer | null = n"
+    },
+    {
+      "index": 21,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:16:18.428Z",
+      "content": "Now let me look at a few route examples to understand the API structure better:",
+      "tokens": {
+        "input": 29662,
+        "output": 165
+      },
+      "cost_usd": 0.091461
+    },
+    {
+      "index": 22,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:18.428Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/routes/roadmap.ts",
+        "max_lines": 80
+      }
+    },
+    {
+      "index": 23,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:18.429Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"import { Hono } from 'hono';\\r\\nimport { getStore } from '../store.js';\\r\\nimport { broadcast } from '../ws.js';\\r\\nimport { getAutomationEngine } from '../automation/engine.js';\\r\\nimport type { RoadmapItem, Horizon } from '../../shared/types.js';\\r\\n\\r\\nconst app = new Hono();\\r\\n\\r\\n// GET /api/v1/roadmap\\r\\napp.get('/', (c) => {\\r\\n  const store = getStore();\\r\\n  const horizon = c.req.query('horizon') as Horizon | undefined;\\r\\n  const status = c.req.query('status');\\r\\n  const assignee = c.req.query('assignee');\\r\\n  const category = c.req.query('category');\\r\\n  const epic_id = c.req.query('epic_id');\\r\\n  const milestone_id = c.req.query('milestone_id');\\r\\n  const type = c.req.query('type');\\r\\n\\r\\n  let items = store.roadmap.items;\\r\\n  if (horizon) items = items.filter(i => i.horizon === horizon);\\r\\n  if (status) items = items.filter(i => i.status === status);\\r\\n  if (assignee) items = items.filter(i => i.assignee === assignee);\\r\\n  if (category) items = items.filter(i => i.category === category);\\r\\n  if (epic_id) items = items.filter(i => i.epic_id === epic_id);\\r\\n  if (milestone_id) items = items.filter(i => i.milestone_id === milestone_id);\\r\\n  if (type) items = items.filter(i => i.type === type);\\r\\n\\r\\n  return c.json({ ok: true, data: { items, total: store.roadmap.items.length } });\\r\\n});\\r\\n\\r\\n// GET /api/v1/roadmap/:id\\r\\napp.get('/:id', (c) => {\\r\\n  const store = getStore();\\r\\n  const item = store.roadmap.items.find(i => i.id === c.req.param('id'));\\r\\n  if (!item) return c.json({ ok: false, error: 'Item not found' }, 404);\\r\\n  return c.json({ ok: true, data: item });\\r\\n});\\r\\n\\r\\n// POST /api/v1/roadmap\\r\\napp.post('/', async (c) => {\\r\\n  const store = getStore();\\r\\n  const body = await c.req.json();\\r\\n\\r\\n  // WIP limit check\\r\\n  if (body.horizon === 'now') {\\r\\n    const nowCount = store.roadmap.items.filter(\\r\\n      i => i.horizon === 'now' && i.status !== 'completed' && i.status !== 'cancelled'\\r\\n    ).length;\\r\\n    if (nowCount >= store.config.settings.max_now_items) {\\r\\n      return c.json({\\r\\n        ok: false,\\r\\n        error: `WIP limit reached: ${nowCount}/${store.config.settings.max_now_items} items in Now. Demote one first.`,\\r\\n      }, 400);\\r\\n    }\\r\\n  }\\r\\n\\r\\n  const now = new Date().toISOString().split('T')[0];\\r\\n  const item: RoadmapItem = {\\r\\n    id: body.id || body.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),\\r\\n    title: body.title,\\r\\n    summary: body.summary || '',\\r\\n    type: body.type || 'feature',\\r\\n    horizon: body.horizon || 'later',\\r\\n    priority: body.priority || 'P2',\\r\\n    size: body.size || 'M',\\r\\n    status: body.status || 'pending',\\r\\n    category: body.category || 'general',\\r\\n    epic_id: body.epic_id || null,\\r\\n    milestone_id: body.milestone_id || null,\\r\\n    depends_on: body.depends_on || [],\\r\\n    blocked_by: body.blocked_by || [],\\r\\n    related_issues: body.related_issues || [],\\r\\n    spawned_from: body.spawned_from || null,\\r\\n    assignee: body.assignee || null,\\r\\n    tags: body.tags || [],\\r\\n    design_doc: body.design_doc || null,\\r\\n    acceptance_criteria: body.acceptance_criteria || [],\\r\\n    created: now,\\r\\n    updated: now,\\r\",\n  \"total_lines\": 293,\n  \"showing\": {\n    \"from\": 0,\n    \"to\": 80\n  },\n  \"truncated\": true\n}",
+      "tool_result_preview": "{\n  \"content\": \"import { Hono } from 'hono';\\r\\nimport { getStore } from '../store.js';\\r\\nimport { broadcast } from '../ws.js';\\r\\nimport { getAutomationEngine } from '../automation/engine.js';\\r\\nim"
+    },
+    {
+      "index": 24,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:16:18.429Z",
+      "tool_name": "read_project_file",
+      "tool_args": {
+        "file_path": "server/routes/ai.ts",
+        "max_lines": 80
+      }
+    },
+    {
+      "index": 25,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:16:18.430Z",
+      "tool_name": "read_project_file",
+      "tool_result": "{\n  \"content\": \"/**\\r\\n * AI API Routes — Chat streaming, conversation management, config, and models.\\r\\n */\\r\\n\\r\\nimport { Hono } from 'hono';\\r\\nimport { streamSSE } from 'hono/streaming';\\r\\nimport { getAIService } from '../ai/service.js';\\r\\nimport {\\r\\n  runChat,\\r\\n  listConversations,\\r\\n  loadConversation,\\r\\n  deleteConversation,\\r\\n  type ChatStreamEvent,\\r\\n} from '../ai/chat.js';\\r\\nimport { getDataDir, getLocalDataDir, getCredentialsPath } from '../project-config.js';\\r\\nimport fs from 'fs';\\r\\nimport path from 'path';\\r\\n\\r\\nconst app = new Hono();\\r\\n\\r\\n// ─── Chat Streaming ──────────────────────────────────────────────────────────\\r\\n\\r\\n// POST /api/v1/ai/chat — Stream a chat message (SSE)\\r\\napp.post('/chat', async (c) => {\\r\\n  const body = await c.req.json().catch(() => ({}));\\r\\n  const { conversation_id, message, model } = body;\\r\\n\\r\\n  if (!message || typeof message !== 'string' || message.trim().length === 0) {\\r\\n    return c.json({ ok: false, error: 'Message is required' }, 400);\\r\\n  }\\r\\n\\r\\n  // Set SSE headers\\r\\n  c.header('Content-Type', 'text/event-stream');\\r\\n  c.header('Cache-Control', 'no-cache');\\r\\n  c.header('Connection', 'keep-alive');\\r\\n\\r\\n  return streamSSE(c, async (stream) => {\\r\\n    try {\\r\\n      const generator = runChat(conversation_id || null, message.trim(), model);\\r\\n\\r\\n      for await (const event of generator) {\\r\\n        await stream.writeSSE({\\r\\n          event: event.type,\\r\\n          data: JSON.stringify(event),\\r\\n        });\\r\\n      }\\r\\n    } catch (err: any) {\\r\\n      await stream.writeSSE({\\r\\n        event: 'error',\\r\\n        data: JSON.stringify({ type: 'error', error: err.message || 'Stream failed' }),\\r\\n      });\\r\\n    }\\r\\n  });\\r\\n});\\r\\n\\r\\n// ─── Conversation Management ─────────────────────────────────────────────────\\r\\n\\r\\n// GET /api/v1/ai/conversations — List all conversations\\r\\napp.get('/conversations', (c) => {\\r\\n  const convos = listConversations();\\r\\n  return c.json({ ok: true, data: { conversations: convos } });\\r\\n});\\r\\n\\r\\n// GET /api/v1/ai/conversations/:id — Get a specific conversation\\r\\napp.get('/conversations/:id', (c) => {\\r\\n  const convo = loadConversation(c.req.param('id'));\\r\\n  if (!convo) return c.json({ ok: false, error: 'Conversation not found' }, 404);\\r\\n  return c.json({ ok: true, data: convo });\\r\\n});\\r\\n\\r\\n// DELETE /api/v1/ai/conversations/:id — Delete a conversation\\r\\napp.delete('/conversations/:id', (c) => {\\r\\n  const deleted = deleteConversation(c.req.param('id'));\\r\\n  return c.json({ ok: true, data: { deleted } });\\r\\n});\\r\\n\\r\\n// ─── Models & Config ─────────────────────────────────────────────────────────\\r\\n\\r\\n// GET /api/v1/ai/models — List available models\\r\\napp.get('/models', (c) => {\\r\",\n  \"total_lines\": 361,\n  \"showing\": {\n    \"from\": 0,\n    \"to\": 80\n  },\n  \"truncated\": true\n}",
+      "tool_result_preview": "{\n  \"content\": \"/**\\r\\n * AI API Routes — Chat streaming, conversation management, config, and models.\\r\\n */\\r\\n\\r\\nimport { Hono } from 'hono';\\r\\nimport { streamSSE } from 'hono/streaming';\\r\\nimpo"
+    },
+    {
+      "index": 26,
+      "type": "thinking",
+      "timestamp": "2026-02-08T22:17:44.645Z",
+      "content": "Perfect! Now I have a comprehensive understanding of the server architecture. Let me create the updated documentation:",
+      "tokens": {
+        "input": 32318,
+        "output": 4096
+      },
+      "cost_usd": 0.158394
+    },
+    {
+      "index": 27,
+      "type": "tool_call",
+      "timestamp": "2026-02-08T22:17:44.645Z",
+      "tool_name": "update_doc",
+      "tool_args": {
+        "id": "system-server"
+      }
+    },
+    {
+      "index": 28,
+      "type": "tool_result",
+      "timestamp": "2026-02-08T22:17:44.645Z",
+      "tool_name": "update_doc",
+      "tool_result": "{\n  \"error\": \"No content provided or content too short. Pass the FULL markdown text in the \\\"content\\\" parameter as a string. The content must be the complete document text.\"\n}",
+      "tool_result_preview": "{\n  \"error\": \"No content provided or content too short. Pass the FULL markdown text in the \\\"content\\\" parameter as a string. The content must be the complete document text.\"\n}"
+    }
+  ],
+  "summary": "{\n  \"error\": \"No content provided or content too short. Pass the FULL markdown text in the \\\"content\\\" parameter as a string. The content must be the complete document text.\"\n}",
+  "changes_made": [],
+  "suggestions": [],
+  "errors": []
+}
