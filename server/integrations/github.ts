@@ -1,4 +1,5 @@
 import { execSync } from 'child_process';
+import { getProjectRoot } from '../project-config.js';
 import type { IntegrationPlugin, IntegrationHealth, IntegrationEvent } from './types.js';
 
 // ─── Local Git Helpers (zero config) ─────────────────────────────────────────
@@ -6,7 +7,7 @@ import type { IntegrationPlugin, IntegrationHealth, IntegrationEvent } from './t
 function git(cmd: string, cwd?: string): string {
   try {
     return execSync(`git ${cmd}`, {
-      cwd: cwd || process.cwd(),
+      cwd: cwd || getProjectRoot(),
       encoding: 'utf-8',
       timeout: 10000,
       stdio: ['pipe', 'pipe', 'pipe'],
@@ -19,7 +20,7 @@ function git(cmd: string, cwd?: string): string {
 function gh(cmd: string, cwd?: string): string {
   try {
     return execSync(`gh ${cmd}`, {
-      cwd: cwd || process.cwd(),
+      cwd: cwd || getProjectRoot(),
       encoding: 'utf-8',
       timeout: 15000,
       stdio: ['pipe', 'pipe', 'pipe'],

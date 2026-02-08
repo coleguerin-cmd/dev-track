@@ -9,10 +9,10 @@
     },
     {
       "id": "helicone",
-      "enabled": false,
+      "enabled": true,
       "credentials": {},
-      "last_tested": null,
-      "test_result": null
+      "last_tested": "2026-02-08T01:56:25.440Z",
+      "test_result": "fail"
     }
   ]
 }

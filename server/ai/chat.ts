@@ -12,8 +12,9 @@
 import fs from 'fs';
 import path from 'path';
 import { getAIService, type AIMessage, type AIToolCall, type StreamEvent } from './service.js';
-import { TOOL_DEFINITIONS, TOOL_LABELS, executeTool } from './tools.js';
+import { TOOL_DEFINITIONS, TOOL_LABELS, executeTool } from './tools/index.js';
 import { getStore } from '../store.js';
+import { getDataDir } from '../project-config.js';
 import type { TaskType } from './router.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -56,7 +57,7 @@ export interface ChatStreamEvent {
 
 // ─── Conversation Storage ────────────────────────────────────────────────────
 
-const CONVO_DIR = path.resolve(process.cwd(), 'data/ai/conversations');
+const CONVO_DIR = path.join(getDataDir(), 'ai/conversations');
 
 function ensureConvoDir() {
   if (!fs.existsSync(CONVO_DIR)) fs.mkdirSync(CONVO_DIR, { recursive: true });
@@ -120,7 +121,7 @@ function buildSystemPrompt(): string {
   // Load user profile
   let profileBlock = '';
   try {
-    const profilesPath = path.resolve(process.cwd(), 'data/ai/profiles.json');
+    const profilesPath = path.join(getDataDir(), 'ai/profiles.json');
     if (fs.existsSync(profilesPath)) {
       const profiles = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
       const user = profiles.profiles?.[0];
@@ -133,7 +134,7 @@ function buildSystemPrompt(): string {
   // Load recent brain notes
   let notesBlock = '';
   try {
-    const notesPath = path.resolve(process.cwd(), 'data/brain/notes.json');
+    const notesPath = path.join(getDataDir(), 'brain/notes.json');
     if (fs.existsSync(notesPath)) {
       const data = JSON.parse(fs.readFileSync(notesPath, 'utf-8'));
       const recent = (data.notes || []).slice(-5);

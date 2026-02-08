@@ -2,9 +2,10 @@ import { Hono } from 'hono';
 import fs from 'fs';
 import path from 'path';
 import { broadcast } from '../ws.js';
+import { getDataDir } from '../project-config.js';
 import type { Idea, IdeasData, IdeaStatus, IdeaCategory } from '../../shared/types.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+const DATA_DIR = getDataDir();
 
 function readJSON<T>(file: string, fallback: T): T {
   const p = path.join(DATA_DIR, file);

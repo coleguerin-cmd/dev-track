@@ -3,6 +3,11 @@ import * as api from '../api/client';
 import { CategoryTag } from '../components/StatusBadge';
 import type { ChangelogEntry } from '@shared/types';
 
+// Handle both old (files_touched) and new (files_changed) field names
+function getFiles(entry: any): string[] {
+  return entry.files_touched || entry.files_changed || [];
+}
+
 export function Changelog() {
   const [entries, setEntries] = useState<ChangelogEntry[]>([]);
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -52,7 +57,7 @@ export function Changelog() {
 
                   {expandedId === entry.id && (
                     <div className="mt-3 pt-3 border-t border-border space-y-2 animate-fade-in">
-                      {entry.items.length > 0 && (
+                      {(entry.items?.length > 0) && (
                         <div>
                           <p className="label mb-1">Items</p>
                           <ul className="space-y-0.5">
@@ -62,13 +67,19 @@ export function Changelog() {
                           </ul>
                         </div>
                       )}
-                      {entry.files_touched.length > 0 && (
+                      {(getFiles(entry).length > 0) && (
                         <div>
                           <p className="label mb-1">Files</p>
-                          {entry.files_touched.map(f => (
+                          {getFiles(entry).map(f => (
                             <p key={f} className="text-xs font-mono text-text-tertiary">{f}</p>
                           ))}
                         </div>
+                      )}
+                      {(entry as any).type && (
+                        <p className="text-2xs text-text-tertiary">Type: {(entry as any).type}{(entry as any).scope ? ` · Scope: ${(entry as any).scope}` : ''}</p>
+                      )}
+                      {entry.backlog_item && (
+                        <p className="text-2xs text-text-tertiary">Backlog: {entry.backlog_item}</p>
                       )}
                     </div>
                   )}

@@ -1,0 +1,26 @@
+feat: Session 6 — multi-project architecture, modular AI tool registry, UI fixes
+
+Distribution infrastructure:
+- Centralized project-config.ts replaces all hardcoded process.cwd() paths (14 files)
+- CLI commands: dev-track init, start, projects (scaffolds data, registers projects, generates cursor rules)
+- Central registry at ~/.dev-track/ with per-project data isolation
+- Project switcher dropdown in sidebar with hot-swap (POST /api/v1/projects/switch)
+- GET /api/v1/project and /api/v1/projects endpoints
+
+AI tool registry refactor:
+- Replaced monolithic 718-line tools.ts with modular registry (server/ai/tools/)
+- 16 domain modules, ~40 tools total, auto-collected by registry
+- New tools: update_state, update_idea, start/end_session, Actions CRUD,
+  context_recovery r/w, preferences r/w, user_profile r/w, write_project_file,
+  list_directory, scan_codebase, detailed git_log, git_branches, integrations_status
+
+UI improvements:
+- Kanban drag-and-drop via @dnd-kit (ISS-004 resolved)
+- AI provider keys moved to Integrations tab as AI Providers section (ISS-013)
+- Helicone org_id field + credential sync to AI proxy (ISS-015)
+- Fixed Changelog crash on undefined items/files_touched (ISS-017)
+- Fixed Ideas crash on null array fields (ISS-018)
+- Fixed Docs ToC scroll in nested overflow container (ISS-019)
+- Sidebar shows project name prominently with dev-track as subtle branding
+
+Tested: Pillar initialized successfully with isolated data at ~/.dev-track/projects/pillar/

@@ -1,10 +1,22 @@
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { serve } from '@hono/node-server';
-import { createServer } from 'http';
 import fs from 'fs';
 import path from 'path';
-import { getStore } from './store.js';
+import os from 'os';
+import {
+  setDataDir,
+  setProjectRoot,
+  setProjectConfig,
+  getDataDir,
+  getProjectRoot,
+  getProjectName,
+  getProjectConfig,
+  loadRegistry,
+  registerProject,
+  findAvailablePort,
+} from './project-config.js';
+import { getStore, reloadStore } from './store.js';
 import { setupWebSocket } from './ws.js';
 import { startWatcher } from './watcher.js';
 
@@ -27,7 +39,37 @@ import codebaseRoutes from './routes/codebase.js';
 import gitRoutes from './routes/git.js';
 import aiRoutes from './routes/ai.js';
 
-const PORT = parseInt(process.env.DEV_TRACK_PORT || '24680');
+// ─── Parse CLI flags ────────────────────────────────────────────────────────
+
+function parseArgs(): { dataDir?: string; port?: number; projectRoot?: string } {
+  const args = process.argv.slice(2);
+  const result: { dataDir?: string; port?: number; projectRoot?: string } = {};
+
+  for (let i = 0; i < args.length; i++) {
+    if (args[i] === '--data-dir' && args[i + 1]) {
+      result.dataDir = args[++i];
+    } else if (args[i] === '--port' && args[i + 1]) {
+      result.port = parseInt(args[++i]);
+    } else if (args[i] === '--project-root' && args[i + 1]) {
+      result.projectRoot = args[++i];
+    }
+  }
+
+  return result;
+}
+
+const cliArgs = parseArgs();
+
+// Apply CLI flags (highest priority)
+if (cliArgs.dataDir) setDataDir(cliArgs.dataDir);
+if (cliArgs.projectRoot) setProjectRoot(cliArgs.projectRoot);
+
+// Resolve port: CLI flag > env var > project config > default
+const PORT = cliArgs.port
+  || parseInt(process.env.DEV_TRACK_PORT || '0')
+  || getProjectConfig()?.port
+  || 24680;
+
 const app = new Hono();
 
 // ─── Middleware ──────────────────────────────────────────────────────────────
@@ -35,9 +77,9 @@ const app = new Hono();
 app.use('*', cors({
   origin: (origin) => {
     // Allow any localhost port for development
-    if (!origin) return 'http://localhost:24680';
+    if (!origin) return `http://localhost:${PORT}`;
     if (origin.includes('localhost') || origin.includes('127.0.0.1')) return origin;
-    return 'http://localhost:24680';
+    return `http://localhost:${PORT}`;
   },
   allowMethods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
   allowHeaders: ['Content-Type'],
@@ -75,15 +117,102 @@ app.get('/api/v1/quick-status', (c) => {
   });
 });
 
+// Project info endpoint
+app.get('/api/v1/project', (c) => {
+  return c.json({
+    ok: true,
+    data: {
+      name: getProjectName(),
+      id: getProjectConfig()?.projectId || path.basename(getProjectRoot()),
+      dataDir: getDataDir(),
+      projectRoot: getProjectRoot(),
+      port: PORT,
+    },
+  });
+});
+
+// All registered projects
+app.get('/api/v1/projects', (c) => {
+  const registry = loadRegistry();
+  return c.json({
+    ok: true,
+    data: {
+      projects: registry.projects,
+      current: getProjectConfig()?.projectId || path.basename(getProjectRoot()),
+    },
+  });
+});
+
+// Switch to a different project (hot-swap data directory)
+app.post('/api/v1/projects/switch', async (c) => {
+  const body = await c.req.json().catch(() => ({}));
+  const { projectId } = body;
+
+  if (!projectId) {
+    return c.json({ ok: false, error: 'projectId is required' }, 400);
+  }
+
+  const registry = loadRegistry();
+  const project = registry.projects.find(p => p.id === projectId);
+
+  if (!project) {
+    return c.json({ ok: false, error: `Project "${projectId}" not found in registry` }, 404);
+  }
+
+  // Resolve the data directory
+  const dataDir = project.dataDir.replace(/^~/, os.homedir());
+  if (!fs.existsSync(dataDir)) {
+    return c.json({ ok: false, error: `Data directory not found: ${dataDir}` }, 404);
+  }
+
+  // Hot-swap: update data dir, project root, and reload the store
+  setDataDir(dataDir);
+  setProjectRoot(project.path);
+
+  // Update last accessed
+  project.lastAccessed = new Date().toISOString();
+  registerProject(project);
+
+  // Reload the store with new data
+  reloadStore();
+
+  // Restart the file watcher on the new data dir
+  startWatcher();
+
+  const store = getStore();
+  console.log(`\n  [switch] Switched to project: ${project.name}`);
+  console.log(`  [switch] Data: ${dataDir}`);
+  console.log(`  [switch] Status: ${store.getQuickStatusLine()}\n`);
+
+  return c.json({
+    ok: true,
+    data: {
+      name: project.name,
+      id: project.id,
+      dataDir,
+      projectRoot: project.path,
+      status: store.getQuickStatusLine(),
+    },
+  });
+});
+
 // Health check
 app.get('/api/health', (c) => {
-  return c.json({ ok: true, uptime: process.uptime(), port: PORT });
+  return c.json({
+    ok: true,
+    uptime: process.uptime(),
+    port: PORT,
+    project: getProjectName(),
+    dataDir: getDataDir(),
+  });
 });
 
 // ─── Static File Serving (built UI) ────────────────────────────────────────
 
-const UI_DIST = path.resolve(process.cwd(), 'dist', 'ui');
-const UI_DEV = path.resolve(process.cwd(), 'ui');
+// In production, serve from dist/ui relative to the dev-track package location
+// In development, serve from the workspace
+const PACKAGE_ROOT = path.resolve(new URL('.', import.meta.url).pathname.replace(/^\/([A-Z]:)/, '$1'), '..');
+const UI_DIST = path.resolve(PACKAGE_ROOT, 'dist', 'ui');
 
 app.get('*', (c) => {
   // Try to serve from dist/ui first (production build)
@@ -127,6 +256,7 @@ app.get('*', (c) => {
         <div style="text-align:center;">
           <h1 style="font-size:2rem;margin-bottom:1rem;">dev-track</h1>
           <p style="color:#a1a1aa;">API server running on port ${PORT}</p>
+          <p style="color:#a1a1aa;">Project: <strong>${getProjectName()}</strong></p>
           <p style="color:#a1a1aa;">UI dev server: <a href="http://localhost:24681" style="color:#3b82f6;">http://localhost:24681</a></p>
           <p style="color:#71717a;font-size:0.875rem;margin-top:2rem;">Run <code style="background:#18181b;padding:2px 6px;border-radius:4px;">npm run dev</code> for both servers</p>
         </div>
@@ -137,15 +267,18 @@ app.get('*', (c) => {
 
 // ─── Start Server ───────────────────────────────────────────────────────────
 
+const projectName = getProjectName();
+
 console.log('\n  ╔══════════════════════════════════════╗');
 console.log('  ║         dev-track server              ║');
 console.log('  ╚══════════════════════════════════════╝\n');
 
 // Initialize store (loads all data files)
 const store = getStore();
-console.log(`  Project: ${store.config.project}`);
-console.log(`  Health:  ${store.state.overall_completion}%`);
-console.log(`  Status:  ${store.getQuickStatusLine()}\n`);
+console.log(`  Project:  ${projectName}`);
+console.log(`  Data:     ${getDataDir()}`);
+console.log(`  Health:   ${store.state.overall_completion}%`);
+console.log(`  Status:   ${store.getQuickStatusLine()}\n`);
 
 const server = serve({
   fetch: app.fetch,

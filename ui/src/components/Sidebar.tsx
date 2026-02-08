@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import * as api from '../api/client';
 import {
   LayoutDashboard,
@@ -12,6 +12,8 @@ import {
   FileText,
   BarChart3,
   Settings,
+  ChevronDown,
+  FolderOpen,
 } from 'lucide-react';
 
 type View = 'dashboard' | 'backlog' | 'actions' | 'issues' | 'ideas' | 'codebase' | 'sessions' | 'changelog' | 'docs' | 'metrics' | 'settings';
@@ -20,6 +22,14 @@ interface SidebarProps {
   activeView: View;
   onViewChange: (view: View) => void;
   connected: boolean;
+}
+
+interface ProjectInfo {
+  id: string;
+  name: string;
+  path: string;
+  dataDir: string;
+  lastAccessed: string;
 }
 
 const NAV_ITEMS: { id: View; label: string; icon: typeof LayoutDashboard; shortcut: string; group: 'main' | 'data' | 'config' }[] = [
@@ -39,15 +49,69 @@ const NAV_ITEMS: { id: View; label: string; icon: typeof LayoutDashboard; shortc
 export function Sidebar({ activeView, onViewChange, connected }: SidebarProps) {
   const [statusLine, setStatusLine] = useState('');
   const [issueCounts, setIssueCounts] = useState({ open: 0, critical: 0 });
+  const [projectName, setProjectName] = useState('');
+  const [currentProjectId, setCurrentProjectId] = useState('');
+  const [projects, setProjects] = useState<ProjectInfo[]>([]);
+  const [showProjectPicker, setShowProjectPicker] = useState(false);
+  const [switching, setSwitching] = useState(false);
+  const pickerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const loadProjectData = () => {
     api.config.quickStatus()
       .then((data: any) => setStatusLine(data?.status_line || ''))
       .catch(() => {});
     api.issues.list({ status: 'open' })
       .then((data: any) => setIssueCounts(data?.counts || { open: 0, critical: 0 }))
       .catch(() => {});
-  }, []);
+    fetch('/api/v1/project').then(r => r.json()).then(d => {
+      if (d.ok && d.data) {
+        setProjectName(d.data.name);
+        setCurrentProjectId(d.data.id);
+      }
+    }).catch(() => {});
+    fetch('/api/v1/projects').then(r => r.json()).then(d => {
+      if (d.ok && d.data?.projects) setProjects(d.data.projects);
+    }).catch(() => {});
+  };
+
+  useEffect(() => { loadProjectData(); }, []);
+
+  // Close picker on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (pickerRef.current && !pickerRef.current.contains(e.target as Node)) {
+        setShowProjectPicker(false);
+      }
+    };
+    if (showProjectPicker) document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, [showProjectPicker]);
+
+  const switchProject = async (projectId: string) => {
+    if (projectId === currentProjectId || switching) return;
+    setSwitching(true);
+    try {
+      const res = await fetch('/api/v1/projects/switch', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ projectId }),
+      });
+      const json = await res.json();
+      if (json.ok) {
+        setShowProjectPicker(false);
+        // Reload all sidebar data for the new project
+        loadProjectData();
+        // Force a full page reload to refresh all views with new project data
+        window.location.reload();
+      } else {
+        console.error('Switch failed:', json.error);
+      }
+    } catch (err) {
+      console.error('Switch failed:', err);
+    } finally {
+      setSwitching(false);
+    }
+  };
 
   // Keyboard shortcuts
   useEffect(() => {
@@ -91,16 +155,64 @@ export function Sidebar({ activeView, onViewChange, connected }: SidebarProps) {
     );
   };
 
+  const hasMultipleProjects = projects.length > 1;
+
   return (
     <aside className="w-[200px] flex-shrink-0 bg-surface-0 border-r border-border flex flex-col h-screen select-none">
-      {/* Brand */}
-      <div className="px-4 pt-4 pb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-[18px] h-[18px] rounded bg-accent-blue/15 flex items-center justify-center">
+      {/* Brand + Project Switcher */}
+      <div className="px-4 pt-4 pb-3 relative" ref={pickerRef}>
+        <button
+          onClick={() => hasMultipleProjects && setShowProjectPicker(!showProjectPicker)}
+          className={`flex items-center gap-2 w-full text-left ${hasMultipleProjects ? 'cursor-pointer hover:opacity-80' : 'cursor-default'} transition-opacity`}
+        >
+          <div className="w-[18px] h-[18px] rounded bg-accent-blue/15 flex items-center justify-center flex-shrink-0">
             <Zap className="w-[11px] h-[11px] text-accent-blue" strokeWidth={2.5} />
           </div>
-          <span className="font-semibold text-[13px] tracking-tight text-text-primary">dev-track</span>
-        </div>
+          <div className="flex-1 min-w-0">
+            {projectName ? (
+              <>
+                <span className="font-semibold text-[13px] tracking-tight text-text-primary block truncate">{projectName}</span>
+                <span className="text-[9px] text-text-tertiary/50 uppercase tracking-widest">dev-track</span>
+              </>
+            ) : (
+              <span className="font-semibold text-[13px] tracking-tight text-text-primary">dev-track</span>
+            )}
+          </div>
+          {hasMultipleProjects && (
+            <ChevronDown className={`w-3 h-3 text-text-tertiary flex-shrink-0 transition-transform ${showProjectPicker ? 'rotate-180' : ''}`} />
+          )}
+        </button>
+
+        {/* Project picker dropdown */}
+        {showProjectPicker && (
+          <div className="absolute left-2 right-2 top-full mt-1 bg-surface-2 border border-border rounded-lg shadow-lg z-50 py-1 animate-fade-in">
+            {projects.map(p => (
+              <button
+                key={p.id}
+                onClick={() => switchProject(p.id)}
+                disabled={switching}
+                className={`w-full flex items-center gap-2.5 px-3 py-2 text-left transition-colors ${
+                  p.id === currentProjectId
+                    ? 'bg-accent-blue/10 text-accent-blue'
+                    : 'text-text-secondary hover:bg-surface-3 hover:text-text-primary'
+                }`}
+              >
+                <FolderOpen className="w-3.5 h-3.5 flex-shrink-0" strokeWidth={1.75} />
+                <div className="flex-1 min-w-0">
+                  <span className="text-xs font-medium block truncate">{p.name}</span>
+                  <span className="text-[9px] text-text-tertiary truncate block">{p.path}</span>
+                </div>
+                {p.id === currentProjectId && (
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent-blue flex-shrink-0" />
+                )}
+              </button>
+            ))}
+            {switching && (
+              <div className="px-3 py-2 text-[10px] text-text-tertiary text-center">Switching...</div>
+            )}
+          </div>
+        )}
+
         <div className="flex items-center gap-1.5 mt-2">
           <span className={`w-1.5 h-1.5 rounded-full ${connected ? 'bg-status-pass' : 'bg-status-fail'}`} />
           <span className="text-[10px] text-text-tertiary">{connected ? 'Connected' : 'Disconnected'}</span>

@@ -14,6 +14,7 @@ import Anthropic from '@anthropic-ai/sdk';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import fs from 'fs';
 import path from 'path';
+import { getDataDir, getCredentialsPath } from '../project-config.js';
 import { ModelRouter, type TaskType } from './router.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -88,7 +89,7 @@ interface AICredentials {
 
 function loadCredentials(): AICredentials {
   try {
-    const credPath = path.resolve(process.cwd(), '.credentials.json');
+    const credPath = getCredentialsPath();
     if (fs.existsSync(credPath)) {
       const data = JSON.parse(fs.readFileSync(credPath, 'utf-8'));
       return data.ai || {};
@@ -175,7 +176,7 @@ export class AIService {
 
   private loadConfig(): any {
     try {
-      const configPath = path.resolve(process.cwd(), 'data/ai/config.json');
+      const configPath = path.join(getDataDir(), 'ai/config.json');
       if (fs.existsSync(configPath)) {
         return JSON.parse(fs.readFileSync(configPath, 'utf-8'));
       }

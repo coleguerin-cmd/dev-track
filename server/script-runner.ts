@@ -1,5 +1,6 @@
 import { spawn } from 'child_process';
 import path from 'path';
+import { getProjectRoot } from './project-config.js';
 import { broadcast } from './ws.js';
 
 export interface ScriptResult {
@@ -18,7 +19,7 @@ export function runScript(
   } = {}
 ): Promise<ScriptResult> {
   const {
-    cwd = path.resolve(process.cwd(), '..'), // Default to project root (parent of dev-track)
+    cwd = getProjectRoot(), // Default to project root
     timeout = 120000,
     onOutput,
   } = options;

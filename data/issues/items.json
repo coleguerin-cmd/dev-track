@@ -55,7 +55,7 @@
       "id": "ISS-004",
       "title": "Kanban drag-and-drop not actually implemented",
       "action_id": null,
-      "status": "open",
+      "status": "resolved",
       "severity": "low",
       "assignee": null,
       "discovered": "2026-02-07",
@@ -64,8 +64,8 @@
       "root_cause": "Deprioritized in favor of core features",
       "files": ["ui/src/views/Backlog.tsx"],
       "backlog_item": "kanban-dnd",
-      "resolution": null,
-      "resolved": null,
+      "resolution": "Wired up @dnd-kit/core: DndContext wrapper, useDroppable columns (horizon IDs), useDraggable cards, DragOverlay with card preview, onDragEnd calls existing move API. PointerSensor with 8px activation distance so clicks still work. Drop zone highlighting and drag overlay styling. Button-based moves kept as fallback.",
+      "resolved": "2026-02-08",
       "notes": "Button-based moving works as a fallback. DnD is polish."
     },
     {
@@ -205,7 +205,108 @@
       "resolution": null,
       "resolved": null,
       "notes": "User proposed: extension/CLI that watches AI conversation logs, captures user messages + AI final responses (not intermediate changes), passes to DevTrack AI for lightweight parse. Extracts issues, decisions, ideas. Also detects session start/end. Needs to work across platforms (Cursor, Claude, Gemini, etc). This is the 'bridge' that makes DevTrack truly intelligent. See IDEA-024 for session lifecycle aspect."
+    },
+    {
+      "id": "ISS-013",
+      "title": "Redundancy between AI Configuration and Integrations tabs for API keys",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": "session-6",
+      "symptoms": "Helicone appears in both AI Config and Integrations tabs. AI provider keys (OpenAI, Anthropic, Google) are in AI Config but are functionally integrations — external service credentials. User confused about where keys belong. AI keys serve dev-track's own chat agent, not the user's app, but this isn't clear in the UI.",
+      "root_cause": "AI keys were built into AI Config as a convenience. Integrations tab was built separately for dev tools. No consolidation pass done.",
+      "files": ["ui/src/views/Settings.tsx"],
+      "backlog_item": null,
+      "resolution": "Moved all API key management (OpenAI, Anthropic, Google, Helicone) from AI Configuration tab into Integrations tab as a top-level 'AI Providers' section with 2x2 grid layout. AI Config now only has: provider toggles (with note pointing to Integrations for keys), model defaults, budget controls, feature toggles. 'Development Tools' subheader separates AI providers from integration plugins below.",
+      "resolved": "2026-02-08",
+      "notes": "User wants: all external service keys in Integrations tab as 'AI Providers' subsection. AI Config keeps model defaults, budget, features only. Clarify that AI keys power dev-track's chat agent (for now), not the user's app."
+    },
+    {
+      "id": "ISS-014",
+      "title": "No in-app project switcher — must use CLI to change projects",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": "session-6",
+      "symptoms": "After initializing multiple projects (dev-track, Pillar), there's no way to switch between them from within the UI. User must go back to terminal and run 'dev-track start' in a different project directory. The GET /api/v1/projects endpoint exists but nothing in the UI uses it.",
+      "root_cause": "Project switcher was explicitly deferred to follow-up in the session 6 plan. Multi-project architecture was built CLI-first.",
+      "files": ["ui/src/components/Sidebar.tsx", "server/index.ts", "server/watcher.ts"],
+      "backlog_item": null,
+      "resolution": "Built project switcher dropdown in sidebar. Shows when multiple projects registered. POST /api/v1/projects/switch endpoint hot-swaps the data directory, project root, reloads the store, and restarts the file watcher without restarting the server process. Sidebar fetches /api/v1/projects on load, renders dropdown with project names and paths, highlights current project. On switch: calls API, then window.location.reload() to refresh all views. Watcher made restartable (closes old, opens new).",
+      "resolved": "2026-02-08",
+      "notes": "Hot-swap approach chosen over multi-port or server restart. Server stays on same port, just repoints at different data. Page reload needed because all React components cache data from initial load."
+    }
+    ,
+    {
+      "id": "ISS-015",
+      "title": "Helicone plugin missing org ID field and credentials not synced to AI proxy",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "medium",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": "session-6",
+      "symptoms": "AI proxy reads helicone key + org_id from .credentials.json under 'ai' namespace. Helicone plugin stores under 'helicone' namespace with only api_key (no org_id). User can't configure org ID from the UI at all. Credentials entered in the plugin don't flow to the proxy.",
+      "root_cause": "AI proxy and integration plugin were built independently with different credential paths. No sync mechanism.",
+      "files": ["server/integrations/helicone.ts", "server/integrations/manager.ts", "server/ai/service.ts"],
+      "backlog_item": null,
+      "resolution": "Added org_id credential field to Helicone plugin. Updated IntegrationManager.setCredentials() to sync Helicone credentials to the ai namespace (.credentials.json → ai.helicone + ai.helicone_org_id) when Helicone plugin credentials are saved. AI proxy now picks up credentials configured through the Integrations UI. Single source of truth for Helicone config.",
+      "resolved": "2026-02-08",
+      "notes": "Fix: add org_id field to Helicone plugin, sync helicone plugin creds to ai namespace when saved so proxy picks them up."
+    }
+    ,
+    {
+      "id": "ISS-016",
+      "title": "AI chat agent missing CRUD tools for 13 DevTrack entities/capabilities",
+      "action_id": null,
+      "status": "resolved",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_in_run": "session-6",
+      "symptoms": "AI chat agent has 25 tools but is missing: update_state, update_idea, session start/end, all Actions CRUD, context-recovery read/write, preferences read/write, user profile read/write, write_project_file, scan_codebase trigger, detailed git log, directory listing, config read/write, integration status. Cannot perform project initialization or full project audit.",
+      "root_cause": "Initial tool set was built for chat interaction, not for autonomous project management. Tools added reactively as needed during sessions 4-5.",
+      "files": ["server/ai/tools.ts"],
+      "backlog_item": "ai-chat-agent",
+      "resolution": "Full refactor: monolithic tools.ts (718 lines, giant switch) replaced with modular registry at server/ai/tools/. 16 domain modules, each self-contained with definitions + executors. Registry auto-collects from all modules. New tools added: update_state, update_idea, start_session, end_session, all Actions CRUD (list/create/update), context_recovery read/write, preferences read/write, user_profile read/write/add_observation, write_project_file, list_directory, scan_codebase, detailed git_log (with full messages/dates/since/path filters), git_branches, update_velocity, project_config read/write, list_registered_projects, integrations_status, test_integration. Total: ~40 tools across 16 domains. Adding new tools = new file in tools/ dir.",
+      "resolved": "2026-02-08",
+      "notes": "Prerequisite for IDEA-032 (AI init wizard). User wants AI to have full CRUD access to every corner of DevTrack."
+    }
+    ,
+    {
+      "id": "ISS-017",
+      "title": "Changelog view crashes on click — 'cannot read length of undefined'",
+      "action_id": null, "status": "resolved", "severity": "high", "assignee": null,
+      "discovered": "2026-02-08", "discovered_in_run": "session-6",
+      "symptoms": "Clicking any changelog entry throws 'Uncaught TypeError: Cannot read properties of undefined (reading length)'. View crashes.",
+      "root_cause": "ChangelogEntry type expects items:string[] and files_touched:string[], but actual data uses files_changed and has no items field. Component accesses entry.items.length without null check.",
+      "files": ["ui/src/views/Changelog.tsx"], "backlog_item": null,
+      "resolution": "Added optional chaining (entry.items?.length) for null safety. Created getFiles() helper to handle both files_touched and files_changed field names. Added type/scope/backlog_item display in expanded view.", "resolved": "2026-02-08", "notes": null
+    },
+    {
+      "id": "ISS-018",
+      "title": "Ideas view — clicking ideas may crash if data has null arrays",
+      "action_id": null, "status": "resolved", "severity": "medium", "assignee": null,
+      "discovered": "2026-02-08", "discovered_in_run": "session-6",
+      "symptoms": "Clicking ideas doesn't expand / detail panel doesn't appear. Possible crash on open_questions.length or pros.length when those fields are null.",
+      "root_cause": "Ideas data may have null/undefined for array fields (pros, cons, open_questions) that the component accesses with .length without null checks.",
+      "files": ["ui/src/views/Ideas.tsx"], "backlog_item": null,
+      "resolution": "Added optional chaining on all array property accesses: open_questions?.length, pros?.length, cons?.length. Prevents crash when ideas have null/undefined array fields.", "resolved": "2026-02-08", "notes": null
+    },
+    {
+      "id": "ISS-019",
+      "title": "Docs view — ToC section links don't scroll to content",
+      "action_id": null, "status": "resolved", "severity": "medium", "assignee": null,
+      "discovered": "2026-02-08", "discovered_in_run": "session-6",
+      "symptoms": "Clicking any table of contents heading in Docs view does nothing. Content exists but ToC links don't scroll to it.",
+      "root_cause": "ToC generates #anchor links but ReactMarkdown doesn't add id attributes to rendered headings without rehype-slug plugin configured.",
+      "files": ["ui/src/views/Docs.tsx"], "backlog_item": null,
+      "resolution": "Fixed scrollToSection to use container-relative scrolling instead of scrollIntoView. The docs content is in a scrollable div (overflow-y-auto), so scrollIntoView doesn't work — now calculates offsetTop relative to the container and uses container.scrollTo().", "resolved": "2026-02-08", "notes": null
     }
   ],
-  "next_id": 13
+  "next_id": 20
 }

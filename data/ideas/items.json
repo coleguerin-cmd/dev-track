@@ -473,7 +473,64 @@
       "notes": "User's insight: 'how interesting would this data be to employers if you were ACTUALLY honest.' The answer is: extremely. But also extremely sensitive. The product opportunity is there but the ethics need to be right. Start with: portable across the user's own projects and AI tools. Later: opt-in sharing for teams.",
       "created": "2026-02-08",
       "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-031",
+      "title": "Encrypted key transfer for auto-populating credentials across projects",
+      "status": "captured",
+      "category": "security",
+      "priority": "high",
+      "description": "When initializing dev-track in a new project, credentials from .credentials.json auto-populate in the UI (already works locally). For the paid product, if we ever sync credentials between projects or from a central store, the transfer must be encrypted. HTTPS + encrypted storage at rest minimum. Consider: (1) per-project encryption key derived from a master password, (2) OS keychain integration (macOS Keychain, Windows Credential Manager), (3) zero-knowledge architecture where the server never sees plaintext keys. For local-only use this is fine — keys never leave the machine. Becomes critical when cloud sync or team features are added.",
+      "pros": ["Enables secure cross-project credential sharing", "Users don't need to re-enter keys per project", "OS keychain integration is the gold standard for local credential storage"],
+      "cons": ["Adds complexity to a local-first tool", "OS keychain APIs differ per platform", "Master password UX is annoying"],
+      "open_questions": ["When does this become critical — only when cloud sync ships?", "OS keychain vs encrypted file vs master password?", "Should credentials ever sync to the web platform or stay local-only?"],
+      "notes": "User noticed credentials auto-populating from .credentials.json and flagged security concern proactively. Good instinct. Park until cloud sync is on the roadmap, but document the requirement now.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    }
+    ,
+    {
+      "id": "IDEA-032",
+      "title": "AI project initialization wizard — full codebase audit on first run",
+      "status": "captured",
+      "category": "core",
+      "priority": "critical",
+      "description": "When dev-track init runs on a new project, the AI should audit the entire codebase end-to-end: parse all source files, find docs/READMEs, read package.json/configs, scan git commit history for changelog, look for existing sprint plans/product plans/TODOs/FIXMEs. It synthesizes everything into dev-track: populates state.json with system ratings, creates backlog items from TODOs and weak areas, creates issues from known bugs and security concerns, captures ideas, rates architectural health, identifies what's half-baked vs production-ready. Should work on mid-stream projects like Pillar and Landmark — not just greenfield.",
+      "pros": ["Zero-to-productive in one command", "Works on existing projects mid-stream", "AI finds things humans miss (security gaps, incomplete features)", "Git history becomes changelog automatically", "Differentiating feature — no other tool does this"],
+      "cons": ["Expensive — full codebase + git history analysis", "Quality depends on AI model capability", "Large codebases may need chunked analysis", "Risk of generating noise (too many low-value issues)"],
+      "open_questions": ["Which model tier? Needs to be smart enough for architecture assessment", "How to handle monorepos vs single projects?", "Should it ask the user to confirm before populating, or just do it?", "How deep into git history — last 50 commits? All?"],
+      "notes": "User explicitly wants: come into midstream on Pillar/Landmark, AI populates dev-track top-to-bottom with where it thinks everything is. Not just docs — actual code analysis. Security weaknesses, incomplete features, architecture gaps. Loads suggestions as actions, issues, ideas, backlog items.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-033",
+      "title": "GitHub commit sync — parse git history into DevTrack changelog and context",
+      "status": "captured",
+      "category": "integration",
+      "priority": "high",
+      "description": "Sync git commit history directly into DevTrack. Parse commits into changelog entries, detect patterns (feature work, bug fixes, refactors). GitHub integration already exists — extend it to pull commit history on init and keep it synced. AI can then search DevTrack's own data instead of re-parsing git every time. Enables: 'what changed last week', 'when was auth last touched', 'show me all commits related to the payment system'.",
+      "pros": ["Rich project history without manual entry", "AI can search structured commit data", "Connects code changes to backlog/issues automatically", "GitHub integration already has git CLI access"],
+      "cons": ["Commit messages vary wildly in quality", "Large repos = lots of data", "Need to handle merge commits, squashes, rebases"],
+      "open_questions": ["Parse on init only or keep syncing?", "How to map commits to backlog items/issues?", "Store raw commits or AI-summarized versions?"],
+      "notes": "User wants: load all previous git commits so AI can search them within DevTrack. GitHub integration already uses local git CLI.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "IDEA-034",
+      "title": "Product management audit — clarify Actions vs Backlog vs Issues vs Ideas relationships",
+      "status": "captured",
+      "category": "architecture",
+      "priority": "high",
+      "description": "The data model needs an audit. Current entities: Backlog (features/tasks with horizons), Issues (bugs with severity), Ideas (captured concepts), Actions (tracked features with health/diagnostics), Sessions, Changelog, Brain Notes. Questions: Are Actions redundant with Backlog? Should Issues auto-create from Backlog items? Should Ideas promote directly to Backlog? Is this Notion + Jira + GitHub? What's the relationship graph between entities? User explicitly wants clarity on what each entity IS and how they flow into each other. This is the product definition of DevTrack itself.",
+      "pros": ["Cleaner mental model for users", "Reduces confusion about where to put things", "Enables better AI automation (knows the flow)", "Forces us to define what DevTrack IS as a product"],
+      "cons": ["May require data model changes", "Migration of existing data", "Risk of over-engineering the taxonomy"],
+      "open_questions": ["Should Actions be merged into Backlog?", "What's the lifecycle: Idea → Backlog → Issue? Or are they independent?", "Do we need all these entities or can some be collapsed?", "What does 'Notion + Jira + GitHub driven by AI' actually mean in entity terms?"],
+      "notes": "User called out that Actions aren't being used. Wants to audit the full product management suite. This is a product definition exercise, not just code.",
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
     }
   ],
-  "next_id": 31
+  "next_id": 35
 }

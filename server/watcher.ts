@@ -2,12 +2,20 @@ import chokidar from 'chokidar';
 import path from 'path';
 import { getStore } from './store.js';
 import { broadcast } from './ws.js';
+import { getDataDir } from './project-config.js';
 import type { WSEvent } from '../shared/types.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+let _watcher: chokidar.FSWatcher | null = null;
 
 export function startWatcher(): void {
-  const watcher = chokidar.watch(DATA_DIR, {
+  // Close existing watcher if restarting (e.g., project switch)
+  if (_watcher) {
+    _watcher.close().catch(() => {});
+    _watcher = null;
+  }
+
+  const DATA_DIR = getDataDir();
+  _watcher = chokidar.watch(DATA_DIR, {
     ignoreInitial: true,
     persistent: true,
     depth: 3,
@@ -17,7 +25,7 @@ export function startWatcher(): void {
     },
   });
 
-  watcher.on('change', (filePath: string) => {
+  _watcher.on('change', (filePath: string) => {
     const relative = path.relative(DATA_DIR, filePath).replace(/\\/g, '/');
     const store = getStore();
 
@@ -39,7 +47,7 @@ export function startWatcher(): void {
     }
   });
 
-  watcher.on('add', (filePath: string) => {
+  _watcher.on('add', (filePath: string) => {
     const relative = path.relative(DATA_DIR, filePath).replace(/\\/g, '/');
     const store = getStore();
     if (store.isRecentWrite(relative)) return;

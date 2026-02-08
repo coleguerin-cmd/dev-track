@@ -133,15 +133,15 @@
       "title": "Implement actual drag-and-drop in backlog kanban",
       "horizon": "next",
       "size": "M",
-      "status": "pending",
+      "status": "completed",
       "category": "ui",
       "summary": "Wire up @dnd-kit. Cards draggable between Now/Next/Later columns. Drop triggers API move call.",
       "design_doc": null,
       "depends_on": ["boot-ui"],
       "assignee": null,
       "created": "2026-02-07",
-      "updated": "2026-02-07",
-      "completed": null,
+      "updated": "2026-02-08",
+      "completed": "2026-02-08",
       "tags": ["polish"]
     },
     {

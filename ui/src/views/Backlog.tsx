@@ -1,4 +1,15 @@
 import { useEffect, useState, useCallback } from 'react';
+import {
+  DndContext,
+  DragOverlay,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  useDroppable,
+  useDraggable,
+  type DragStartEvent,
+  type DragEndEvent,
+} from '@dnd-kit/core';
 import * as api from '../api/client';
 import { SizeBadge, StatusBadge, CategoryTag } from '../components/StatusBadge';
 import type { BacklogItem, Horizon } from '@shared/types';
@@ -7,6 +18,12 @@ export function Backlog() {
   const [items, setItems] = useState<BacklogItem[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [expandedId, setExpandedId] = useState<string | null>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+
+  // Require 8px of movement before starting drag (so clicks still work)
+  const sensors = useSensors(
+    useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
+  );
 
   const load = useCallback(() => {
     api.backlog.list().then((d: any) => setItems(d?.items || [])).catch(() => {});
@@ -45,6 +62,29 @@ export function Backlog() {
 
   const [showCompleted, setShowCompleted] = useState(false);
 
+  const activeItem = activeId ? items.find(i => i.id === activeId) : null;
+
+  const handleDragStart = (event: DragStartEvent) => {
+    setActiveId(event.active.id as string);
+    setExpandedId(null); // collapse any expanded card while dragging
+  };
+
+  const handleDragEnd = (event: DragEndEvent) => {
+    const { active, over } = event;
+    setActiveId(null);
+
+    if (!over) return;
+
+    const itemId = active.id as string;
+    const targetHorizon = over.id as Horizon;
+    const item = items.find(i => i.id === itemId);
+
+    // Only move if dropped on a different column
+    if (item && targetHorizon !== item.horizon && ['now', 'next', 'later'].includes(targetHorizon)) {
+      moveItem(itemId, targetHorizon);
+    }
+  };
+
   return (
     <div className="max-w-7xl mx-auto">
       <div className="flex items-center justify-between mb-6">
@@ -54,37 +94,60 @@ export function Backlog() {
         </button>
       </div>
 
-      {/* Three-column Kanban */}
-      <div className="grid grid-cols-3 gap-5 items-start">
-        <KanbanColumn
-          title="Now"
-          items={nowItems}
-          maxItems={3}
-          onMove={moveItem}
-          onComplete={completeItem}
-          onUpdateStatus={updateStatus}
-          expandedId={expandedId}
-          onToggleExpand={setExpandedId}
-        />
-        <KanbanColumn
-          title="Next"
-          items={nextItems}
-          onMove={moveItem}
-          onComplete={completeItem}
-          onUpdateStatus={updateStatus}
-          expandedId={expandedId}
-          onToggleExpand={setExpandedId}
-        />
-        <KanbanColumn
-          title="Later"
-          items={laterItems}
-          onMove={moveItem}
-          onComplete={completeItem}
-          onUpdateStatus={updateStatus}
-          expandedId={expandedId}
-          onToggleExpand={setExpandedId}
-        />
-      </div>
+      {/* Three-column Kanban with DnD */}
+      <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+        <div className="grid grid-cols-3 gap-5 items-start">
+          <KanbanColumn
+            title="Now"
+            horizon="now"
+            items={nowItems}
+            maxItems={3}
+            onMove={moveItem}
+            onComplete={completeItem}
+            onUpdateStatus={updateStatus}
+            expandedId={expandedId}
+            onToggleExpand={setExpandedId}
+            isDropTarget={activeId !== null}
+          />
+          <KanbanColumn
+            title="Next"
+            horizon="next"
+            items={nextItems}
+            onMove={moveItem}
+            onComplete={completeItem}
+            onUpdateStatus={updateStatus}
+            expandedId={expandedId}
+            onToggleExpand={setExpandedId}
+            isDropTarget={activeId !== null}
+          />
+          <KanbanColumn
+            title="Later"
+            horizon="later"
+            items={laterItems}
+            onMove={moveItem}
+            onComplete={completeItem}
+            onUpdateStatus={updateStatus}
+            expandedId={expandedId}
+            onToggleExpand={setExpandedId}
+            isDropTarget={activeId !== null}
+          />
+        </div>
+
+        <DragOverlay>
+          {activeItem ? (
+            <div className="card p-3 opacity-90 shadow-xl ring-1 ring-accent-blue/40 rotate-[2deg] w-[300px]">
+              <div className="flex items-start justify-between gap-2">
+                <span className="text-sm font-medium leading-tight flex-1">{activeItem.title}</span>
+                <SizeBadge size={activeItem.size} />
+              </div>
+              <div className="flex items-center gap-2 mt-1.5">
+                <StatusBadge status={activeItem.status} />
+                {activeItem.category && <CategoryTag category={activeItem.category} />}
+              </div>
+            </div>
+          ) : null}
+        </DragOverlay>
+      </DndContext>
 
       {/* Completed / Archived items */}
       {completedItems.length > 0 && (
@@ -135,6 +198,7 @@ export function Backlog() {
 
 function KanbanColumn({
   title,
+  horizon,
   items,
   maxItems,
   onMove,
@@ -142,8 +206,10 @@ function KanbanColumn({
   onUpdateStatus,
   expandedId,
   onToggleExpand,
+  isDropTarget,
 }: {
   title: string;
+  horizon: Horizon;
   items: BacklogItem[];
   maxItems?: number;
   onMove: (id: string, horizon: Horizon) => void;
@@ -151,7 +217,9 @@ function KanbanColumn({
   onUpdateStatus: (id: string, status: string) => void;
   expandedId: string | null;
   onToggleExpand: (id: string | null) => void;
+  isDropTarget?: boolean;
 }) {
+  const { isOver, setNodeRef } = useDroppable({ id: horizon });
   const isOverLimit = maxItems !== undefined && items.length >= maxItems;
 
   return (
@@ -165,9 +233,19 @@ function KanbanColumn({
         </span>
       </div>
 
-      <div className="space-y-2 min-h-[200px]">
+      <div
+        ref={setNodeRef}
+        className={`space-y-2 min-h-[200px] rounded-lg transition-all duration-150 ${
+          isOver
+            ? 'bg-accent-blue/10 ring-2 ring-accent-blue/30 ring-dashed'
+            : isDropTarget
+              ? 'ring-1 ring-border-subtle ring-dashed'
+              : ''
+        }`}
+        style={{ padding: isDropTarget ? '4px' : undefined }}
+      >
         {items.map(item => (
-          <BacklogCard
+          <DraggableBacklogCard
             key={item.id}
             item={item}
             isExpanded={expandedId === item.id}
@@ -178,11 +256,35 @@ function KanbanColumn({
           />
         ))}
         {items.length === 0 && (
-          <div className="card border-dashed border-border-subtle p-6 text-center">
-            <p className="text-xs text-text-tertiary">No items</p>
+          <div className={`card border-dashed border-border-subtle p-6 text-center ${isOver ? 'border-accent-blue/40' : ''}`}>
+            <p className="text-xs text-text-tertiary">{isOver ? 'Drop here' : 'No items'}</p>
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function DraggableBacklogCard(props: {
+  item: BacklogItem;
+  isExpanded: boolean;
+  onToggle: () => void;
+  onMove: (id: string, horizon: Horizon) => void;
+  onComplete: (id: string) => void;
+  onUpdateStatus: (id: string, status: string) => void;
+}) {
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: props.item.id,
+  });
+
+  return (
+    <div
+      ref={setNodeRef}
+      {...listeners}
+      {...attributes}
+      style={{ opacity: isDragging ? 0.3 : 1 }}
+    >
+      <BacklogCard {...props} />
     </div>
   );
 }

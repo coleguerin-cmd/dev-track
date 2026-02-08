@@ -12,6 +12,8 @@ import {
   Brain,
   Sparkles,
   Eye,
+  Key,
+  EyeOff,
 } from 'lucide-react';
 import { RadarChart } from '../components/RadarChart';
 
@@ -699,7 +701,7 @@ function AISection() {
       <div className="flex items-center justify-between">
         <div>
           <h2 className="text-base font-semibold">AI Configuration</h2>
-          <p className="text-xs text-text-tertiary mt-0.5">Provider settings, model defaults, and budget controls</p>
+          <p className="text-xs text-text-tertiary mt-0.5">Model defaults, budget controls, and feature toggles</p>
         </div>
         <button onClick={saveConfig} disabled={saving} className="btn-primary text-xs flex items-center gap-1.5">
           {saved ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
@@ -707,9 +709,10 @@ function AISection() {
         </button>
       </div>
 
-      {/* Providers */}
+      {/* Providers toggle */}
       <div className="bg-surface-2 border border-border rounded-lg p-4 space-y-3">
         <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wider">Providers</h3>
+        <p className="text-[10px] text-text-tertiary">Enable/disable which AI providers are used. Configure API keys in the <strong>Integrations</strong> tab.</p>
         <div className="space-y-2">
           {Object.entries(config.providers).map(([id, provider]) => (
             <div key={id} className="flex items-center justify-between px-3 py-2 bg-surface-3 rounded-md">
@@ -727,7 +730,6 @@ function AISection() {
             </div>
           ))}
         </div>
-        <p className="text-[10px] text-text-tertiary">API keys are configured in <code className="text-accent-blue">.credentials.json</code>. A Settings UI for managing keys is coming soon.</p>
       </div>
 
       {/* Default models */}
@@ -837,11 +839,63 @@ function IntegrationsSection() {
   const [saving, setSaving] = useState(false);
   const [showGuide, setShowGuide] = useState(false);
 
+  // AI Provider key state
+  const [maskedCreds, setMaskedCreds] = useState<Record<string, string | null>>({});
+  const [hasCreds, setHasCreds] = useState<Record<string, boolean>>({});
+  const [keyEdits, setKeyEdits] = useState<Record<string, string>>({});
+  const [keyVisible, setKeyVisible] = useState<Record<string, boolean>>({});
+  const [savingKeys, setSavingKeys] = useState(false);
+  const [savedKeys, setSavedKeys] = useState(false);
+  const [testingProvider, setTestingProvider] = useState<string | null>(null);
+  const [testResults, setTestResults] = useState<Record<string, { ok: boolean; message: string }>>({});
+
   useEffect(() => {
     apiFetch<{ plugins: PluginInfo[] }>('/integrations')
       .then(d => setPlugins(d.plugins))
       .catch(() => {});
+    loadAICredentials();
   }, []);
+
+  const loadAICredentials = () => {
+    fetch(`${BASE}/ai/credentials`).then(r => r.json()).then(d => {
+      if (d.ok && d.data) {
+        setMaskedCreds({ openai: d.data.openai, anthropic: d.data.anthropic, google: d.data.google, helicone: d.data.helicone });
+        setHasCreds({ openai: d.data.has_openai, anthropic: d.data.has_anthropic, google: d.data.has_google, helicone: d.data.has_helicone });
+      }
+    }).catch(() => {});
+  };
+
+  const saveAIKeys = async () => {
+    const updates = Object.fromEntries(Object.entries(keyEdits).filter(([_, v]) => v.trim().length > 0));
+    if (Object.keys(updates).length === 0) return;
+    setSavingKeys(true);
+    try {
+      await fetch(`${BASE}/ai/credentials`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(updates) });
+      setSavedKeys(true);
+      setKeyEdits({});
+      loadAICredentials();
+      setTimeout(() => setSavedKeys(false), 2000);
+    } catch (err) { console.error(err); } finally { setSavingKeys(false); }
+  };
+
+  const testAIProvider = async (providerId: string) => {
+    setTestingProvider(providerId);
+    setTestResults(prev => ({ ...prev, [providerId]: undefined as any }));
+    try {
+      const res = await fetch(`${BASE}/ai/providers/${providerId}/test`, { method: 'POST' });
+      const json = await res.json();
+      if (json.ok && json.data) setTestResults(prev => ({ ...prev, [providerId]: json.data }));
+      else setTestResults(prev => ({ ...prev, [providerId]: { ok: false, message: json.error || 'Test failed' } }));
+    } catch (err: any) {
+      setTestResults(prev => ({ ...prev, [providerId]: { ok: false, message: err.message } }));
+    } finally { setTestingProvider(null); }
+  };
+
+  const AI_PROVIDERS = [
+    { id: 'openai', name: 'OpenAI', placeholder: 'sk-proj-...', field: 'openai' },
+    { id: 'anthropic', name: 'Anthropic', placeholder: 'sk-ant-api03-...', field: 'anthropic' },
+    { id: 'google', name: 'Google AI', placeholder: 'AIzaSy...', field: 'google' },
+  ];
 
   const selected = plugins.find(p => p.id === selectedId);
 
@@ -904,7 +958,88 @@ function IntegrationsSection() {
     <div className="space-y-6">
       <div>
         <h2 className="text-base font-semibold">Integrations</h2>
-        <p className="text-xs text-text-tertiary mt-0.5">Connect your development tools</p>
+        <p className="text-xs text-text-tertiary mt-0.5">Connect your AI providers and development tools</p>
+      </div>
+
+      {/* AI Providers */}
+      <div className="bg-surface-2 border border-border rounded-lg p-4 space-y-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-1.5">
+            <Key className="w-3.5 h-3.5 text-accent-yellow" strokeWidth={2} />
+            <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wider">AI Providers</h3>
+          </div>
+          <button
+            onClick={saveAIKeys}
+            disabled={savingKeys || Object.values(keyEdits).every(v => !v.trim())}
+            className="btn-primary text-xs flex items-center gap-1.5"
+          >
+            {savedKeys ? <Check className="w-3.5 h-3.5" /> : <Save className="w-3.5 h-3.5" />}
+            {savingKeys ? 'Saving...' : savedKeys ? 'Saved' : 'Save Keys'}
+          </button>
+        </div>
+
+        <div className="grid grid-cols-3 gap-3">
+          {AI_PROVIDERS.map(provider => {
+            const isConfigured = hasCreds[provider.field];
+            const masked = maskedCreds[provider.field];
+            const editValue = keyEdits[provider.field] || '';
+            const isVisible = keyVisible[provider.field] || false;
+            const provTestResult = testResults[provider.id];
+            const isTesting = testingProvider === provider.id;
+
+            return (
+              <div key={provider.id} className="bg-surface-3 rounded-md p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className={`w-2 h-2 rounded-full ${isConfigured ? 'bg-status-pass' : 'bg-surface-4'}`} />
+                    <span className="text-xs font-medium text-text-primary">{provider.name}</span>
+                  </div>
+                  <button
+                    onClick={() => testAIProvider(provider.id)}
+                    disabled={isTesting || (!isConfigured && !editValue)}
+                    className="btn-ghost text-[11px] flex items-center gap-1 py-0.5 px-2"
+                  >
+                    <RefreshCw className={`w-3 h-3 ${isTesting ? 'animate-spin' : ''}`} />
+                    {isTesting ? 'Testing...' : 'Test'}
+                  </button>
+                </div>
+
+                <div className="relative">
+                  <input
+                    type={isVisible ? 'text' : 'password'}
+                    className="input font-mono text-xs pr-8 w-full"
+                    placeholder={isConfigured ? (masked || 'Configured') : provider.placeholder}
+                    value={editValue}
+                    onChange={e => setKeyEdits({ ...keyEdits, [provider.field]: e.target.value })}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setKeyVisible({ ...keyVisible, [provider.field]: !isVisible })}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-text-tertiary hover:text-text-secondary transition-colors"
+                  >
+                    {isVisible ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+                  </button>
+                </div>
+
+                {provTestResult && (
+                  <div className={`text-[11px] flex items-center gap-1.5 ${provTestResult.ok ? 'text-status-pass' : 'text-status-fail'}`}>
+                    {provTestResult.ok ? <Check className="w-3 h-3" /> : <XIcon className="w-3 h-3" />}
+                    {provTestResult.message}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+        <p className="text-[10px] text-text-tertiary">
+          Keys are stored locally in <code className="text-accent-blue">.credentials.json</code> and never sent to any third party.
+          Enable Helicone to proxy AI requests for cost tracking.
+        </p>
+      </div>
+
+      {/* Development Tools */}
+      <div>
+        <h3 className="text-xs font-semibold text-text-tertiary uppercase tracking-wider mb-3 px-1">Development Tools</h3>
       </div>
 
       <div className="grid grid-cols-3 gap-5 items-start">

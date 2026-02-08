@@ -85,7 +85,7 @@ export function Ideas() {
                     <span>{idea.id}</span>
                     <span>{idea.created}</span>
                     {idea.source && <span>via {idea.source}</span>}
-                    {idea.open_questions.length > 0 && (
+                    {(idea.open_questions?.length > 0) && (
                       <span className="text-accent-yellow">{idea.open_questions.length} open questions</span>
                     )}
                   </div>
@@ -125,19 +125,19 @@ export function Ideas() {
                 </div>
               </div>
 
-              {selected.pros.length > 0 && (
+              {(selected.pros?.length > 0) && (
                 <div>
                   <p className="label mb-1">Pros</p>
                   {selected.pros.map((p, i) => <p key={i} className="text-xs text-status-pass">+ {p}</p>)}
                 </div>
               )}
-              {selected.cons.length > 0 && (
+              {(selected.cons?.length > 0) && (
                 <div>
                   <p className="label mb-1">Cons</p>
                   {selected.cons.map((c, i) => <p key={i} className="text-xs text-status-fail">- {c}</p>)}
                 </div>
               )}
-              {selected.open_questions.length > 0 && (
+              {(selected.open_questions?.length > 0) && (
                 <div>
                   <p className="label mb-1">Open Questions</p>
                   {selected.open_questions.map((q, i) => <p key={i} className="text-xs text-accent-yellow">? {q}</p>)}

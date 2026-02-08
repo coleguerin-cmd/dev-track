@@ -2,8 +2,9 @@ import { Hono } from 'hono';
 import fs from 'fs';
 import path from 'path';
 import { scanCodebase, generateEdgeLabel, type CodebaseAnalysis } from '../analyzer/scanner.js';
+import { getDataDir, getProjectRoot } from '../project-config.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
+const DATA_DIR = getDataDir();
 const CACHE_FILE = path.join(DATA_DIR, 'codebase', 'analysis.json');
 
 let cachedAnalysis: CodebaseAnalysis | null = null;
@@ -30,7 +31,7 @@ app.post('/scan', async (c) => {
   const body = await c.req.json().catch(() => ({}));
   // Default: scan the current project (cwd). When dev-track lives inside another
   // project as .dev-track/, pass project_root explicitly to scan the host project.
-  const projectRoot = body.project_root || process.cwd();
+  const projectRoot = body.project_root || getProjectRoot();
   const srcDir = body.src_dir; // Optional: scan only a subdirectory
 
   console.log(`[codebase] Scanning ${projectRoot}${srcDir ? `/${srcDir}` : ''}...`);

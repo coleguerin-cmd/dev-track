@@ -16,6 +16,14 @@ export const heliconePlugin: IntegrationPlugin = {
       placeholder: 'sk-helicone-xxxxxxxx',
       help: 'Dashboard → Settings → API Keys. Create a read-only key for dev-track.',
     },
+    {
+      key: 'org_id',
+      label: 'Organization ID',
+      type: 'text',
+      required: false,
+      placeholder: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+      help: 'Dashboard → Settings → Organization. Only needed if you have multiple orgs.',
+    },
   ],
 
   setupGuide: `## Helicone Integration Setup

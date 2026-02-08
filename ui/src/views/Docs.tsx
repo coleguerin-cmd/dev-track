@@ -75,8 +75,11 @@ export function Docs() {
   const scrollToSection = useCallback((id: string) => {
     setActiveSection(id);
     const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    const container = document.getElementById('docs-content');
+    if (el && container) {
+      // Use container scrolling since the content is in a scrollable div
+      const offset = el.offsetTop - container.offsetTop - 20;
+      container.scrollTo({ top: offset, behavior: 'smooth' });
     }
   }, []);
 

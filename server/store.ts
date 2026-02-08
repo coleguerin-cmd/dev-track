@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { getDataDir } from './project-config.js';
 import type {
   DevTrackConfig,
   ProjectState,
@@ -20,12 +21,10 @@ import type {
   Action,
 } from '../shared/types.js';
 
-const DATA_DIR = path.resolve(process.cwd(), 'data');
-
 // ─── File Helpers ───────────────────────────────────────────────────────────
 
 function readJSON<T>(filePath: string, fallback: T): T {
-  const fullPath = path.join(DATA_DIR, filePath);
+  const fullPath = path.join(getDataDir(), filePath);
   try {
     if (!fs.existsSync(fullPath)) return fallback;
     const raw = fs.readFileSync(fullPath, 'utf-8');
@@ -37,14 +36,14 @@ function readJSON<T>(filePath: string, fallback: T): T {
 }
 
 function writeJSON<T>(filePath: string, data: T): void {
-  const fullPath = path.join(DATA_DIR, filePath);
+  const fullPath = path.join(getDataDir(), filePath);
   const dir = path.dirname(fullPath);
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(fullPath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
 }
 
 function readMarkdown(filePath: string): string {
-  const fullPath = path.join(DATA_DIR, filePath);
+  const fullPath = path.join(getDataDir(), filePath);
   try {
     if (!fs.existsSync(fullPath)) return '';
     return fs.readFileSync(fullPath, 'utf-8');
@@ -54,7 +53,7 @@ function readMarkdown(filePath: string): string {
 }
 
 function listFiles(dirPath: string, ext: string): string[] {
-  const fullPath = path.join(DATA_DIR, dirPath);
+  const fullPath = path.join(getDataDir(), dirPath);
   try {
     if (!fs.existsSync(fullPath)) return [];
     return fs.readdirSync(fullPath)

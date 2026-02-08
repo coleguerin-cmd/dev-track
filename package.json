@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "description": "AI-native project intelligence system for rapid development",
   "type": "module",
+  "bin": {
+    "dev-track": "./cli/index.ts"
+  },
   "scripts": {
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:ui\"",
     "dev:server": "tsx watch server/index.ts",

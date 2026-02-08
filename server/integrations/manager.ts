@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { getDataDir, getCredentialsPath, getProjectRoot } from '../project-config.js';
 import type { IntegrationPlugin, IntegrationConfig, IntegrationsStore } from './types.js';
 import { githubPlugin } from './github.js';
 import { vercelPlugin } from './vercel.js';
@@ -25,8 +26,8 @@ const PLUGINS: Record<string, IntegrationPlugin> = {
 
 // ─── Credential Storage (.env file, gitignored) ────────────────────────────
 
-const ENV_PATH = path.resolve(process.cwd(), '.env');
-const CREDS_PATH = path.resolve(process.cwd(), '.credentials.json');
+const ENV_PATH = path.join(getProjectRoot(), '.env');
+const CREDS_PATH = getCredentialsPath();
 
 function loadCredentials(): Record<string, Record<string, string>> {
   try {
@@ -43,7 +44,7 @@ function saveCredentials(creds: Record<string, Record<string, string>>): void {
 
 // ─── Config Storage ─────────────────────────────────────────────────────────
 
-const CONFIG_PATH = path.resolve(process.cwd(), 'data', 'integrations.json');
+const CONFIG_PATH = path.join(getDataDir(), 'integrations.json');
 
 function loadConfig(): IntegrationsStore {
   try {
@@ -100,6 +101,16 @@ export class IntegrationManager {
   // Save credentials for a plugin
   setCredentials(pluginId: string, creds: Record<string, string>) {
     this.credentials[pluginId] = creds;
+
+    // Sync Helicone credentials to the AI proxy namespace
+    // The AI service reads from .credentials.json → ai.helicone + ai.helicone_org_id
+    if (pluginId === 'helicone') {
+      if (!this.credentials.ai) this.credentials.ai = {} as any;
+      const aiCreds = this.credentials.ai as Record<string, string>;
+      if (creds.api_key) aiCreds.helicone = creds.api_key;
+      if (creds.org_id) aiCreds.helicone_org_id = creds.org_id;
+    }
+
     saveCredentials(this.credentials);
   }
 
