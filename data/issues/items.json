@@ -992,6 +992,49 @@
       ],
       "notes": "API chain analysis: GET /docs/:id → store.getDocContent(id) → readMarkdown('docs/{id}.md') → path.join(getDataDir(), ...). The .md files exist with content (system-overview.md has 137 lines). Need to verify in browser — could be a path issue, CSS issue, or rendering bug."
     }
+    ,
+    {
+      "id": "ISS-042",
+      "type": "architecture",
+      "title": "No resilience for long-running AI agent tasks — server restart kills in-flight work",
+      "status": "open",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_by": "session-10",
+      "symptoms": "Docs initialization cost $35.94 and only completed 4 of 14 docs because the server restarted mid-generation (tsx watch hot reload). The async IIFE in the route handler was killed. No checkpoint, no resume, no refund. User pays for all the context-building iterations that produced nothing.",
+      "root_cause": "Long-running AI agent tasks run as fire-and-forget async functions inside the server process. Server restarts (tsx watch, crashes, EADDRINUSE) kill them. No checkpoint/resume mechanism. Each update_doc call persists but the agent loop state is lost.",
+      "files": ["server/routes/docs.ts", "server/ai/runner.ts", "server/automation/engine.ts"],
+      "resolution": null,
+      "resolved": null,
+      "roadmap_item": null,
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "tags": ["architecture", "resilience", "cost", "critical-for-production"],
+      "notes": "Docs init: 17 API calls, 2.1M input tokens, $35.94. Agent spent 6 iterations ($14) fumbling with update_doc tool format. Zero prompt cache hits. Possible fixes: (1) run agent in child process that survives server restart, (2) checkpoint after each tool call iteration, (3) per-doc generation instead of monolithic agent run, (4) lock server from hot-reload during agent execution."
+    },
+    {
+      "id": "ISS-043",
+      "type": "bug",
+      "title": "Anthropic prompt caching not working — 0 cache reads on repeated 130K token system prompts",
+      "status": "open",
+      "severity": "high",
+      "assignee": null,
+      "discovered": "2026-02-08",
+      "discovered_by": "session-10",
+      "symptoms": "Helicone export shows promptCacheReadTokens: 0 for all 17 requests in the docs generation run. The system prompt is ~130K tokens and nearly identical across iterations. Anthropic's automatic prompt caching should be reducing costs by 90% on repeated prefixes, but it's not activating.",
+      "root_cause": "Possible causes: (1) Helicone proxy may interfere with Anthropic's cache headers, (2) the system prompt changes slightly between iterations (tool results appended), (3) cache requires specific API parameters not being set, (4) Helicone may not report cache metrics correctly for proxied requests.",
+      "files": ["server/ai/service.ts"],
+      "resolution": null,
+      "resolved": null,
+      "roadmap_item": null,
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "tags": ["ai", "cost", "anthropic", "caching"],
+      "notes": "If caching worked, the docs init would have cost ~$8 instead of $36. This is the single biggest cost optimization available. Anthropic charges $1.50/1M for cached input tokens vs $15/1M for fresh — 90% savings."
+    }
   ],
-  "next_id": 42
+  "next_id": 44
 }
