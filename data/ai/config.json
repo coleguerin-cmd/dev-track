@@ -55,7 +55,7 @@
     "daily_limit_usd": 13,
     "warn_at_usd": 7,
     "pause_on_limit": false,
-    "total_spent_usd": 8.243862,
+    "total_spent_usd": 18.913376999999997,
     "last_reset": "2026-02-08"
   },
   "defaults": {

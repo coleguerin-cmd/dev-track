@@ -1,62 +1,72 @@
 {
   "running": false,
   "mode": "update",
-  "started_at": "2026-02-08T22:16:03.309Z",
-  "docs_total": 10,
-  "docs_completed": 10,
+  "started_at": "2026-02-08T22:44:07.429Z",
+  "docs_total": 12,
+  "docs_completed": 12,
   "current_doc": null,
   "completed_docs": [
     {
       "id": "system-server",
-      "completed_at": "2026-02-08T22:17:44.649Z",
+      "completed_at": "2026-02-08T22:47:37.559Z",
       "cost": 0
     },
     {
       "id": "system-web-ui",
-      "completed_at": "2026-02-08T22:17:57.980Z",
+      "completed_at": "2026-02-08T22:50:59.392Z",
       "cost": 0
     },
     {
       "id": "system-ai-intelligence",
-      "completed_at": "2026-02-08T22:18:12.885Z",
+      "completed_at": "2026-02-08T22:54:33.883Z",
       "cost": 0
     },
     {
       "id": "system-data-layer",
-      "completed_at": "2026-02-08T22:18:27.081Z",
+      "completed_at": "2026-02-08T22:54:55.815Z",
       "cost": 0
     },
     {
       "id": "system-cli",
-      "completed_at": "2026-02-08T22:18:38.760Z",
+      "completed_at": "2026-02-08T22:57:09.128Z",
       "cost": 0
     },
     {
       "id": "system-integrations",
-      "completed_at": "2026-02-08T22:18:53.237Z",
+      "completed_at": "2026-02-08T22:57:34.059Z",
       "cost": 0
     },
     {
       "id": "system-brain",
-      "completed_at": "2026-02-08T22:19:12.012Z",
+      "completed_at": "2026-02-08T22:58:12.657Z",
       "cost": 0
     },
     {
       "id": "system-codebase-tools",
-      "completed_at": "2026-02-08T22:19:23.595Z",
+      "completed_at": "2026-02-08T23:01:13.817Z",
       "cost": 0
     },
     {
       "id": "system-session-tracking",
-      "completed_at": "2026-02-08T22:19:38.023Z",
+      "completed_at": "2026-02-08T23:01:35.626Z",
       "cost": 0
     },
     {
       "id": "system-cursor-rule",
-      "completed_at": "2026-02-08T22:19:53.026Z",
+      "completed_at": "2026-02-08T23:04:51.772Z",
+      "cost": 0
+    },
+    {
+      "id": "system-codebase-visualizer",
+      "completed_at": "2026-02-08T23:05:14.519Z",
+      "cost": 0
+    },
+    {
+      "id": "system-codebase-scanner",
+      "completed_at": "2026-02-08T23:05:33.571Z",
       "cost": 0
     }
   ],
   "errors": [],
-  "total_cost": 2.776293
+  "total_cost": 7.629654000000001
 }

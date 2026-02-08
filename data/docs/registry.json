@@ -388,6 +388,56 @@
       ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
+    },
+    {
+      "id": "system-codebase-visualizer",
+      "title": "System: Codebase Architecture Visualizer",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "codebase-visualizer"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": null,
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
+    },
+    {
+      "id": "system-codebase-scanner",
+      "title": "System: Codebase Scanner",
+      "type": "auto-generated",
+      "content": "",
+      "systems": [
+        "codebase-scanner"
+      ],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": null,
+      "generation_sources": [
+        "systems",
+        "codebase"
+      ],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "system",
+        "auto-generated"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-08"
     }
   ]
 }
