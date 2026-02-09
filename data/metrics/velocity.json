@@ -214,32 +214,32 @@
       "session": 10,
       "developer": "user",
       "duration_hours": 4,
-      "items_shipped": 18,
+      "items_shipped": 24,
       "by_size": {
-        "S": 4,
-        "M": 6,
-        "L": 6,
-        "XL": 2
+        "S": 5,
+        "M": 8,
+        "L": 8,
+        "XL": 3
       },
       "by_category": {
-        "feature": 8,
-        "fix": 3,
-        "ui": 4,
-        "architecture": 2,
-        "infrastructure": 1
+        "feature": 10,
+        "fix": 4,
+        "ui": 5,
+        "architecture": 3,
+        "infrastructure": 2
       },
-      "points": 62,
+      "points": 80,
       "issues_found": 3,
       "issues_resolved": 3,
-      "notes": "Docs system end-to-end: discovery agent, per-doc writers, 4-layer framework, sub-pages, three-column UI, parallel execution, phased generation, checkpoint/resume, provenance tracking. Also: automation Run Now, rate limiting, multi-user prep, Helicone enrichment, AI state cache. Docs generation runs: $36 Opus 4.6 (4 core docs) + $3 Opus 4.5 (re-run) + $7.63 Sonnet (10 system docs). 9 commits, ~15K lines."
+      "notes": "Biggest session ever. Full docs system built twice — basic pipeline then complete rewrite as discovery agent + per-doc writers. 4-layer framework, sub-pages, three-column UI, Mermaid diagrams, parallel pool, phased generation, adaptive complexity budgets, verification + retry, recovery pass, cost modal, provenance tracking. Also: automation Run Now, rate limiting, multi-user prep, Helicone enrichment, AI state cache, diff-based updates, git staleness detection. Docs generation: $36 Opus 4.6 + $3 Opus 4.5 + $8 Sonnet = ~$47 total. 14 commits, ~18K lines."
     }
   ],
   "totals": {
     "total_sessions": 10,
-    "total_items_shipped": 129,
-    "total_points": 424,
-    "avg_items_per_session": 12.9,
-    "avg_points_per_session": 42.4,
+    "total_items_shipped": 135,
+    "total_points": 442,
+    "avg_items_per_session": 13.5,
+    "avg_points_per_session": 44.2,
     "total_issues_found": 24,
     "total_issues_resolved": 28
   },
