@@ -4,7 +4,7 @@
   "created": "2026-02-07",
   "version": "0.1.0",
   "settings": {
-    "max_now_items": 3,
+    "max_now_items": 999,
     "max_session_history": 10,
     "max_run_history_per_action": 20,
     "auto_archive_resolved_issues_after_days": 7,

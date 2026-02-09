@@ -311,7 +311,7 @@ export function scaffoldDataDir(dataDir: string, projectName: string): void {
       created: new Date().toISOString().split('T')[0],
       version: '0.1',
       settings: {
-        max_now_items: 3,
+        max_now_items: 999,
         max_session_history: 10,
         max_run_history_per_action: 20,
         auto_archive_resolved_issues_after_days: 7,

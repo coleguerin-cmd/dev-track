@@ -197,17 +197,7 @@ app.post('/:id/move', async (c) => {
   const targetHorizon = body.horizon as Horizon;
   if (!targetHorizon) return c.json({ ok: false, error: 'horizon is required' }, 400);
 
-  if (targetHorizon === 'now' && item.horizon !== 'now') {
-    const nowCount = store.roadmap.items.filter(
-      i => i.horizon === 'now' && i.status !== 'completed' && i.status !== 'cancelled'
-    ).length;
-    if (nowCount >= store.config.settings.max_now_items) {
-      return c.json({
-        ok: false,
-        error: `WIP limit reached: ${nowCount}/${store.config.settings.max_now_items} items in Now.`,
-      }, 400);
-    }
-  }
+  // No WIP limit — AI sprints handle high throughput
 
   const oldHorizon = item.horizon;
   item.horizon = targetHorizon;
