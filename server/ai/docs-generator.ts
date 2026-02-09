@@ -597,7 +597,48 @@ export async function generateDocs(mode: 'initialize' | 'update'): Promise<void>
       });
     }
 
-    // Step 3: Done
+    // Step 3: Recovery pass — find docs that are still thin after the main run
+    const store3 = getStore();
+    const thinDocs = plan.pages.filter(p => {
+      const content = store3.getDocContent(p.id);
+      return content.length < 3000; // Less than ~3KB = probably failed
+    });
+
+    if (thinDocs.length > 0) {
+      console.log(`[docs-gen] Recovery pass: ${thinDocs.length} docs still thin after main run. Retrying with bumped complexity...`);
+      updateStatus({ phase: 'architecture', current_doc: null }); // Reuse phase for UI
+
+      for (const page of thinDocs) {
+        if (isCompleted(page.id)) continue; // Already verified as good
+
+        // Bump complexity for retry
+        const bumpedPage = { ...page, complexity: 'high' as const };
+        if (page.complexity === 'high') bumpedPage.complexity = 'deep' as any;
+
+        updateStatus({ current_doc: page.id });
+        console.log(`[docs-gen]   Recovery: ${page.id} (bumped to ${bumpedPage.complexity})`);
+
+        try {
+          const cost = await writeDoc(bumpedPage, stateCache, mode);
+          _status.completed_docs.push({ id: page.id, completed_at: new Date().toISOString(), cost, layer: page.layer });
+          _status.docs_completed++;
+          updateStatus({});
+
+          const finalContent = store3.getDocContent(page.id);
+          if (finalContent.length < 3000) {
+            console.warn(`[docs-gen]   Recovery still failed for ${page.id} (${finalContent.length} chars). Giving up.`);
+            _status.errors.push(`${page.id}: still thin after recovery (${finalContent.length} chars)`);
+          } else {
+            console.log(`[docs-gen]   Recovery SUCCESS: ${page.id} (${Math.round(finalContent.length / 1024)}KB)`);
+          }
+        } catch (err: any) {
+          console.error(`[docs-gen]   Recovery failed: ${page.id}: ${err.message}`);
+          _status.errors.push(`${page.id}: recovery failed: ${err.message}`);
+        }
+      }
+    }
+
+    // Step 4: Done
     updateStatus({ running: false, phase: 'done', current_doc: null });
     console.log(`[docs-gen] Complete: ${_status.docs_completed}/${_status.docs_total} docs, $${_status.total_cost.toFixed(2)}, ${_status.errors.length} errors`);
 
