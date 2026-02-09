@@ -439,17 +439,55 @@ The content parameter MUST be the complete markdown document as a string.`;
     });
 
     recorder.finalize(result.content, result.iterations);
+    let totalCost = result.cost;
     trackCost(result.cost);
+
+    // ─── Verification: check if the doc was actually written ──────────
+    const postContent = store.getDocContent(page.id);
+    const preLength = doc ? (store.getDocContent(page.id)?.length || 0) : 0;
+    const contentWritten = postContent.length > 5000 || (postContent.length > preLength + 500);
+
+    if (!contentWritten) {
+      console.warn(`[docs-gen] Verification FAILED for ${page.id}: content length ${postContent.length} (was ${preLength}). Retrying with direct prompt...`);
+      
+      // Retry with a simpler, more direct prompt — just write the content
+      try {
+        const retryPrompt = `The previous attempt to write documentation for "${page.title}" failed to produce content. 
+
+Read the current doc with get_doc id="${page.id}", then read 2-3 relevant source files, then call update_doc with id="${page.id}" and a COMPLETE markdown document as the content parameter.
+
+The content MUST be a full markdown string, at least 50 lines. Do not skip the content parameter.`;
+
+        const retryResult = await runAgent(
+          `You are a documentation writer. Write comprehensive documentation. When calling update_doc, the content parameter is REQUIRED and must be the FULL markdown text.`,
+          retryPrompt,
+          { task: 'incremental_update', maxIterations: 5, maxTokens: 16384, heliconeProperties: { ...{ User: 'devtrack-docs-generator', Source: 'docs-retry', DocId: page.id } } },
+        );
+        
+        totalCost += retryResult.cost;
+        trackCost(retryResult.cost);
+
+        const retryContent = store.getDocContent(page.id);
+        if (retryContent.length > postContent.length + 500) {
+          console.log(`[docs-gen] Retry SUCCESS for ${page.id}: ${retryContent.length} chars`);
+        } else {
+          console.warn(`[docs-gen] Retry also failed for ${page.id}. Content: ${retryContent.length} chars. Moving on.`);
+        }
+      } catch (retryErr: any) {
+        console.error(`[docs-gen] Retry error for ${page.id}:`, retryErr.message);
+      }
+    }
 
     // Record edit history
     const docRef = store.docsRegistry.docs.find(d => d.id === page.id);
     if (docRef) {
+      const finalContent = store.getDocContent(page.id);
       const edit: DocEdit = {
         timestamp: new Date().toISOString(),
         actor: 'ai',
-        actor_detail: `${result.iterations} iterations, ${mode} mode`,
-        summary: `Generated ${page.layer} documentation`,
-        cost_usd: result.cost,
+        actor_detail: `${result.iterations} iterations, ${mode} mode${!contentWritten ? ' (retry needed)' : ''}`,
+        summary: `Generated ${page.layer} documentation (${Math.round(finalContent.length / 1024)}KB)`,
+        cost_usd: totalCost,
       };
       if (!docRef.edit_history) docRef.edit_history = [];
       docRef.edit_history.push(edit as any);
@@ -461,7 +499,7 @@ The content parameter MUST be the complete markdown document as a string.`;
       store.saveDocsRegistry();
     }
 
-    return result.cost;
+    return totalCost;
   } catch (err: any) {
     recorder.fail(err.message || 'Unknown error');
     throw err;
