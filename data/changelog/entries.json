@@ -1745,12 +1745,132 @@
       "type": "feature",
       "scope": "full-stack",
       "files_changed": [
-        "ui/src/api/client.ts", "ui/src/api/useWebSocket.ts", "ui/src/components/Sidebar.tsx",
-        "ui/src/components/ChatSidebar.tsx", "ui/src/views/Dashboard.tsx", "server/project-config.ts",
-        "server/routes/roadmap.ts", "server/routes/init.ts", "server/index.ts"
+        "ui/src/api/client.ts",
+        "ui/src/api/useWebSocket.ts",
+        "ui/src/components/Sidebar.tsx",
+        "ui/src/components/ChatSidebar.tsx",
+        "ui/src/views/Dashboard.tsx",
+        "server/project-config.ts",
+        "server/routes/roadmap.ts",
+        "server/routes/init.ts",
+        "server/index.ts"
       ],
       "backlog_item": null,
       "breaking": false
+    },
+    {
+      "id": "CL-094",
+      "date": "2026-02-09",
+      "session": 12,
+      "title": "Global credentials — ~/.dev-track/credentials.json",
+      "description": "API keys now stored at ~/.dev-track/credentials.json (global, follows user across projects). Per-project override via .credentials.json in project root. Auto-migration on first load.",
+      "type": "feature",
+      "scope": "server",
+      "files_changed": [
+        "server/project-config.ts",
+        "server/routes/ai.ts",
+        "server/integrations/manager.ts"
+      ],
+      "backlog_item": "global-credentials",
+      "breaking": false
+    },
+    {
+      "id": "CL-095",
+      "date": "2026-02-09",
+      "session": 12,
+      "title": "Init system overhaul — 6-phase engine with model tier routing, SSE streaming, cancel/resume",
+      "description": "Complete rewrite of project initialization. 6 focused phases (Discovery→Systems→Roadmap→Cross-ref→Git Import→Finalize) with intelligent model routing: Opus for quality-critical phases (Roadmap, Finalize), Sonnet for structural phases (Systems, Cross-ref), Haiku for mechanical phases (Discovery, Git Import). Agent runner gains tier override, cost cap, AbortSignal, and onToolCall progress callback. Metadata scanner pre-reads top 15 key files to eliminate AI read_file iterations. Init route streams SSE events in real-time. New endpoints: POST /estimate, POST /cancel, POST /resume, GET /status. Checkpoint system saves after each phase for cancel/resume support.",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/ai/runner.ts",
+        "server/ai/router.ts",
+        "server/init/phases.ts",
+        "server/init/metadata-scanner.ts",
+        "server/init/checkpoint.ts",
+        "server/routes/init.ts",
+        "ui/src/api/client.ts",
+        "ui/src/components/InitPanel.tsx",
+        "ui/src/views/Dashboard.tsx"
+      ],
+      "backlog_item": "init-optimization",
+      "breaking": true
+    },
+    {
+      "id": "CL-096",
+      "date": "2026-02-09",
+      "session": null,
+      "title": "Fix multi-server project switching - eliminate hot-swap corruption",
+      "description": "Disabled server-side hot-swap endpoint (returns 409 redirect). Fixed missing port type on ProjectInfo interface (root cause of all switching failures). Removed stale built UI at dist/ui. Home project switching now clears API origin correctly.",
+      "type": "fix",
+      "scope": "server,ui",
+      "roadmap_item": null,
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [
+        "server/index.ts",
+        "ui/src/components/Sidebar.tsx"
+      ],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
+    },
+    {
+      "id": "CL-097",
+      "date": "2026-02-09",
+      "session": null,
+      "title": "Upfactor init engine - system_id on issues, stronger idea generation, cross-ref linkage",
+      "description": "Added system_id field to create_issue/update_issue tools. Strengthened idea generation prompts (minimum 5 ideas with pros/cons). Fixed cross-ref phase to focus on linkage quality (epic_id, system_id, milestone_id). Added Opus original ideas to finalize phase. Bumped iteration limits (roadmap 50->70, crossref 25->40).",
+      "type": "enhancement",
+      "scope": "server",
+      "roadmap_item": null,
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [
+        "server/init/phases.ts",
+        "server/ai/tools/issues.ts"
+      ],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
+    },
+    {
+      "id": "CL-098",
+      "date": "2026-02-09",
+      "session": null,
+      "title": "Protect project registry from wipe during hot-reload race conditions",
+      "description": "saveRegistry now merges entries - never writes fewer projects than already exist. loadRegistry logs errors instead of silently returning empty. Prevents tsx watch restarts from wiping other project entries.",
+      "type": "fix",
+      "scope": "server",
+      "roadmap_item": null,
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [
+        "server/project-config.ts"
+      ],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
+    },
+    {
+      "id": "CL-099",
+      "date": "2026-02-09",
+      "session": null,
+      "title": "Register Landmark project and establish 3-project multi-server infrastructure",
+      "description": "Registered Landmark in global registry (port 24684). Created data directory scaffolding with Helicone enabled from start. Created .dev-track/config.json for Pillar and Landmark. Validated 3-project switching: dev-track (24680), pillar (24682), landmark (24684).",
+      "type": "infrastructure",
+      "scope": "server",
+      "roadmap_item": null,
+      "epic_id": null,
+      "issues_resolved": [],
+      "release_id": null,
+      "files_changed": [],
+      "commit_hashes": [],
+      "breaking": false,
+      "tags": []
     }
   ]
 }

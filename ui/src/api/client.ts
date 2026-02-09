@@ -278,9 +278,139 @@ export const git = {
 
 // ─── Project Init ───────────────────────────────────────────────────────────
 
+export interface InitEstimate {
+  project: string;
+  project_root: string;
+  stats: {
+    total_files: number;
+    total_lines: number;
+    languages: Record<string, number>;
+    project_type: string;
+    has_existing_cursor_rules: boolean;
+    has_claude_md: boolean;
+    has_readme: boolean;
+  };
+  estimate: {
+    cost_low: number;
+    cost_high: number;
+    time_minutes_low: number;
+    time_minutes_high: number;
+    size_category: 'small' | 'medium' | 'large' | 'xl';
+    estimated_systems: number;
+    estimated_phases: number;
+  };
+}
+
+export interface InitProgressEvent {
+  type: 'phase_start' | 'phase_complete' | 'entity_created' | 'cost_update' | 'error' | 'done' | 'cancelled';
+  phase?: string;
+  phase_number?: number;
+  total_phases?: number;
+  phase_description?: string;
+  entity_type?: string;
+  entity_id?: string;
+  entity_title?: string;
+  count?: number;
+  phase_cost?: number;
+  total_cost?: number;
+  total_entities?: number;
+  duration_seconds?: number;
+  error?: string;
+  message?: string;
+}
+
+export interface InitStatus {
+  running: boolean;
+  checkpoint: any | null;
+  can_resume: boolean;
+}
+
 export const init = {
-  run: () => request<any>('/init', { method: 'POST', body: JSON.stringify({}) }),
+  /** Quick pre-scan — returns cost/time estimate without starting init */
+  estimate: () => request<InitEstimate>('/init/estimate', { method: 'POST' }),
+
+  /** Get current init status and checkpoint info */
+  status: () => request<InitStatus>('/init/status'),
+
+  /** Cancel a running initialization */
+  cancel: () => request<{ message: string }>('/init/cancel', { method: 'POST' }),
+
+  /**
+   * Start full initialization with SSE streaming.
+   * Returns an EventSource-like interface for consuming progress events.
+   */
+  run: (onEvent: (event: InitProgressEvent) => void, onError?: (err: Error) => void): (() => void) => {
+    return connectInitSSE('/init', onEvent, onError);
+  },
+
+  /**
+   * Resume initialization from checkpoint with SSE streaming.
+   */
+  resume: (onEvent: (event: InitProgressEvent) => void, onError?: (err: Error) => void): (() => void) => {
+    return connectInitSSE('/init/resume', onEvent, onError);
+  },
 };
+
+/**
+ * Connect to an init SSE endpoint via fetch + ReadableStream.
+ * Returns a cleanup function to abort the connection.
+ */
+function connectInitSSE(
+  path: string,
+  onEvent: (event: InitProgressEvent) => void,
+  onError?: (err: Error) => void,
+): () => void {
+  const controller = new AbortController();
+  const url = `${getApiBase()}${path}`;
+
+  (async () => {
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal,
+      });
+
+      if (!res.ok || !res.body) {
+        throw new Error(`Init request failed: ${res.status}`);
+      }
+
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        
+        // Parse SSE events from buffer
+        const lines = buffer.split('\n');
+        buffer = lines.pop() || ''; // Keep incomplete line in buffer
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.substring(6);
+            try {
+              const event = JSON.parse(data) as InitProgressEvent;
+              onEvent(event);
+            } catch {
+              // Not valid JSON, skip
+            }
+          }
+          // event: lines are ignored — event type is embedded in the JSON data.type field
+        }
+      }
+    } catch (err: any) {
+      if (err.name !== 'AbortError') {
+        onError?.(err);
+      }
+    }
+  })();
+
+  return () => controller.abort();
+}
 
 // ─── Config ─────────────────────────────────────────────────────────────────
 

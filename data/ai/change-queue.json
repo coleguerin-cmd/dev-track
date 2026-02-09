@@ -26,6 +26,44 @@
         "author": "unknown",
         "related_items": []
       }
+    },
+    {
+      "id": "chg-1770609370543-1",
+      "type": "activity_report",
+      "timestamp": "2026-02-09T03:56:10.543Z",
+      "processed": false,
+      "data": {
+        "source": "cursor",
+        "action": "feature",
+        "description": "Init system overhaul: 6-phase engine, model tier routing, SSE streaming, cancel/resume, pre-read key files, estimate endpoint",
+        "files": [
+          "server/ai/runner.ts",
+          "server/ai/router.ts",
+          "server/init/phases.ts",
+          "server/init/metadata-scanner.ts",
+          "server/routes/init.ts",
+          "ui/src/api/client.ts",
+          "ui/src/components/InitPanel.tsx",
+          "ui/src/views/Dashboard.tsx"
+        ]
+      }
+    },
+    {
+      "id": "chg-1770614081362-1",
+      "type": "activity_report",
+      "timestamp": "2026-02-09T05:14:41.362Z",
+      "processed": false,
+      "data": {
+        "source": "cursor",
+        "action": "feature",
+        "description": "Upfactored init engine: added system_id to issues, strengthened idea generation prompts, fixed cross-ref phase linkage, bumped iteration caps, fixed project switcher hot-swap bug, disabled server-side hot-swap",
+        "files": [
+          "server/init/phases.ts",
+          "server/ai/tools/issues.ts",
+          "server/index.ts",
+          "ui/src/components/Sidebar.tsx"
+        ]
+      }
     }
   ],
   "last_processed": null,

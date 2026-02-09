@@ -1,26 +1,34 @@
 {
-  "last_generated": "2026-02-09T01:25:49.666Z",
-  "briefing": "Session 11 in progress: Infrastructure work on change tracking system. New files added (change-queue.ts, hooks.ts) and automation engine modified. 4 audit runs executed (0026-0029). Git shows uncommitted work across 20+ files. Session objective is docs validation and multi-project readiness, but current work appears to be automation infrastructure improvements. No completed roadmap items yet this session. All open issues remain valid (ISS-034 semantic watcher is critical blocker, ISS-043 Anthropic caching is high-priority cost optimization).",
+  "last_generated": "2026-02-09T05:30:00.000Z",
+  "briefing": "Session 12 complete. Major focus: multi-server project switching stability and init engine quality. Root-caused the project switching corruption bug — missing `port` field on the `ProjectInfo` TypeScript interface meant every switch fell through to the server-side hot-swap fallback, which corrupted whichever server was running. Fixed by: (1) adding port to the type, (2) disabling server-side hot-swap (returns 409 with redirect), (3) adding merge protection to the registry so tsx watch restarts can't wipe other project entries. Upfactored the init engine with system_id on issues, minimum 5 ideas per init, stronger cross-ref linkage prompts, Opus original ideas in finalize phase, and bumped iteration limits. Successfully ran the new 6-phase init on Pillar — produced 19 systems, 7 epics, 32 roadmap items, 10 issues, 15 changelog entries, 5 brain notes, a cursor rule, and 62% health score. Registered Landmark as third project on port 24684. Three-project switching validated: dev-track (24680), pillar (24682), landmark (24684). Two new issues discovered: ISS-044 (npx CWD config detection) and ISS-045 (SSE keepalive during rate limiting). Git has uncommitted changes from this session.",
   "hot_context": [
-    "server/automation/change-queue.ts - NEW infrastructure file",
-    "server/routes/hooks.ts - NEW webhook/trigger infrastructure",
-    "server/automation/engine.ts - Modified automation engine",
-    "server/ai/tools/backlog.ts, ideas.ts, issues.ts - AI tool updates",
-    "data/audits/runs/run-0026 through run-0029 - Recent automation execution",
-    "20+ uncommitted data files - Session state not yet committed"
+    "server/index.ts — hot-swap endpoint disabled, returns 409 redirect. Each project runs its own server.",
+    "ui/src/components/Sidebar.tsx — ProjectInfo now has port field. No more hot-swap fallback.",
+    "server/project-config.ts — saveRegistry merges entries, never writes fewer than existing. loadRegistry logs errors.",
+    "server/init/phases.ts — 6 phases: discovery(haiku), systems(sonnet), roadmap(opus,70iter), crossref(sonnet,40iter), git(haiku), finalize(opus,30iter). Finalize now generates 5 Opus original ideas.",
+    "server/ai/tools/issues.ts — create_issue and update_issue now accept system_id and roadmap_item fields.",
+    "Pillar (port 24682): Init completed. 19 systems, 7 epics, 32 roadmap items, 10 issues, 62% health. Data at ~/.dev-track/projects/pillar/data.",
+    "Landmark (port 24684): Registered, server running, data scaffolded, Helicone enabled. Ready for initialization.",
+    "ISS-045 (HIGH): SSE stream dies during rate limiter waits (30-60s). Init UI shows hung. Needs keepalive heartbeat.",
+    "ISS-044 (MEDIUM): .dev-track/config.json not detected when using npx tsx. Workaround: use env vars.",
+    "~/.dev-track/projects.json is the global project registry. 3 projects registered.",
+    "dist/ui was deleted — port 24680 no longer serves stale built React app.",
+    "Helicone was disabled in Pillar's AI config during init (fixed to enabled now). Landmark has it enabled from start."
   ],
   "warnings": [
-    "Session 11 has uncommitted work - 20+ modified files plus 2 new infrastructure files not yet committed to git",
-    "Change queue shows 'no unprocessed changes' but git status shows substantial uncommitted work - possible disconnect between change tracking and actual file state",
-    "ISS-034 (semantic file watcher) remains CRITICAL blocker - prevents reliable automation triggers from external edits",
-    "Session objective mentions 'docs validation' and 'Landmark readiness' but current work appears to be automation infrastructure - potential scope drift"
+    "ISS-034 (CRITICAL) still open: Semantic file watcher broken — blocks reliable automation triggers.",
+    "ISS-043 (HIGH) still open: Anthropic prompt caching not working — 0 cache reads on 130K token system prompts.",
+    "ISS-045 (HIGH) new: SSE keepalive needed — init UI shows hung during rate limiter waits.",
+    "Landmark server requires env vars to start correctly (DEV_TRACK_DATA_DIR + DEV_TRACK_PORT) due to ISS-044.",
+    "tsx watch restarts can be disruptive — the registry merge protection helps but doesn't fix all races.",
+    "Pillar init ran without Helicone — no cost tracking for that run. Fixed config for future runs."
   ],
   "suggestions": [
-    "PRIORITY 1: Commit the current work (change-queue.ts, hooks.ts, automation engine updates) with clear commit message describing what was built",
-    "PRIORITY 2: Return to session 11 objective - browser test Docs tab end-to-end (three-column layout, Mermaid, cost modal, sub-pages)",
-    "PRIORITY 3: Audit docs prompts for project-agnosticism - strip DevTrack-specific references before Landmark port",
-    "PRIORITY 4: Test multi-project switching and profile persistence",
-    "PRIORITY 5: Address ISS-043 (Anthropic prompt caching) - potential 90% cost savings on docs generation",
-    "Consider: Is the change-queue infrastructure work a prerequisite for the session objective, or is this scope creep?"
+    "PRIORITY 1: Run Landmark initialization — server is ready, all improvements applied.",
+    "PRIORITY 2: Fix ISS-045 — add SSE heartbeat (every 15s) and rate-limiter keepalive. Quick fix, high impact.",
+    "PRIORITY 3: Fix ISS-044 — debug process.cwd() behavior with npx tsx. May need to resolve config from script location instead.",
+    "PRIORITY 4: Fix ISS-034 — semantic watcher is the critical blocker for reliable automations.",
+    "PRIORITY 5: Browser test Pillar and Landmark dashboards — verify all 6 phase outputs render correctly.",
+    "PRIORITY 6: Investigate ISS-043 — prompt caching could save 90% on automation costs."
   ]
 }

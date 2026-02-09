@@ -1049,7 +1049,55 @@
         "caching"
       ],
       "notes": "HIGH PRIORITY COST OPTIMIZATION (13+ days open): Helicone shows 0 cache reads despite 130K token system prompts repeated across iterations. Anthropic automatic prompt caching should reduce costs 90% on repeated prefixes ($1.50/1M cached vs $15/1M fresh). Docs generation cost $36 — with caching would be ~$8 (90% savings). Possible causes: (1) Helicone proxy interfering with cache headers, (2) system prompt changing slightly between iterations (tool results appended), (3) missing API parameters, (4) Helicone not reporting correctly. This is THE single biggest cost optimization available. Session 10 data: 17 requests, 2.1M input tokens, promptCacheReadTokens: 0 for all. WEEKLY REFRESH: 13+ days old, $28 in potential savings per docs run. Should prioritize investigation."
+    },
+    {
+      "id": "ISS-044",
+      "title": "Project config .dev-track/config.json not detected when using npx tsx",
+      "status": "open",
+      "severity": "medium",
+      "type": "bug",
+      "symptoms": "When starting a server from a project directory using npx tsx, the .dev-track/config.json in the CWD is not detected. Server falls back to legacy defaults (port 24680, ./data/ path). Requires env vars as workaround.",
+      "root_cause": "npx downloading tsx on-the-fly may change effective CWD or process.cwd() resolves differently.",
+      "resolution": null,
+      "files": [
+        "server/project-config.ts"
+      ],
+      "roadmap_item": null,
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "assignee": null,
+      "tags": [],
+      "discovered": "2026-02-09",
+      "discovered_by": "user",
+      "resolved": null,
+      "notes": null
+    },
+    {
+      "id": "ISS-045",
+      "title": "SSE stream dies during long rate-limiter waits - init UI shows hung on finalizing",
+      "status": "open",
+      "severity": "high",
+      "type": "bug",
+      "symptoms": "During Pillar init, the Finalize phase triggered multiple 30-60s rate limiter waits. The SSE connection timed out, so the UI never received the done event. User sees Finalizing indefinitely even though the server completed successfully.",
+      "root_cause": "No SSE keepalive/heartbeat mechanism. Hono SSE stream has no periodic ping during idle periods. Browser closes the connection after ~60s of inactivity.",
+      "resolution": null,
+      "files": [
+        "server/routes/init.ts",
+        "server/ai/runner.ts",
+        "ui/src/api/client.ts"
+      ],
+      "roadmap_item": null,
+      "epic_id": null,
+      "milestone_id": null,
+      "blocked_by_issue": null,
+      "assignee": null,
+      "tags": [],
+      "discovered": "2026-02-09",
+      "discovered_by": "user",
+      "resolved": null,
+      "notes": null
     }
   ],
-  "next_id": 44
+  "next_id": 46
 }

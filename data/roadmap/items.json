@@ -1515,13 +1515,13 @@
     },
     {
       "id": "pillar-init-audit",
-      "title": "End-to-end audit of Pillar initialization — review, fix, and complete what the init missed",
-      "summary": "Pillar init created 13 systems, 20 roadmap items, 8 issues, 6 ideas, 3 docs. Review quality of each: are systems accurate? Are roadmap items meaningful? Are issues real? Complete what the 20-iteration limit cut short. Run a follow-up init or manual corrections. Validate the data against Pillar's actual codebase (919 files, 64 AI tools, 65+ DB models).",
+      "title": "Re-initialize Pillar with new 6-phase engine — validate quality improvement end-to-end",
+      "summary": "New init engine is built (6 phases, Opus for quality, pre-read key files, SSE streaming). Need to re-run on Pillar to validate: better system descriptions, more roadmap items, epics wired correctly, issues linked to systems, git history imported, cursor rule generated. Compare output quality and cost vs. old init ($19.87 for half-baked results).",
       "type": "chore",
-      "horizon": "now",
+      "horizon": "shipped",
       "priority": "P0",
       "size": "M",
-      "status": "pending",
+      "status": "completed",
       "category": "core",
       "epic_id": "platform-distribution",
       "milestone_id": null,
@@ -1530,7 +1530,11 @@
       "related_issues": [],
       "spawned_from": null,
       "assignee": null,
-      "tags": ["pillar", "initialization", "dogfood"],
+      "tags": [
+        "pillar",
+        "initialization",
+        "dogfood"
+      ],
       "design_doc": null,
       "acceptance_criteria": [
         "All 13 Pillar systems reviewed for accuracy",
@@ -1542,19 +1546,19 @@
       "created": "2026-02-09",
       "updated": "2026-02-09",
       "started": null,
-      "completed": null,
+      "completed": "2026-02-09",
       "ai_notes": "First real dogfood of DevTrack on a production project. Init hit 20-iteration limit and stopped before finishing.",
       "estimated_sessions": 1
     },
     {
       "id": "init-progress-streaming",
       "title": "Init progress UI — real-time streaming with cost, step indicator, and time estimate",
-      "summary": "Replace the blank loading screen during initialization with real-time progress: current step name, entities created so far, running AI cost, estimated time remaining. Server streams events via SSE or polling. UI shows step-by-step progress bar with explanations of what each step does. Cost displayed in real-time on the loading bar. No hard iteration limit — use cost cap instead.",
+      "summary": "Full InitPanel component: pre-scan estimate card (files, lines, languages, cost range, time range), phase-by-phase progress with live cost counter, entity feed showing what's being created, cancel/resume controls. SSE stream from server with phase_start/phase_complete/entity_created/cost_update/done/cancelled events. Completion summary with per-phase cost breakdown.",
       "type": "feature",
-      "horizon": "now",
+      "horizon": "shipped",
       "priority": "P0",
       "size": "L",
-      "status": "pending",
+      "status": "completed",
       "category": "ui",
       "epic_id": "ui-views",
       "milestone_id": null,
@@ -1563,7 +1567,11 @@
       "related_issues": [],
       "spawned_from": "IDEA-074",
       "assignee": null,
-      "tags": ["ux", "initialization", "streaming"],
+      "tags": [
+        "ux",
+        "initialization",
+        "streaming"
+      ],
       "design_doc": null,
       "acceptance_criteria": [
         "Real-time step indicator visible during init",
@@ -1583,12 +1591,12 @@
     {
       "id": "global-credentials",
       "title": "Global credentials — move .credentials.json to ~/.dev-track/credentials.json",
-      "summary": "API keys should follow the user across projects like profiles do. Move from per-project .credentials.json to ~/.dev-track/credentials.json with per-project override support. Migration: check project root first (backward compat), then fall back to global. Eliminates the #1 friction point for new project initialization.",
+      "summary": "API keys now stored at ~/.dev-track/credentials.json (global, follows user across projects). Per-project override via .credentials.json in project root. Auto-migration on first load.",
       "type": "feature",
-      "horizon": "now",
+      "horizon": "shipped",
       "priority": "P1",
       "size": "S",
-      "status": "pending",
+      "status": "completed",
       "category": "core",
       "epic_id": "platform-distribution",
       "milestone_id": null,
@@ -1597,7 +1605,11 @@
       "related_issues": [],
       "spawned_from": "IDEA-075",
       "assignee": null,
-      "tags": ["credentials", "multi-project", "quick-win"],
+      "tags": [
+        "credentials",
+        "multi-project",
+        "quick-win"
+      ],
       "design_doc": null,
       "acceptance_criteria": [
         "Credentials stored at ~/.dev-track/credentials.json globally",
@@ -1615,12 +1627,12 @@
     {
       "id": "init-optimization",
       "title": "Initialization optimization — apply automation learnings, remove iteration cap, better prompts",
-      "summary": "Apply learnings from the automation efficiency overhaul to the init flow: summary mode for scanning, filtered reads, state-cache-aware prompts. Remove 20-iteration hard limit — replace with cost cap ($10 max). Better error recovery (rate limit retry). Ensure all entity types get created (current init sometimes runs out before issues/ideas). Wire init through model router properly for Helicone tracking.",
+      "summary": "Complete rewrite: 6-phase engine (Discovery/Systems/Roadmap/Cross-ref/Git/Finalize), Opus for quality phases, Sonnet/Haiku for mechanical. Pre-read key files, state cache for inter-phase context, cost cap instead of iteration cap, abort signal for cancel.",
       "type": "enhancement",
-      "horizon": "now",
+      "horizon": "shipped",
       "priority": "P1",
       "size": "M",
-      "status": "pending",
+      "status": "completed",
       "category": "core",
       "epic_id": null,
       "milestone_id": null,
@@ -1629,7 +1641,11 @@
       "related_issues": [],
       "spawned_from": "IDEA-078",
       "assignee": null,
-      "tags": ["initialization", "optimization", "cost"],
+      "tags": [
+        "initialization",
+        "optimization",
+        "cost"
+      ],
       "design_doc": null,
       "acceptance_criteria": [
         "Init creates ALL entity types (systems, roadmap, issues, ideas, docs, state, context recovery)",

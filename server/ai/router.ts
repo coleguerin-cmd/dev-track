@@ -238,6 +238,43 @@ export class ModelRouter {
     throw new Error('No AI models available. Add API keys in Settings → AI.');
   }
 
+  /** Route directly by tier — for init phases that know exactly what quality level they need */
+  routeByTier(tier: ModelTier, preferredProviders?: string[]): string {
+    const providers = preferredProviders || ['anthropic', 'openai', 'google'];
+    
+    for (const provider of providers) {
+      if (!this.availableProviders.has(provider)) continue;
+      const candidates = this.discoveredModels
+        .filter(m => m.tier === tier && m.provider === provider);
+      if (candidates.length > 0) {
+        return candidates[0].id;
+      }
+    }
+
+    // Fallback: try adjacent tiers
+    const fallbackOrder: Record<ModelTier, ModelTier[]> = {
+      premium: ['standard'],
+      standard: ['premium', 'budget'],
+      budget: ['standard'],
+    };
+
+    for (const fallbackTier of fallbackOrder[tier] || []) {
+      for (const provider of providers) {
+        if (!this.availableProviders.has(provider)) continue;
+        const candidates = this.discoveredModels
+          .filter(m => m.tier === fallbackTier && m.provider === provider);
+        if (candidates.length > 0) {
+          console.log(`[ai-router] No ${tier} model available, falling back to ${fallbackTier}: ${candidates[0].id}`);
+          return candidates[0].id;
+        }
+      }
+    }
+
+    // Last resort: any available model
+    if (this.discoveredModels.length > 0) return this.discoveredModels[0].id;
+    throw new Error('No AI models available. Add API keys in Settings → AI.');
+  }
+
   /** Get all discovered models */
   getAvailableModels(): ModelInfo[] {
     return this.discoveredModels;

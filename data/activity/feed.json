@@ -840,7 +840,111 @@
       },
       "id": "ACT-0064",
       "timestamp": "2026-02-09T01:36:33.960Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "activity_report",
+      "entity_id": "chg-1770609370543-1",
+      "title": "Activity report (cursor): Init system overhaul: 6-phase engine, model tier routing, SSE streaming, cancel/",
+      "actor": "cursor",
+      "metadata": {
+        "action": "feature",
+        "files_count": 8
+      },
+      "id": "ACT-0065",
+      "timestamp": "2026-02-09T03:56:10.544Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "activity_report",
+      "entity_id": "chg-1770614081362-1",
+      "title": "Activity report (cursor): Upfactored init engine: added system_id to issues, strengthened idea generation ",
+      "actor": "cursor",
+      "metadata": {
+        "action": "feature",
+        "files_count": 4
+      },
+      "id": "ACT-0066",
+      "timestamp": "2026-02-09T05:14:41.363Z"
+    },
+    {
+      "type": "issue_opened",
+      "entity_type": "issue",
+      "entity_id": "ISS-044",
+      "title": "Issue opened: Project config .dev-track/config.json not detected when using npx tsx",
+      "actor": "user",
+      "metadata": {
+        "severity": "medium",
+        "type": "bug"
+      },
+      "id": "ACT-0067",
+      "timestamp": "2026-02-09T05:24:36.873Z"
+    },
+    {
+      "type": "issue_opened",
+      "entity_type": "issue",
+      "entity_id": "ISS-045",
+      "title": "Issue opened: SSE stream dies during long rate-limiter waits - init UI shows hung on finalizing",
+      "actor": "user",
+      "metadata": {
+        "severity": "high",
+        "type": "bug"
+      },
+      "id": "ACT-0068",
+      "timestamp": "2026-02-09T05:24:48.862Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-096",
+      "title": "fix: Fix multi-server project switching - eliminate hot-swap corruption",
+      "actor": "user",
+      "metadata": {
+        "type": "fix",
+        "scope": "server,ui"
+      },
+      "id": "ACT-0069",
+      "timestamp": "2026-02-09T05:25:18.403Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-097",
+      "title": "enhancement: Upfactor init engine - system_id on issues, stronger idea generation, cross-ref linkage",
+      "actor": "user",
+      "metadata": {
+        "type": "enhancement",
+        "scope": "server"
+      },
+      "id": "ACT-0070",
+      "timestamp": "2026-02-09T05:25:32.408Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-098",
+      "title": "fix: Protect project registry from wipe during hot-reload race conditions",
+      "actor": "user",
+      "metadata": {
+        "type": "fix",
+        "scope": "server"
+      },
+      "id": "ACT-0071",
+      "timestamp": "2026-02-09T05:25:46.362Z"
+    },
+    {
+      "type": "changelog_entry",
+      "entity_type": "changelog",
+      "entity_id": "CL-099",
+      "title": "infrastructure: Register Landmark project and establish 3-project multi-server infrastructure",
+      "actor": "user",
+      "metadata": {
+        "type": "infrastructure",
+        "scope": "server"
+      },
+      "id": "ACT-0072",
+      "timestamp": "2026-02-09T05:25:59.513Z"
     }
   ],
-  "next_id": 65
+  "next_id": 73
 }

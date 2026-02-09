@@ -53,14 +53,16 @@ export const issueTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'create_issue',
-        description: 'Create a new issue/bug report',
+        description: 'Create a new issue/bug report. Link to a system_id and/or roadmap_item when applicable.',
         parameters: { type: 'object', properties: {
           title: { type: 'string', description: 'Issue title' },
           severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low'] },
           symptoms: { type: 'string', description: 'What is happening' },
           root_cause: { type: 'string', description: 'Why it is happening (if known)' },
           files: { type: 'array', items: { type: 'string' }, description: 'Affected files' },
-          backlog_item: { type: 'string', description: 'Related backlog item ID' },
+          system_id: { type: 'string', description: 'System this issue belongs to (e.g., "ai-core", "database")' },
+          roadmap_item: { type: 'string', description: 'Related roadmap item ID that would fix this issue' },
+          backlog_item: { type: 'string', description: 'Deprecated — use roadmap_item instead' },
         }, required: ['title', 'severity', 'symptoms'] },
       }},
       label: 'Creating issue',
@@ -78,7 +80,10 @@ export const issueTools: ToolModule = {
           assignee: null, discovered: new Date().toISOString().split('T')[0],
           discovered_in_run: null, symptoms: args.symptoms,
           root_cause: args.root_cause || null, files: args.files || [],
-          backlog_item: args.backlog_item || null, resolution: null, resolved: null, notes: null,
+          system_id: args.system_id || null,
+          roadmap_item: args.roadmap_item || args.backlog_item || null,
+          backlog_item: args.roadmap_item || args.backlog_item || null,
+          resolution: null, resolved: null, notes: null,
         };
         store.issues.issues.push(issue as any);
         store.issues.next_id = nextId + 1;
@@ -100,6 +105,7 @@ export const issueTools: ToolModule = {
           notes: { type: 'string' },
           type: { type: 'string' },
           files: { type: 'array', items: { type: 'string' } },
+          system_id: { type: 'string', description: 'System this issue belongs to' },
           roadmap_item: { type: 'string' },
           tags: { type: 'array', items: { type: 'string' } },
         }, required: ['id'] },
@@ -109,7 +115,7 @@ export const issueTools: ToolModule = {
         const store = getStore();
         const issue = (store.issues.issues || []).find((i: any) => i.id === args.id);
         if (!issue) return { error: `Issue ${args.id} not found` };
-        const updatable = ['status', 'severity', 'symptoms', 'root_cause', 'resolution', 'notes', 'type', 'files', 'roadmap_item', 'tags'];
+        const updatable = ['status', 'severity', 'symptoms', 'root_cause', 'resolution', 'notes', 'type', 'files', 'system_id', 'roadmap_item', 'tags'];
         for (const key of updatable) {
           if (args[key] !== undefined) (issue as any)[key] = args[key];
         }

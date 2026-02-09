@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { getDataDir, getCredentialsPath, getProjectRoot } from '../project-config.js';
+import { getDataDir, getCredentialsPath, getCredentialsSavePath, getProjectRoot } from '../project-config.js';
 import type { IntegrationPlugin, IntegrationConfig, IntegrationsStore } from './types.js';
 import { githubPlugin } from './github.js';
 import { vercelPlugin } from './vercel.js';
@@ -27,19 +27,21 @@ const PLUGINS: Record<string, IntegrationPlugin> = {
 // ─── Credential Storage (.env file, gitignored) ────────────────────────────
 
 const ENV_PATH = path.join(getProjectRoot(), '.env');
-const CREDS_PATH = getCredentialsPath();
-
 function loadCredentials(): Record<string, Record<string, string>> {
   try {
-    if (fs.existsSync(CREDS_PATH)) {
-      return JSON.parse(fs.readFileSync(CREDS_PATH, 'utf-8'));
+    const credsPath = getCredentialsPath();
+    if (fs.existsSync(credsPath)) {
+      return JSON.parse(fs.readFileSync(credsPath, 'utf-8'));
     }
   } catch {}
   return {};
 }
 
 function saveCredentials(creds: Record<string, Record<string, string>>): void {
-  fs.writeFileSync(CREDS_PATH, JSON.stringify(creds, null, 2) + '\n', 'utf-8');
+  const savePath = getCredentialsSavePath();
+  const saveDir = path.dirname(savePath);
+  if (!fs.existsSync(saveDir)) fs.mkdirSync(saveDir, { recursive: true });
+  fs.writeFileSync(savePath, JSON.stringify(creds, null, 2) + '\n', 'utf-8');
 }
 
 // ─── Config Storage ─────────────────────────────────────────────────────────

@@ -191,10 +191,56 @@ export function getLocalDataDir(): string {
 }
 
 /**
+ * Get the global credentials path — credentials are user-level, not project-level.
+ * Stored at ~/.dev-track/credentials.json so they follow the user across all projects.
+ */
+export function getGlobalCredentialsPath(): string {
+  ensureDevTrackHome();
+  return path.join(DEVTRACK_HOME, 'credentials.json');
+}
+
+/**
  * Get the credentials file path.
+ * Priority: per-project .credentials.json → global ~/.dev-track/credentials.json
+ * Migrates per-project credentials to global on first access if global doesn't exist.
  */
 export function getCredentialsPath(): string {
-  return path.join(getProjectRoot(), '.credentials.json');
+  const projectCredsPath = path.join(getProjectRoot(), '.credentials.json');
+  const globalCredsPath = getGlobalCredentialsPath();
+
+  // If per-project file exists, it takes priority (override support)
+  if (fs.existsSync(projectCredsPath)) {
+    // Migrate to global if global doesn't exist yet
+    if (!fs.existsSync(globalCredsPath)) {
+      try {
+        fs.copyFileSync(projectCredsPath, globalCredsPath);
+        console.log('[credentials] Migrated per-project credentials to global ~/.dev-track/credentials.json');
+      } catch { /* best effort */ }
+    }
+    return projectCredsPath;
+  }
+
+  // Fall back to global credentials
+  if (fs.existsSync(globalCredsPath)) {
+    return globalCredsPath;
+  }
+
+  // Neither exists — return global path (will be created on first save)
+  return globalCredsPath;
+}
+
+/**
+ * Get the path where new credentials should be saved.
+ * Always saves to global unless per-project override exists.
+ */
+export function getCredentialsSavePath(): string {
+  const projectCredsPath = path.join(getProjectRoot(), '.credentials.json');
+  // If project has its own overrides, keep writing there
+  if (fs.existsSync(projectCredsPath)) {
+    return projectCredsPath;
+  }
+  // Otherwise save globally
+  return getGlobalCredentialsPath();
 }
 
 /**
@@ -239,14 +285,39 @@ export function ensureDevTrackHome(): void {
 export function loadRegistry(): ProjectRegistry {
   try {
     if (fs.existsSync(REGISTRY_PATH)) {
-      return JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf-8'));
+      const raw = fs.readFileSync(REGISTRY_PATH, 'utf-8').trim();
+      if (raw) {
+        const parsed = JSON.parse(raw);
+        if (parsed?.projects && Array.isArray(parsed.projects)) {
+          return parsed;
+        }
+        console.warn('[registry] Invalid registry format, preserving file. Expected { projects: [] }');
+      }
     }
-  } catch {}
+  } catch (err: any) {
+    console.error(`[registry] Failed to read ${REGISTRY_PATH}: ${err.message}. NOT wiping — returning empty.`);
+  }
   return { projects: [] };
 }
 
 export function saveRegistry(registry: ProjectRegistry): void {
   ensureDevTrackHome();
+  // Defensive: never save an empty registry if the file already has entries
+  // This prevents race conditions from wiping the file
+  try {
+    if (fs.existsSync(REGISTRY_PATH)) {
+      const existing = JSON.parse(fs.readFileSync(REGISTRY_PATH, 'utf-8').trim());
+      if (existing?.projects?.length > registry.projects.length) {
+        // Merge: keep entries from existing that aren't in the new registry
+        const newIds = new Set(registry.projects.map(p => p.id));
+        for (const proj of existing.projects) {
+          if (!newIds.has(proj.id)) {
+            registry.projects.push(proj);
+          }
+        }
+      }
+    }
+  } catch { /* file doesn't exist or is corrupt — safe to overwrite */ }
   fs.writeFileSync(REGISTRY_PATH, JSON.stringify(registry, null, 2));
 }
 

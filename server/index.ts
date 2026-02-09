@@ -171,48 +171,37 @@ app.get('/api/v1/projects', (c) => {
   });
 });
 
-// Switch to a different project (hot-swap data directory)
+// Switch to a different project — DEPRECATED (multi-server mode)
+// Each project runs its own server instance. The UI switches by changing API origin.
+// This endpoint is kept only for backward compat but no longer hot-swaps.
 app.post('/api/v1/projects/switch', async (c) => {
   const body = await c.req.json().catch(() => ({}));
   const { projectId } = body;
+  const currentProject = getProjectName();
 
-  if (!projectId) {
-    return c.json({ ok: false, error: 'projectId is required' }, 400);
+  // In multi-server mode, don't hot-swap — just tell the client where to go
+  if (projectId && projectId !== currentProject) {
+    const registry = loadRegistry();
+    const project = registry.projects.find(p => p.id === projectId);
+    if (project?.port) {
+      console.log(`[switch] Rejecting hot-swap to "${projectId}" — use port ${project.port} instead`);
+      return c.json({
+        ok: false,
+        error: 'hot_swap_disabled',
+        redirect: { port: project.port, origin: `http://localhost:${project.port}` },
+      }, 409);
+    }
   }
 
-  const registry = loadRegistry();
-  const project = registry.projects.find(p => p.id === projectId);
-
-  if (!project) {
-    return c.json({ ok: false, error: `Project "${projectId}" not found in registry` }, 404);
-  }
-
-  const dataDir = project.dataDir.replace(/^~/, os.homedir());
-  if (!fs.existsSync(dataDir)) {
-    return c.json({ ok: false, error: `Data directory not found: ${dataDir}` }, 404);
-  }
-
-  setDataDir(dataDir);
-  setProjectRoot(project.path);
-
-  project.lastAccessed = new Date().toISOString();
-  registerProject(project);
-
-  reloadStore();
-  startWatcher();
-
+  // If requesting the same project we're already serving, just return status
   const store = getStore();
-  console.log(`\n  [switch] Switched to project: ${project.name}`);
-  console.log(`  [switch] Data: ${dataDir}`);
-  console.log(`  [switch] Status: ${store.getQuickStatusLine()}\n`);
-
   return c.json({
     ok: true,
     data: {
-      name: project.name,
-      id: project.id,
-      dataDir,
-      projectRoot: project.path,
+      name: currentProject,
+      id: currentProject,
+      dataDir: getDataDir(),
+      projectRoot: getProjectRoot?.() || '',
       status: store.getQuickStatusLine(),
     },
   });

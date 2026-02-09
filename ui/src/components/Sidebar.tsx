@@ -31,6 +31,7 @@ interface ProjectInfo {
   name: string;
   path: string;
   dataDir: string;
+  port?: number;
   lastAccessed: string;
 }
 
@@ -95,40 +96,36 @@ export function Sidebar({ activeView, onViewChange, connected }: SidebarProps) {
     if (projectId === currentProjectId || switching) return;
     setSwitching(true);
     try {
-      // Find the target project's port from the registry
       const target = projects.find(p => p.id === projectId);
-      if (target?.port) {
-        // Multi-server mode: switch API origin to the project's port
-        const origin = `http://localhost:${target.port}`;
-        // Verify the server is actually running on that port
-        try {
-          const check = await fetch(`${origin}/api/health`, { signal: AbortSignal.timeout(2000) });
-          if (check.ok) {
-            setApiOrigin(origin);
-            setShowProjectPicker(false);
-            window.location.reload();
-            return;
-          }
-        } catch {
-          // Server not running on that port — fall back to hot-swap
-          console.log(`Server not running on port ${target.port}, falling back to hot-swap`);
-        }
+      if (!target) {
+        console.error(`Project "${projectId}" not found in registry`);
+        return;
       }
 
-      // Fallback: hot-swap on the current server (single-server mode)
-      const res = await fetch('/api/v1/projects/switch', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ projectId }),
-      });
-      const json = await res.json();
-      if (json.ok) {
-        setApiOrigin(null); // Clear any stored origin — use current server
-        setShowProjectPicker(false);
-        window.location.reload();
-      } else {
-        console.error('Switch failed:', json.error);
+      // Determine the target origin
+      // If the target port matches the Vite proxy backend (24680), clear origin to use proxy
+      // Otherwise, set the explicit origin for multi-server mode
+      const isHomeServer = target.port === 24680;
+      const targetOrigin = isHomeServer ? '' : `http://localhost:${target.port}`;
+      const healthUrl = isHomeServer
+        ? '/api/health'  // Goes through Vite proxy
+        : `http://localhost:${target.port}/api/health`;
+
+      try {
+        const check = await fetch(healthUrl, { signal: AbortSignal.timeout(3000) });
+        if (check.ok) {
+          setApiOrigin(isHomeServer ? null : targetOrigin);
+          setShowProjectPicker(false);
+          window.location.reload();
+          return;
+        }
+      } catch {
+        // Server not running
       }
+
+      // Server is not running — show error
+      const portLabel = target.port || 'unknown';
+      alert(`Server for "${target.name}" is not running on port ${portLabel}.\n\nStart it from the project directory.`);
     } catch (err) {
       console.error('Switch failed:', err);
     } finally {

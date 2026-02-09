@@ -12,7 +12,7 @@ import {
   deleteConversation,
   type ChatStreamEvent,
 } from '../ai/chat.js';
-import { getDataDir, getLocalDataDir, getCredentialsPath, getGlobalProfilePath } from '../project-config.js';
+import { getDataDir, getLocalDataDir, getCredentialsPath, getCredentialsSavePath, getGlobalProfilePath } from '../project-config.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -137,12 +137,13 @@ app.put('/config', async (c) => {
 // PUT /api/v1/ai/credentials — Update AI provider credentials
 app.put('/credentials', async (c) => {
   const body = await c.req.json().catch(() => ({}));
-  const credsPath = getCredentialsPath();
+  const readPath = getCredentialsPath();
+  const savePath = getCredentialsSavePath();
 
   try {
     let creds: any = {};
-    if (fs.existsSync(credsPath)) {
-      creds = JSON.parse(fs.readFileSync(credsPath, 'utf-8'));
+    if (fs.existsSync(readPath)) {
+      creds = JSON.parse(fs.readFileSync(readPath, 'utf-8'));
     }
     if (!creds.ai) creds.ai = {};
 
@@ -153,13 +154,16 @@ app.put('/credentials', async (c) => {
     if (body.helicone !== undefined) creds.ai.helicone = body.helicone;
     if (body.helicone_org_id !== undefined) creds.ai.helicone_org_id = body.helicone_org_id;
 
-    fs.writeFileSync(credsPath, JSON.stringify(creds, null, 2));
+    // Ensure directory exists for global path
+    const saveDir = path.dirname(savePath);
+    if (!fs.existsSync(saveDir)) fs.mkdirSync(saveDir, { recursive: true });
+    fs.writeFileSync(savePath, JSON.stringify(creds, null, 2));
 
     // Reset AI service to pick up new credentials
     const { resetAIService } = await import('../ai/service.js');
     resetAIService();
 
-    return c.json({ ok: true, data: { updated: true } });
+    return c.json({ ok: true, data: { updated: true, path: savePath } });
   } catch (err: any) {
     return c.json({ ok: false, error: err.message }, 500);
   }

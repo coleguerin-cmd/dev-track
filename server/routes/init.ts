@@ -1,218 +1,249 @@
+/**
+ * Init Routes — Project initialization with SSE streaming.
+ * 
+ * Endpoints:
+ *   POST /api/v1/init/estimate  — Quick pre-scan, returns cost/time estimate
+ *   POST /api/v1/init           — Run initialization (SSE stream)
+ *   POST /api/v1/init/cancel    — Cancel a running initialization
+ *   POST /api/v1/init/resume    — Resume from last checkpoint (SSE stream)
+ *   GET  /api/v1/init/status    — Get current init status / checkpoint
+ */
+
 import { Hono } from 'hono';
+import { streamSSE } from 'hono/streaming';
 import { getStore } from '../store.js';
-import { getProjectRoot } from '../project-config.js';
-import { runAgent } from '../ai/runner.js';
-import { scanCodebase } from '../analyzer/scanner.js';
-import { execSync } from 'child_process';
+import { getProjectRoot, getProjectName } from '../project-config.js';
+import { quickEstimate, estimateCost, fullMetadataScan } from '../init/metadata-scanner.js';
+import { createCheckpoint, loadCheckpoint, saveCheckpoint, clearCheckpoint, type InitCheckpoint } from '../init/checkpoint.js';
+import { runInitPhases, type PhaseProgress } from '../init/phases.js';
 
 const app = new Hono();
 
-// POST /api/v1/init — AI-powered project initialization
-app.post('/', async (c) => {
-  const store = getStore();
-  const body = await c.req.json().catch(() => ({}));
-  const projectRoot = body.project_root || getProjectRoot();
+// Active init tracking
+let activeAbortController: AbortController | null = null;
+let activeInitRunning = false;
 
-  console.log(`[init] Starting AI project initialization for: ${projectRoot}`);
+// ─── POST /estimate — Quick pre-scan cost estimate ──────────────────────────
 
+app.post('/estimate', async (c) => {
+  const projectRoot = getProjectRoot();
+  
   try {
-    // Step 1: Run codebase scanner
-    console.log('[init] Step 1: Scanning codebase...');
-    let scanResult: any = null;
-    try {
-      scanResult = await scanCodebase(projectRoot);
-    } catch (err: any) {
-      console.warn('[init] Scanner failed, continuing without scan:', err.message);
-    }
-
-    // Step 2: Get git info
-    console.log('[init] Step 2: Reading git history...');
-    let gitLog = '';
-    let gitBranches = '';
-    try {
-      gitLog = execSync('git log --oneline --no-decorate -50', { cwd: projectRoot, encoding: 'utf-8', timeout: 10000 });
-      gitBranches = execSync('git branch -a', { cwd: projectRoot, encoding: 'utf-8', timeout: 5000 });
-    } catch { /* git not available or not a repo */ }
-
-    // Step 3: Read package info
-    console.log('[init] Step 3: Reading project metadata...');
-    let packageInfo = '';
-    try {
-      const fs = await import('fs');
-      const path = await import('path');
-      const pkgPath = path.join(projectRoot, 'package.json');
-      if (fs.existsSync(pkgPath)) {
-        const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf-8'));
-        packageInfo = JSON.stringify({ name: pkg.name, description: pkg.description, scripts: Object.keys(pkg.scripts || {}), dependencies: Object.keys(pkg.dependencies || {}), devDependencies: Object.keys(pkg.devDependencies || {}) }, null, 2);
-      }
-    } catch { /* no package.json */ }
-
-    // Step 4: Read README
-    let readme = '';
-    try {
-      const fs = await import('fs');
-      const path = await import('path');
-      for (const name of ['README.md', 'readme.md', 'README.txt']) {
-        const p = path.join(projectRoot, name);
-        if (fs.existsSync(p)) { readme = fs.readFileSync(p, 'utf-8').substring(0, 5000); break; }
-      }
-    } catch { /* no readme */ }
-
-    // Step 5: Run AI agent
-    console.log('[init] Step 4: Running AI agent for deep analysis...');
-    const systemPrompt = buildInitSystemPrompt(store.config.project);
-    const userMessage = buildInitUserMessage(store.config.project, { scanResult, gitLog, gitBranches, packageInfo, readme });
-
-    const result = await runAgent(systemPrompt, userMessage, {
-      task: 'project_init',
-      maxIterations: 20,
-      heliconeProperties: {
-        User: 'devtrack-init',
-        Source: 'initialization',
-        Project: store.config.project,
-      },
-    });
-
-    console.log(`[init] Entity population complete: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);
-
-    // Step 6: Trigger docs generation (async — don't wait)
-    console.log('[init] Step 5: Triggering docs generation...');
-    try {
-      // Import dynamically to avoid circular deps
-      const { default: fetch } = await import('node-fetch' as any).catch(() => ({ default: globalThis.fetch }));
-      // Fire docs generation in the background via internal API
-      fetch(`http://127.0.0.1:${process.env.PORT || 24680}/api/v1/docs/generate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'initialize' }),
-      }).catch(() => { /* fire and forget */ });
-    } catch { /* ignore — docs will be generated on next manual trigger */ }
-
+    const stats = quickEstimate(projectRoot);
+    const estimate = estimateCost(stats);
+    
     return c.json({
       ok: true,
       data: {
-        message: result.content,
-        tool_calls: result.tool_calls_made.length,
-        iterations: result.iterations,
-        cost: result.cost,
-        docs_generation: 'started',
+        project: getProjectName(),
+        project_root: projectRoot,
+        stats,
+        estimate,
       },
     });
   } catch (err: any) {
-    console.error('[init] Failed:', err.message);
+    console.error('[init] Estimate failed:', err.message);
     return c.json({ ok: false, error: err.message }, 500);
   }
 });
 
-function buildInitSystemPrompt(projectName: string): string {
-  return `You are the project initialization agent for "${projectName}". Your job is to deeply analyze a codebase and populate the project tracker with comprehensive, high-quality project data.
+// ─── POST / — Run full initialization (SSE stream) ─────────────────────────
 
-You have full access to all project management tools. Use them aggressively — create every entity that makes sense.
+app.post('/', async (c) => {
+  if (activeInitRunning) {
+    return c.json({ ok: false, error: 'Initialization already in progress. Cancel it first or wait.' }, 409);
+  }
 
-## Your Mission
-Analyze the provided codebase data and populate ALL of these project entities:
+  const projectRoot = getProjectRoot();
+  const projectName = getProjectName();
+  
+  console.log(`[init] Starting phased initialization for: ${projectName} (${projectRoot})`);
 
-### Systems (create_system)
-Create one system per major module/service. Include:
-- Rich description of what the system does
-- Accurate health_score (0-100) based on code quality signals
-- tech_stack array from detected technologies
-- dependencies between systems
+  return streamSSE(c, async (stream) => {
+    activeInitRunning = true;
+    activeAbortController = new AbortController();
 
-### Roadmap Items (create_backlog_item)
-Create roadmap items from:
-- TODO/FIXME comments in the codebase
-- Incomplete features visible in the code
-- README "planned" or "roadmap" sections
-- Feature branches in git
-Set appropriate horizons: "now" for urgent, "next" for planned, "later" for someday.
-
-### Issues (create_issue)
-Create issues for:
-- Known bugs or code smells
-- Missing tests or documentation
-- Stale dependencies
-- Security concerns
-- Performance problems visible in the code
-
-### Docs (create_doc)
-Generate these auto-generated docs:
-1. **System Overview** — architecture summary of all systems, how they connect, tech stack
-2. **Onboarding Guide** — how to set up, run, and develop the project
-3. **Architecture Decisions** — key design choices visible in the codebase
-Mark all as auto_generated: true with generation_sources.
-
-### State (update_project_state)
-Write:
-- overall_health: computed from system health scores
-- summary: one-paragraph project assessment
-
-### Context Recovery (write_context_recovery)
-Write initial context recovery with:
-- briefing: what this project is and its current state
-- hot_context: key things any AI working on this project should know
-- warnings: risks or concerns
-- suggestions: what to work on next
-
-### Ideas (create_idea)
-Capture interesting patterns, opportunities, or improvements you notice.
-
-## Quality Bar
-- Every description should be detailed and specific, not generic
-- Health scores should be justified by observable signals
-- Roadmap items need clear acceptance criteria when possible
-- Docs should be comprehensive enough to onboard a new developer
-- Think like a senior engineering manager doing a thorough project audit
-
-## Project: ${projectName}`;
-}
-
-function buildInitUserMessage(projectName: string, context: {
-  scanResult: any;
-  gitLog: string;
-  gitBranches: string;
-  packageInfo: string;
-  readme: string;
-}): string {
-  const parts: string[] = ['## Codebase Analysis Results\n'];
-
-  if (context.scanResult) {
-    const scan = context.scanResult;
-    parts.push(`### Scanner Output`);
-    parts.push(`Files scanned: ${scan.files_scanned || 'unknown'}`);
-    parts.push(`Lines of code: ${scan.total_lines || 'unknown'}`);
-    if (scan.modules) {
-      parts.push(`\nModules detected (${scan.modules.length}):`);
-      for (const mod of scan.modules.slice(0, 20)) {
-        parts.push(`- **${mod.name || mod.id}**: ${mod.description || mod.file_count + ' files'}`);
+    const sendEvent = async (event: PhaseProgress) => {
+      try {
+        await stream.writeSSE({
+          event: event.type,
+          data: JSON.stringify(event),
+        });
+      } catch {
+        // Client disconnected
       }
+    };
+
+    try {
+      // Phase 0: Pre-scan
+      await sendEvent({
+        type: 'phase_start',
+        phase: 'prescan',
+        phase_number: 0,
+        total_phases: 7,
+        phase_description: 'Scanning project files and reading metadata',
+        message: 'Scanning project...',
+      });
+
+      const metadata = await fullMetadataScan(projectRoot);
+      const estimate = estimateCost(metadata.quick_stats);
+
+      await sendEvent({
+        type: 'phase_complete',
+        phase: 'prescan',
+        phase_number: 0,
+        total_phases: 7,
+        phase_cost: 0,
+        total_cost: 0,
+        message: `Scan complete: ${metadata.quick_stats.total_files} files, ${metadata.quick_stats.total_lines.toLocaleString()} lines. Estimated cost: $${estimate.cost_low}-$${estimate.cost_high}`,
+        count: metadata.quick_stats.total_files,
+      });
+
+      // Create fresh checkpoint
+      const checkpoint = createCheckpoint(projectName);
+      checkpoint.scan_data = { estimate };
+      saveCheckpoint(checkpoint);
+
+      // Run all phases with SSE streaming
+      const result = await runInitPhases(
+        metadata,
+        checkpoint,
+        async (event) => { await sendEvent(event); },
+        activeAbortController.signal,
+      );
+
+      // Send final summary
+      if (result.completed) {
+        clearCheckpoint(); // Clean up on success
+      }
+
+    } catch (err: any) {
+      console.error('[init] Init failed:', err);
+      await sendEvent({
+        type: 'error',
+        error: err.message,
+        message: `Initialization failed: ${err.message}`,
+      });
+    } finally {
+      activeInitRunning = false;
+      activeAbortController = null;
     }
-    if (scan.external_services) {
-      parts.push(`\nExternal services: ${JSON.stringify(scan.external_services)}`);
+  });
+});
+
+// ─── POST /cancel — Cancel running initialization ──────────────────────────
+
+app.post('/cancel', async (c) => {
+  if (!activeInitRunning || !activeAbortController) {
+    return c.json({ ok: false, error: 'No initialization in progress' }, 404);
+  }
+
+  activeAbortController.abort();
+  console.log('[init] Cancellation requested');
+
+  return c.json({
+    ok: true,
+    data: { message: 'Cancellation requested. The current phase will complete, then initialization will pause.' },
+  });
+});
+
+// ─── POST /resume — Resume from last checkpoint (SSE stream) ───────────────
+
+app.post('/resume', async (c) => {
+  if (activeInitRunning) {
+    return c.json({ ok: false, error: 'Initialization already in progress' }, 409);
+  }
+
+  const checkpoint = loadCheckpoint();
+  if (!checkpoint) {
+    return c.json({ ok: false, error: 'No checkpoint found. Start a new initialization instead.' }, 404);
+  }
+
+  if (checkpoint.completed) {
+    return c.json({ ok: false, error: 'Previous initialization was already completed. Start a new one.' }, 400);
+  }
+
+  const projectRoot = getProjectRoot();
+  console.log(`[init] Resuming from checkpoint: ${checkpoint.completed_phases.length} phases complete, $${checkpoint.total_cost.toFixed(2)} spent`);
+
+  return streamSSE(c, async (stream) => {
+    activeInitRunning = true;
+    activeAbortController = new AbortController();
+
+    const sendEvent = async (event: PhaseProgress) => {
+      try {
+        await stream.writeSSE({
+          event: event.type,
+          data: JSON.stringify(event),
+        });
+      } catch {}
+    };
+
+    try {
+      // Re-scan metadata (needed for prompts even on resume)
+      await sendEvent({
+        type: 'phase_start',
+        phase: 'prescan',
+        phase_number: 0,
+        total_phases: 7,
+        phase_description: 'Re-scanning project files for resume',
+        message: 'Re-scanning project for resume...',
+      });
+
+      const metadata = await fullMetadataScan(projectRoot);
+
+      await sendEvent({
+        type: 'phase_complete',
+        phase: 'prescan',
+        phase_number: 0,
+        total_phases: 7,
+        phase_cost: 0,
+        total_cost: checkpoint.total_cost,
+        count: metadata.quick_stats.total_files,
+        message: `Resuming from phase ${checkpoint.completed_phases.length + 1}. Previous cost: $${checkpoint.total_cost.toFixed(2)}`,
+      });
+
+      // Reset cancelled flag for resume
+      checkpoint.cancelled = false;
+
+      const result = await runInitPhases(
+        metadata,
+        checkpoint,
+        async (event) => { await sendEvent(event); },
+        activeAbortController.signal,
+      );
+
+      if (result.completed) {
+        clearCheckpoint();
+      }
+
+    } catch (err: any) {
+      console.error('[init] Resume failed:', err);
+      await sendEvent({
+        type: 'error',
+        error: err.message,
+        message: `Resume failed: ${err.message}`,
+      });
+    } finally {
+      activeInitRunning = false;
+      activeAbortController = null;
     }
-  } else {
-    parts.push('Scanner did not produce results. Use available tools to inspect the project.');
-  }
+  });
+});
 
-  if (context.packageInfo) {
-    parts.push(`\n### Package Info\n${context.packageInfo}`);
-  }
+// ─── GET /status — Current init status ──────────────────────────────────────
 
-  if (context.readme) {
-    parts.push(`\n### README (first 5000 chars)\n${context.readme}`);
-  }
-
-  if (context.gitLog) {
-    parts.push(`\n### Recent Git History (last 50 commits)\n\`\`\`\n${context.gitLog}\n\`\`\``);
-  }
-
-  if (context.gitBranches) {
-    parts.push(`\n### Git Branches\n\`\`\`\n${context.gitBranches}\n\`\`\``);
-  }
-
-  parts.push(`\n## Instructions\nAnalyze everything above. Create all relevant project entities for "${projectName}". Be thorough and detailed.`);
-
-  return parts.join('\n');
-}
+app.get('/status', async (c) => {
+  const checkpoint = loadCheckpoint();
+  
+  return c.json({
+    ok: true,
+    data: {
+      running: activeInitRunning,
+      checkpoint: checkpoint || null,
+      can_resume: checkpoint && !checkpoint.completed && !activeInitRunning,
+    },
+  });
+});
 
 export default app;

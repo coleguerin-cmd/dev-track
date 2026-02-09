@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import * as api from '../api/client';
 import { SizeBadge, StatusBadge, SeverityBadge } from '../components/StatusBadge';
+import { InitPanel } from '../components/InitPanel';
 import type { QuickStatus, RoadmapItem, Issue, Session, BrainNote, ActivityEvent, Idea } from '@shared/types';
 
 function getBase() { return `${localStorage.getItem('devtrack-api-origin') || ''}/api/v1`; }
@@ -62,21 +63,7 @@ export function Dashboard() {
     setBrainNotes(prev => prev.filter(n => n.id !== id));
   };
 
-  const [initRunning, setInitRunning] = useState(false);
   const [docsRunning, setDocsRunning] = useState(false);
-
-  const runProjectInit = async () => {
-    setInitRunning(true);
-    try {
-      await api.init.run();
-      // Refresh all data after init
-      setTimeout(() => {
-        api.config.quickStatus().then((d: any) => setStatus(d?.status)).catch(() => {});
-        api.backlog.list({ horizon: 'now' }).then((d: any) => setNowItems(d?.items || [])).catch(() => {});
-        setInitRunning(false);
-      }, 5000);
-    } catch { setInitRunning(false); }
-  };
 
   const runDocsInit = async () => {
     setDocsRunning(true);
@@ -90,74 +77,28 @@ export function Dashboard() {
     } catch { setDocsRunning(false); }
   };
 
+  const refreshDashboard = () => {
+    api.config.quickStatus().then((d: any) => setStatus(d?.status)).catch(() => {});
+    api.backlog.list({ horizon: 'now' }).then((d: any) => setNowItems(d?.items || [])).catch(() => {});
+    api.backlog.list({ horizon: 'next' }).then((d: any) => setNextItems((d?.items || []).slice(0, 5))).catch(() => {});
+    api.issues.list({ status: 'open' }).then((d: any) => setRecentIssues((d?.issues || []).slice(0, 5))).catch(() => {});
+    apiFetch<{ entries: any[] }>('/changelog').then(d => setChangelog((d?.entries || []).slice(0, 5))).catch(() => {});
+  };
+
   const healthPct = status?.health ?? 0;
   const healthColor = healthPct >= 80 ? 'text-status-pass' : healthPct >= 60 ? 'text-accent-blue' : healthPct >= 40 ? 'text-accent-yellow' : 'text-status-fail';
 
-  // Detect empty/new project — show prominent initialization UI
+  // Detect empty/new project — show InitPanel
   const isEmptyProject = !status?.health && nowItems.length === 0 && recentIssues.length === 0 && activity.length === 0;
 
-  if (isEmptyProject && !initRunning) {
-    return (
-      <div className="max-w-2xl mx-auto mt-20 text-center space-y-6">
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-accent-blue/10 flex items-center justify-center">
-          <Zap size={32} className="text-accent-blue" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-semibold text-text-primary">Welcome to DevTrack</h1>
-          <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto">
-            This project hasn't been initialized yet. DevTrack will scan your codebase, analyze the architecture, and automatically create systems, roadmap items, issues, and documentation.
-          </p>
-        </div>
-        <button
-          onClick={runProjectInit}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent-blue text-white font-medium text-sm hover:bg-accent-blue/90 transition-colors"
-        >
-          <Play size={18} />
-          Initialize Project
-        </button>
-        <p className="text-[11px] text-text-tertiary">
-          This will take 3-5 minutes and costs ~$3-5 in AI usage. Requires API keys in Settings.
-        </p>
-      </div>
-    );
-  }
-
-  if (isEmptyProject && initRunning) {
-    return (
-      <div className="max-w-2xl mx-auto mt-20 text-center space-y-6">
-        <div className="w-16 h-16 mx-auto rounded-2xl bg-accent-blue/10 flex items-center justify-center">
-          <Loader2 size={32} className="text-accent-blue animate-spin" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-semibold text-text-primary">Initializing Project...</h1>
-          <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto">
-            AI is scanning your codebase, analyzing architecture, and creating systems, roadmap items, issues, and docs. This usually takes 3-5 minutes.
-          </p>
-        </div>
-        <p className="text-[11px] text-text-tertiary">
-          Watch the server terminal for progress. Refresh this page when it's done.
-        </p>
-      </div>
-    );
+  if (isEmptyProject) {
+    return <InitPanel onComplete={refreshDashboard} />;
   }
 
   return (
     <div className="max-w-7xl mx-auto space-y-5">
       {/* Project Actions Bar */}
       <div className="flex items-center gap-2">
-        <button
-          onClick={runProjectInit}
-          disabled={initRunning}
-          className={`flex items-center gap-1.5 text-[10px] font-medium px-3 py-1.5 rounded transition-colors ${
-            initRunning
-              ? 'bg-accent-blue/20 text-accent-blue cursor-wait'
-              : 'bg-surface-2 text-text-secondary hover:bg-surface-3 hover:text-text-primary border border-border'
-          }`}
-          title="Run full AI project analysis — scans codebase, creates systems, roadmap items, issues, and triggers docs generation"
-        >
-          {initRunning ? <Loader2 size={10} className="animate-spin" /> : <Play size={10} />}
-          {initRunning ? 'Initializing Project...' : 'Initialize Project'}
-        </button>
         <button
           onClick={runDocsInit}
           disabled={docsRunning}

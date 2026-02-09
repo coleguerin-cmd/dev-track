@@ -9,12 +9,17 @@
 import { getAIService } from './service.js';
 import { TOOL_DEFINITIONS, executeTool } from './tools/index.js';
 import type { AuditRecorder } from '../automation/recorder.js';
+import type { ModelTier } from './router.js';
 
 export interface AgentOptions {
   /** Task type for model routing (default: 'deep_audit' = premium tier) */
   task?: string;
+  /** Model tier override — bypasses task routing, picks best model in tier */
+  tier?: ModelTier;
   /** Max tool-call iterations (default: 20) */
   maxIterations?: number;
+  /** Max cost in USD — stops the agent when cumulative cost exceeds this (no default = unlimited) */
+  maxCost?: number;
   /** Subset of tool names to allow (default: all) */
   allowedTools?: string[];
   /** Override model ID directly */
@@ -25,6 +30,19 @@ export interface AgentOptions {
   heliconeProperties?: Record<string, string>;
   /** Max output tokens per AI call (default: 4096) — increase for tools that need large output like doc generation */
   maxTokens?: number;
+  /** Progress callback — fires after each tool call execution */
+  onToolCall?: (event: ToolCallEvent) => void;
+  /** Abort signal — set to cancel a running agent */
+  signal?: AbortSignal;
+}
+
+export interface ToolCallEvent {
+  toolName: string;
+  args: any;
+  result: string;
+  iteration: number;
+  totalCost: number;
+  totalTokens: number;
 }
 
 export interface AgentResult {
@@ -45,9 +63,21 @@ export async function runAgent(
   const maxIterations = options.maxIterations ?? 20;
   const task = options.task ?? 'deep_audit';
 
+  // Resolve model: explicit model > tier override > task routing (via service)
+  let resolvedModel = options.model;
+  if (!resolvedModel && options.tier) {
+    const router = aiService.getRouter();
+    if (router && router.isDiscovered()) {
+      resolvedModel = router.routeByTier(options.tier);
+      console.log(`[runner] Tier override '${options.tier}' → model: ${resolvedModel}`);
+    } else {
+      console.warn(`[runner] Tier '${options.tier}' requested but router not ready — falling back to task routing`);
+    }
+  }
+
   // Filter tools if subset specified
   let tools = TOOL_DEFINITIONS;
-  if (options.allowedTools) {
+  if (options.allowedTools !== undefined) {
     const allowed = new Set(options.allowedTools);
     tools = tools.filter((t: any) => allowed.has(t.function.name));
   }
@@ -63,16 +93,38 @@ export async function runAgent(
   let totalCost = 0;
 
   for (let i = 0; i < maxIterations; i++) {
+    // Check cancel signal
+    if (options.signal?.aborted) {
+      return {
+        content: '[Agent cancelled by user]',
+        tool_calls_made: toolCallLog,
+        iterations: i,
+        tokens_used: totalTokens,
+        cost: totalCost,
+      };
+    }
+
     const result = await aiService.complete(messages, {
       task,
       tools: tools.length > 0 ? tools : undefined,
-      model: options.model,
+      model: resolvedModel,
       max_tokens: options.maxTokens,
       heliconeProperties: options.heliconeProperties,
     } as any);
 
     totalTokens += result.usage?.total_tokens || 0;
     totalCost += result.estimated_cost_usd || 0;
+
+    // Check cost cap AFTER accumulating this iteration's cost
+    if (options.maxCost && totalCost >= options.maxCost) {
+      return {
+        content: `[Agent stopped: cost cap reached ($${totalCost.toFixed(2)} / $${options.maxCost.toFixed(2)})]`,
+        tool_calls_made: toolCallLog,
+        iterations: i + 1,
+        tokens_used: totalTokens,
+        cost: totalCost,
+      };
+    }
 
     // Record thinking step
     if (recorder) {
@@ -105,6 +157,17 @@ export async function runAgent(
 
     // Execute tool calls
     for (const tc of result.tool_calls) {
+      // Check cancel between tool calls too
+      if (options.signal?.aborted) {
+        return {
+          content: '[Agent cancelled by user]',
+          tool_calls_made: toolCallLog,
+          iterations: i + 1,
+          tokens_used: totalTokens,
+          cost: totalCost,
+        };
+      }
+
       const fnName = tc.function.name;
       const fnArgs = typeof tc.function.arguments === 'string'
         ? JSON.parse(tc.function.arguments)
@@ -122,6 +185,18 @@ export async function runAgent(
 
       // Record tool result
       if (recorder) recorder.recordToolResult(fnName, toolResult);
+
+      // Fire progress callback
+      if (options.onToolCall) {
+        options.onToolCall({
+          toolName: fnName,
+          args: fnArgs,
+          result: toolResult,
+          iteration: i + 1,
+          totalCost,
+          totalTokens,
+        });
+      }
 
       toolCallLog.push({
         name: fnName,

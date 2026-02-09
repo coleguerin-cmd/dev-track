@@ -24,22 +24,25 @@ Before moving to the next task, do ALL of these:
 This is not optional. Do it inline, not at session end.
 
 ## Quick Status (auto-updated at session end)
-dev-track | 82% health | Now: Epic/hierarchy visibility (L, in_progress) | 10 sessions, 128 items shipped, 421 points | Open issues: 5 (1 crit, 3 high) | 73 ideas captured
+dev-track | 86% health | Now: none | 12 sessions, 137 items shipped, 456 points | Open issues: 8 (1 crit, 4 high) | 73 ideas captured | 3 projects registered (dev-track, pillar, landmark)
 
 ## Last Session Briefing (auto-updated at session end)
-Session 10 complete (Feb 9 early morning). Biggest session ever — 14 commits, ~18K lines, 24 items shipped, 80 points. Built the entire docs generation system: discovery agent (scans project, produces doc plan), per-doc writers with 4-layer framework (architecture/operational/implementation/design), parallel execution, phased generation, adaptive complexity budgets (5/8/15/22 iterations), post-write verification + auto-retry, recovery pass for thin docs, checkpoint/resume. Three-column Docs UI (left page tree, center content, right ToC), Mermaid diagrams, callout blocks, cost modal, sub-page support, edit provenance. Also: automation Run Now button, AI rate limiting (retry + backoff + TokenRateTracker), multi-user data separation, Helicone custom properties, AI state cache, diff-based updates. Total docs AI spend: ~$50. 14 docs generated (267KB). Git clean. Session 11 priorities: browser test Docs tab, audit prompts for project-agnosticism, test on Landmark, dogfood end-to-end initialization.
+Session 12 complete (Feb 9). Focused on multi-server stability and init quality. Root-caused project switching corruption: missing `port` field on `ProjectInfo` TypeScript interface caused all switch attempts to fall through to hot-swap, corrupting the running server. Disabled hot-swap entirely (409 redirect). Added merge protection to registry (prevents tsx watch restarts from wiping entries). Upfactored init engine: added system_id to issues, minimum 5 ideas with pros/cons, stronger cross-ref linkage prompts, Opus original ideas in finalize phase, bumped iteration limits (roadmap 50→70, crossref 25→40). Successfully ran Pillar init with 6-phase engine — 19 systems, 7 epics, 32 roadmap items, 10 issues, 15 changelog entries, 5 brain notes, cursor rule, 62% health. Registered Landmark as third project (port 24684). Two new bugs: ISS-045 (SSE keepalive, high) and ISS-044 (npx CWD detection, medium). Session 13 priorities: run Landmark init, fix ISS-045, fix ISS-034, browser test Pillar dashboard.
 
 ## Warnings
 - AUTOMATIONS ARE ON. Standard model tier, $10/day budget, 60min cooldown. Kill switch in data/ai/config.json.
 - ISS-034 (critical): Semantic file watcher broken — blocks reliable automation triggers.
+- ISS-045 (high): SSE stream dies during rate-limiter waits — init UI shows hung on finalizing. Needs keepalive.
+- ISS-043 (high): Anthropic prompt caching not working — 0 cache reads on 130K token system prompts. Biggest cost optimization available.
+- ISS-044 (medium): .dev-track/config.json not detected when using npx tsx. Workaround: env vars.
 - ISS-006 (high): AI context drift — automation engine is the structural fix but needs testing with automations ON.
 - ISS-012 (high): No bridge between external AI conversations and DevTrack. Not started.
-- ISS-043 (high): Anthropic prompt caching not working — 0 cache reads on 130K token system prompts. Biggest cost optimization available.
 - ISS-003 (low): Integration plugins untested. Helicone still failing.
 - ISS-031 (low): Max Concurrent setting not enforced by automation engine. UI shows "COMING SOON".
 - View-level data lifecycle not built yet (IDEA-067) — global refresh removed but views may miss updates.
 - Server crashes on tsx watch reload when port is held (EADDRINUSE). Kill node processes before restart.
 - backlog/items.json is LEGACY — roadmap/items.json is the canonical source. /api/v1/backlog is an alias for /api/v1/roadmap.
+- Landmark server requires env vars to start: DEV_TRACK_DATA_DIR + DEV_TRACK_PORT (ISS-044).
 
 ## User Profile
 Read `data/ai/profiles.json` for the active user profile. Key points:
