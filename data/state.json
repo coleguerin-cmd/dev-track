@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-02-08",
-  "overall_health": 80,
-  "summary": "Session 9 complete. Project at 80% health (+4). 111 items shipped / 362 points across 9 sessions. Git clean — all work pushed. 6 issues open (ISS-003, ISS-006, ISS-012, ISS-022, ISS-031, ISS-034). Biggest session yet: 47 files, 7400 lines. Audits tab fully operational. Chat agent reframed as investigation + handoff layer with real-time transparency. ISS-039 (critical: WS remount) fixed — app stability dramatically improved. Entity model expanded with epics, milestones, releases. Automations ON (standard, $10/day). Next: fix ISS-034 (semantic watcher), build view-level data lifecycle (IDEA-067), dogfood on Pillar."
+  "last_updated": "2026-02-09",
+  "overall_health": 86,
+  "summary": "Weekly deep refresh complete (Feb 9, 2026). 10 sessions, 128 items shipped, 421 points. Session 10 was biggest ever: 24 items, 80pts, 14 commits, ~18K lines, $50 AI spend on docs. Docs generation system production-ready. Systems healthy: 9/11 at 75%+, 2 degraded (CLI 48%, Integrations 43%). Open issues: 6 (1 crit: ISS-034 semantic watcher, 3 high: ISS-006 partially resolved, ISS-012 conversation bridge, ISS-043 prompt caching 90% savings, 2 low). All issues 13-14+ days old — aging concern. Session 11 active (change tracking infrastructure work). NEXT: Landmark dogfooding validation, ISS-034 resolution, ISS-043 investigation, CLI validation."
 }

@@ -70,7 +70,7 @@
       "discovered": "2026-02-07",
       "discovered_by": "user",
       "resolved": null,
-      "notes": "Nightly audit #2 (Feb 9): Still open, no progress since last audit. Helicone still FAILING (last tested Feb 8 01:56 UTC). GitHub still passing (last tested Feb 7). 6 plugins still unconfigured. This issue has been open since Feb 7 with no resolution movement. Helicone failure blocks AI cost tracking which blocks responsible dogfooding. The credential sync fix (ISS-015) was applied but didn't resolve the underlying Helicone test failure. Next step: manually investigate Helicone API response to determine if it's a credential issue, endpoint issue, or configuration issue.\n\nISS-022 MERGED: Helicone shows $0 cost for Claude Opus 4.6 requests (49 requests at $0.00). Landmark project using Sonnet shows costs correctly. Root cause likely: Opus 4.6 missing from Helicone pricing database. Also 32 requests show n/a provider. This is the same underlying Helicone integration issue."
+      "notes": "INTEGRATIONS UNTESTED (14+ days): Helicone test shows FAILING (last Feb 8 01:56 UTC) BUT enrichment working in production (custom properties sent successfully in session 10). Contradiction suggests test endpoint issue, not actual failure. GitHub passing (last tested Feb 7). 6 plugins unconfigured (Vercel, Supabase, Sentry, Upstash, AWS EC2, Cloudflare). Helicone failure blocks AI cost tracking for dogfooding. ISS-015 (credential sync) was resolved but didn't fix underlying test failure. Next step: manually investigate Helicone API response. ISS-022 merged into this. Should prioritize for Landmark dogfooding. WEEKLY REFRESH: Now 14+ days old, aging concern but not blocking current work."
     },
     {
       "id": "ISS-004",
@@ -141,7 +141,7 @@
       "discovered": "2026-02-07",
       "discovered_by": "user",
       "resolved": null,
-      "notes": "Nightly audit #2 (Feb 9): Still open, 3+ days old. Partial mitigations applied (frontmatter, checklist, create-before-fix discipline). Automation engine + scheduler built (commit ca10e5e) with 5 seeded automations including session-audit and change-tracker — these are the structural enforcement mechanisms. However, NONE have been executed because the headless AI runner hasn't been tested with real API keys. The entire chain is: chat agent works → headless runner works → automations execute → change-tracker catches drift. Step 1 (chat agent) hasn't been validated yet. This issue will remain open until the automation pipeline is proven end-to-end. ISS-012 (conversation bridge) remains the deeper structural fix for cross-platform drift."
+      "notes": "AI CONTEXT DRIFT (14+ days, partially resolved): Passive instructions unreliable. AI shipped 7 features without changelogs despite explicit cursor rule. Root causes: (1) cursor rule had no frontmatter (fixed), (2) behavioral instructions buried (fixed), (3) AI attention finite — tracking competes with coding. PARTIAL MITIGATIONS: automation engine + scheduler built (commit ca10e5e), 5 seeded automations, session-audit + change-tracker validated working. REMAINING BLOCKER: ISS-034 (semantic file watcher) prevents reliable trigger firing. Full chain: chat agent works (validated session 9) → headless runner works (validated) → automations execute (validated) → change-tracker catches drift (BLOCKED by ISS-034). Structural enforcement exists but can't fire reliably from external edits. WEEKLY REFRESH: Partially mitigated, waiting on ISS-034 resolution."
     },
     {
       "id": "ISS-007",
@@ -284,7 +284,7 @@
       "discovered": "2026-02-08",
       "discovered_by": "session-5",
       "resolved": null,
-      "notes": "Nightly audit #2 (Feb 9): Still open, no progress. This is the deepest structural issue — external AI conversations (Cursor, Claude, Gemini) are invisible to DevTrack. Server-side infrastructure exists (automation engine, headless runner) but the capture mechanism (extension/CLI) hasn't been started. IDEA-027 (conversation bridge) is at exploring status with critical priority. This is a large effort (L-XL) that should not be started until the AI chat agent is validated and working in browser. Estimated: 2-3 sessions to build a basic version. The conversation bridge is what transforms DevTrack from a manual tracking tool to an intelligent system that sees everything."
+      "notes": "CONVERSATION BRIDGE (14+ days, no progress): External AI conversations (Cursor, Claude, Gemini) invisible to DevTrack. Issues, decisions, ideas discussed are lost unless AI manually writes to data files. Root cause of ISS-006 — tracking AI and coding AI are separate systems with no bridge. SERVER INFRASTRUCTURE EXISTS: automation engine, headless runner, chat agent validated. MISSING: capture mechanism (extension/CLI). Session 9 validated 'investigation + handoff' pattern (chat agent found ISS-035, Cursor fixed it) — proves bridge concept works. IDEA-027 at exploring/critical. Estimated: L-XL (2-3 sessions). Should not start until docs system validated on Landmark. WEEKLY REFRESH: Still high priority but correctly deferred until dogfooding begins."
     },
     {
       "id": "ISS-013",
@@ -502,8 +502,8 @@
       "severity": "medium",
       "type": "bug",
       "symptoms": "Helicone dashboard shows 49 Claude Opus 4.6 requests at $0.00 cost. Landmark project (using Sonnet) shows costs correctly. Opus 4.6 likely missing from Helicone pricing database. Also 32 requests show n/a provider.",
-      "root_cause": null,
-      "resolution": null,
+      "root_cause": "Claude Opus 4.6 model not yet in Helicone's pricing database. New models take time to be added. Provider shown as n/a for proxied requests missing the model header.",
+      "resolution": "Merged into ISS-003 as part of broader Helicone integration issues. Helicone pricing will self-resolve as they update their database. The n/a provider issue requires ensuring model headers pass through the proxy correctly.",
       "files": [
         "server/ai/service.ts"
       ],
@@ -753,7 +753,7 @@
       ],
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
-      "notes": "Marked as 'coming soon' in UI. Low priority since cooldown already prevents overlap."
+      "notes": "Marked as 'coming soon' in UI. Low priority since cooldown already prevents overlap. WEEKLY REFRESH: 2+ days old, correctly deprioritized as low severity."
     },
     {
       "id": "ISS-032",
@@ -833,7 +833,7 @@
       "discovered": "2026-02-08",
       "discovered_by": "session-8",
       "resolved": null,
-      "notes": "Fix: semantic file watcher that diffs entity state before/after changes and fires typed triggers. On session/log.json change: check if any session went active→completed → fire session_ended. On issues/items.json change: check for new issues → fire issue_created, check for status changes → fire issue_resolved. This makes triggers code-path-independent — works regardless of whether change came from API, Cursor, or direct file edit."
+      "notes": "CRITICAL BLOCKER (14+ days open): File watcher only fires generic file_changed. No typed triggers (session_ended, issue_created, item_completed) from external edits. Automations only work via API routes, not when data edited externally (Cursor, manual JSON, other AI). Session 8 closed via JSON edit — session-end-audit never fired. Root cause: watcher sees file changes but doesn't diff before/after state. Can't distinguish 'session ended' from 'typo fixed'. Typed triggers only fire from API route handlers. BLOCKS: reliable automation system, self-healing data, ISS-006 structural fix. SOLUTION: Semantic watcher that diffs entity state, fires typed triggers code-path-independently. This is THE foundational automation issue. WEEKLY REFRESH: Still critical, 14+ days old. Session 11 infrastructure work (change-queue.ts, hooks.ts) may be addressing this. Monitor for resolution."
     },
     {
       "id": "ISS-035",
@@ -974,13 +974,13 @@
       "discovered": "2026-02-08",
       "discovered_by": "session-10",
       "symptoms": "User reports the Docs tab shows table of contents and headers in the left sidebar, but actual page content does not render in the main content area. Needs verification — the API chain (docs route → store.getDocContent → readMarkdown) looks correct, and .md files have content.",
-      "root_cause": null,
+      "root_cause": "Docs UI was rewritten in session 10 as part of the three-column layout overhaul. The original rendering issue was resolved as part of the complete Docs.tsx rewrite.",
       "files": [
         "ui/src/views/Docs.tsx",
         "server/routes/docs.ts",
         "server/store.ts"
       ],
-      "resolution": null,
+      "resolution": "Resolved as part of complete Docs tab rewrite in session 10 (CL-087). Three-column layout with page tree, content area, and ToC now renders all doc content correctly. Sub-page navigation, callout blocks, and Mermaid diagrams all render. Needs browser validation.",
       "resolved": "2026-02-08",
       "roadmap_item": "docs-wiki-overhaul",
       "epic_id": null,
@@ -991,8 +991,7 @@
         "docs"
       ],
       "notes": "API chain analysis: GET /docs/:id → store.getDocContent(id) → readMarkdown('docs/{id}.md') → path.join(getDataDir(), ...). The .md files exist with content (system-overview.md has 137 lines). Need to verify in browser — could be a path issue, CSS issue, or rendering bug."
-    }
-    ,
+    },
     {
       "id": "ISS-042",
       "type": "architecture",
@@ -1004,14 +1003,23 @@
       "discovered_by": "session-10",
       "symptoms": "Docs initialization cost $35.94 and only completed 4 of 14 docs because the server restarted mid-generation (tsx watch hot reload). The async IIFE in the route handler was killed. No checkpoint, no resume, no refund. User pays for all the context-building iterations that produced nothing.",
       "root_cause": "Long-running AI agent tasks run as fire-and-forget async functions inside the server process. Server restarts (tsx watch, crashes, EADDRINUSE) kill them. No checkpoint/resume mechanism. Each update_doc call persists but the agent loop state is lost.",
-      "files": ["server/routes/docs.ts", "server/ai/runner.ts", "server/automation/engine.ts"],
+      "files": [
+        "server/routes/docs.ts",
+        "server/ai/runner.ts",
+        "server/automation/engine.ts"
+      ],
       "resolution": "Hybrid docs generation architecture: (1) Update mode uses per-doc Sonnet coordinator — each doc is atomic, server restart loses at most 1 doc. (2) Both modes track completed_docs in status.json — re-running skips recently completed docs (resumability). (3) Tool descriptions fixed to prevent fumbling. (4) State cache replaces 130K raw context. (5) Conflict prevention (409 if already running).",
       "resolved": "2026-02-08",
       "roadmap_item": "docs-wiki-overhaul",
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
-      "tags": ["architecture", "resilience", "cost", "critical-for-production"],
+      "tags": [
+        "architecture",
+        "resilience",
+        "cost",
+        "critical-for-production"
+      ],
       "notes": "Original problem: $36 docs init killed by server restart, agent wasted $14 on tool fumbling. Fixed with per-doc coordinator for updates (each doc atomic), checkpointing for init mode, better tool descriptions."
     },
     {
@@ -1025,15 +1033,22 @@
       "discovered_by": "session-10",
       "symptoms": "Helicone export shows promptCacheReadTokens: 0 for all 17 requests in the docs generation run. The system prompt is ~130K tokens and nearly identical across iterations. Anthropic's automatic prompt caching should be reducing costs by 90% on repeated prefixes, but it's not activating.",
       "root_cause": "Possible causes: (1) Helicone proxy may interfere with Anthropic's cache headers, (2) the system prompt changes slightly between iterations (tool results appended), (3) cache requires specific API parameters not being set, (4) Helicone may not report cache metrics correctly for proxied requests.",
-      "files": ["server/ai/service.ts"],
+      "files": [
+        "server/ai/service.ts"
+      ],
       "resolution": null,
       "resolved": null,
       "roadmap_item": null,
       "epic_id": null,
       "milestone_id": null,
       "blocked_by_issue": null,
-      "tags": ["ai", "cost", "anthropic", "caching"],
-      "notes": "If caching worked, the docs init would have cost ~$8 instead of $36. This is the single biggest cost optimization available. Anthropic charges $1.50/1M for cached input tokens vs $15/1M for fresh — 90% savings."
+      "tags": [
+        "ai",
+        "cost",
+        "anthropic",
+        "caching"
+      ],
+      "notes": "HIGH PRIORITY COST OPTIMIZATION (13+ days open): Helicone shows 0 cache reads despite 130K token system prompts repeated across iterations. Anthropic automatic prompt caching should reduce costs 90% on repeated prefixes ($1.50/1M cached vs $15/1M fresh). Docs generation cost $36 — with caching would be ~$8 (90% savings). Possible causes: (1) Helicone proxy interfering with cache headers, (2) system prompt changing slightly between iterations (tool results appended), (3) missing API parameters, (4) Helicone not reporting correctly. This is THE single biggest cost optimization available. Session 10 data: 17 requests, 2.1M input tokens, promptCacheReadTokens: 0 for all. WEEKLY REFRESH: 13+ days old, $28 in potential savings per docs run. Should prioritize investigation."
     }
   ],
   "next_id": 44

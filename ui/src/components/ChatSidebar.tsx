@@ -2,7 +2,10 @@ import { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-const BASE = '/api/v1';
+function getBase() {
+  const origin = localStorage.getItem('devtrack-api-origin') || '';
+  return `${origin}/api/v1`;
+}
 const STORAGE_KEY = 'dt-chat-conversation';
 const STORAGE_MODEL_KEY = 'dt-chat-model';
 
@@ -141,7 +144,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
     let retryTimer: ReturnType<typeof setTimeout>;
 
     const fetchModels = (attempt = 0) => {
-      fetch(`${BASE}/ai/models`).then(r => r.json()).then(d => {
+      fetch(`${getBase()}/ai/models`).then(r => r.json()).then(d => {
         if (d.ok) {
           setConfigured(d.data.configured);
           const modelList = d.data.models || [];
@@ -156,7 +159,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
 
     fetchModels();
 
-    fetch(`${BASE}/ai/conversations`).then(r => r.json()).then(d => {
+    fetch(`${getBase()}/ai/conversations`).then(r => r.json()).then(d => {
       if (d.ok) setConversations(d.data.conversations || []);
     }).catch(() => {});
 
@@ -166,7 +169,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
   // Auto-load persisted conversation on mount
   useEffect(() => {
     if (conversationId && messages.length === 0) {
-      fetch(`${BASE}/ai/conversations/${conversationId}`).then(r => r.json()).then(data => {
+      fetch(`${getBase()}/ai/conversations/${conversationId}`).then(r => r.json()).then(data => {
         if (data.ok) {
           setMessages((data.data.messages || []).filter((m: ChatMessage) => m.role !== 'system' && m.role !== 'tool'));
         } else {
@@ -246,7 +249,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
     setMessages(prev => [...prev, userMsg]);
 
     try {
-      const response = await fetch(`${BASE}/ai/chat`, {
+      const response = await fetch(`${getBase()}/ai/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -321,7 +324,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
       setIsStreaming(false);
       setActiveToolCalls([]);
       // Refresh conversation list
-      fetch(`${BASE}/ai/conversations`).then(r => r.json()).then(d => {
+      fetch(`${getBase()}/ai/conversations`).then(r => r.json()).then(d => {
         if (d.ok) setConversations(d.data.conversations || []);
       }).catch(() => {});
     }
@@ -343,7 +346,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
 
   const loadConversation = async (id: string) => {
     try {
-      const res = await fetch(`${BASE}/ai/conversations/${id}`);
+      const res = await fetch(`${getBase()}/ai/conversations/${id}`);
       const data = await res.json();
       if (data.ok) {
         setConversationId(data.data.id);
@@ -357,7 +360,7 @@ export function ChatSidebar({ isOpen, onToggle, width, onWidthChange }: ChatSide
 
   const deleteConversation = async (id: string) => {
     try {
-      await fetch(`${BASE}/ai/conversations/${id}`, { method: 'DELETE' });
+      await fetch(`${getBase()}/ai/conversations/${id}`, { method: 'DELETE' });
       setConversations(prev => prev.filter(c => c.id !== id));
       if (conversationId === id) {
         startNewConversation();
@@ -769,7 +772,7 @@ function ActivityLog() {
 
   const fetchEvents = useCallback(async () => {
     try {
-      const res = await fetch(`${BASE}/activity?limit=200`);
+      const res = await fetch(`${getBase()}/activity?limit=200`);
       const data = await res.json();
       if (data.ok) setEvents(data.data.events);
     } catch { /* silent */ }

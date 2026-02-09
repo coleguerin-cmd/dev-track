@@ -1,8 +1,31 @@
 import { Hono } from 'hono';
+import { execSync } from 'child_process';
 import { getStore } from '../store.js';
+import { getProjectRoot } from '../project-config.js';
 import { broadcast } from '../ws.js';
 import { getAutomationEngine } from '../automation/engine.js';
+import { startCheckpoint, completeCheckpoint, getCurrentCheckpoint } from '../automation/change-queue.js';
 import type { Session } from '../../shared/types.js';
+
+function getGitHead(): string {
+  try {
+    return execSync('git rev-parse HEAD', { cwd: getProjectRoot(), encoding: 'utf-8' }).trim();
+  } catch { return 'unknown'; }
+}
+
+function getGitLog(since: string): string[] {
+  try {
+    const output = execSync(`git log ${since}..HEAD --oneline`, { cwd: getProjectRoot(), encoding: 'utf-8' }).trim();
+    return output ? output.split('\n') : [];
+  } catch { return []; }
+}
+
+function getGitDiffFiles(since: string): string[] {
+  try {
+    const output = execSync(`git diff --name-only ${since}..HEAD`, { cwd: getProjectRoot(), encoding: 'utf-8' }).trim();
+    return output ? output.split('\n') : [];
+  } catch { return []; }
+}
 
 const app = new Hono();
 
@@ -51,6 +74,11 @@ app.post('/start', async (c) => {
     actor: session.developer,
     metadata: { objective: session.objective, appetite: session.appetite },
   });
+
+  // Start session checkpoint — record git HEAD for later diff
+  const gitHead = getGitHead();
+  startCheckpoint(session.id, gitHead);
+  console.log(`[session] Checkpoint started: git HEAD ${gitHead.substring(0, 7)}`);
 
   broadcast({ type: 'session_updated', data: session, timestamp: new Date().toISOString() });
   return c.json({ ok: true, data: session });
@@ -134,6 +162,28 @@ app.post('/end', async (c) => {
       points: completedSession.points,
     },
   });
+
+  // Complete session checkpoint — compute git diff and entity changes
+  try {
+    const gitHeadEnd = getGitHead();
+    const checkpoint = getCurrentCheckpoint();
+    const startHash = checkpoint?.git_head_start || 'HEAD~10';
+
+    const commits = getGitLog(startHash);
+    const filesChanged = getGitDiffFiles(startHash);
+    const entitiesCreated = (completedSession.changelog_ids || []);
+    const entitiesUpdated = [
+      ...(completedSession.roadmap_items_completed || []),
+      ...(completedSession.issues_resolved || []),
+    ];
+
+    const result = completeCheckpoint(gitHeadEnd, commits, filesChanged, entitiesCreated, entitiesUpdated);
+    if (result) {
+      console.log(`[session] Checkpoint completed: ${commits.length} commits, ${filesChanged.length} files changed`);
+    }
+  } catch (err: any) {
+    console.error(`[session] Checkpoint error: ${err.message}`);
+  }
 
   broadcast({ type: 'session_updated', data: { ended: completedSession }, timestamp: now });
 

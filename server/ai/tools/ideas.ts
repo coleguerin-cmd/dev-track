@@ -33,10 +33,11 @@ export const ideaTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'list_ideas',
-        description: 'List all captured ideas, optionally filtered by status or category',
+        description: 'List ideas, optionally filtered by status or category. Use summary=true for lightweight scanning (id+title+status+priority+updated only). Use status filter to avoid loading dismissed/promoted ideas.',
         parameters: { type: 'object', properties: {
           status: { type: 'string', enum: ['captured', 'exploring', 'validated', 'promoted', 'dismissed'] },
           category: { type: 'string', enum: ['feature', 'architecture', 'ux', 'business', 'integration', 'core', 'security'] },
+          summary: { type: 'boolean', description: 'If true, return only id, title, status, priority, category, created, updated (much fewer tokens)' },
         }},
       }},
       label: 'Listing ideas',
@@ -45,6 +46,13 @@ export const ideaTools: ToolModule = {
         let ideas = data.ideas || [];
         if (args.status) ideas = ideas.filter((i: any) => i.status === args.status);
         if (args.category) ideas = ideas.filter((i: any) => i.category === args.category);
+        if (args.summary) {
+          const summaryIdeas = ideas.map((i: any) => ({
+            id: i.id, title: i.title, status: i.status, priority: i.priority,
+            category: i.category, created: i.created, updated: i.updated,
+          }));
+          return { ideas: summaryIdeas, total: summaryIdeas.length, mode: 'summary' };
+        }
         return { ideas, total: ideas.length };
       },
     },

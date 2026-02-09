@@ -13,6 +13,7 @@ import {
   getProjectName,
   getProjectConfig,
   loadRegistry,
+  saveRegistry,
   registerProject,
   findAvailablePort,
 } from './project-config.js';
@@ -46,6 +47,7 @@ import gitRoutes from './routes/git.js';
 import aiRoutes from './routes/ai.js';
 import initRoutes from './routes/init.js';
 import auditsRoutes from './routes/audits.js';
+import hooksRoutes from './routes/hooks.js';
 
 // ─── Parse CLI flags ────────────────────────────────────────────────────────
 
@@ -72,11 +74,17 @@ const cliArgs = parseArgs();
 if (cliArgs.dataDir) setDataDir(cliArgs.dataDir);
 if (cliArgs.projectRoot) setProjectRoot(cliArgs.projectRoot);
 
-// Resolve port: CLI flag > env var > project config > default
-const PORT = cliArgs.port
+// Resolve port: CLI flag > env var > project config > find available
+const preferredPort = cliArgs.port
   || parseInt(process.env.DEV_TRACK_PORT || '0')
   || getProjectConfig()?.port
   || 24680;
+
+// Find an available port (skips ports already in use by other DevTrack instances)
+const PORT = await findAvailablePort(preferredPort);
+if (PORT !== preferredPort) {
+  console.log(`[port] ${preferredPort} is in use, using ${PORT} instead`);
+}
 
 const app = new Hono();
 
@@ -120,6 +128,7 @@ app.route('/api/v1/git', gitRoutes);
 app.route('/api/v1/ai', aiRoutes);
 app.route('/api/v1/init', initRoutes);
 app.route('/api/v1/audits', auditsRoutes);
+app.route('/api/v1/hooks', hooksRoutes);
 
 // Backward compat: /api/v1/backlog → /api/v1/roadmap
 app.route('/api/v1/backlog', roadmapRoutes);
@@ -299,6 +308,32 @@ const server = serve({
 
 setupWebSocket(server as unknown as import('http').Server);
 startWatcher();
+
+// Register this project in the global registry with its port
+// so the UI project switcher can find it for multi-server mode
+try {
+  const projectConfig = getProjectConfig();
+  const projectId = projectConfig?.projectId || path.basename(getProjectRoot());
+  const registry = loadRegistry();
+  const existing = registry.projects.find(p => p.id === projectId);
+  if (existing) {
+    existing.port = PORT;
+    existing.lastAccessed = new Date().toISOString();
+    existing.path = getProjectRoot();
+    existing.dataDir = getDataDir();
+  } else {
+    registry.projects.push({
+      id: projectId,
+      name: projectConfig?.name || projectName,
+      path: getProjectRoot(),
+      dataDir: getDataDir(),
+      port: PORT,
+      lastAccessed: new Date().toISOString(),
+      created: new Date().toISOString(),
+    });
+  }
+  saveRegistry(registry);
+} catch { /* ignore — non-critical */ }
 
 // Start automation engine + scheduler
 getAutomationEngine(); // Initialize singleton

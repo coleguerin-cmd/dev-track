@@ -9,7 +9,7 @@ export const backlogTools: ToolModule = {
         type: 'function',
         function: {
           name: 'list_backlog',
-          description: 'List roadmap items, optionally filtered by horizon, status, epic, or category. Items are grouped under Epics and belong to the roadmap hierarchy.',
+          description: 'List roadmap items, optionally filtered by horizon, status, epic, or category. Use summary=true for lightweight scanning (returns id+title+status+updated+priority only — 90% fewer tokens). Use filters to avoid loading shipped/completed items unnecessarily.',
           parameters: {
             type: 'object',
             properties: {
@@ -17,6 +17,7 @@ export const backlogTools: ToolModule = {
               status: { type: 'string', enum: ['pending', 'in_progress', 'completed', 'cancelled'], description: 'Filter by status' },
               epic_id: { type: 'string', description: 'Filter by epic ID' },
               category: { type: 'string', description: 'Filter by category' },
+              summary: { type: 'boolean', description: 'If true, return only id, title, status, updated, priority, horizon, epic_id (much fewer tokens)' },
             },
           },
         },
@@ -29,6 +30,13 @@ export const backlogTools: ToolModule = {
         if (args.status) items = items.filter((i: any) => i.status === args.status);
         if (args.epic_id) items = items.filter((i: any) => i.epic_id === args.epic_id);
         if (args.category) items = items.filter((i: any) => i.category === args.category);
+        if (args.summary) {
+          const summaryItems = items.map((i: any) => ({
+            id: i.id, title: i.title, status: i.status, updated: i.updated,
+            priority: i.priority, horizon: i.horizon, epic_id: i.epic_id, size: i.size,
+          }));
+          return { items: summaryItems, total: summaryItems.length, mode: 'summary' };
+        }
         return { items, total: items.length };
       },
     },

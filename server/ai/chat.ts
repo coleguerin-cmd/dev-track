@@ -14,7 +14,7 @@ import path from 'path';
 import { getAIService, type AIMessage, type AIToolCall, type StreamEvent } from './service.js';
 import { TOOL_DEFINITIONS, TOOL_LABELS, executeTool } from './tools/index.js';
 import { getStore } from '../store.js';
-import { getDataDir, getLocalDataDir } from '../project-config.js';
+import { getDataDir, getLocalDataDir, getProjectName, getGlobalProfilePath } from '../project-config.js';
 import type { TaskType } from './router.js';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
@@ -121,7 +121,7 @@ function buildSystemPrompt(): string {
   // Load user profile
   let profileBlock = '';
   try {
-    const profilesPath = path.join(getLocalDataDir(), 'profiles.json');
+    const profilesPath = getGlobalProfilePath();
     if (fs.existsSync(profilesPath)) {
       const profiles = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
       const user = profiles.profiles?.[0];
@@ -144,7 +144,8 @@ function buildSystemPrompt(): string {
     }
   } catch {}
 
-  return `You are the dev-track AI assistant — an intelligent project copilot that helps manage, plan, and understand software projects.
+  const pName = getProjectName() || 'this project';
+  return `You are the AI project assistant for "${pName}" — an intelligent project copilot that helps manage, plan, and understand software projects.
 
 ## Current Status
 ${status}
@@ -153,7 +154,7 @@ ${profileBlock}
 ${notesBlock}
 
 ## Your Capabilities
-You have FULL access to the dev-track project management system through tools:
+You have FULL access to the project management system through tools:
 
 ### Entity Hierarchy (top → bottom)
 - **Milestones**: Time-bound delivery targets (e.g., v0.3). Contain epics and roadmap items.
@@ -191,7 +192,7 @@ You have FULL access to the dev-track project management system through tools:
 ## Scope & Boundaries
 **You are a project intelligence layer, NOT a code editor.** You can:
 - READ any file in the project to investigate bugs, understand architecture, trace issues
-- CREATE/UPDATE DevTrack entities: issues, roadmap items, ideas, epics, changelog, brain notes, etc.
+- CREATE/UPDATE project entities: issues, roadmap items, ideas, epics, changelog, brain notes, etc.
 - SEARCH code, git history, and docs for context
 
 **You CANNOT edit source code.** When you find a bug or identify a fix:
@@ -274,8 +275,7 @@ export async function* runChat(
   // Get user name for Helicone tracking
   let userName = 'user';
   try {
-    const localDir = getLocalDataDir();
-    const profilesPath = path.join(localDir, 'profiles.json');
+    const profilesPath = getGlobalProfilePath();
     if (fs.existsSync(profilesPath)) {
       const profileData = JSON.parse(fs.readFileSync(profilesPath, 'utf-8'));
       userName = profileData.profiles?.[0]?.name || profileData.profiles?.[0]?.id || 'user';

@@ -236,10 +236,10 @@
   ],
   "totals": {
     "total_sessions": 10,
-    "total_items_shipped": 135,
-    "total_points": 442,
-    "avg_items_per_session": 13.5,
-    "avg_points_per_session": 44.2,
+    "total_items_shipped": 128,
+    "total_points": 421,
+    "avg_items_per_session": 12.8,
+    "avg_points_per_session": 42.1,
     "total_issues_found": 24,
     "total_issues_resolved": 28
   },

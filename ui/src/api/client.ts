@@ -1,7 +1,29 @@
-const BASE = '/api/v1';
+/**
+ * Dynamic API base URL — supports multi-server project switching.
+ * When multiple DevTrack servers run on different ports, the UI
+ * switches between them by changing the API origin in localStorage.
+ * Default: same origin (relative URL /api/v1).
+ */
+function getApiBase(): string {
+  const stored = localStorage.getItem('devtrack-api-origin');
+  if (stored) return `${stored}/api/v1`;
+  return '/api/v1';
+}
+
+export function setApiOrigin(origin: string | null): void {
+  if (origin) {
+    localStorage.setItem('devtrack-api-origin', origin);
+  } else {
+    localStorage.removeItem('devtrack-api-origin');
+  }
+}
+
+export function getApiOrigin(): string | null {
+  return localStorage.getItem('devtrack-api-origin');
+}
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
-  const url = `${BASE}${path}`;
+  const url = `${getApiBase()}${path}`;
   const res = await fetch(url, {
     headers: { 'Content-Type': 'application/json', ...options?.headers },
     ...options,

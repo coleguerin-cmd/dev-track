@@ -38,7 +38,7 @@
       "title": "Initialization wizard with AI-powered project analysis",
       "description": "When dev-track is added to a new project, an initialization flow where the AI scans the codebase, infers the project structure, writes initial state.json (system ratings), captures TODOs/FIXMEs as backlog items, generates a context recovery briefing, and verifies the tool reflects the project status accurately.",
       "category": "feature",
-      "status": "captured",
+      "status": "exploring",
       "source": "conversation 2026-02-07 (ideas thread)",
       "related_ideas": [
         "IDEA-003"
@@ -59,9 +59,9 @@
         "Multi-pass for smaller models — how to chunk?",
         "What's the minimum viable initialization?"
       ],
-      "notes": "The codebase scanner already does 80% of this.",
+      "notes": "Weekly refresh: 14+ days old in captured status. Project init is critical for dogfooding on Landmark. Elevating to exploring to signal active consideration. Wizard should leverage docs generation system (already built) for initial project intelligence.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-09",
       "priority": "P2",
       "tags": []
     },
@@ -214,7 +214,7 @@
       "title": "Web-based multi-user version with concurrent sessions",
       "description": "Multiple users working concurrently with their own conversation threads. Sessions as first-class entities. API server handles serialization. Auth, permissions, activity attribution.",
       "category": "architecture",
-      "status": "captured",
+      "status": "dismissed",
       "source": "conversation 2026-02-07 (session 2)",
       "related_ideas": [
         "IDEA-021",
@@ -234,9 +234,9 @@
         "When does file-based storage hit its limit?",
         "How to handle auth?"
       ],
-      "notes": "Plant seeds in data model now. Build when local tool is fully validated.",
+      "notes": "Weekly refresh: Web-based multi-user is far future (post-product launch). Current focus is single-user dogfooding. Multi-user prep (data/local/ separation) is done, but full web platform is years away. Dismissing to reduce noise.",
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "priority": "P2",
       "tags": []
     },
@@ -245,7 +245,7 @@
       "title": "Integration data routing into native views",
       "description": "Instead of a flat integrations tab, route integration data into relevant views: Sentry errors flow into Issues as a separate section, Helicone costs into a Costs tab, Vercel deploys into a Deploys section on Dashboard. Each integration populates the view where its data is most useful.",
       "category": "feature",
-      "status": "captured",
+      "status": "dismissed",
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [
         "IDEA-006",
@@ -267,9 +267,9 @@
         "How to handle when integration is down vs not configured?",
         "Do we need a separate Costs tab or just sections?"
       ],
-      "notes": "Start with Sentry -> Issues and Helicone -> Metrics. Build the pattern, then extend.",
+      "notes": "Weekly refresh: Integration data routing is premature. Only 1/8 integrations working (ISS-003 open 14+ days). Should revisit after integrations are stable and tested. Dismissing for now.",
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "priority": "P2",
       "tags": []
     },
@@ -278,7 +278,7 @@
       "title": "Global command-P style search across all data",
       "description": "Floating search bar at the top of every page (or hotkey-activated) that searches across backlog items, issues, ideas, changelog entries, codebase files, brain notes. Like Cursor's command palette but for dev-track data. Results grouped by type with quick-jump to the item.",
       "category": "ux",
-      "status": "captured",
+      "status": "validated",
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [
         "IDEA-011",
@@ -299,9 +299,9 @@
         "Server-side search or client-side?",
         "Hotkey activation or always-visible?"
       ],
-      "notes": "Codebase Explorer already has search within its view. This extends it globally.",
+      "notes": "Weekly refresh: Global search is high-value UX improvement. Roadmap item 'global-search' exists in Next horizon. User repeatedly references Command-P pattern. Validating as ready for implementation.",
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "priority": "P2",
       "tags": []
     },
@@ -310,7 +310,7 @@
       "title": "UI design overhaul — Cursor-inspired minimalism",
       "description": "Full design pass: replace emoji icons with clean SVG/Lucide icons, tighter spacing, better typography hierarchy, Cursor-inspired sidebar navigation. More professional, less playful. The goal is clean information density like Linear or Cursor's dashboard.",
       "category": "ux",
-      "status": "captured",
+      "status": "validated",
       "source": "conversation 2026-02-07 (session 3)",
       "related_ideas": [
         "IDEA-010",
@@ -330,9 +330,9 @@
         "Which icon set? Lucide is already installed.",
         "How far to deviate from current dark theme?"
       ],
-      "notes": "User specifically mentioned liking Cursor's navigation style. Lucide-react is already in package.json.",
+      "notes": "Weekly refresh: UI design overhaul phase 2 is validated need. Roadmap item 'ui-design-overhaul' exists. Linear design benchmarking established (BN-024). Ready for implementation after dogfooding validates core functionality.",
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "priority": "P2",
       "tags": []
     },
@@ -405,7 +405,7 @@
       "title": "Background AI watcher — file-change-driven intelligence loop",
       "description": "A lightweight AI process that monitors the codebase for file changes in real-time. On change: analyze what changed, auto-update changelog, detect if backlog/issues/state need updating, and do it. Doesn't write code — just observes and tracks. Could use cheap models (GPT-4o-mini, Haiku) since it's analysis not generation. Runs alongside the coding AI, communicates via dev-track data files. The coding AI in Cursor/Claude leaves notes, the watcher AI picks them up and maintains the tracking system.",
       "category": "architecture",
-      "status": "captured",
+      "status": "dismissed",
       "source": "conversation 2026-02-07 (session 3 — meta discussion)",
       "related_ideas": [
         "IDEA-007",
@@ -433,9 +433,9 @@
         "How does the coding AI signal 'I just finished a task' to the watcher?",
         "Can we use git diff as the input rather than raw file watching?"
       ],
-      "notes": "This is the real solution to the 'AI forgot to update changelog' problem. Instead of asking the coding AI to both write code AND track changes (competing attention), separate the concerns: coding AI writes code, watcher AI tracks changes. They communicate through dev-track data files — that's the protocol. Start simple: on git commit, run a cheap model against the diff and auto-update changelog + state.",
+      "notes": "Weekly refresh: Background AI watcher superseded by tiered audit system (IDEA-055 promoted to roadmap). Semantic file watcher (ISS-034) addresses the core need. Dismissing in favor of more focused approach.",
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "priority": "P2",
       "tags": []
     },
@@ -609,7 +609,7 @@
       "title": "Self-hosted logging for dev-track-on-dev-track (vindaloop)",
       "description": "dev-track building dev-track. All AI calls, tool executions, errors, and performance data logged internally. A dedicated Logs view in the UI showing request/response pairs, latencies, costs, errors. This data feeds back into the dev-track AI so it can help debug itself. The ultimate dogfooding loop.",
       "category": "architecture",
-      "status": "captured",
+      "status": "dismissed",
       "source": "conversation 2026-02-07 (session 4)",
       "related_ideas": [
         "IDEA-014",
@@ -629,9 +629,9 @@
         "Store logs in data/ai/logs/ or a separate system?",
         "How much context does the AI need about its own logs?"
       ],
-      "notes": "The vindaloop. dev-track monitors itself building itself. This is actually a killer demo for the product.",
+      "notes": "Weekly refresh: Self-hosted logging (vindaloop) is unnecessary complexity. Helicone integration exists and works (despite ISS-003 test failures). Audit system provides full transparency. Dismissing.",
       "created": "2026-02-07",
-      "updated": "2026-02-07",
+      "updated": "2026-02-09",
       "priority": "P2",
       "tags": []
     },
@@ -874,7 +874,7 @@
     {
       "id": "IDEA-028",
       "title": "Deepgram voice integration — talk to DevTrack instead of typing",
-      "status": "captured",
+      "status": "dismissed",
       "category": "feature",
       "priority": "medium",
       "description": "Integrate Deepgram (or similar) for voice-to-text in the DevTrack AI chat. User can talk to DevTrack instead of typing. Useful for brain dumps, session planning, quick updates. The DevTrack chat sidebar would have a mic button. Voice transcription feeds into the same chat pipeline.",
@@ -896,9 +896,9 @@
         "How to handle transcription errors gracefully?",
         "Should we use AI to clean up transcription before feeding to chat?"
       ],
-      "notes": "User is already using voice (Deepgram) in Cursor and loves it. Bringing that to DevTrack's own chat is natural.",
+      "notes": "Weekly refresh: Deepgram voice integration is far future feature. Current focus is dogfooding core functionality. Dismissing to reduce noise.",
       "created": "2026-02-08",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "tags": []
     },
     {
@@ -1644,7 +1644,7 @@
     {
       "id": "IDEA-052",
       "title": "Entity grouping and parenting — ideas with sub-ideas, roadmap hierarchy, epics in UI",
-      "status": "captured",
+      "status": "promoted",
       "category": "ux",
       "priority": "high",
       "description": "Multiple entity types need parent/child relationships: (1) Ideas need sub-ideas — a big idea like 'AI-unique views' has multiple child ideas under it. (2) Roadmap items need grouping — epics exist in the data model but aren't displayed in the UI anywhere. (3) Design docs, RFDs, ADRs — these doc types exist conceptually but aren't surfaced distinctly. The user can't see the hierarchy that exists in the data. Epics have item_count and completed_count but no UI displays them. Milestones have version numbers but no UI shows version tracking. Other tools (Linear, Notion) typically use one level: Epic→Issues, Project→Tasks.",
@@ -1665,7 +1665,7 @@
         "Should ideas have a 'theme' tag or actual parent-child?",
         "How to display hierarchy in kanban view without clutter?"
       ],
-      "notes": "User called out: epics not in UI, ideas need wider grouping, roadmap needs parents/subsystems, docs need to show design docs/RFDs/ADRs distinctly. The data model v2 added epic_id and milestone_id to roadmap items but the UI never shows these groupings.",
+      "notes": "PROMOTED TO ROADMAP (epic-hierarchy-ui). SHIPPED in session 9: Roadmap By Epic view (items grouped under epics with progress bars, colored dots, inline epic editor), Ideas By Group view (connected-component clustering via related_ideas), cross-entity linking (open issues per epic). Core epic visibility DONE. Remaining (Ideas parent_idea field, deeper nesting) was out of original scope — user need fully met.",
       "source": "conversation session-8",
       "related_ideas": [
         "IDEA-034",
@@ -1680,7 +1680,7 @@
         "hierarchy"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "IDEA-053",
@@ -1752,8 +1752,8 @@
         "multi-user"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "notes": "Direct structural fix for root cause of ISS-020. Sessions 6 & 7 were orphaned because the external AI (Cursor) forgot to end them. This ensures DevTrack's own AI catches what external agents forget. Estimated 1 session to build. Future group: Session Reliability (with IDEA-056).",
+      "updated": "2026-02-09",
+      "notes": "PROMOTED TO ROADMAP (session-heartbeat-stale-detector). Direct structural fix for ISS-020 root cause. Sessions 6-7 orphaned because external AI forgot to end them. Behavioral compliance unreliable. Solution: (1) Session heartbeat (bump last_active on every activity event), (2) Stale session detector (scheduled check for inactive sessions), (3) DevTrack AI circle-back (on session_stale trigger, write retro, close gracefully), (4) Multi-user aware. Zero-cost heartbeat, configurable threshold, structural safety net.",
       "related_ideas": [
         "IDEA-024",
         "IDEA-025"
@@ -1765,7 +1765,7 @@
       "title": "Tiered audit system — file change (pennies), session (dimes), weekly (dollars)",
       "description": "Current session-end audit costs $2.82 on Sonnet for 25 tool calls over 164s — too expensive for per-session use. On a large codebase (Pillar = 150K lines vs DevTrack = 30K) this balloons to $10+. Need a tiered audit architecture:\n\n(1) FILE CHANGE AUDIT (pennies): On any file change, run a micro-audit. Use cached AI state so it doesn't need to re-read the whole system. Just: what changed? does the cache need updating? does a changelog entry make sense? Should take <5 tool calls, cost <$0.01. Can run continuously, not gated to 60s intervals.\n\n(2) SESSION AUDIT (dimes): On session close, diff commits from session start to session end. Only audit what's relevant to the session — don't re-read the entire system. AI already has cached state from file-change audits. Cost target: $0.10-0.30.\n\n(3) NIGHTLY AUDIT (low dollars): Broader sweep but still scoped. Check for stale data, contradictions, things the external AI forgot. Has benefit of all the cached state from the day's file-change audits. Cost target: $0.50-1.00.\n\n(4) WEEKLY AUDIT (dollars): Full system audit. This is where the $2-3 spend makes sense. Deep review, cross-entity consistency, strategic recommendations. Cost target: $2-5.\n\nKey enabler: AI state cache that gets incrementally updated on every file change, so larger audits don't start cold.",
       "category": "architecture",
-      "status": "exploring",
+      "status": "validated",
       "priority": "critical",
       "source": "conversation session-8 (post-close)",
       "pros": [
@@ -1793,8 +1793,8 @@
         "scalability"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "notes": "XL item — should be broken down. Phase 1: AI state cache + file-change micro-audit. Phase 2: session audit using cache. Phase 3: optimize nightly/weekly to use cache. User quoted: '$2.82 per session is going to add up relatively fast.' Future group: Tiered Audit System (with IDEA-050, IDEA-051).",
+      "updated": "2026-02-09",
+      "notes": "PROMOTED TO ROADMAP. Current session-end audit costs $2.82 (25 tool calls, 164s). On large codebase (Pillar 150K lines) would balloon to $10+. Tiered architecture: (1) File change micro-audit (Haiku, <$0.01, continuous), (2) Session audit ($0.10-0.30 using cached state + git diff), (3) Nightly audit ($0.50-1.00), (4) Weekly full audit ($2-5). Key enabler: AI state cache updated incrementally. This is THE cost-effective path to continuous change tracking. XL item — should be broken down into phases.",
       "related_ideas": [
         "IDEA-057",
         "IDEA-059",
@@ -1807,7 +1807,7 @@
       "title": "Auto-commit on session close — detect uncommitted work, commit to correct branch",
       "description": "When a session ends, the system should: (1) Check if there are uncommitted changes. (2) If yes, check if auto-commit is enabled in settings. (3) Detect the current branch (main, feature, etc.) and commit there. (4) Use the session's changelog entries and activity to generate a meaningful commit message. (5) Optionally push if configured. This should be a setting in the Settings UI: 'Auto-commit on session close' with options: off, commit only, commit and push. The external AI (Cursor) should also be doing this, but the structural safety net is DevTrack handling it if they don't — same pattern as the session heartbeat.",
       "category": "feature",
-      "status": "exploring",
+      "status": "promoted",
       "priority": "high",
       "source": "conversation session-8 (post-close)",
       "pros": [
@@ -1834,8 +1834,8 @@
         "settings"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "notes": "User flagged this after the session-end audit found 27 uncommitted files. Quick M-sized win with high impact. Future group: Session Reliability (with IDEA-054)."
+      "updated": "2026-02-09",
+      "notes": "PROMOTED TO ROADMAP (auto-commit-session-close). Session-end audit found 27 uncommitted files. On session close: detect uncommitted changes, check auto-commit setting, detect branch, generate commit message from session activity, commit (optionally push). Setting in Settings UI: off/commit/commit+push. Structural safety net — doesn't depend on external AI remembering. Quick M-sized win with high impact."
     },
     {
       "id": "IDEA-057",
@@ -1972,13 +1972,14 @@
         "trust"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "related_ideas": [
         "IDEA-043",
         "IDEA-044",
         "IDEA-061",
         "IDEA-046"
-      ]
+      ],
+      "notes": "PROMOTED TO ROADMAP (audits-tab). Automation results invisible. Need Audits tab showing: summary, changes made, suggestions not acted on, thinking chain, cost, tool calls. Enables trust, transparency, cost visibility, suggestion-with-approval workflow. SHIPPED in session 9: full audit recording pipeline + Audits UI with stats, filters, run cards, expandable detail. Critical for autonomous AI operations."
     },
     {
       "id": "IDEA-061",
@@ -1986,7 +1987,7 @@
       "title": "Autonomy levels — fully autonomous vs suggestion-with-approval mode",
       "description": "Not all users want DevTrack AI to make changes autonomously. Enterprise users may need approval workflows. Add an autonomy setting with levels:\n\n(1) FULL AUTONOMY — DevTrack AI makes all changes directly. Ideal for solo devs / power users who trust the system.\n(2) SUGGEST & APPROVE — DevTrack AI identifies changes but presents them as 1-click approval cards in the Audits tab. 'I want to promote IDEA-034 to roadmap' → user clicks Approve or Dismiss. Batch approval for multiple suggestions.\n(3) READ-ONLY — DevTrack AI only observes and reports. No changes made. Useful for evaluation / onboarding.\n\nThis is a per-user or per-project setting in Settings. The automation prompt should be aware of the autonomy level so the AI knows whether to execute changes or just recommend them.",
       "category": "feature",
-      "status": "exploring",
+      "status": "promoted",
       "priority": "high",
       "source": "conversation session-8 (post-close)",
       "pros": [
@@ -2012,11 +2013,12 @@
         "trust"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "related_ideas": [
         "IDEA-060",
         "IDEA-043"
-      ]
+      ],
+      "notes": "PROMOTED TO ROADMAP (autonomy-levels). Three modes: (1) Full autonomy (AI makes all changes), (2) Suggest & approve (1-click approval cards in Audits tab), (3) Read-only (observe and report). Per-project setting. Automation prompts adapt to level. Opens DevTrack to enterprise users. Depends on audits-tab for suggestion rendering."
     },
     {
       "id": "IDEA-062",
@@ -2156,7 +2158,11 @@
         "How do we track that an issue was handed off and implemented externally?"
       ],
       "notes": "This pattern was validated live in session 9. The chat agent found ISS-035 (shallow merge bug), created the issue with full investigation detail, and the Cursor agent implemented the fix. This is the bridge pattern from ISS-012.",
-      "tags": ["architecture", "ai-handoff", "investigation-pattern"],
+      "tags": [
+        "architecture",
+        "ai-handoff",
+        "investigation-pattern"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -2168,7 +2174,9 @@
       "status": "captured",
       "priority": "medium",
       "source": "session-9 upfactoring",
-      "related_ideas": ["IDEA-065"],
+      "related_ideas": [
+        "IDEA-065"
+      ],
       "promoted_to": null,
       "pros": [
         "Agent makes better decisions with more context",
@@ -2186,7 +2194,10 @@
         "Can we use embeddings to determine relevance of pushed context?"
       ],
       "notes": "",
-      "tags": ["ai-intelligence", "context-management"],
+      "tags": [
+        "ai-intelligence",
+        "context-management"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -2216,7 +2227,11 @@
         "Should we add typed WS event subscriptions or just filter client-side?"
       ],
       "notes": "Current state after ISS-039 fix: views fetch on mount but never refresh. This is better than the remount-everything pattern but means data goes stale. Medium priority since most views are fine with mount-only fetch for now.",
-      "tags": ["infrastructure", "state-management", "real-time"],
+      "tags": [
+        "infrastructure",
+        "state-management",
+        "real-time"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -2228,7 +2243,9 @@
       "status": "captured",
       "priority": "medium",
       "source": "session-9 upfactoring",
-      "related_ideas": ["IDEA-065"],
+      "related_ideas": [
+        "IDEA-065"
+      ],
       "promoted_to": null,
       "pros": [
         "Eliminates the manual context transfer between DevTrack and coding AI",
@@ -2245,26 +2262,49 @@
         "Should it include the full entity or a condensed handoff summary?"
       ],
       "notes": "",
-      "tags": ["ai-handoff", "developer-experience"],
+      "tags": [
+        "ai-handoff",
+        "developer-experience"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
-    }
-    ,
+    },
     {
       "id": "IDEA-069",
       "title": "AI State Cache — compressed project state summary for efficient audits",
       "description": "A data/ai/state-cache.json file containing a compressed summary of project state (~2-5K tokens instead of 130K). Systems list, roadmap status, open issues, recent changelog, velocity stats. Updated incrementally after every audit/agent run. All subsequent audits load the cache instead of re-reading every data file. Paired with change detection: diff current state vs cache to determine what actually changed before firing an expensive AI call.",
       "category": "architecture",
-      "status": "exploring",
+      "status": "implemented",
       "priority": "critical",
       "source": "session-10 (Helicone log audit — $36 docs generation showed every run rebuilds from scratch)",
-      "related_ideas": ["IDEA-051", "IDEA-055"],
+      "related_ideas": [
+        "IDEA-051",
+        "IDEA-055"
+      ],
       "promoted_to": null,
-      "pros": ["90% context reduction per audit call", "Enables incremental audits", "Foundation for tiered audit system", "Reduces rate limit pressure"],
-      "cons": ["Cache can become stale if not updated", "Need to handle cache invalidation", "Adds a new data file to maintain"],
-      "open_questions": ["What's the right cache format?", "How often to rebuild cache from scratch?", "Should cache be per-automation or global?"],
+      "pros": [
+        "90% context reduction per audit call",
+        "Enables incremental audits",
+        "Foundation for tiered audit system",
+        "Reduces rate limit pressure"
+      ],
+      "cons": [
+        "Cache can become stale if not updated",
+        "Need to handle cache invalidation",
+        "Adds a new data file to maintain"
+      ],
+      "open_questions": [
+        "What's the right cache format?",
+        "How often to rebuild cache from scratch?",
+        "Should cache be per-automation or global?"
+      ],
       "notes": "Real data: docs init used 2.1M input tokens across 17 requests. With state cache, most of that context could be pre-summarized.",
-      "tags": ["ai", "cost", "architecture", "caching"],
+      "tags": [
+        "ai",
+        "cost",
+        "architecture",
+        "caching"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -2273,16 +2313,36 @@
       "title": "Per-doc generation instead of monolithic agent run",
       "description": "Instead of one agent that generates all 14 docs in a single 30-iteration run (paying 130K tokens per iteration), run separate focused agents per doc. Each agent gets: the state cache + relevant source files for THAT doc only. Benefits: (1) if one fails, others succeed, (2) much smaller context per call, (3) naturally resilient to server restarts (completed docs stay), (4) can parallelize. Cost: probably $1-2 per doc on Sonnet instead of $2.50 per iteration on Opus.",
       "category": "architecture",
-      "status": "exploring",
+      "status": "implemented",
       "priority": "high",
       "source": "session-10 (agent wasted $14 fumbling with tool calls across iterations)",
-      "related_ideas": ["IDEA-069"],
+      "related_ideas": [
+        "IDEA-069"
+      ],
       "promoted_to": null,
-      "pros": ["Natural resilience — each doc is atomic", "Smaller context per call", "Parallelizable", "Can route different docs to different models"],
-      "cons": ["More API calls total", "Each doc agent lacks cross-doc context", "Need orchestration layer"],
-      "open_questions": ["Parallel or sequential?", "How to share context between doc agents?", "Does per-doc actually cost less than monolithic?"],
+      "pros": [
+        "Natural resilience — each doc is atomic",
+        "Smaller context per call",
+        "Parallelizable",
+        "Can route different docs to different models"
+      ],
+      "cons": [
+        "More API calls total",
+        "Each doc agent lacks cross-doc context",
+        "Need orchestration layer"
+      ],
+      "open_questions": [
+        "Parallel or sequential?",
+        "How to share context between doc agents?",
+        "Does per-doc actually cost less than monolithic?"
+      ],
       "notes": "",
-      "tags": ["ai", "cost", "docs", "architecture"],
+      "tags": [
+        "ai",
+        "cost",
+        "docs",
+        "architecture"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -2296,11 +2356,25 @@
       "source": "session-10 (user question: is Opus worth $30 vs Sonnet $5 for initialization?)",
       "related_ideas": [],
       "promoted_to": null,
-      "pros": ["Users control their own cost/quality tradeoff", "Power users get premium quality", "Default to affordable"],
-      "cons": ["More config complexity", "Need to test quality across tiers"],
-      "open_questions": ["Should this be per-user or per-project?", "What's the default for new users?"],
+      "pros": [
+        "Users control their own cost/quality tradeoff",
+        "Power users get premium quality",
+        "Default to affordable"
+      ],
+      "cons": [
+        "More config complexity",
+        "Need to test quality across tiers"
+      ],
+      "open_questions": [
+        "Should this be per-user or per-project?",
+        "What's the default for new users?"
+      ],
       "notes": "",
-      "tags": ["settings", "ai", "cost"],
+      "tags": [
+        "settings",
+        "ai",
+        "cost"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -2309,16 +2383,32 @@
       "title": "Wire docs generation into project initialization flow",
       "description": "POST /api/v1/init currently scans codebase and populates entities but doesn't generate docs. When a new project is initialized (like porting to Landmark), the init flow should: (1) scan codebase, (2) create systems/roadmap/issues, (3) generate full doc structure via the docs generation pipeline. User sees a complete wiki when they first open the Docs tab — no need to click Initialize separately.",
       "category": "feature",
-      "status": "exploring",
+      "status": "implemented",
       "priority": "high",
       "source": "session-10 (user: 'when we initialize in a new project, you need to run everything top to bottom, including generating the docs')",
-      "related_ideas": ["IDEA-070"],
+      "related_ideas": [
+        "IDEA-070"
+      ],
       "promoted_to": null,
-      "pros": ["Seamless first-time experience", "No manual steps", "Docs ready from day one"],
-      "cons": ["Init takes longer", "More expensive first-run cost"],
-      "open_questions": ["Run docs generation async or block until done?", "Show progress UI during init?"],
+      "pros": [
+        "Seamless first-time experience",
+        "No manual steps",
+        "Docs ready from day one"
+      ],
+      "cons": [
+        "Init takes longer",
+        "More expensive first-run cost"
+      ],
+      "open_questions": [
+        "Run docs generation async or block until done?",
+        "Show progress UI during init?"
+      ],
       "notes": "",
-      "tags": ["initialization", "docs", "ux"],
+      "tags": [
+        "initialization",
+        "docs",
+        "ux"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     },
@@ -2332,14 +2422,122 @@
       "source": "session-10 (user: 'can you audit the logs end to end in Helicone through the API')",
       "related_ideas": [],
       "promoted_to": null,
-      "pros": ["Self-aware cost tracking", "AI can optimize its own usage", "Rich analytics in DevTrack"],
-      "cons": ["Another integration to maintain", "Helicone API can be slow", "Data duplication"],
-      "open_questions": ["Pull on schedule or on demand?", "How much request data to store?", "Privacy implications of storing full prompts?"],
+      "pros": [
+        "Self-aware cost tracking",
+        "AI can optimize its own usage",
+        "Rich analytics in DevTrack"
+      ],
+      "cons": [
+        "Another integration to maintain",
+        "Helicone API can be slow",
+        "Data duplication"
+      ],
+      "open_questions": [
+        "Pull on schedule or on demand?",
+        "How much request data to store?",
+        "Privacy implications of storing full prompts?"
+      ],
       "notes": "Clickhouse endpoint works for bulk queries. Point query endpoint returned empty. Need org ID header.",
-      "tags": ["helicone", "cost", "analytics"],
+      "tags": [
+        "helicone",
+        "cost",
+        "analytics"
+      ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
     }
+    ,
+    {
+      "id": "IDEA-074",
+      "title": "Init progress UI — real-time step indicator with explanations during project initialization",
+      "description": "When a new project initializes, the dashboard shows nothing. Should show: (1) Current step (Scanning codebase... Reading git... Running AI agent...), (2) Progress bar or step counter, (3) What each step does in plain English, (4) Estimated time remaining, (5) Cost estimate. Server already logs steps to console — just need to expose via SSE or polling endpoint and render in the empty state UI.",
+      "category": "ux",
+      "status": "captured",
+      "priority": "high",
+      "source": "session-11 dogfood — Pillar initialization",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": ["Critical for first-time UX", "User has zero visibility during 3-5 min wait", "Server already logs the steps"],
+      "cons": ["Need SSE or polling endpoint for real-time updates"],
+      "open_questions": ["SSE stream or polling endpoint?", "Show cost in real-time or just estimate upfront?"],
+      "notes": "User literally said 'we should really have progress indicators and explanations of what its doing'",
+      "tags": ["ux", "initialization", "onboarding"],
+      "created": "2026-02-09",
+      "updated": "2026-02-09"
+    },
+    {
+      "id": "IDEA-075",
+      "title": "Global credentials — move .credentials.json to ~/.dev-track/credentials.json",
+      "description": "Currently API keys live in .credentials.json per project root. When initializing a new project (Pillar), the user has to manually copy credentials. Should be global at ~/.dev-track/credentials.json with per-project override support. Migration: check project root first (backward compat), then fall back to global. Same pattern as global profiles.",
+      "category": "architecture",
+      "status": "captured",
+      "priority": "high",
+      "source": "session-11 dogfood — Pillar init failed because no API keys",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": ["One-time key setup works across all projects", "Same pattern as global profiles", "Eliminates the #1 new-project friction"],
+      "cons": ["Need migration path", "Per-project overrides add complexity"],
+      "open_questions": ["Should per-project still be supported as override?"],
+      "notes": "User said 'I thought our native dev-track keys were supposed to travel with'",
+      "tags": ["architecture", "credentials", "multi-project"],
+      "created": "2026-02-09",
+      "updated": "2026-02-09"
+    },
+    {
+      "id": "IDEA-076",
+      "title": "Background daemon — persistent service for multi-project overnight automations",
+      "description": "Current architecture: one Node server per active project, dies when terminal closes. No overnight audits if laptop sleeps. No simultaneous monitoring of multiple projects. Fix: lightweight background daemon (system service) that manages all registered projects. Handles scheduled automations, file watching, and health checks. UI server is just the dashboard that connects to the daemon. Daemon installs via: Windows Task Scheduler, macOS launchd, Linux systemd.",
+      "category": "architecture",
+      "status": "captured",
+      "priority": "medium",
+      "source": "session-11 — user identified the multi-project monitoring gap",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": ["Overnight audits actually run", "All projects monitored simultaneously", "Survives terminal close / laptop sleep"],
+      "cons": ["System service installation is platform-specific", "More complex deployment", "v1.0 feature not MVP"],
+      "open_questions": ["Electron app vs native service?", "How to handle laptop sleep/wake?"],
+      "notes": "User said 'the more I dig into all this the more im thinking we need a web app with a desktop daemon'",
+      "tags": ["architecture", "daemon", "v1.0"],
+      "created": "2026-02-09",
+      "updated": "2026-02-09"
+    }
+    ,
+    {
+      "id": "IDEA-077",
+      "title": "Git history import — show commits alongside changelog as a tab or timeline",
+      "description": "Import git commit history into DevTrack and display alongside the semantic changelog. Changelog is WHAT shipped and WHY (semantic). Git log is WHAT files changed (mechanical). Both are useful. Show as tabs in Changelog view: 'Changelog | Git History'. Auto-import on session start/end from checkpoint. Could also cross-link: changelog entry CL-090 references commits abc123, def456.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "medium",
+      "source": "session-11 — user question about changelog vs git",
+      "related_ideas": [],
+      "promoted_to": null,
+      "pros": ["Full development timeline in one place", "Cross-references between semantic and mechanical changes", "Git history already available via checkpoint system"],
+      "cons": ["Could be noisy for large repos", "Need to decide granularity (per-commit vs per-session)"],
+      "open_questions": ["Import all history or just per-session?", "Tab in Changelog view or separate view?"],
+      "notes": "User asked 'im confused about the difference between our changelog function and githubs'",
+      "tags": ["git", "changelog", "timeline"],
+      "created": "2026-02-09",
+      "updated": "2026-02-09"
+    },
+    {
+      "id": "IDEA-078",
+      "title": "Init upfactor — real-time cost/progress streaming, remove iteration limit, Helicone tracking, optimization",
+      "description": "The initialization flow needs major upfactoring: (1) Real-time progress streaming via SSE — show current step, entities created so far, running cost, estimated time. (2) Remove the 20-iteration hard limit — let the agent finish the job. (3) Cost display on the loading bar in real-time. (4) Apply learnings from automation refactor (filtered reads, summary mode) where applicable. (5) Wire through Helicone for cost tracking. (6) Better error recovery — if rate limited, wait and continue.",
+      "category": "feature",
+      "status": "captured",
+      "priority": "high",
+      "source": "session-11 — Pillar initialization dogfood",
+      "related_ideas": ["IDEA-074"],
+      "promoted_to": null,
+      "pros": ["Critical for first-time UX", "User needs cost visibility", "Current 20-iteration limit is arbitrary"],
+      "cons": ["SSE streaming adds complexity", "Uncapped iterations could be expensive"],
+      "open_questions": ["Hard cost cap instead of iteration cap?", "Stream via SSE or poll?"],
+      "notes": "User: 'I dont want the agent to be limited on the front end initialization really - I want to know what my cost is in real time'",
+      "tags": ["initialization", "ux", "streaming", "cost"],
+      "created": "2026-02-09",
+      "updated": "2026-02-09"
+    }
   ],
-  "next_id": 74
+  "next_id": 79
 }

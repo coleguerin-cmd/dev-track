@@ -21,7 +21,8 @@ import type { GraphEdgeData } from '../components/graph/GraphEdge';
 
 type GraphView = 'modules' | 'files' | 'routes';
 
-const BASE = '/api/v1';
+function getBase() { return `${localStorage.getItem('devtrack-api-origin') || ''}/api/v1`; }
+const BASE = getBase();
 
 // ─── Dagre Layout ────────────────────────────────────────────────────────────
 

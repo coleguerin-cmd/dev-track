@@ -42,18 +42,7 @@ app.post('/', async (c) => {
   const store = getStore();
   const body = await c.req.json();
 
-  // WIP limit check
-  if (body.horizon === 'now') {
-    const nowCount = store.roadmap.items.filter(
-      i => i.horizon === 'now' && i.status !== 'completed' && i.status !== 'cancelled'
-    ).length;
-    if (nowCount >= store.config.settings.max_now_items) {
-      return c.json({
-        ok: false,
-        error: `WIP limit reached: ${nowCount}/${store.config.settings.max_now_items} items in Now. Demote one first.`,
-      }, 400);
-    }
-  }
+  // No WIP limit on NOW — AI sprints handle high throughput
 
   const now = new Date().toISOString().split('T')[0];
   const item: RoadmapItem = {
@@ -117,18 +106,7 @@ app.patch('/:id', async (c) => {
 
   const body = await c.req.json();
 
-  // WIP limit check if moving to now
-  if (body.horizon === 'now' && item.horizon !== 'now') {
-    const nowCount = store.roadmap.items.filter(
-      i => i.horizon === 'now' && i.status !== 'completed' && i.status !== 'cancelled'
-    ).length;
-    if (nowCount >= store.config.settings.max_now_items) {
-      return c.json({
-        ok: false,
-        error: `WIP limit reached: ${nowCount}/${store.config.settings.max_now_items} items in Now.`,
-      }, 400);
-    }
-  }
+  // No WIP limit on NOW — AI sprints handle high throughput
 
   const oldEpicId = item.epic_id;
   const oldMilestoneId = item.milestone_id;

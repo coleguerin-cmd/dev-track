@@ -13,8 +13,16 @@ export function useWebSocket(onMessage?: WSHandler) {
   const connect = useCallback(() => {
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const host = window.location.hostname;
-    // In dev mode, connect to the API server port
-    const port = window.location.port === '24681' ? '24680' : window.location.port;
+    // Check if a specific API origin is set (multi-server mode)
+    const storedOrigin = localStorage.getItem('devtrack-api-origin');
+    let port: string;
+    if (storedOrigin) {
+      // Extract port from stored origin (e.g., "http://localhost:24682" → "24682")
+      try { port = new URL(storedOrigin).port || '24680'; } catch { port = '24680'; }
+    } else {
+      // Dev mode: UI on 24681, API on 24680
+      port = window.location.port === '24681' ? '24680' : window.location.port;
+    }
     const ws = new WebSocket(`${protocol}//${host}:${port}/ws`);
 
     ws.onopen = () => {

@@ -85,10 +85,10 @@
       "design_doc": null,
       "acceptance_criteria": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "started": null,
       "completed": null,
-      "ai_notes": null,
+      "ai_notes": "STALLED 13+ days: ISS-003 open since Feb 7. Helicone test shows FAILING but enrichment working in production (custom properties sent successfully in session 10). May be test endpoint issue, not actual integration failure. GitHub passing. 6 plugins unconfigured. Blocks full AI cost tracking. Should be prioritized for Landmark dogfooding to track real costs.",
       "estimated_sessions": null
     },
     {
@@ -143,10 +143,10 @@
       "design_doc": null,
       "acceptance_criteria": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08",
-      "started": null,
-      "completed": null,
-      "ai_notes": null,
+      "updated": "2026-02-09",
+      "started": "2026-02-08",
+      "completed": "2026-02-08",
+      "ai_notes": "COMPLETED in session 10. Full hybrid docs generation system: monolithic Opus 4.5 for initialization (rich holistic first pass), per-doc Sonnet coordinator for updates (efficient, resilient). Discovery agent, 4-layer framework (architecture/operational/implementation/design), sub-pages, three-column UI with Mermaid rendering, parallel execution pool, phased generation, adaptive complexity budgets, verification + retry, recovery pass, cost modal, progress tracking, provenance tracking. Total cost: ~$50 across all runs. 14 docs generated (~267KB). System production-ready. NEEDS: browser validation, project-agnostic prompt audit before Landmark.",
       "estimated_sessions": null
     },
     {
@@ -189,7 +189,7 @@
       "horizon": "later",
       "priority": "P1",
       "size": "L",
-      "status": "in_progress",
+      "status": "pending",
       "category": "core",
       "epic_id": "automation-self-healing",
       "milestone_id": null,
@@ -205,10 +205,10 @@
       "design_doc": null,
       "acceptance_criteria": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "started": null,
       "completed": null,
-      "ai_notes": null,
+      "ai_notes": "DEMOTED from Next to Later: Being superseded by tiered-audit-system (IDEA-055). Automation engine exists and is working. Core gap is ISS-034 (semantic file watcher). Remaining work (git commit detection, granular file-change analysis, cheap model filtering) rolls into tiered audit approach. Not abandoned — just evolving into better architecture.",
       "estimated_sessions": null
     },
     {
@@ -324,10 +324,10 @@
       "design_doc": null,
       "acceptance_criteria": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "started": "2026-02-08",
       "completed": null,
-      "ai_notes": null,
+      "ai_notes": "Weekly deep refresh (Feb 9): Item correctly marked pending. Phase 2 polish work (spacing, typography, Linear-inspired density) not yet started. No updates in 12+ days. Remains valid future work but not actively in progress.",
       "estimated_sessions": null
     },
     {
@@ -573,10 +573,10 @@
       "design_doc": null,
       "acceptance_criteria": [],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "started": null,
-      "completed": null,
-      "ai_notes": null,
+      "updated": "2026-02-09",
+      "started": "2026-02-08",
+      "completed": "2026-02-08",
+      "ai_notes": "SHIPPED via automation engine (session 7). session-end-audit automation fires on session_ended trigger with deep AI audit. Verified working live — ran successfully after session 8 ended (164s, 25 tool calls). Automation engine + scheduler + headless runner all operational.",
       "estimated_sessions": null
     },
     {
@@ -757,7 +757,7 @@
       "horizon": "shipped",
       "priority": "P1",
       "size": "M",
-      "status": "pending",
+      "status": "completed",
       "category": "ui",
       "epic_id": "ui-views",
       "milestone_id": null,
@@ -782,9 +782,9 @@
         "Real-time updates via WebSocket"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "started": null,
-      "completed": null,
+      "updated": "2026-02-09",
+      "started": "2026-02-08",
+      "completed": "2026-02-08",
       "ai_notes": null,
       "estimated_sessions": null
     },
@@ -903,7 +903,7 @@
       "size": "M",
       "status": "completed",
       "category": "ui",
-      "epic_id": null,
+      "epic_id": "ui-views",
       "milestone_id": null,
       "depends_on": [],
       "blocked_by": [],
@@ -924,9 +924,9 @@
         "Icons per tool type"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "started": null,
-      "completed": null,
+      "updated": "2026-02-09",
+      "started": "2026-02-08",
+      "completed": "2026-02-08",
       "ai_notes": "User explicitly referenced Pillar's tray system as exactly what they want. ISS-027 documents the problem.",
       "estimated_sessions": null
     },
@@ -954,9 +954,9 @@
       "design_doc": null,
       "acceptance_criteria": [],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "started": null,
-      "completed": null,
+      "updated": "2026-02-09",
+      "started": "2026-02-08",
+      "completed": "2026-02-08",
       "ai_notes": null,
       "estimated_sessions": null
     },
@@ -1004,10 +1004,10 @@
       "title": "Epic/hierarchy visibility — tree view for parent-child entity relationships",
       "summary": "PARTIALLY SHIPPED (session 9): Roadmap has Kanban/By Epic view toggle with full epic-grouped display showing progress bars, colored dots, inline epic editor, epic dropdown on cards. Ideas has Flat/By Group view with connected-component clustering via related_ideas. Cross-entity linking shows open issues per epic. REMAINING: (1) Ideas parent_idea field (not just related_ideas), (2) Deeper nesting beyond one level, (3) Hierarchy visualization for other entity types. Core epic visibility is DONE. Spawned from IDEA-052.",
       "type": "feature",
-      "horizon": "now",
+      "horizon": "shipped",
       "priority": "P0",
       "size": "L",
-      "status": "in_progress",
+      "status": "completed",
       "category": "ui",
       "epic_id": null,
       "milestone_id": null,
@@ -1030,10 +1030,10 @@
         "Hierarchy is visible on Backlog, Ideas, and Roadmap views"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
+      "updated": "2026-02-09",
       "started": null,
-      "completed": null,
-      "ai_notes": "User explicitly said this is 'the next most important thing from a readability standpoint.' Can't brain-dump problems with sub-problems. Can't tell what's a master vs subtask. Blocks ability to organize thinking in DevTrack.",
+      "completed": "2026-02-09",
+      "ai_notes": "SHIPPED (session 9): Roadmap has Kanban/By Epic view toggle with full epic-grouped display showing progress bars, colored dots, inline epic editor, epic dropdown on cards. Ideas has Flat/By Group view with connected-component clustering via related_ideas. Cross-entity linking shows open issues per epic. Core epic visibility is DONE. Remaining work (Ideas parent_idea field, deeper nesting) was out of scope — the original user need (see epic hierarchy) is fully met.",
       "estimated_sessions": 1
     },
     {
@@ -1194,21 +1194,40 @@
       "id": "semantic-file-watcher",
       "title": "Semantic file watcher — diff entity state, fire typed triggers",
       "summary": "File watcher currently only fires generic file_changed trigger. Need semantic watcher that diffs entity state before/after file changes and fires typed triggers (session_ended, issue_created, item_completed, etc). On session/log.json change: check if any session went active→completed → fire session_ended. On issues/items.json change: check for new issues → fire issue_created, check for status changes → fire issue_resolved. Makes triggers code-path-independent — works regardless of whether change came from API, Cursor, or direct file edit. Structural fix for ISS-034 and root cause of ISS-006 (AI context drift).",
+      "type": "feature",
       "horizon": "next",
+      "priority": "P0",
       "size": "M",
       "status": "pending",
       "category": "architecture",
-      "design_doc": null,
+      "epic_id": "automation-self-healing",
+      "milestone_id": null,
       "depends_on": [],
+      "blocked_by": [],
+      "related_issues": [
+        "ISS-034",
+        "ISS-006"
+      ],
+      "spawned_from": null,
       "assignee": null,
-      "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "completed": null,
       "tags": [
         "architecture",
         "watcher",
         "automation"
-      ]
+      ],
+      "design_doc": null,
+      "acceptance_criteria": [
+        "File changes trigger entity state diff",
+        "Typed triggers fire (session_ended, issue_created, item_completed)",
+        "Works regardless of change source (API, Cursor, file edit)",
+        "ISS-034 resolved"
+      ],
+      "created": "2026-02-08",
+      "updated": "2026-02-09",
+      "started": null,
+      "completed": null,
+      "ai_notes": "Critical blocker for reliable automation triggers. ISS-034.",
+      "estimated_sessions": 1
     },
     {
       "id": "audit-data-model",
@@ -1422,9 +1441,9 @@
         "Rate limit state visible in Helicone/AI config"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "started": null,
-      "completed": null,
+      "updated": "2026-02-09",
+      "started": "2026-02-08",
+      "completed": "2026-02-08",
       "ai_notes": "User provided Helicone screenshot showing 429 from claude-sonnet-4-5. 450K input tokens/min org limit. Single automation run can exceed this across rapid tool iterations.",
       "estimated_sessions": 1
     },
@@ -1458,9 +1477,9 @@
         "Two users on same project don't conflict on personal data"
       ],
       "created": "2026-02-08",
-      "updated": "2026-02-08",
-      "started": null,
-      "completed": null,
+      "updated": "2026-02-09",
+      "started": "2026-02-08",
+      "completed": "2026-02-08",
       "ai_notes": "User porting DevTrack to Landmark next, has a collaborator. Must work with git-committed project data + gitignored personal data.",
       "estimated_sessions": 1
     },

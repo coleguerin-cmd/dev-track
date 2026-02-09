@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import * as api from '../api/client';
+import { setApiOrigin } from '../api/client';
 import {
   LayoutDashboard,
   ListTodo,
@@ -65,13 +66,14 @@ export function Sidebar({ activeView, onViewChange, connected }: SidebarProps) {
     api.issues.list({ status: 'open' })
       .then((data: any) => setIssueCounts(data?.counts || { open: 0, critical: 0 }))
       .catch(() => {});
-    fetch('/api/v1/project').then(r => r.json()).then(d => {
+    const origin = localStorage.getItem('devtrack-api-origin') || '';
+    fetch(`${origin}/api/v1/project`).then(r => r.json()).then(d => {
       if (d.ok && d.data) {
         setProjectName(d.data.name);
         setCurrentProjectId(d.data.id);
       }
     }).catch(() => {});
-    fetch('/api/v1/projects').then(r => r.json()).then(d => {
+    fetch(`${origin}/api/v1/projects`).then(r => r.json()).then(d => {
       if (d.ok && d.data?.projects) setProjects(d.data.projects);
     }).catch(() => {});
   };
@@ -93,6 +95,27 @@ export function Sidebar({ activeView, onViewChange, connected }: SidebarProps) {
     if (projectId === currentProjectId || switching) return;
     setSwitching(true);
     try {
+      // Find the target project's port from the registry
+      const target = projects.find(p => p.id === projectId);
+      if (target?.port) {
+        // Multi-server mode: switch API origin to the project's port
+        const origin = `http://localhost:${target.port}`;
+        // Verify the server is actually running on that port
+        try {
+          const check = await fetch(`${origin}/api/health`, { signal: AbortSignal.timeout(2000) });
+          if (check.ok) {
+            setApiOrigin(origin);
+            setShowProjectPicker(false);
+            window.location.reload();
+            return;
+          }
+        } catch {
+          // Server not running on that port — fall back to hot-swap
+          console.log(`Server not running on port ${target.port}, falling back to hot-swap`);
+        }
+      }
+
+      // Fallback: hot-swap on the current server (single-server mode)
       const res = await fetch('/api/v1/projects/switch', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -100,10 +123,8 @@ export function Sidebar({ activeView, onViewChange, connected }: SidebarProps) {
       });
       const json = await res.json();
       if (json.ok) {
+        setApiOrigin(null); // Clear any stored origin — use current server
         setShowProjectPicker(false);
-        // Reload all sidebar data for the new project
-        loadProjectData();
-        // Force a full page reload to refresh all views with new project data
         window.location.reload();
       } else {
         console.error('Switch failed:', json.error);
@@ -157,7 +178,7 @@ export function Sidebar({ activeView, onViewChange, connected }: SidebarProps) {
     );
   };
 
-  const hasMultipleProjects = projects.length > 1;
+  const hasMultipleProjects = projects.length > 0;
 
   return (
     <aside className="w-[200px] flex-shrink-0 bg-surface-0 border-r border-border flex flex-col h-screen select-none">

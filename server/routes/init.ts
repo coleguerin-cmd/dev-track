@@ -61,11 +61,16 @@ app.post('/', async (c) => {
     // Step 5: Run AI agent
     console.log('[init] Step 4: Running AI agent for deep analysis...');
     const systemPrompt = buildInitSystemPrompt(store.config.project);
-    const userMessage = buildInitUserMessage({ scanResult, gitLog, gitBranches, packageInfo, readme });
+    const userMessage = buildInitUserMessage(store.config.project, { scanResult, gitLog, gitBranches, packageInfo, readme });
 
     const result = await runAgent(systemPrompt, userMessage, {
       task: 'project_init',
       maxIterations: 20,
+      heliconeProperties: {
+        User: 'devtrack-init',
+        Source: 'initialization',
+        Project: store.config.project,
+      },
     });
 
     console.log(`[init] Entity population complete: ${result.iterations} iterations, ${result.tool_calls_made.length} tool calls, $${result.cost.toFixed(4)}`);
@@ -100,12 +105,12 @@ app.post('/', async (c) => {
 });
 
 function buildInitSystemPrompt(projectName: string): string {
-  return `You are the DevTrack initialization agent. Your job is to deeply analyze a codebase and populate DevTrack with comprehensive, high-quality project data.
+  return `You are the project initialization agent for "${projectName}". Your job is to deeply analyze a codebase and populate the project tracker with comprehensive, high-quality project data.
 
-You have full access to all DevTrack tools. Use them aggressively — create every entity that makes sense.
+You have full access to all project management tools. Use them aggressively — create every entity that makes sense.
 
 ## Your Mission
-Analyze the provided codebase data and populate ALL of these DevTrack entities:
+Analyze the provided codebase data and populate ALL of these project entities:
 
 ### Systems (create_system)
 Create one system per major module/service. Include:
@@ -162,7 +167,7 @@ Capture interesting patterns, opportunities, or improvements you notice.
 ## Project: ${projectName}`;
 }
 
-function buildInitUserMessage(context: {
+function buildInitUserMessage(projectName: string, context: {
   scanResult: any;
   gitLog: string;
   gitBranches: string;
@@ -205,7 +210,7 @@ function buildInitUserMessage(context: {
     parts.push(`\n### Git Branches\n\`\`\`\n${context.gitBranches}\n\`\`\``);
   }
 
-  parts.push('\n## Instructions\nAnalyze everything above. Create all relevant DevTrack entities. Be thorough and detailed.');
+  parts.push(`\n## Instructions\nAnalyze everything above. Create all relevant project entities for "${projectName}". Be thorough and detailed.`);
 
   return parts.join('\n');
 }

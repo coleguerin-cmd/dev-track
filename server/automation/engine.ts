@@ -13,6 +13,7 @@ import { broadcast } from '../ws.js';
 import { runAgent } from '../ai/runner.js';
 import { AuditRecorder } from './recorder.js';
 import { formatStateCacheForPrompt, invalidateStateCache } from '../ai/state-cache.js';
+import { formatChangeQueueForPrompt } from './change-queue.js';
 import type { Automation, AutomationCondition, AuditTriggerType } from '../../shared/types.js';
 
 export type TriggerType = 'issue_created' | 'item_completed' | 'session_ended' | 'health_changed' | 'scheduled' | 'file_changed' | 'manual';
@@ -197,22 +198,29 @@ class AutomationEngine {
       context.data || {},
     );
 
-    // Build context from state cache (compressed ~2-5K tokens instead of raw store reads)
+    // Build context from state cache + change queue
     const stateContext = formatStateCacheForPrompt();
+    const changeQueueContext = formatChangeQueueForPrompt();
     const contextSummary = [
       `Trigger: ${context.trigger}`,
       context.data ? `Trigger data: ${JSON.stringify(context.data).substring(0, 1000)}` : '',
       '',
       stateContext,
+      '',
+      changeQueueContext,
     ].filter(Boolean).join('\n');
 
     const systemPrompt = [
-      'You are the DevTrack automation agent. You have full access to all DevTrack tools.',
-      'Execute the following automation task with depth, precision, and attention to detail.',
-      'Use tools to read current state, make changes, and verify your work.',
-      'Be thorough — check for edge cases, stale data, contradictions.',
-      'When creating or updating entities, provide rich descriptions and complete metadata.',
-      'When deduplicating: list existing items first, check for semantic overlap, keep the more complete version.',
+      'You are the project automation agent.',
+      'You have access to a specific set of tools for this automation (not all tools — only what you need).',
+      '',
+      'EFFICIENCY RULES:',
+      '- The State Cache and Change Queue in the user message are your PRIMARY data sources.',
+      '- Use summary=true on list tools for scanning. Only fetch full entities when you need to update them.',
+      '- Use filters (status, horizon, epic_id) to avoid loading unnecessary data.',
+      '- Do NOT re-read data that is already available in the State Cache or Change Queue.',
+      '- Stay within the iteration and tool call budget specified in your task.',
+      '- Do NOT update entities that were updated less than 1 hour ago unless you have a specific correction.',
       '',
       `Automation: ${automation.name}`,
       `Description: ${automation.description}`,
@@ -225,10 +233,15 @@ class AutomationEngine {
     const modelTier = cfg?.automations?.default_model_tier || 'standard';
     const taskType = modelTier === 'premium' ? 'deep_audit' : 'incremental_update';
 
+    // Per-automation iteration limits and tool scoping
+    const maxIter = (automation as any).max_iterations || 15;
+    const allowedTools = (automation as any).allowed_tools || undefined;
+
     try {
       const result = await runAgent(systemPrompt, contextSummary, {
         task: taskType,
-        maxIterations: 15,
+        maxIterations: maxIter,
+        allowedTools,
         recorder,
         heliconeProperties: {
           User: 'devtrack-automation',
@@ -270,7 +283,7 @@ class AutomationEngine {
         case 'run_ai_agent':
           if (action.value?.prompt) {
             await runAgent(
-              'You are the DevTrack automation agent. Execute the task using available tools.',
+              'You are the project automation agent. Execute the task using available tools.',
               action.value.prompt,
               { task: action.value.task || 'deep_audit' },
             );

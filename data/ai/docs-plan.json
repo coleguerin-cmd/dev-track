@@ -1,0 +1,454 @@
+{
+  "id": "plan-1770606050493",
+  "mode": "initialize",
+  "created_at": "2026-02-09T03:00:50.493Z",
+  "model": "claude-opus-4-5-20251101",
+  "pages": [
+    {
+      "id": "project-overview",
+      "title": "Project Overview",
+      "layer": "architecture",
+      "description": "High-level architecture, system diagram, tech stack, how components connect, and the core philosophy of dev-track as an AI-native project intelligence system.",
+      "source_files": [
+        "package.json",
+        "data/designs/SPEC.md",
+        "server/index.ts"
+      ],
+      "sort_order": 0,
+      "exists": false,
+      "complexity": "medium"
+    },
+    {
+      "id": "data-model-reference",
+      "title": "Data Model & Entity Reference",
+      "layer": "implementation",
+      "description": "Complete entity model v2: 14 entities, every field, relationships, constraints, enums, and data integrity rules. The \"if I got hit by a bus\" doc for the data layer.",
+      "source_files": [
+        "shared/types.ts",
+        "server/store.ts",
+        "data/designs/ENTITY-MODEL-V2.md"
+      ],
+      "sort_order": 1,
+      "exists": true,
+      "complexity": "deep"
+    },
+    {
+      "id": "getting-started",
+      "title": "Getting Started Guide",
+      "layer": "operational",
+      "description": "Prerequisites, installation, first run, basic workflow, and how to initialize dev-track in a new project.",
+      "source_files": [
+        "package.json",
+        "cli/index.ts",
+        "server/index.ts"
+      ],
+      "sort_order": 2,
+      "exists": true,
+      "complexity": "medium"
+    },
+    {
+      "id": "system-server",
+      "title": "System: Server (Hono API)",
+      "layer": "architecture",
+      "description": "Hono framework, WebSocket, file watcher, multi-project hot-swap, 27+ route files, rate limiting, AI state cache, automation engine, and audit recording.",
+      "source_files": [
+        "server/index.ts",
+        "server/store.ts",
+        "server/watcher.ts",
+        "server/ws.ts",
+        "server/routes/roadmap.ts"
+      ],
+      "sort_order": 10,
+      "exists": true,
+      "complexity": "high"
+    },
+    {
+      "id": "system-web-ui",
+      "title": "System: Web UI (React + Tailwind)",
+      "layer": "architecture",
+      "description": "13+ views (Dashboard, Roadmap, Systems, Issues, Ideas, Codebase, Sessions, Changelog, Docs, Metrics, Settings, Audits), AI chat sidebar, notification tray, project switcher, Lucide icons.",
+      "source_files": [
+        "ui/src/App.tsx",
+        "ui/src/views/Dashboard.tsx",
+        "ui/src/views/Backlog.tsx",
+        "ui/src/views/Docs.tsx"
+      ],
+      "sort_order": 11,
+      "exists": true,
+      "complexity": "high"
+    },
+    {
+      "id": "system-ai-intelligence",
+      "title": "System: AI Intelligence Layer",
+      "layer": "architecture",
+      "description": "AIService across OpenAI/Anthropic/Google with Helicone proxy, auto-model-discovery (58 models), task-aware ModelRouter with fallback chains, ~40 tools across 16 domains, ChatService with multi-turn agent loop, headless runner, AI state cache, rate limiting.",
+      "source_files": [
+        "server/ai/service.ts",
+        "server/ai/router.ts",
+        "server/ai/runner.ts",
+        "server/ai/tools/index.ts",
+        "server/ai/state-cache.ts"
+      ],
+      "sort_order": 12,
+      "exists": true,
+      "complexity": "deep"
+    },
+    {
+      "id": "system-data-layer",
+      "title": "System: Data Layer (JSON + TypeScript)",
+      "layer": "architecture",
+      "description": "v2 entity model, Store reads from v2 paths with backward compat, file watcher syncs, JSON-based with typed interfaces, data directories, migration script, central registry at ~/.dev-track/.",
+      "source_files": [
+        "server/store.ts",
+        "shared/types.ts",
+        "server/project-config.ts"
+      ],
+      "sort_order": 13,
+      "exists": true,
+      "complexity": "medium"
+    },
+    {
+      "id": "system-cli",
+      "title": "System: CLI",
+      "layer": "architecture",
+      "description": "Full command set (init, start, status, backlog, issues, changelog, context, projects), multi-project support, npm link workaround.",
+      "source_files": [
+        "cli/index.ts"
+      ],
+      "sort_order": 14,
+      "exists": true,
+      "complexity": "medium"
+    },
+    {
+      "id": "system-integrations",
+      "title": "System: Integration Plugins",
+      "layer": "architecture",
+      "description": "8 plugins: GitHub, Vercel, Supabase, Sentry, Helicone, Upstash, AWS EC2, Cloudflare. Plugin manager, test endpoints, enrichment.",
+      "source_files": [
+        "server/integrations/manager.ts",
+        "server/integrations/github.ts",
+        "server/integrations/helicone.ts"
+      ],
+      "sort_order": 15,
+      "exists": true,
+      "complexity": "medium"
+    },
+    {
+      "id": "system-brain",
+      "title": "System: AI Brain",
+      "layer": "architecture",
+      "description": "AI memory system: notes, user preferences, context recovery, user profiles with AI-observed intelligence scoring.",
+      "source_files": [
+        "server/routes/brain.ts",
+        "server/ai/tools/brain.ts"
+      ],
+      "sort_order": 16,
+      "exists": true,
+      "complexity": "low"
+    },
+    {
+      "id": "system-codebase-tools",
+      "title": "System: Codebase Scanner & Visualizer",
+      "layer": "architecture",
+      "description": "react-flow graph with 3 views (module, file, dependency), plain-English module descriptions and relationship labels, scanner with auto-discovery approach.",
+      "source_files": [
+        "server/analyzer/scanner.ts",
+        "ui/src/views/CodebaseGraph.tsx",
+        "ui/src/components/graph/GraphNode.tsx"
+      ],
+      "sort_order": 17,
+      "exists": true,
+      "complexity": "high"
+    },
+    {
+      "id": "system-session-tracking",
+      "title": "System: Session Tracking & Velocity",
+      "layer": "architecture",
+      "description": "Session logging, velocity tracking (items shipped, points), v2 unified Session type, session log and current session.",
+      "source_files": [
+        "server/routes/session.ts",
+        "server/ai/tools/session.ts"
+      ],
+      "sort_order": 18,
+      "exists": true,
+      "complexity": "low"
+    },
+    {
+      "id": "system-cursor-rule",
+      "title": "System: Cursor Rule / AI Context",
+      "layer": "architecture",
+      "description": "alwaysApply frontmatter, mandatory pre/post checklist at top, inline Quick Status + Last Session Briefing (auto-regenerated), file map, session lifecycle instructions, AI autonomy permissions, standing instructions.",
+      "source_files": [
+        "templates/dev-track.mdc",
+        "server/context-sync.ts"
+      ],
+      "sort_order": 19,
+      "exists": true,
+      "complexity": "medium"
+    },
+    {
+      "id": "system-automation-engine",
+      "title": "System: Automation Engine",
+      "layer": "architecture",
+      "description": "Evaluates triggers, checks conditions, executes actions. Supports both rigid condition-based and AI-driven automations. Audit recording, scheduler, change queue.",
+      "source_files": [
+        "server/automation/engine.ts",
+        "server/automation/scheduler.ts",
+        "server/automation/recorder.ts",
+        "server/automation/change-queue.ts"
+      ],
+      "sort_order": 20,
+      "exists": false,
+      "complexity": "high"
+    },
+    {
+      "id": "system-docs-generation",
+      "title": "System: Docs Generation Engine",
+      "layer": "architecture",
+      "description": "Two-step process: discovery agent scans project and produces a doc plan, then per-doc writers generate content. Supports initialize mode (Opus) and update mode (Sonnet), phased generation, parallel execution, checkpoint/resume, edit history tracking.",
+      "source_files": [
+        "server/ai/docs-generator.ts"
+      ],
+      "sort_order": 21,
+      "exists": false,
+      "complexity": "deep"
+    },
+    {
+      "id": "api-reference",
+      "title": "API Reference",
+      "layer": "operational",
+      "description": "Every endpoint with method, path, request/response format, examples. Covers roadmap, backlog, epics, milestones, releases, systems, issues, changelog, sessions, ideas, activity, metrics, docs, git, config, automations, audits, integrations.",
+      "source_files": [
+        "server/routes/roadmap.ts",
+        "server/routes/issues.ts",
+        "server/routes/session.ts",
+        "server/routes/ai.ts",
+        "server/routes/docs.ts"
+      ],
+      "sort_order": 30,
+      "exists": true,
+      "complexity": "deep"
+    },
+    {
+      "id": "configuration-guide",
+      "title": "Configuration Guide",
+      "layer": "operational",
+      "description": "Settings, environment variables, feature flags, AI config (budget, automations, rate limiting), project config, global settings, multi-project registry.",
+      "source_files": [
+        "server/project-config.ts",
+        "data/ai/config.json",
+        "data/config.json"
+      ],
+      "sort_order": 31,
+      "exists": false,
+      "complexity": "medium"
+    },
+    {
+      "id": "deployment-guide",
+      "title": "Deployment Guide",
+      "layer": "operational",
+      "description": "How to build, deploy, and monitor dev-track. Production considerations, multi-project setup, port configuration, server lifecycle.",
+      "source_files": [
+        "package.json",
+        "server/index.ts"
+      ],
+      "sort_order": 32,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "ai-tools-reference",
+      "title": "AI Tools Reference",
+      "layer": "implementation",
+      "description": "Complete reference of ~40 AI tools across 16 domains: backlog, epics, milestones, releases, issues, changelog, session, state, brain, docs, codebase, git, files, ideas, metrics, integrations, audits, actions, profiles. Tool definitions, parameters, execution logic.",
+      "source_files": [
+        "server/ai/tools/index.ts",
+        "server/ai/tools/backlog.ts",
+        "server/ai/tools/issues.ts",
+        "server/ai/tools/docs.ts"
+      ],
+      "sort_order": 40,
+      "exists": false,
+      "complexity": "deep"
+    },
+    {
+      "id": "automation-system",
+      "title": "Automation System Deep Dive",
+      "layer": "implementation",
+      "description": "How automations work: trigger types, condition evaluation, AI-driven vs rigid actions, audit recording, scheduler, change queue, cooldown logic, budget checks, master kill switch.",
+      "source_files": [
+        "server/automation/engine.ts",
+        "server/automation/scheduler.ts",
+        "server/automation/recorder.ts",
+        "server/automation/change-queue.ts"
+      ],
+      "sort_order": 41,
+      "exists": false,
+      "complexity": "deep"
+    },
+    {
+      "id": "ai-state-cache",
+      "title": "AI State Cache System",
+      "layer": "implementation",
+      "description": "Compressed project summary for efficient agent context. ~2-5K tokens replaces 130K raw. How it's built, when it's invalidated, how it's used in prompts.",
+      "source_files": [
+        "server/ai/state-cache.ts"
+      ],
+      "sort_order": 42,
+      "exists": false,
+      "complexity": "medium"
+    },
+    {
+      "id": "rate-limiting",
+      "title": "Rate Limiting & Token Tracking",
+      "layer": "implementation",
+      "description": "withRetry + exponential backoff, TokenRateTracker with preemptive delay, budget enforcement, cost tracking.",
+      "source_files": [
+        "server/ai/service.ts"
+      ],
+      "sort_order": 43,
+      "exists": false,
+      "complexity": "medium"
+    },
+    {
+      "id": "model-router",
+      "title": "Model Router & Fallback Chains",
+      "layer": "implementation",
+      "description": "Task-aware routing (chat, docs, audit, code_analysis, planning, quick_read, budget_conscious), fallback chains, auto-model-discovery (58 models), provider selection.",
+      "source_files": [
+        "server/ai/router.ts"
+      ],
+      "sort_order": 44,
+      "exists": false,
+      "complexity": "high"
+    },
+    {
+      "id": "file-watcher",
+      "title": "File Watcher & Live Updates",
+      "layer": "implementation",
+      "description": "chokidar file watching, debouncing, WebSocket push updates, store reload, change detection.",
+      "source_files": [
+        "server/watcher.ts",
+        "server/ws.ts"
+      ],
+      "sort_order": 45,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "multi-project-support",
+      "title": "Multi-Project Support",
+      "layer": "implementation",
+      "description": "Central registry at ~/.dev-track/, project switching, hot-swap, global settings, global user profiles.",
+      "source_files": [
+        "server/project-config.ts"
+      ],
+      "sort_order": 46,
+      "exists": false,
+      "complexity": "medium"
+    },
+    {
+      "id": "activity-feed",
+      "title": "Activity Feed System",
+      "layer": "implementation",
+      "description": "Timeline of all events (items shipped, issues resolved, sessions, etc.). Event types, entity tracking, filtering, UI rendering.",
+      "source_files": [
+        "server/routes/activity.ts",
+        "ui/src/views/Dashboard.tsx"
+      ],
+      "sort_order": 47,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "audit-system",
+      "title": "Audit System & Transparency",
+      "layer": "implementation",
+      "description": "Audit runs, thinking chain, tool calls, changes made, suggestions, cost tracking, trigger types, run status, full detail view.",
+      "source_files": [
+        "server/automation/recorder.ts",
+        "server/routes/audits.ts",
+        "ui/src/views/Audits.tsx"
+      ],
+      "sort_order": 48,
+      "exists": false,
+      "complexity": "medium"
+    },
+    {
+      "id": "velocity-tracking",
+      "title": "Velocity Tracking & Metrics",
+      "layer": "implementation",
+      "description": "Items shipped per session, points, trends, totals, session history, point values (S=1, M=2, L=5, XL=8).",
+      "source_files": [
+        "server/routes/metrics.ts",
+        "ui/src/views/Metrics.tsx"
+      ],
+      "sort_order": 49,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "adr-001-entity-model-v2",
+      "title": "ADR-001: Entity Model v2",
+      "layer": "design",
+      "description": "Why we moved from backlog/actions to roadmap/epics/milestones/releases. 14 entities, enterprise-grade structure, migration strategy.",
+      "source_files": [
+        "data/designs/ENTITY-MODEL-V2.md"
+      ],
+      "sort_order": 60,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "adr-002-json-over-sqlite",
+      "title": "ADR-002: JSON + Markdown as Source of Truth",
+      "layer": "design",
+      "description": "Why JSON + Markdown files instead of SQLite as source of truth. Git-friendliness, AI writability, human readability, trade-offs.",
+      "source_files": [
+        "data/designs/SPEC.md"
+      ],
+      "sort_order": 61,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "adr-003-local-server",
+      "title": "ADR-003: Local Server Architecture",
+      "layer": "design",
+      "description": "Why a local Hono server instead of just files. Browser limitations, WebSocket, validation, background tasks.",
+      "source_files": [
+        "data/designs/SPEC.md",
+        "server/index.ts"
+      ],
+      "sort_order": 62,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "adr-004-ai-driven-automations",
+      "title": "ADR-004: AI-Driven Automations",
+      "layer": "design",
+      "description": "Why AI-driven automations instead of only rigid condition-based rules. Flexibility, context-awareness, audit transparency, cost trade-offs.",
+      "source_files": [
+        "server/automation/engine.ts"
+      ],
+      "sort_order": 63,
+      "exists": false,
+      "complexity": "low"
+    },
+    {
+      "id": "adr-005-docs-generation-hybrid",
+      "title": "ADR-005: Hybrid Docs Generation (Opus + Sonnet)",
+      "layer": "design",
+      "description": "Why monolithic Opus 4.5 init + per-doc Sonnet updates. Cost efficiency, quality, incremental updates, phased generation.",
+      "source_files": [
+        "server/ai/docs-generator.ts"
+      ],
+      "sort_order": 64,
+      "exists": false,
+      "complexity": "low"
+    }
+  ],
+  "estimated_cost_usd": 21.75,
+  "estimated_minutes": 83
+}

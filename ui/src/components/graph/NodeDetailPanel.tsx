@@ -3,7 +3,8 @@ import type { Node, Edge } from 'reactflow';
 import type { GraphNodeData } from './GraphNode';
 import type { GraphEdgeData } from './GraphEdge';
 
-const BASE = '/api/v1';
+function getBase() { return `${localStorage.getItem('devtrack-api-origin') || ''}/api/v1`; }
+const BASE = getBase();
 
 interface FileDetail {
   path: string;

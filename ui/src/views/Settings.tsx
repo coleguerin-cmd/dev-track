@@ -17,7 +17,8 @@ import {
 } from 'lucide-react';
 import { RadarChart } from '../components/RadarChart';
 
-const BASE = '/api/v1';
+function getBase() { return `${localStorage.getItem('devtrack-api-origin') || ''}/api/v1`; }
+const BASE = getBase();
 
 async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
   const res = await fetch(`${BASE}${path}`, {

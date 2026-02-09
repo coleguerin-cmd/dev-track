@@ -57,6 +57,13 @@
       "first_seen": "2026-02-07",
       "last_seen": "2026-02-07",
       "notes": "Give genuine opinions with specific reasoning. Say where you agree AND where you'd push back. The user respects directness."
+    },
+    {
+      "pattern": "AI sprints blow past WIP limits — max 3 NOW constraint is counterproductive when AI is executing",
+      "frequency": 1,
+      "first_seen": "2026-02-09",
+      "last_seen": "2026-02-09",
+      "notes": "User explicitly asked to remove the max 3 NOW limit. Session 10 shipped 24 items — arbitrary WIP caps don't fit AI-driven development."
     }
   ]
 }

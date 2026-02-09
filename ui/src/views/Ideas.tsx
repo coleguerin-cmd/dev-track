@@ -1,7 +1,8 @@
 import { useEffect, useState, useCallback, useMemo } from 'react';
 import type { Idea, IdeaStatus, IdeaCategory } from '@shared/types';
 
-const BASE = '/api/v1';
+function getBase() { return `${localStorage.getItem('devtrack-api-origin') || ''}/api/v1`; }
+const BASE = getBase();
 async function apiFetch<T>(path: string, opts?: RequestInit): Promise<T> {
   const r = await fetch(`${BASE}${path}`, { headers: { 'Content-Type': 'application/json', ...opts?.headers }, ...opts });
   const j = await r.json(); if (!j.ok) throw new Error(j.error); return j.data as T;

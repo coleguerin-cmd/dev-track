@@ -25,7 +25,8 @@ import * as api from '../api/client';
 import { SizeBadge, StatusBadge, SeverityBadge } from '../components/StatusBadge';
 import type { QuickStatus, RoadmapItem, Issue, Session, BrainNote, ActivityEvent, Idea } from '@shared/types';
 
-const BASE = '/api/v1';
+function getBase() { return `${localStorage.getItem('devtrack-api-origin') || ''}/api/v1`; }
+const BASE = getBase();
 async function apiFetch<T>(path: string): Promise<T> {
   const r = await fetch(`${BASE}${path}`);
   const j = await r.json(); return j.data as T;
@@ -91,6 +92,54 @@ export function Dashboard() {
 
   const healthPct = status?.health ?? 0;
   const healthColor = healthPct >= 80 ? 'text-status-pass' : healthPct >= 60 ? 'text-accent-blue' : healthPct >= 40 ? 'text-accent-yellow' : 'text-status-fail';
+
+  // Detect empty/new project — show prominent initialization UI
+  const isEmptyProject = !status?.health && nowItems.length === 0 && recentIssues.length === 0 && activity.length === 0;
+
+  if (isEmptyProject && !initRunning) {
+    return (
+      <div className="max-w-2xl mx-auto mt-20 text-center space-y-6">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-accent-blue/10 flex items-center justify-center">
+          <Zap size={32} className="text-accent-blue" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-semibold text-text-primary">Welcome to DevTrack</h1>
+          <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto">
+            This project hasn't been initialized yet. DevTrack will scan your codebase, analyze the architecture, and automatically create systems, roadmap items, issues, and documentation.
+          </p>
+        </div>
+        <button
+          onClick={runProjectInit}
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-accent-blue text-white font-medium text-sm hover:bg-accent-blue/90 transition-colors"
+        >
+          <Play size={18} />
+          Initialize Project
+        </button>
+        <p className="text-[11px] text-text-tertiary">
+          This will take 3-5 minutes and costs ~$3-5 in AI usage. Requires API keys in Settings.
+        </p>
+      </div>
+    );
+  }
+
+  if (isEmptyProject && initRunning) {
+    return (
+      <div className="max-w-2xl mx-auto mt-20 text-center space-y-6">
+        <div className="w-16 h-16 mx-auto rounded-2xl bg-accent-blue/10 flex items-center justify-center">
+          <Loader2 size={32} className="text-accent-blue animate-spin" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-semibold text-text-primary">Initializing Project...</h1>
+          <p className="text-sm text-text-secondary mt-2 max-w-md mx-auto">
+            AI is scanning your codebase, analyzing architecture, and creating systems, roadmap items, issues, and docs. This usually takes 3-5 minutes.
+          </p>
+        </div>
+        <p className="text-[11px] text-text-tertiary">
+          Watch the server terminal for progress. Refresh this page when it's done.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-5">

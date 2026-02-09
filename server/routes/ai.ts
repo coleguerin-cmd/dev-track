@@ -12,7 +12,7 @@ import {
   deleteConversation,
   type ChatStreamEvent,
 } from '../ai/chat.js';
-import { getDataDir, getLocalDataDir, getCredentialsPath } from '../project-config.js';
+import { getDataDir, getLocalDataDir, getCredentialsPath, getGlobalProfilePath } from '../project-config.js';
 import fs from 'fs';
 import path from 'path';
 
@@ -285,16 +285,8 @@ app.get('/usage', (c) => {
 // ─── Profiles (personal data — stored in local/gitignored directory) ─────────
 
 function getProfilesPath(): string {
-  const localDir = getLocalDataDir();
-  const localPath = path.join(localDir, 'profiles.json');
-  // Migration: copy from old path if exists but not in local yet
-  if (!fs.existsSync(localPath)) {
-    const oldPath = path.join(getDataDir(), 'ai/profiles.json');
-    if (fs.existsSync(oldPath)) {
-      fs.copyFileSync(oldPath, localPath);
-    }
-  }
-  return localPath;
+  // Profiles are global (user-level), not per-project
+  return getGlobalProfilePath();
 }
 
 // GET /api/v1/ai/profiles — Get all user profiles

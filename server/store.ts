@@ -487,6 +487,10 @@ export class Store {
   getNextAuditRunId(): string {
     const index = this.loadAuditIndex();
     const id = `run-${String(index.next_id).padStart(4, '0')}`;
+    // Atomically increment next_id and save immediately to prevent race conditions
+    // when multiple automations start concurrently (e.g., scheduler fires 3 at once)
+    index.next_id++;
+    this.saveAuditIndex(index);
     return id;
   }
 

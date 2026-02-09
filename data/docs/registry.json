@@ -438,6 +438,35 @@
       ],
       "created": "2026-02-08",
       "updated": "2026-02-08"
+    },
+    {
+      "id": "project-overview",
+      "title": "Project Overview",
+      "type": "auto-generated",
+      "content": "",
+      "parent_id": null,
+      "sort_order": 0,
+      "layer": "architecture",
+      "systems": [],
+      "roadmap_items": [],
+      "epics": [],
+      "auto_generated": true,
+      "last_generated": null,
+      "generation_sources": [
+        "codebase",
+        "systems"
+      ],
+      "last_edited_by": "ai",
+      "last_edited_at": "2026-02-09",
+      "edit_history": [],
+      "author": "ai",
+      "status": "published",
+      "tags": [
+        "auto-generated",
+        "architecture"
+      ],
+      "created": "2026-02-09",
+      "updated": "2026-02-09"
     }
   ]
 }

@@ -27,10 +27,11 @@ export const issueTools: ToolModule = {
     {
       definition: { type: 'function', function: {
         name: 'list_issues',
-        description: 'List all issues, optionally filtered by status or severity',
+        description: 'List issues, optionally filtered by status or severity. Use summary=true for lightweight scanning (id+title+status+severity+updated only). Use status="open" to avoid loading resolved issues.',
         parameters: { type: 'object', properties: {
           status: { type: 'string', enum: ['open', 'in_progress', 'resolved'], description: 'Filter by status' },
           severity: { type: 'string', enum: ['critical', 'high', 'medium', 'low'], description: 'Filter by severity' },
+          summary: { type: 'boolean', description: 'If true, return only id, title, status, severity, discovered, resolved (much fewer tokens)' },
         }},
       }},
       label: 'Listing issues',
@@ -39,6 +40,13 @@ export const issueTools: ToolModule = {
         let issues = store.issues.issues || [];
         if (args.status) issues = issues.filter((i: any) => i.status === args.status);
         if (args.severity) issues = issues.filter((i: any) => i.severity === args.severity);
+        if (args.summary) {
+          const summaryIssues = issues.map((i: any) => ({
+            id: i.id, title: i.title, status: i.status, severity: i.severity,
+            discovered: i.discovered, resolved: i.resolved,
+          }));
+          return { issues: summaryIssues, total: summaryIssues.length, mode: 'summary' };
+        }
         return { issues, total: issues.length };
       },
     },

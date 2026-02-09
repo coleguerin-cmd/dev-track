@@ -709,7 +709,138 @@
       },
       "id": "ACT-0054",
       "timestamp": "2026-02-08T19:34:27.664Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "session-end-audit",
+      "title": "Automation fired: Session End Audit",
+      "actor": "system",
+      "metadata": {
+        "trigger": "manual",
+        "duration_seconds": 284
+      },
+      "id": "ACT-0055",
+      "timestamp": "2026-02-09T00:30:01.923Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "change-tracker",
+      "title": "Automation fired: Change Tracker",
+      "actor": "system",
+      "metadata": {
+        "trigger": "manual",
+        "duration_seconds": 199
+      },
+      "id": "ACT-0056",
+      "timestamp": "2026-02-09T00:34:48.798Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "nightly-audit",
+      "title": "Automation fired: Nightly System Audit",
+      "actor": "system",
+      "metadata": {
+        "trigger": "manual",
+        "duration_seconds": 373
+      },
+      "id": "ACT-0057",
+      "timestamp": "2026-02-09T00:43:01.783Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "weekly-report",
+      "title": "Automation fired: Weekly Progress Report",
+      "actor": "system",
+      "metadata": {
+        "trigger": "manual",
+        "duration_seconds": 453
+      },
+      "id": "ACT-0058",
+      "timestamp": "2026-02-09T00:50:58.044Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "session-end-audit",
+      "title": "Automation fired: Session End Audit",
+      "actor": "system",
+      "metadata": {
+        "trigger": "manual",
+        "duration_seconds": 48
+      },
+      "id": "ACT-0059",
+      "timestamp": "2026-02-09T01:25:56.873Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "weekly-report",
+      "title": "Automation fired: Weekly Progress Report",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 74
+      },
+      "id": "ACT-0060",
+      "timestamp": "2026-02-09T01:27:02.129Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "nightly-audit",
+      "title": "Automation fired: Nightly System Audit",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 100
+      },
+      "id": "ACT-0061",
+      "timestamp": "2026-02-09T01:27:28.161Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "automation",
+      "entity_id": "weekly-deep-refresh",
+      "title": "Automation fired: Weekly Deep Refresh",
+      "actor": "system",
+      "metadata": {
+        "trigger": "scheduled",
+        "duration_seconds": 216
+      },
+      "id": "ACT-0062",
+      "timestamp": "2026-02-09T01:29:24.706Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "activity_report",
+      "entity_id": "chg-1770600992343-1",
+      "title": "Activity report (test): Wiring verification test",
+      "actor": "test",
+      "metadata": {
+        "action": "verify",
+        "files_count": 0
+      },
+      "id": "ACT-0063",
+      "timestamp": "2026-02-09T01:36:32.344Z"
+    },
+    {
+      "type": "system_health_changed",
+      "entity_type": "commit",
+      "entity_id": "abc123t",
+      "title": "Git commit: test: verify hook endpoint",
+      "actor": "external",
+      "metadata": {
+        "hash": "abc123test",
+        "files_count": 1,
+        "related_items": []
+      },
+      "id": "ACT-0064",
+      "timestamp": "2026-02-09T01:36:33.960Z"
     }
   ],
-  "next_id": 55
+  "next_id": 65
 }

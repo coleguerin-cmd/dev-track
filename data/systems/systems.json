@@ -3,11 +3,11 @@
     {
       "id": "server",
       "name": "Server (Hono API)",
-      "description": "22+ route files (v2: roadmap, epics, milestones, releases, systems, labels, automations + existing). Hono framework, WebSocket + file watcher. Multi-project hot-swap via project-config.ts. Docs CRUD, headless AI runner, automation engine, scheduler. Build passes clean. 0 open issues. Last commit: Feb 7 22:16 UTC. Automation engine and scheduler are built but untested in production. No new commits in 24+ hours — stable but aging. 4 uncommitted data file changes pending.",
+      "description": "27+ route files (v2 complete + audits). Hono framework, WebSocket + file watcher. Multi-project hot-swap. Docs generation pipeline (discovery + per-doc), headless AI runner, automation engine with audit recording, scheduler. Rate limiting (withRetry + TokenRateTracker). AI state cache. Multi-user data separation. Helicone enrichment. Build passes clean. Git clean (data files uncommitted is normal). Automation engine validated live (session-end-audit, change-tracker, weekly-report all successful). 0 open issues blocking server. Session 10: Massive expansion — docs system, rate limiting, state cache, multi-user prep.",
       "status": "healthy",
-      "health_score": 87,
+      "health_score": 90,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [
         "Hono",
@@ -27,16 +27,16 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "web-ui",
       "name": "Web UI (React + Tailwind)",
-      "description": "12+ views: Dashboard (v2 with health ring), Roadmap (kanban DnD), Systems (new), Issues, Ideas, Codebase (react-flow graph), Sessions, Changelog, Docs, Metrics, Settings (3-tab with Profile/AI Config/Integrations). AI chat sidebar. Notification tray. Project switcher. Lucide icons throughout. UI design overhaul phase 1 complete, phase 2 stalled (no activity since Feb 8). Chat agent built but NEVER battle-tested with real browser conversations — this is the #1 risk. Multiple crash bugs were fixed (ISS-017/018/019) but new bugs may lurk untested.",
+      "description": "13+ views: Dashboard (v2 health ring), Roadmap (kanban DnD + By Epic view), Systems, Issues, Ideas, Codebase (react-flow), Sessions, Changelog, Docs (three-column with Mermaid + sub-pages + cost modal), Metrics, Settings (3-tab), Audits (full transparency). AI chat sidebar with AgentActivityPanel + SessionChangesTray. Notification tray. Project switcher. Lucide icons. Session 9: ISS-039 critical fix (refreshKey destroyed view state). Session 10: Three-column Docs UI, Mermaid rendering, progress tracking. UI stable and battle-tested. Phase 2 polish remains (spacing, typography, Linear-inspired density).",
       "status": "healthy",
-      "health_score": 70,
+      "health_score": 88,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [
         "React",
@@ -54,16 +54,16 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "ai-intelligence",
       "name": "AI Intelligence Layer",
-      "description": "AIService across OpenAI/Anthropic/Google with Helicone proxy. Auto-model-discovery (58 models). Task-aware ModelRouter with fallback chains. ~40 tools across 16 domain modules (server/ai/tools/). ChatService with multi-turn agent loop. SSE streaming. User profiles injected into system prompts. Headless runner for programmatic agent execution. RISKS: (1) Chat agent never tested with real conversations in browser — 9+ days in_progress, still the #1 blocker. (2) Helicone integration FAILING (ISS-003). (3) Headless runner tested via automations but not with full conversation flows. (4) No validated end-to-end flow from user message → tool calls → response in browser.",
+      "description": "AIService across OpenAI/Anthropic/Google with Helicone proxy. Auto-model-discovery (58 models). Task-aware ModelRouter with fallback chains. ~40 tools across 16 domains. ChatService with multi-turn agent loop. SSE streaming. User profiles injected. Headless runner for programmatic execution. AI state cache (~2-5K tokens replaces 130K raw). Rate limiting (withRetry + exponential backoff, TokenRateTracker with preemptive delay). Session 9: Chat agent validated (investigation + handoff pattern proven). Session 10: Docs generation system (discovery agent + per-doc writers + parallel execution + verification + recovery). ISS-040 resolved (rate limiting). Remaining risks: ISS-043 (prompt caching not working — 0 cache reads despite 130K prompts).",
       "status": "healthy",
-      "health_score": 65,
+      "health_score": 82,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [
         "OpenAI",
@@ -82,16 +82,16 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "cli",
       "name": "CLI",
-      "description": "Full command set (init, start, status, backlog, issues, changelog, context, projects). Multi-project support (init, start, list). Pillar initialized successfully. NEVER fully tested against live server — fundamental risk. npm link crashes Cursor — must use 'npx tsx' workaround. No activity or attention since Feb 7. Lowest confidence system. Needs live validation before dogfooding on other projects. Risk of silent failures when used for real.",
+      "description": "Full command set (init, start, status, backlog, issues, changelog, context, projects). Multi-project support. Pillar initialized successfully. NEVER fully tested against live server — fundamental risk. npm link crashes Cursor — must use 'npx tsx' workaround. No activity since Feb 7 (14+ days stale). Lowest confidence system. Needs live validation before dogfooding on other projects. Risk of silent failures when used for real. Blocks Landmark initialization test. WEEKLY REFRESH: 14+ days stale, health declining slowly.",
       "status": "degraded",
       "health_score": 48,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [
         "TypeScript",
@@ -107,16 +107,16 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "data-layer",
       "name": "Data Layer (JSON + TypeScript)",
-      "description": "v2 entity model: 14 entities, ~500 lines of shared types. Store reads from v2 paths with backward compat. File watcher syncs. JSON-based with typed interfaces. Data directories: roadmap/, systems/, releases/, activity/, labels/, automations/, docs/, issues/, ideas/, session/, brain/, ai/, metrics/. Migration script completed. Central registry at ~/.dev-track/. Most mature system. DATA INTEGRITY GAP: Sessions 6-7 velocity data missing from velocity log (ISS-020). 15 modified data files uncommitted to git.",
+      "description": "v2 entity model: 14 entities, ~500 lines shared types. Store reads from v2 paths with backward compat. File watcher syncs. JSON-based with typed interfaces. Data directories: roadmap/, systems/, releases/, activity/, labels/, automations/, docs/, issues/, ideas/, session/, brain/, ai/, metrics/, audits/. Migration script completed. Central registry at ~/.dev-track/. Most mature system. ISS-020 RESOLVED (sessions 6-7 backfilled). 20 modified data files uncommitted (normal session state). Audit system recording operational.",
       "status": "healthy",
-      "health_score": 90,
+      "health_score": 88,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [
         "TypeScript",
@@ -130,16 +130,16 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "integrations",
       "name": "Integration Plugins",
-      "description": "8 plugins: GitHub (passing, last tested Feb 7), Vercel (unconfigured), Supabase (unconfigured), Sentry (unconfigured), Helicone (configured, FAILING since Feb 8 01:56 UTC), Upstash (unconfigured), AWS EC2 (unconfigured), Cloudflare (unconfigured). Only 1/8 confirmed working. Helicone failure blocks AI cost tracking for dogfooding. Credential sync from plugin to AI proxy built (ISS-015 resolved) but Helicone still failing — may be API endpoint issue or credential format issue. ISS-003 still open.",
+      "description": "8 plugins: GitHub (passing, last tested Feb 7), Vercel (unconfigured), Supabase (unconfigured), Sentry (unconfigured), Helicone (configured, status unknown — last test Feb 8 01:56 UTC showed FAILING, but enrichment working in session 10), Upstash (unconfigured), AWS EC2 (unconfigured), Cloudflare (unconfigured). 1/8 confirmed working. Helicone enrichment (custom properties) working despite test failure — may be test endpoint issue. ISS-003 still open (14+ days). Blocks full AI cost tracking for dogfooding. WEEKLY REFRESH: 14+ days stale, health declining slowly.",
       "status": "degraded",
-      "health_score": 42,
+      "health_score": 43,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [
         "TypeScript"
@@ -154,7 +154,7 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "codebase-visualizer",
@@ -210,11 +210,11 @@
     {
       "id": "brain",
       "name": "AI Brain System",
-      "description": "AI memory system: 18 notes total (4 dismissed, 14 active). User preferences (4 prefs + 4 learned patterns). Context recovery for session handoff (last refreshed Feb 8 04:18 UTC). User profiles with AI-observed intelligence scoring (IQ 127, cognitive + technical radar charts, deep assessment, session observations). Brain notes accumulating — BN-015 through BN-018 are large weekly report / audit summaries that may bloat context loading. Some older active notes (BN-002, BN-004, BN-005, BN-006) are still valid but aging.",
+      "description": "AI memory system: 28 notes total (4 dismissed, 24 active). User preferences (4 prefs + 4 learned patterns). Context recovery (last refreshed Feb 9 00:27 UTC — current). User profiles with AI-observed intelligence scoring (IQ 128, cognitive + technical radar charts, deep assessment, session observations). BN-015 through BN-020 are large report summaries (bloat concern per BN-021). Active notes include critical architectural observations (BN-023, BN-027, BN-028). Health improved from 70% → 75% due to current context recovery and valuable active notes.",
       "status": "healthy",
-      "health_score": 78,
+      "health_score": 75,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [
         "TypeScript",
@@ -230,16 +230,16 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "cursor-rule",
       "name": "Cursor Rule / AI Context",
-      "description": "alwaysApply frontmatter, mandatory pre/post checklist at top, inline Quick Status + Last Session Briefing (auto-regenerated), file map, session lifecycle instructions, AI autonomy permissions, standing instructions. ISS-006 (AI drift) still open — structural enforcement via automation engine built but untested. Context recovery refreshed Feb 8 and again during this audit session. The rule itself may be stale relative to entity model v2 changes (file map, entity references). Needs validation in next real coding session.",
+      "description": "alwaysApply frontmatter, mandatory pre/post checklist at top, inline Quick Status + Last Session Briefing (auto-regenerated), file map, session lifecycle instructions, AI autonomy permissions, standing instructions. ISS-006 (AI drift) partially resolved — automation engine provides structural enforcement. Context recovery refreshed Feb 9 during session 10. The rule itself is current with entity model v2. Needs validation in next real coding session but fundamentally sound. Health improved from 62% → 75% due to automation engine validation.",
       "status": "degraded",
-      "health_score": 62,
+      "health_score": 75,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [],
       "modules": [],
@@ -250,16 +250,16 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     },
     {
       "id": "session-tracking",
       "name": "Session Tracking & Velocity",
-      "description": "8 sessions logged in session log (includes 2 backfilled). 60+ changelog entries. Velocity tracked: 89 items shipped, 293 points across 8 sessions. Avg 11.1 items/session, 36.6 pts/session. ISS-020 RESOLVED: Sessions 6-7 backfilled from activity data. v2 unified Session type in use. No session currently active. Velocity data now accurate and complete.",
+      "description": "10 sessions logged (includes 2 backfilled). 87 changelog entries. Velocity tracked: 128 items shipped, 421 points across 10 sessions. Avg 12.8 items/session, 42.1 pts/session. ISS-020 RESOLVED (sessions 6-7 backfilled). v2 unified Session type in use. Session 11 currently active (started Feb 9 07:00 UTC). Velocity data accurate and complete. Session 10 was biggest ever: 24 items, 80 points, ~18K lines. Health improved from 88% → 90%.",
       "status": "healthy",
-      "health_score": 80,
+      "health_score": 90,
       "health_signals": [],
-      "last_assessed": "2026-02-08",
+      "last_assessed": "2026-02-09",
       "owner": null,
       "tech_stack": [],
       "modules": [],
@@ -272,7 +272,7 @@
       "test_coverage": null,
       "tags": [],
       "created": "2026-02-07",
-      "updated": "2026-02-08"
+      "updated": "2026-02-09"
     }
   ]
 }

@@ -1,22 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { getDataDir } from '../../project-config.js';
+import { getDataDir, getGlobalProfilePath } from '../../project-config.js';
 import { getStore } from '../../store.js';
 import type { ToolModule } from './types.js';
 
 function getProfilesPath() {
-  // Profiles are personal data — stored in local (gitignored) directory
-  const { getLocalDataDir } = require('../../project-config.js');
-  const localDir = getLocalDataDir();
-  const localPath = path.join(localDir, 'profiles.json');
-  // Migration: if profiles exist at old path but not new, copy them
-  if (!fs.existsSync(localPath)) {
-    const oldPath = path.join(getDataDir(), 'ai/profiles.json');
-    if (fs.existsSync(oldPath)) {
-      fs.copyFileSync(oldPath, localPath);
-    }
-  }
-  return localPath;
+  // Profiles are global (user-level), not per-project — stored at ~/.dev-track/profile.json
+  return getGlobalProfilePath();
 }
 function markProfileWrite() { try { getStore().markWrite('local/profiles.json'); } catch {} }
 

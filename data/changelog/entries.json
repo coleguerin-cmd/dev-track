@@ -1465,7 +1465,10 @@
         "ui/src/views/Settings.tsx"
       ],
       "backlog_item": null,
-      "issues_resolved": ["ISS-035", "ISS-039"],
+      "issues_resolved": [
+        "ISS-035",
+        "ISS-039"
+      ],
       "breaking": false
     },
     {
@@ -1528,7 +1531,9 @@
         "server/ai/service.ts"
       ],
       "backlog_item": "ai-rate-limiting",
-      "issues_resolved": ["ISS-040"],
+      "issues_resolved": [
+        "ISS-040"
+      ],
       "breaking": false
     },
     {
@@ -1574,7 +1579,10 @@
       "description": "Changed doc_generation task route from premium-first to standard-first (Sonnet default, Opus via model override). Initialize mode will explicitly pass Opus 4.5 model ID. Rewrote update_doc tool: content parameter now REQUIRED (was optional), description explains it must be full markdown text, added validation that rejects empty/short content with clear error message. Prevents the $14 tool-fumbling waste from the first docs run.",
       "type": "fix",
       "scope": "server",
-      "files_changed": ["server/ai/router.ts", "server/ai/tools/docs.ts"],
+      "files_changed": [
+        "server/ai/router.ts",
+        "server/ai/tools/docs.ts"
+      ],
       "backlog_item": "docs-wiki-overhaul",
       "breaking": false
     },
@@ -1586,7 +1594,9 @@
       "description": "New server/ai/state-cache.ts module. buildStateCache() reads all store data and compresses into ~2-5K token summary: project health, systems with scores, roadmap by horizon, open issues, recent changelog, velocity stats, docs status, active session. 30-minute TTL with memory + disk caching. getStateCache() returns fresh or cached. formatStateCacheForPrompt() outputs ready-to-inject text block. Replaces 130K+ token raw context building in automations and docs generator. Foundation for tiered audit system (IDEA-069).",
       "type": "feature",
       "scope": "server",
-      "files_changed": ["server/ai/state-cache.ts"],
+      "files_changed": [
+        "server/ai/state-cache.ts"
+      ],
       "backlog_item": "docs-wiki-overhaul",
       "breaking": false
     },
@@ -1610,7 +1620,9 @@
         "ui/src/api/client.ts"
       ],
       "backlog_item": "docs-wiki-overhaul",
-      "issues_resolved": ["ISS-042"],
+      "issues_resolved": [
+        "ISS-042"
+      ],
       "breaking": false
     },
     {
@@ -1629,6 +1641,115 @@
         "ui/src/views/Docs.tsx"
       ],
       "backlog_item": "docs-wiki-overhaul",
+      "breaking": false
+    },
+    {
+      "id": "CL-088",
+      "date": "2026-02-09",
+      "session": null,
+      "title": "Session-end audit — comprehensive data freshness review",
+      "description": "Deep audit of all DevTrack data after session 11. Updated roadmap item statuses (epic-hierarchy-ui → completed, ui-design-overhaul → pending). Enhanced issue notes with current context (ISS-034 critical blocker, ISS-043 cost optimization, ISS-006/012 progress). Updated 7 system health scores reflecting session 9-10 validation. Refreshed epic summaries (automation-audits complete, codebase-intelligence 2/3 shipped, ai-intelligence-engine validated). Updated milestone v0-2 with completion prediction. Refreshed context recovery with session 10 outcomes. Found 0 contradictions — all data consistent. Git status: 14 uncommitted data files (normal session state). Overall health: 84% (↑2). All stale data corrected.",
+      "type": "chore",
+      "scope": "audit",
+      "files_changed": [
+        "data/roadmap/items.json",
+        "data/roadmap/epics.json",
+        "data/roadmap/milestones.json",
+        "data/issues/items.json",
+        "data/systems.json",
+        "data/state.json",
+        "data/brain/notes.json"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-089",
+      "date": "2026-02-09",
+      "session": null,
+      "title": "Change Tracker automation — comprehensive post-session analysis and epic updates",
+      "description": "Change Tracker automation executed following session-end audit run-0026. Reviewed all recent activity (50 events, 24 completed items from session 10, 10 audit runs). Updated 3 epic summaries with session 10 validation results: Codebase Intelligence (docs system production-ready), AI Intelligence Engine (rate limiting shipped, chat validated), Platform Distribution (multi-user prep complete). Updated milestone v0-2 prediction. Enhanced ISS-003 notes with Helicone context. No duplicates found across 13 next-horizon roadmap items and 38 ideas. All entity relationships verified correct. Session 10 was the largest ever: 24 items, 80 points, $50 AI spend, 14 commits. Docs generation system is the flagship achievement — discovery agent, 4-layer framework, parallel execution, adaptive complexity budgets, verification + retry.",
+      "type": "chore",
+      "scope": "automation",
+      "files_changed": [
+        "data/roadmap/epics.json",
+        "data/roadmap/milestones.json",
+        "data/issues/items.json"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-090",
+      "date": "2026-02-09",
+      "session": 11,
+      "title": "Automation efficiency overhaul — 10x cost reduction, change-aware pipeline, checkpoint system",
+      "description": "Complete redesign of the automation system. Phase 1: Added summary mode to list_backlog, list_issues, list_ideas tools (returns id+title+status only, 80-90% fewer tokens). Phase 2: Wired allowed_tools and max_iterations from automation config into engine.ts runAgent call (tool scoping + iteration budgets per automation). Phase 3: Built change queue system (data/ai/change-queue.json) — accumulates commits, activity reports, and session checkpoints. Automations read the queue instead of scanning everything. Phase 4: Built hooks API (POST /api/v1/hooks/commit for git post-commit hooks, POST /api/v1/hooks/activity for external AI activity reporting, GET /api/v1/hooks/install-script for git hook generation). Phase 5: Session checkpoint system — records git HEAD at session start, computes git diff + entity diff at session end, feeds into change queue. Phase 6: Rewrote all 5 automation prompts with explicit filter usage, summary mode, state-cache-first instructions, non-overlapping scopes, and iteration budgets. Phase 7: Added weekly deep-refresh automation (comprehensive scan, $1-2 budget, runs once/week). Phase 8: Disabled docs-refresh automation (manual only). Phase 9: Fixed audit run ID race condition (concurrent automations getting same ID). Results: Session-end $1.69→$0.24 (7x), Nightly $3.65→$0.45 (8x), Weekly $1.49→$0.14 (10x). Total daily: $8.57→$0.83 (10.3x). Updated cursor rule with activity reporting instruction.",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "server/ai/tools/backlog.ts",
+        "server/ai/tools/issues.ts",
+        "server/ai/tools/ideas.ts",
+        "server/automation/engine.ts",
+        "server/automation/change-queue.ts",
+        "server/routes/hooks.ts",
+        "server/routes/session.ts",
+        "server/store.ts",
+        "server/index.ts",
+        "data/automations/automations.json",
+        ".cursor/rules/dev-track.mdc"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-091",
+      "date": "2026-02-09",
+      "session": 11,
+      "title": "Project-agnostic AI prompts — replaced 9 hardcoded DevTrack references with dynamic project name",
+      "description": "Made all AI-facing prompts project-agnostic for multi-project support. Replaced hardcoded 'DevTrack' references in: init.ts (4 refs — initialization agent prompt now uses projectName parameter), chat.ts (3 refs — chat assistant prompt now uses getProjectName()), engine.ts (2 refs — automation agent prompt now generic). Internal infrastructure names (.dev-track/ directory, Helicone metadata, TypeScript types) left as product naming. Docs generator, state cache, scanner, and automation prompts were already generic. System is now ready for Landmark initialization.",
+      "type": "fix",
+      "scope": "server",
+      "files_changed": [
+        "server/routes/init.ts",
+        "server/ai/chat.ts",
+        "server/automation/engine.ts"
+      ],
+      "backlog_item": null,
+      "breaking": false
+    },
+    {
+      "id": "CL-092",
+      "date": "2026-02-09",
+      "session": 11,
+      "title": "Global user profiles — profiles now stored at ~/.dev-track/profile.json, follow user across all projects",
+      "description": "Moved profile storage from per-project data/local/profiles.json to global ~/.dev-track/profile.json. Profiles (intelligence scores, behavioral patterns, session observations, AI-to-AI guidance) now follow the user across all projects. Migration: checks per-project local dir first, then legacy data/ai/ dir, copies to global on first access. Auto-creates skeleton profile for new users (uses OS username). Updated: project-config.ts (getGlobalProfilePath), routes/ai.ts, ai/tools/profiles.ts, ai/chat.ts. Fixed ESM require() bug in profile path resolution.",
+      "type": "feature",
+      "scope": "server",
+      "files_changed": [
+        "server/project-config.ts",
+        "server/routes/ai.ts",
+        "server/ai/tools/profiles.ts",
+        "server/ai/chat.ts"
+      ],
+      "backlog_item": "multi-user-prep",
+      "breaking": false
+    },
+    {
+      "id": "CL-093",
+      "date": "2026-02-09",
+      "session": 11,
+      "title": "Multi-server project switching, port auto-detect, empty state init UI, WIP limit removal, Helicone init tracking",
+      "description": "Multi-server: dynamic API base URL across all UI components, sidebar switcher checks target port, server auto-registers with port. Port auto-detect via findAvailablePort. Global profiles at ~/.dev-track/profile.json. Empty project Dashboard shows big Initialize button. Fixed: projectName in init, ESM require, port collision. Removed WIP limit from roadmap routes. Added Helicone to init. Pillar successfully initialized (13 systems, 20 roadmap items, 8 issues, 6 ideas, 3 docs).",
+      "type": "feature",
+      "scope": "full-stack",
+      "files_changed": [
+        "ui/src/api/client.ts", "ui/src/api/useWebSocket.ts", "ui/src/components/Sidebar.tsx",
+        "ui/src/components/ChatSidebar.tsx", "ui/src/views/Dashboard.tsx", "server/project-config.ts",
+        "server/routes/roadmap.ts", "server/routes/init.ts", "server/index.ts"
+      ],
+      "backlog_item": null,
       "breaking": false
     }
   ]

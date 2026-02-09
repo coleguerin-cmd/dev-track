@@ -52,6 +52,10 @@ async function checkScheduledAutomations(): Promise<void> {
     a => a.enabled && a.trigger === 'scheduled'
   );
 
+  // Collect due automations, then fire sequentially with stagger delay
+  // This prevents all overdue automations from dogpiling on startup
+  const due: { automation: typeof scheduled[0]; schedule: string }[] = [];
+
   for (const automation of scheduled) {
     const schedule = getScheduleType(automation);
     if (!schedule) continue;
@@ -59,13 +63,29 @@ async function checkScheduledAutomations(): Promise<void> {
     const lastFired = automation.last_fired ? new Date(automation.last_fired) : null;
 
     if (shouldFire(schedule, now, lastFired)) {
-      console.log(`[scheduler] Firing scheduled automation: ${automation.name} (${schedule})`);
-      await engine.fire({
-        trigger: 'scheduled',
-        data: { schedule_type: schedule, automation_id: automation.id },
-        timestamp: now.toISOString(),
-      });
+      due.push({ automation, schedule });
     }
+  }
+
+  if (due.length === 0) return;
+
+  // Sort by priority: daily first, then weekly (daily is more time-sensitive)
+  const priority: Record<string, number> = { hourly: 0, daily: 1, weekly: 2 };
+  due.sort((a, b) => (priority[a.schedule] ?? 1) - (priority[b.schedule] ?? 1));
+
+  for (let i = 0; i < due.length; i++) {
+    const { automation, schedule } = due[i];
+    // Stagger: wait 30s between each automation to avoid rate limit dogpiling
+    if (i > 0) {
+      console.log(`[scheduler] Staggering next automation by 30s...`);
+      await new Promise(r => setTimeout(r, 30_000));
+    }
+    console.log(`[scheduler] Firing scheduled automation: ${automation.name} (${schedule})`);
+    await engine.fire({
+      trigger: 'scheduled',
+      data: { schedule_type: schedule, automation_id: automation.id },
+      timestamp: now.toISOString(),
+    });
   }
 }
 

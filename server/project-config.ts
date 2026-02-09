@@ -11,6 +11,7 @@
 import fs from 'fs';
 import path from 'path';
 import os from 'os';
+import net from 'net';
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -49,6 +50,59 @@ const GLOBAL_SETTINGS_PATH = path.join(DEVTRACK_HOME, 'settings.json');
 
 export function getDevTrackHome(): string {
   return DEVTRACK_HOME;
+}
+
+/**
+ * Get the global profile path — profiles are user-level, not project-level.
+ * Stored at ~/.dev-track/profile.json so they follow the user across all projects.
+ * Migrates from old per-project locations on first access.
+ */
+export function getGlobalProfilePath(): string {
+  ensureDevTrackHome();
+  const globalPath = path.join(DEVTRACK_HOME, 'profile.json');
+
+  if (!fs.existsSync(globalPath)) {
+    // Migration: check per-project local dir first, then legacy ai/ dir
+    try {
+      const localPath = path.join(getLocalDataDir(), 'profiles.json');
+      if (fs.existsSync(localPath)) {
+        fs.copyFileSync(localPath, globalPath);
+        return globalPath;
+      }
+    } catch { /* getLocalDataDir may not be ready yet */ }
+
+    try {
+      const oldPath = path.join(getDataDir(), 'ai/profiles.json');
+      if (fs.existsSync(oldPath)) {
+        fs.copyFileSync(oldPath, globalPath);
+        return globalPath;
+      }
+    } catch { /* getDataDir may not be ready yet */ }
+
+    // No existing profile — create a skeleton for new users
+    const username = os.userInfo().username || 'user';
+    const skeleton = {
+      profiles: [{
+        id: `user-${username}`,
+        name: username,
+        role: '',
+        created: new Date().toISOString().split('T')[0],
+        updated: new Date().toISOString().split('T')[0],
+        behavior: {
+          session_length_preference: 'medium',
+          context_window_habits: 'normal',
+          communication_style: 'direct',
+        },
+        ai_observed: null,
+        ai_instructions: '',
+        context_notes: [],
+        session_observations: { observations: [] },
+      }],
+    };
+    fs.writeFileSync(globalPath, JSON.stringify(skeleton, null, 2));
+  }
+
+  return globalPath;
 }
 
 // ─── State ──────────────────────────────────────────────────────────────────
@@ -344,7 +398,6 @@ export async function findAvailablePort(preferred?: number): Promise<number> {
 
 function isPortAvailable(port: number): Promise<boolean> {
   return new Promise((resolve) => {
-    const net = require('net');
     const server = net.createServer();
     server.once('error', () => resolve(false));
     server.once('listening', () => {
